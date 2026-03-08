@@ -5,4 +5,3 @@ export default defineConfig({
   plugins: [react()],
   base: '/BlenderTutor/',  // 👈 replace with your exact repo name
 })
-`
