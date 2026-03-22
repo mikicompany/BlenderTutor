@@ -89,7 +89,7 @@ const Navbar = () => {
           <button className="px-5 py-2 rounded-full text-sm font-bold cursor-pointer hover:bg-orange-600 text-black transition-all"
           style={{backgroundColor: '#F37D16'}}
           >
-           <a href="https://calendly.com/mikibutler" className="flex items-center" target="_blank" rel="noreferrer">Book a call </a>
+           <a href="https://calendly.com/blendertutoring-info/" className="flex items-center" target="_blank" rel="noreferrer">Book a call </a>
           </button>
         </div>
 
