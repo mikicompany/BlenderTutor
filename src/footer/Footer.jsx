@@ -29,7 +29,7 @@ const Footer = () => {
         style={{ backgroundColor: "#F37D16", padding: "8px 32px" }}
       >
         <a
-          href="https://calendly.com/mikibutler"
+          href="https://calendly.com/blendertutoring-info/"
           className="flex items-center"
           target="_blank"
           rel="noreferrer"
