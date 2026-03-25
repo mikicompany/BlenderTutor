@@ -33,11 +33,11 @@ const About = () => {
     },
     {
       name: "Unreal",
-      logo: "https://github.com/mikicompany/BlenderTutor/blob/main/docs/assets/logos/unreal.png",
+      logo: "https://github.com/mikicompany/BlenderTutor/blob/main/logo: "https://raw.githubusercontent.com/mikicompany/BlenderTutor/main/docs/assets/logos/unreal.png",/assets/logos/unreal.png",
     },
     {
       name: "Unity",
-      logo: "data:image/svg+xml,%3csvg%20xmlns='https://github.com/mikicompany/BlenderTutor/blob/main/docs/assets/logos/unity_logo.png'%20width='275'%20height='100'%3e%3cpath%20fill='%23110b09'%20d='M%2082.775,79.842%2064.9,49.775%2082.775,19.708%2091.392,49.775%20Z%20M%2042.992,76.908%2020.533,54.633%20h%2035.75%20L%2074.158,84.7%20Z%20m%200,-54.358%2031.075,-7.792%20-17.875,30.067%20H%2020.442%20Z%20M%2088.642,0%2048.033,10.542%2041.983,20.9%2029.792,20.808%200,49.775%2029.792,78.742%2041.983,78.65%2048.033,89.008%2088.642,99.642%2099.55,60.133%2093.408,49.867%2099.55,39.6%20Z'/%3e%3c/svg%3e",
+      logo: "data:image/svg+xml,%3csvg%20xmlns='logo: "https://raw.githubusercontent.com/mikicompany/BlenderTutor/main/docs/assets/logos/unity_logo.png",'%20width='275'%20height='100'%3e%3cpath%20fill='%23110b09'%20d='M%2082.775,79.842%2064.9,49.775%2082.775,19.708%2091.392,49.775%20Z%20M%2042.992,76.908%2020.533,54.633%20h%2035.75%20L%2074.158,84.7%20Z%20m%200,-54.358%2031.075,-7.792%20-17.875,30.067%20H%2020.442%20Z%20M%2088.642,0%2048.033,10.542%2041.983,20.9%2029.792,20.808%200,49.775%2029.792,78.742%2041.983,78.65%2048.033,89.008%2088.642,99.642%2099.55,60.133%2093.408,49.867%2099.55,39.6%20Z'/%3e%3c/svg%3e",
     },
     {
       name: "Godot",
