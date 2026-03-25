@@ -70,7 +70,7 @@ const Navbar = () => {
               >
                 B
               </span>
-              lender Tutor
+              lender Tutoring.com
             </span>
           </a>
         </h1>
