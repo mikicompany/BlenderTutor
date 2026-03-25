@@ -17,7 +17,7 @@ const packages = [
     highlighted: false,
   },
   {
-    name: "Pro",
+    name: "Blender Ninja",
     price: "179",
     period: "per month",
     description: "For serious learners ready to master the pipeline.",
@@ -31,7 +31,7 @@ const packages = [
     highlighted: true,
   },
   {
-    name: "Studio",
+    name: "Pro",
     price: "399",
     period: "per month",
     description: "Full mentorship for aspiring professionals.",
