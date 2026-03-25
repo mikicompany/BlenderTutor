@@ -34,7 +34,7 @@ const Footer = () => {
           target="_blank"
           rel="noreferrer"
         >
-          Book a call <ArrowRight size={18} />
+          Book a free call <ArrowRight size={18} />
         </a>
       </motion.button>
     </motion.div>
