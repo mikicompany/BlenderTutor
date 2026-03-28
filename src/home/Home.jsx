@@ -71,7 +71,7 @@ const Home = () => {
                 B
               </span>
               lender <br />
-              <span className="text-orange-500">Tutoring.com</span>
+              <span className="text-orange-500">Tutoring</span>
             </motion.h1>
 
             <motion.p
