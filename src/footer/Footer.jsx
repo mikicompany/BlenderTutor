@@ -19,10 +19,7 @@ const Footer = () => {
       </h2>
 
       <p className="text-gray-400 text-sm md:text-base mb-10 max-w-md mx-auto">
-        Got it—here’s a cleaner, more balanced version:
-
----
-Book a free 15-minute intro call and take the first step toward building something that’s truly yours. We’ll talk about your goals, your interests, and the kind of projects you’ve always wanted to bring to life—and map out a clear path forward together.
+        Book a free 15-minute intro call and take the first step toward building something that’s truly yours. We’ll talk about your goals, your interests, and the kind of projects you’ve always wanted to bring to life—and map out a clear path forward together.
 
 During the call, you’ll meet your mentor, ask questions, and get a feel for how the process works.
 
