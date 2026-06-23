@@ -9,7 +9,14 @@ export default defineConfig({
     tailwindcss(),
     sitemap({
       hostname: 'https://www.blendertutoring.com',
-      dynamicRoutes: ['/']
+      dynamicRoutes: [
+        '/',
+        '/blog',
+        '/blog/how-long-to-learn-blender',
+        '/blog/10-blender-modeling-addons',
+        '/blog/blender-keyboard-shortcuts-beginners',
+        '/blog/best-free-blender-tutorials-2026'
+      ]
     })
   ],
   assetsInclude: ['**/*.md']
