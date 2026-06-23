@@ -9,7 +9,8 @@ export default defineConfig({
     tailwindcss(),
     sitemap({
       hostname: 'https://www.blendertutoring.com',
-      exclude: ['/googlea46d0184849e086f']
+      dynamicRoutes: ['/']
     })
   ],
+  assetsInclude: ['**/*.md']
 })
