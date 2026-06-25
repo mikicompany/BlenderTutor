@@ -69,13 +69,15 @@ const Home = () => {
               className="text-white text-7xl font-bold leading-tight mb-4"
               style={{fontFamily: 'JetBrains Mono, Roboto Mono '}}
             >
-              <span
-                className="inline-block"
-                style={{ fontFamily: "'space grotesk', sans-serif", fontWeight: 700 }}
-              >
-                B
-              </span>
-              lender <br />
+              <span className="whitespace-nowrap">
+                <span
+                  className="inline-block"
+                  style={{ fontFamily: "'space grotesk', sans-serif", fontWeight: 700 }}
+                >
+                  B
+                </span>
+                lender
+              </span>{" "}<br />
               <span className="text-orange-500">Tutoring</span>
             </motion.h1>
 
