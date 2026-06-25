@@ -1,6 +1,7 @@
 import React from "react";
 import { motion, rgba } from "framer-motion";
 import hero from "../assets/hero-bg-CMX9Xi5b.mp4";
+import heroWebm from "../assets/hero-bg.webm";
 import Navbar from "../navbar/Navbar";
 import Packages from "../packages/Packages";
 import About from "../about/About";
@@ -29,12 +30,16 @@ const Home = () => {
       {/* --- FIXED BACKGROUND VIDEO --- */}
       <div className="fixed inset-0 w-full h-screen z-0">
         <video
-          src={hero}
           autoPlay
           muted
           loop
+          playsInline
+          preload="auto"
           className="h-full w-full object-cover"
-        />
+        >
+          <source src={heroWebm} type="video/webm" />
+          <source src={hero} type="video/mp4" />
+        </video>
         {/* Universal Overlay to keep text readable everywhere */}
         <div className="absolute inset-0 bg-black/75 z-10" />
       </div>

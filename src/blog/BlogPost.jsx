@@ -1,4 +1,5 @@
 import { useParams, Link } from "react-router-dom"
+import { Helmet } from "react-helmet-async"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import { posts } from "./posts"
@@ -89,8 +90,35 @@ const BlogPost = () => {
 
   if (!post) return <div className="text-white p-10">Post not found.</div>
 
+  const url = `https://www.blendertutoring.com/blog/${post.slug}`
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": post.title,
+    "description": post.description,
+    "datePublished": post.date,
+    "url": url,
+    "image": post.thumbnail ? `https://www.blendertutoring.com${post.thumbnail}` : "https://www.blendertutoring.com/og-image.png",
+    "author": { "@type": "Organization", "name": "BlenderTutor" },
+    "publisher": { "@type": "Organization", "name": "BlenderTutor", "url": "https://www.blendertutoring.com" }
+  }
+
   return (
     <div className="relative w-full min-h-screen bg-black">
+      <Helmet>
+        <title>{post.title} – BlenderTutor</title>
+        <meta name="description" content={post.description} />
+        <link rel="canonical" href={url} />
+        <meta property="og:title" content={post.title} />
+        <meta property="og:description" content={post.description} />
+        <meta property="og:url" content={url} />
+        <meta property="og:type" content="article" />
+        <meta property="og:image" content={post.thumbnail ? `https://www.blendertutoring.com${post.thumbnail}` : "https://www.blendertutoring.com/og-image.png"} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={post.title} />
+        <meta name="twitter:description" content={post.description} />
+        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+      </Helmet>
       <Navbar />
       <div className="max-w-3xl mx-auto px-6 py-24 text-white">
         <Link to="/blog" className="text-orange-400 hover:underline text-sm mb-8 block">
