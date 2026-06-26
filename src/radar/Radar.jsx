@@ -44,7 +44,7 @@ export default function Radar() {
         </div>
       )}
 
-      <div className="max-w-[1400px] mx-auto px-4 py-8 space-y-10">
+      <div className="max-w-[1400px] mx-auto px-3 sm:px-4 py-5 sm:py-8 space-y-8 sm:space-y-10">
         <NewAndNotable games={data.newAndNotable} loading={loading} />
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-8">

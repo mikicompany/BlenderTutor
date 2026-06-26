@@ -13,32 +13,37 @@ export default function RadarHeader({ lastUpdated, loading, onRefresh, onResetKe
 
   return (
     <header className="border-b border-green-500/20 bg-[#0a0a0a]">
-      <div className="max-w-[1400px] mx-auto px-4 py-5">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-5">
-            <RadarIcon />
+      <div className="max-w-[1400px] mx-auto px-4 py-4">
+        {/* Mobile: stacked layout */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          {/* Logo row */}
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 sm:w-[70px] sm:h-[70px] flex-shrink-0">
+              <RadarIcon />
+            </div>
             <div>
-              <h1 className="text-5xl font-black tracking-tighter text-white leading-none select-none">
+              <h1 className="text-3xl sm:text-5xl font-black tracking-tighter text-white leading-none select-none">
                 THE RADAR
               </h1>
-              <p className="text-green-400 text-xs tracking-[0.35em] uppercase mt-1 font-mono">
+              <p className="text-green-400 text-[10px] sm:text-xs tracking-[0.3em] uppercase mt-0.5 font-mono">
                 Game news in a glimpse
               </p>
             </div>
           </div>
 
-          <div className="text-right flex flex-col items-end gap-2">
+          {/* Date + controls row */}
+          <div className="flex items-center justify-between sm:flex-col sm:items-end gap-2">
             <div>
-              <div className="text-2xl font-black text-white tracking-wide">
+              <div className="text-base sm:text-2xl font-black text-white tracking-wide">
                 {MONTHS[now.getMonth()].toUpperCase()} {now.getFullYear()}
               </div>
-              <div className="text-green-400 font-mono text-sm">
+              <div className="text-green-400 font-mono text-xs sm:text-sm">
                 {now.toLocaleTimeString()}
               </div>
             </div>
             <div className="flex items-center gap-2">
               {lastUpdated && (
-                <span className="text-gray-600 text-xs font-mono">
+                <span className="hidden sm:inline text-gray-600 text-xs font-mono">
                   synced {lastUpdated.toLocaleTimeString()}
                 </span>
               )}

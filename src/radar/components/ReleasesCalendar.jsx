@@ -74,37 +74,52 @@ export default function ReleasesCalendar({ releases, loading }) {
               return (
                 <div
                   key={i}
-                  className={`min-h-[90px] border-b border-r border-[#161616] p-1.5 ${
+                  className={`min-h-[48px] sm:min-h-[90px] border-b border-r border-[#161616] p-1 sm:p-1.5 ${
                     isToday ? 'bg-green-950/20' : day ? 'hover:bg-[#141414]' : ''
                   } transition-colors`}
                 >
                   {day && (
                     <>
-                      <div className={`text-xs font-mono mb-1.5 w-6 h-6 flex items-center justify-center rounded-full ${
+                      <div className={`text-[10px] sm:text-xs font-mono mb-1 w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center rounded-full ${
                         isToday
                           ? 'bg-green-500 text-black font-black'
-                          : 'text-gray-600 hover:text-gray-400'
+                          : 'text-gray-600'
                       }`}>
                         {day}
                       </div>
                       <div className="space-y-0.5">
-                        {games.slice(0, 3).map(g => (
-                          <a
-                            key={g.id}
-                            href={`https://rawg.io/games/${g.slug}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            title={g.name}
-                            className={`${g._color} text-white text-[9px] leading-tight px-1.5 py-0.5 rounded block truncate transition-colors`}
-                          >
-                            {g.name}
-                          </a>
-                        ))}
-                        {games.length > 3 && (
-                          <div className="text-gray-700 text-[9px] pl-1 font-mono">
-                            +{games.length - 3} more
-                          </div>
-                        )}
+                        {/* Mobile: dot indicators only. Desktop: full chips */}
+                        <div className="flex flex-wrap gap-0.5 sm:hidden">
+                          {games.slice(0, 3).map(g => (
+                            <a
+                              key={g.id}
+                              href={`https://rawg.io/games/${g.slug}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              title={g.name}
+                              className={`${g._color} w-2 h-2 rounded-full block`}
+                            />
+                          ))}
+                        </div>
+                        <div className="hidden sm:block space-y-0.5">
+                          {games.slice(0, 3).map(g => (
+                            <a
+                              key={g.id}
+                              href={`https://rawg.io/games/${g.slug}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              title={g.name}
+                              className={`${g._color} text-white text-[9px] leading-tight px-1.5 py-0.5 rounded block truncate transition-colors`}
+                            >
+                              {g.name}
+                            </a>
+                          ))}
+                          {games.length > 3 && (
+                            <div className="text-gray-700 text-[9px] pl-1 font-mono">
+                              +{games.length - 3} more
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </>
                   )}
