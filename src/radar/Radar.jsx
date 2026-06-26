@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Helmet } from 'react-helmet-async'
 import { useGameData } from './hooks/useGameData'
 import RadarHeader from './components/RadarHeader'
 import NewAndNotable from './components/NewAndNotable'
@@ -27,8 +28,46 @@ export default function Radar() {
 
   if (!apiKey) return <ApiSetup onSetKey={handleSetKey} />
 
+  const canonicalUrl = 'https://www.blendertutoring.com/radar'
+  const title = 'The Radar — Game News, Metacritic Scores & Steam Trending'
+  const description = 'Live gaming dashboard: top Metacritic scores, trending Steam games, new releases, and a monthly game release calendar. Updated every minute.'
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: title,
+    description,
+    url: canonicalUrl,
+    publisher: {
+      '@type': 'Organization',
+      name: 'BlenderTutoring',
+      url: 'https://www.blendertutoring.com',
+    },
+  }
+
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
+      <Helmet>
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <meta name="keywords" content="game news, metacritic scores, steam trending, new game releases, game release calendar, top games, gaming dashboard, steam spy, game charts" />
+        <link rel="canonical" href={canonicalUrl} />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content="https://www.blendertutoring.com/og-image.png" />
+        <meta property="og:site_name" content="BlenderTutoring" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content="https://www.blendertutoring.com/og-image.png" />
+
+        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+      </Helmet>
+
       <RadarHeader
         lastUpdated={lastUpdated}
         loading={loading}
