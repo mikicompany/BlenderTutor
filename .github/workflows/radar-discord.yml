@@ -1,0 +1,22 @@
+name: Radar Discord Digest
+
+on:
+  schedule:
+    - cron: '0 14 * * *'   # Daily at 14:00 UTC (10am ET)
+  workflow_dispatch:         # Allow manual trigger from GitHub Actions tab
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Post Radar digest to Discord
+        env:
+          VITE_RAWG_API_KEY: ${{ secrets.VITE_RAWG_API_KEY }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: node scripts/discord-radar.js
