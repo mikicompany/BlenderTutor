@@ -3,3 +3,38 @@
 *{
     font-family: Space Grotesk, sans-serif
 }
+
+@keyframes radar-sweep {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes radar-blip {
+  0%, 100% { opacity: 0.2; r: 2.5; }
+  50%       { opacity: 1;   r: 4; }
+}
+
+@keyframes radar-blip2 {
+  0%, 100% { opacity: 0.1; }
+  60%      { opacity: 0.7; }
+}
+
+.radar-sweep {
+  transform-origin: 36px 36px;
+  animation: radar-sweep 4s linear infinite;
+}
+
+.radar-blip-1 {
+  animation: radar-blip 4s ease-in-out infinite;
+  animation-delay: 0.8s;
+}
+
+.radar-blip-2 {
+  animation: radar-blip2 4s ease-in-out infinite;
+  animation-delay: 2.2s;
+}
+
+.radar-blip-3 {
+  animation: radar-blip2 4s ease-in-out infinite;
+  animation-delay: 3.1s;
+}
