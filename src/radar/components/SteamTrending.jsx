@@ -72,7 +72,7 @@ export default function SteamTrending({ games, loading }) {
                         <img
                           src={`https://cdn.cloudflare.steamstatic.com/steam/apps/${g.appid}/capsule_sm_120.jpg`}
                           alt={g.name}
-                          className="hidden sm:block h-[18px] w-[45px] object-cover rounded-sm opacity-70 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                          className="h-[18px] w-[45px] object-cover rounded-sm opacity-70 group-hover:opacity-100 transition-opacity flex-shrink-0"
                           onError={e => { e.target.style.display = 'none' }}
                         />
                         <a
