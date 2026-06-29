@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 
-const REFRESH_INTERVAL = 60 * 1000
+const REFRESH_INTERVAL = 15 * 60 * 1000
 
 function dateRange(daysBack) {
   const end = new Date()
