@@ -1,15 +1,31 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useNewsFeed } from '../hooks/useNewsFeed'
 
-export default function NewsMarquee() {
+const rawgLink = (g) => (g.slug ? `https://rawg.io/games/${g.slug}` : '#')
+
+export default function NewsMarquee({ data }) {
   const headlines = useNewsFeed()
 
-  if (!headlines.length) return null
+  // If no RSS feed is reachable, fill the ticker from RAWG data already on the page
+  const fallback = useMemo(() => {
+    const items = []
+    data?.newAndNotable?.forEach(g =>
+      items.push({ source: 'NEW & NOTABLE', title: g.name, link: rawgLink(g) })
+    )
+    data?.metacriticTop?.slice(0, 6).forEach(g =>
+      items.push({ source: `METACRITIC ${g.metacritic}`, title: g.name, link: rawgLink(g) })
+    )
+    return items
+  }, [data])
+
+  const items = headlines.length ? headlines : fallback
+
+  if (!items.length) return null
 
   // Content is duplicated so the track can loop seamlessly at -50%
   const track = (ariaHidden) => (
     <div className="news-marquee-track" aria-hidden={ariaHidden}>
-      {headlines.map((h, i) => (
+      {items.map((h, i) => (
         <a
           key={`${h.link}-${i}`}
           href={h.link}

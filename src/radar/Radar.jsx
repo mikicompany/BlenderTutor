@@ -76,7 +76,7 @@ export default function Radar() {
         onResetKey={handleResetKey}
       />
 
-      <NewsMarquee />
+      <NewsMarquee data={data} />
 
       {error && (
         <div className="max-w-[1400px] mx-auto px-4 pt-4">
