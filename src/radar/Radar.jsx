@@ -8,6 +8,7 @@ import MetacriticTop from './components/MetacriticTop'
 import ReleasesCalendar from './components/ReleasesCalendar'
 import ApiSetup from './components/ApiSetup'
 import Subscribe from './components/Subscribe'
+import NewsMarquee from './components/NewsMarquee'
 
 export default function Radar() {
   const [apiKey, setApiKey] = useState(
@@ -74,6 +75,8 @@ export default function Radar() {
         onRefresh={refresh}
         onResetKey={handleResetKey}
       />
+
+      <NewsMarquee />
 
       {error && (
         <div className="max-w-[1400px] mx-auto px-4 pt-4">

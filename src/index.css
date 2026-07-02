@@ -38,3 +38,26 @@
   animation: radar-blip2 4s ease-in-out infinite;
   animation-delay: 3.1s;
 }
+
+@keyframes news-marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-100%); }
+}
+
+.news-marquee-track {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  min-width: 100%;
+  animation: news-marquee-scroll 60s linear infinite;
+}
+
+.news-marquee:hover .news-marquee-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .news-marquee-track {
+    animation-play-state: paused;
+  }
+}
