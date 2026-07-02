@@ -6,7 +6,24 @@ const FEEDS = [
   { source: 'IGN', url: 'https://feeds.feedburner.com/ign/games-all' },
   { source: 'GAMESPOT', url: 'https://www.gamespot.com/feeds/game-news/' },
   { source: 'PC GAMER', url: 'https://www.pcgamer.com/rss/' },
+  { source: 'POLYGON', url: 'https://www.polygon.com/rss/index.xml' },
 ]
+
+// rss2json serves RSS as JSON with proper CORS headers — most reliable in-browser
+async function fetchViaRss2Json(url) {
+  const res = await fetch(
+    `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(url)}`,
+    { signal: AbortSignal.timeout(8000) }
+  )
+  if (!res.ok) return null
+  const json = await res.json()
+  if (json.status !== 'ok' || !json.items?.length) return null
+  return json.items.slice(0, 8).map(item => ({
+    title: item.title?.trim() ?? '',
+    link: item.link ?? '',
+    pubDate: new Date(item.pubDate ?? 0),
+  })).filter(h => h.title)
+}
 
 async function fetchViaProxy(url) {
   const proxies = [
@@ -19,7 +36,7 @@ async function fetchViaProxy(url) {
       const res = await fetch(proxy, { signal: AbortSignal.timeout(8000) })
       if (!res.ok) continue
       const text = await res.text()
-      if (text.includes('<item')) return text
+      if (text.includes('<item')) return parseFeed(text)
     } catch {
       // try next proxy
     }
@@ -27,22 +44,28 @@ async function fetchViaProxy(url) {
   return null
 }
 
-function parseFeed(xml, source) {
+function parseFeed(xml) {
   const doc = new DOMParser().parseFromString(xml, 'text/xml')
-  if (doc.querySelector('parsererror')) return []
-  return [...doc.querySelectorAll('item')].slice(0, 8).map(item => ({
-    source,
+  if (doc.querySelector('parsererror')) return null
+  const items = [...doc.querySelectorAll('item')].slice(0, 8).map(item => ({
     title: item.querySelector('title')?.textContent?.trim() ?? '',
     link: item.querySelector('link')?.textContent?.trim() ?? '',
     pubDate: new Date(item.querySelector('pubDate')?.textContent ?? 0),
   })).filter(h => h.title)
+  return items.length ? items : null
 }
 
 async function fetchAllFeeds() {
   const results = await Promise.allSettled(
     FEEDS.map(async ({ source, url }) => {
-      const xml = await fetchViaProxy(url)
-      return xml ? parseFeed(xml, source) : []
+      let items = null
+      try {
+        items = await fetchViaRss2Json(url)
+      } catch {
+        // fall through to proxies
+      }
+      if (!items) items = await fetchViaProxy(url)
+      return (items ?? []).map(h => ({ ...h, source }))
     })
   )
   return results
