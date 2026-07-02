@@ -9,6 +9,7 @@ export default defineConfig({
     tailwindcss(),
     sitemap({
       hostname: 'https://www.blendertutoring.com',
+      outDir: 'docs',
       dynamicRoutes: [
         '/',
         '/blog',
