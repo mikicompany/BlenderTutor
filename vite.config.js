@@ -17,7 +17,8 @@ export default defineConfig({
         '/blog/10-blender-modeling-addons',
         '/blog/blender-keyboard-shortcuts-beginners',
         '/blog/best-free-blender-tutorials-2026',
-        '/radar'
+        '/radar',
+        '/terms'
       ]
     })
   ],
