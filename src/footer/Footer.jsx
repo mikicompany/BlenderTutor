@@ -61,9 +61,9 @@ Let’s turn your ideas into something tangible.
       <a href="#" className="hover:text-white transition-colors">
         Privacy
       </a>
-      <a href="#" className="hover:text-white transition-colors">
+      <Link to="/terms" className="hover:text-white transition-colors">
         Terms
-      </a>
+      </Link>
     </div>
   </div>
 
