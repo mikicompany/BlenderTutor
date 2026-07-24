@@ -13,6 +13,7 @@ export default defineConfig({
       dynamicRoutes: [
         '/',
         '/blog',
+        '/blog/life-beyond-the-donut',
         '/blog/how-long-to-learn-blender',
         '/blog/10-blender-modeling-addons',
         '/blog/blender-keyboard-shortcuts-beginners',
