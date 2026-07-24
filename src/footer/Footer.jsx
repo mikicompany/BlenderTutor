@@ -58,9 +58,9 @@ Let’s turn your ideas into something tangible.
       <Link to="/radar" className="hover:text-white transition-colors">
         The Radar
       </Link>
-      <a href="#" className="hover:text-white transition-colors">
+      <Link to="/privacy" className="hover:text-white transition-colors">
         Privacy
-      </a>
+      </Link>
       <Link to="/terms" className="hover:text-white transition-colors">
         Terms
       </Link>
