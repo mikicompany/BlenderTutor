@@ -6,6 +6,7 @@ import BlogList from './blog/BlogList'
 import BlogPost from './blog/BlogPost'
 import Radar from './radar/Radar'
 import Terms from './terms/Terms'
+import Privacy from './privacy/Privacy'
 
 // Without this, navigating via links at the bottom of a page (e.g. the
 // footer) keeps the scroll position and lands visitors at the bottom of
@@ -29,6 +30,7 @@ const App = () => {
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/radar" element={<Radar />} />
           <Route path="/terms" element={<Terms />} />
+          <Route path="/privacy" element={<Privacy />} />
         </Routes>
       </BrowserRouter>
     </HelmetProvider>

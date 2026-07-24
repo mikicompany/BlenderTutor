@@ -18,7 +18,8 @@ export default defineConfig({
         '/blog/blender-keyboard-shortcuts-beginners',
         '/blog/best-free-blender-tutorials-2026',
         '/radar',
-        '/terms'
+        '/terms',
+        '/privacy'
       ]
     })
   ],
