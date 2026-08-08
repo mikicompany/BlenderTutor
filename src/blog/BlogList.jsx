@@ -1,10 +1,27 @@
 import { Link } from "react-router-dom"
+import { Helmet } from "react-helmet-async"
 import { posts } from "./posts"
 import Navbar from "../navbar/Navbar"
 
 const BlogList = () => {
   return (
     <div className="relative w-full min-h-screen bg-black">
+      <Helmet>
+        <title>Blender Tutorials &amp; Guides — BlenderTutor Blog</title>
+        <meta
+          name="description"
+          content="Honest, experience-based guides for learning Blender: how long it takes, essential shortcuts, the best addons, and what to make after the donut."
+        />
+        <link rel="canonical" href="https://www.blendertutoring.com/blog" />
+        <meta property="og:title" content="Blender Tutorials &amp; Guides — BlenderTutor Blog" />
+        <meta
+          property="og:description"
+          content="Honest, experience-based guides for learning Blender from a working tutor."
+        />
+        <meta property="og:url" content="https://www.blendertutoring.com/blog" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://www.blendertutoring.com/og-image.png" />
+      </Helmet>
       <Navbar />
       <div className="max-w-3xl mx-auto px-6 py-24 text-white">
         <h1 className="text-4xl font-bold mb-10">Blog</h1>
