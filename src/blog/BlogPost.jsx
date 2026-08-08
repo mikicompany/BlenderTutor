@@ -106,7 +106,9 @@ const BlogPost = () => {
   return (
     <div className="relative w-full min-h-screen bg-black">
       <Helmet>
-        <title>{post.title} – BlenderTutor</title>
+        {/* Must be a single child — an expression plus adjacent text
+            makes react-helmet-async emit an empty <title>. */}
+        <title>{`${post.title} – BlenderTutor`}</title>
         <meta name="description" content={post.description} />
         <link rel="canonical" href={url} />
         <meta property="og:title" content={post.title} />
