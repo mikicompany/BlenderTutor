@@ -122,6 +122,18 @@ export function useGameData(apiKey, onAuthFailure) {
       const messages = []
 
       if (rawgFailure) messages.push(describeRawgFailure(rawgFailure.reason))
+
+      // A 200 carrying an empty result set is the one failure that looks
+      // exactly like success: no error, but nothing to show.
+      const rawgOk = rawgCalls.filter(r => r.status === 'fulfilled')
+      const itemsReturned = rawgOk.reduce(
+        (n, r) => n + (r.value?.results?.length ?? 0),
+        0
+      )
+      if (!rawgFailure && rawgOk.length > 0 && itemsReturned === 0) {
+        messages.push('RAWG accepted the request but returned no games, so there is nothing to display.')
+      }
+
       if (steam.status === 'rejected') {
         messages.push('Steam Spy is unreachable (its public proxies are unreliable) — retrying on the next refresh.')
       }
