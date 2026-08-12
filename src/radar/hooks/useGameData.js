@@ -17,7 +17,35 @@ function monthRange() {
   return `${fmt(start)},${fmt(end)}`
 }
 
-export function useGameData(apiKey) {
+// Carries the HTTP status so failures can be told apart — a rejected key and
+// an exhausted quota need very different reactions.
+class RawgError extends Error {
+  constructor(status, detail) {
+    super(detail ? `RAWG ${status}: ${detail}` : `RAWG ${status}`)
+    this.status = status
+    this.detail = detail
+  }
+}
+
+function describeRawgFailure(reason) {
+  const status = reason?.status
+
+  if (status === 401 || status === 403) {
+    return `RAWG rejected the API key (HTTP ${status}). The key may have been revoked or regenerated — use the key button above to enter a new one.`
+  }
+  if (status === 429) {
+    return 'RAWG request limit reached (HTTP 429). The key is valid but has used up its quota — data returns once the quota resets.'
+  }
+  if (status >= 500) {
+    return `RAWG is having server trouble (HTTP ${status}). This usually clears on its own.`
+  }
+  if (status) {
+    return `RAWG request failed (HTTP ${status})${reason.detail ? `: ${reason.detail}` : ''}.`
+  }
+  return `Could not reach RAWG: ${reason?.message ?? 'network error'}.`
+}
+
+export function useGameData(apiKey, onAuthFailure) {
   const [data, setData] = useState({
     newAndNotable: [],
     metacriticTop: [],
@@ -52,7 +80,17 @@ export function useGameData(apiKey) {
 
   const rawg = useCallback(async (path) => {
     const res = await fetch(`https://api.rawg.io/api/${path}&key=${apiKey}`)
-    if (!res.ok) throw new Error(`RAWG ${res.status}`)
+    if (!res.ok) {
+      // RAWG explains refusals in the body; pass that through to the UI.
+      let detail = ''
+      try {
+        const body = await res.json()
+        detail = body?.error || body?.detail || ''
+      } catch {
+        // non-JSON error body
+      }
+      throw new RawgError(res.status, detail)
+    }
     return res.json()
   }, [apiKey])
 
@@ -68,19 +106,40 @@ export function useGameData(apiKey) {
         fetchSteam(),
       ])
 
-      setData({
-        newAndNotable: notable.status === 'fulfilled' ? notable.value.results ?? [] : [],
-        metacriticTop: top.status === 'fulfilled' ? top.value.results ?? [] : [],
-        releases: cal.status === 'fulfilled' ? cal.value.results ?? [] : [],
-        steamTrending: steam.status === 'fulfilled' ? steam.value : [],
-      })
-      setLastUpdated(new Date())
+      // Keep whatever already loaded for any section that failed, so a blip
+      // doesn't wipe the dashboard.
+      setData(prev => ({
+        newAndNotable: notable.status === 'fulfilled' ? notable.value.results ?? [] : prev.newAndNotable,
+        metacriticTop: top.status === 'fulfilled' ? top.value.results ?? [] : prev.metacriticTop,
+        releases: cal.status === 'fulfilled' ? cal.value.results ?? [] : prev.releases,
+        steamTrending: steam.status === 'fulfilled' ? steam.value : prev.steamTrending,
+      }))
+
+      // allSettled never throws, so failures have to be inspected by hand —
+      // otherwise every outage looks like an empty dashboard with no reason.
+      const rawgCalls = [notable, top, cal]
+      const rawgFailure = rawgCalls.find(r => r.status === 'rejected')
+      const messages = []
+
+      if (rawgFailure) messages.push(describeRawgFailure(rawgFailure.reason))
+      if (steam.status === 'rejected') {
+        messages.push('Steam Spy is unreachable (its public proxies are unreliable) — retrying on the next refresh.')
+      }
+      setError(messages.length ? messages.join(' ') : null)
+
+      const status = rawgFailure?.reason?.status
+      if (status === 401 || status === 403) onAuthFailure?.(status)
+
+      // Only claim a sync when something actually arrived.
+      if (rawgCalls.some(r => r.status === 'fulfilled') || steam.status === 'fulfilled') {
+        setLastUpdated(new Date())
+      }
     } catch (e) {
       setError(e.message)
     } finally {
       setLoading(false)
     }
-  }, [apiKey, rawg])
+  }, [apiKey, rawg, fetchSteam, onAuthFailure])
 
   useEffect(() => {
     fetchAll()

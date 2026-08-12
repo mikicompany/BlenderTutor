@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { useGameData } from './hooks/useGameData'
 import RadarHeader from './components/RadarHeader'
@@ -10,12 +10,30 @@ import ApiSetup from './components/ApiSetup'
 import Subscribe from './components/Subscribe'
 import NewsMarquee from './components/NewsMarquee'
 
+// The key shipped with the site. A key saved in this browser takes priority,
+// which means a stale one entered long ago would otherwise override every
+// later deploy — hence the fallback in handleAuthFailure below.
+const SITE_KEY = import.meta.env.VITE_RAWG_API_KEY || ''
+
 export default function Radar() {
   const [apiKey, setApiKey] = useState(
-    () => localStorage.getItem('radar_rawg_key') || import.meta.env.VITE_RAWG_API_KEY || ''
+    () => localStorage.getItem('radar_rawg_key') || SITE_KEY
   )
 
-  const { data, loading, lastUpdated, error, refresh } = useGameData(apiKey)
+  // If the key stored in this browser gets rejected, drop it and fall back to
+  // the site's own key instead of leaving the visitor stuck on a dead one.
+  const handleAuthFailure = useCallback(() => {
+    const stored = localStorage.getItem('radar_rawg_key')
+    if (stored && SITE_KEY && stored !== SITE_KEY) {
+      localStorage.removeItem('radar_rawg_key')
+      setApiKey(SITE_KEY)
+    }
+  }, [])
+
+  const { data, loading, lastUpdated, error, refresh } = useGameData(
+    apiKey,
+    handleAuthFailure
+  )
 
   const handleSetKey = (key) => {
     localStorage.setItem('radar_rawg_key', key)
@@ -24,7 +42,8 @@ export default function Radar() {
 
   const handleResetKey = () => {
     localStorage.removeItem('radar_rawg_key')
-    setApiKey('')
+    // Fall back to the site's key rather than demanding the visitor supply one.
+    setApiKey(SITE_KEY)
   }
 
   if (!apiKey) return <ApiSetup onSetKey={handleSetKey} />
@@ -81,7 +100,7 @@ export default function Radar() {
       {error && (
         <div className="max-w-[1400px] mx-auto px-4 pt-4">
           <div className="bg-red-950/40 border border-red-800/50 text-red-400 text-sm font-mono px-4 py-3 rounded">
-            ⚠ {error} — check your RAWG API key or try refreshing
+            ⚠ {error}
           </div>
         </div>
       )}
