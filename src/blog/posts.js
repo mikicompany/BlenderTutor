@@ -1,5 +1,190 @@
 export const posts = [
   {
+    slug: "cycles-vs-eevee",
+    title: "Cycles vs EEVEE: Which Blender Render Engine Should You Use?",
+    description: "Blender ships with two render engines and never explains which to pick. Here's the honest answer, and when each one is the right call.",
+    date: "2026-08-15",
+    content: `
+Blender ships with two render engines, offers no guidance on which to use, and quietly defaults you into one of them. So you render something, it looks wrong, and you have no idea whether you chose badly or did something wrong.
+
+Here's the short version, then the details.
+
+> 💡 **The one-line answer:** EEVEE is fast and approximates light. Cycles is slow and simulates it. Beginners should work in EEVEE and render finals in Cycles until they have a reason not to.
+
+---
+
+## ⚖️ What Actually Separates Them
+
+Cycles is a **path tracer**. It fires rays from the camera and follows them as they bounce around your scene, which is roughly how light behaves in reality. That's why it handles reflections, refraction, and bounced colour without you doing anything special — and why it takes so long.
+
+EEVEE is a **rasterizer**, closer to how a video game draws a frame. It approximates the same effects with clever shortcuts, which is why it renders in real time and why some of those effects break in ways that look bizarre until you know the cause.
+
+| | EEVEE | Cycles |
+|---|---|---|
+| Speed | Seconds, often instant | Minutes to hours per frame |
+| Light behaviour | Approximated | Physically simulated |
+| Reflections | Only what's already on screen | Correct, including off-screen |
+| Glass and refraction | Needs setup, often fakey | Accurate by default |
+| Soft shadows, bounced colour | Approximated | Accurate by default |
+| Noise (grain) | None | Yes — needs samples or denoising |
+| Best at | Stylized work, animation, iteration | Photoreal stills, product, archviz |
+
+---
+
+## 🟢 When EEVEE Is the Right Choice
+
+- **Stylized or illustrative work** where you're art-directing the light rather than simulating it
+- **Animation**, where Cycles' per-frame cost multiplies by hundreds of frames
+- **Any time you're still deciding** — composition, layout, blocking
+- **Modest hardware**, where Cycles is painful
+
+EEVEE's real superpower isn't the final image, it's the feedback loop. Changing a light and seeing the result instantly teaches you more about lighting in an afternoon than a week of waiting on Cycles renders.
+
+---
+
+## 🔵 When Cycles Earns the Wait
+
+- **Photorealism** is the goal
+- **Glass, liquids, or metal** are central to the shot
+- **Interiors**, where nearly all the light is bounced light
+- **A single hero image** you'll actually show people
+
+---
+
+## 😤 The Things That Confuse Everyone
+
+**"My EEVEE reflections are missing objects."** EEVEE largely reflects what's already visible on screen, so anything behind the camera or off-frame simply isn't there to reflect. That's not a bug, it's the shortcut. Blender 4.2 rebuilt EEVEE with raytracing options that improve this considerably, so check your version before assuming you're stuck.
+
+**"My glass is black or weird in EEVEE."** Transparency and refraction need explicit settings in EEVEE that Cycles handles for free. If glass matters to the shot, that's a strong hint toward Cycles.
+
+**"My Cycles render is grainy."** That's sampling noise, and it's normal. Raise the sample count, and make sure denoising is enabled — modern Blender ships with a very good denoiser and it does more for render quality per second than almost any other setting.
+
+**"Cycles is unbearably slow."** Check that it's actually using your graphics card. In Preferences, set your Cycles render device, then set the render itself to GPU. A lot of people suffer through CPU rendering for months without realising.
+
+> 💡 Switching engines is a dropdown in Render Properties, not a commitment. You can flip between them mid-project.
+
+---
+
+## 🔁 The Workflow Most Professionals Actually Use
+
+They don't pick one. They **model, light, and iterate in EEVEE** because the feedback is instant, then **switch to Cycles for the final render** and accept the wait once.
+
+Materials mostly carry over between the two, though not always identically — which is why it pays to do a test Cycles render early rather than discovering the difference the night before a deadline.
+
+---
+
+## The Part That Isn't a Settings Problem
+
+Most "bad render" problems turn out not to be engine problems at all. They're lighting problems, or material problems, or a camera at an unflattering angle — and no amount of extra samples fixes those.
+
+That's the kind of thing that's genuinely hard to diagnose from a tutorial, because it depends on your specific scene. It's also the fastest thing to fix with someone looking over your shoulder.
+
+*Rendering something and can't tell why it looks off? [Book a free intro call →](https://blendertutoring.com/#packages)*
+    `
+  },
+  {
+    slug: "uv-unwrapping-blender-beginners",
+    title: "UV Unwrapping in Blender, Without the Panic",
+    description: "UV unwrapping is where most Blender beginners get stuck. Here's what UVs actually are, why your texture looks stretched, and the workflow that fixes it.",
+    date: "2026-08-15",
+    content: `
+Modelling clicks eventually. Materials sort of click. Then you try to put an image texture on your model, it comes out smeared into unrecognisable streaks, and you discover UV unwrapping.
+
+This is the wall. More beginners stall here than anywhere else in Blender, and it's almost always because nobody explained what the process is actually *for*.
+
+---
+
+## 📦 What UVs Actually Are
+
+Take a cardboard box. Cut along some of its edges, flatten it out, and you get a flat cross shape on the table. That flat shape is the UV map. The cuts you made are the **seams**.
+
+That's the whole idea. Your 3D surface has to be flattened into 2D so that a flat image can be painted onto it. Blender can't do that flattening well without knowing where you're willing to cut.
+
+> 💡 If you never tell Blender where to cut, it makes a bad guess — and a bad guess is exactly what stretched, smeared textures look like.
+
+---
+
+## 🧵 Where to Put Seams
+
+The instinct is to avoid cutting. Resist it. **More seams in sensible places beats fewer seams in bad ones.**
+
+Two ways to think about it:
+
+- **Like a cardboard box** — cut along structural edges so the pieces lie flat without distorting
+- **Like clothing patterns** — a sewing pattern hides its seams under the arms and along the sides
+
+The practical rule: put seams where **nobody will look**. Under the object, inside a fold, along a sharp corner, behind the character. A seam is only a problem if it's visible.
+
+To mark one: in **Edit Mode**, switch to edge select, pick your edges, then **Ctrl+E → Mark Seam**. Marked seams turn red.
+
+---
+
+## 🔧 The Actual Workflow
+
+| Step | What you do |
+|---|---|
+| 1 | Switch to the **UV Editing** workspace at the top of Blender |
+| 2 | In Edit Mode, select edges and **Ctrl+E → Mark Seam** |
+| 3 | Select everything with **A** |
+| 4 | Press **U → Unwrap** |
+| 5 | Check the result in the UV editor on the left |
+| 6 | Add seams and re-unwrap until nothing looks stretched |
+
+That's it. Unwrapping isn't one action, it's a loop — mark, unwrap, look, adjust.
+
+**The escape hatch:** **U → Smart UV Project** lets Blender decide the seams itself. It's genuinely fine for hard-surface props, machinery, and anything you won't hand-paint. It's poor for characters and anything organic. Don't feel clever for avoiding it.
+
+---
+
+## 🏁 How to Tell If It Worked
+
+You cannot judge an unwrap by looking at the UV layout. You judge it by putting a test pattern on the model.
+
+In the image editor, create a **New** image and set its type to **UV Grid** or **Colour Grid**, then apply it to your object. Now look at your model:
+
+- **Squares still look square** → your unwrap is good
+- **Squares stretched into rectangles** → that area needs more seams
+- **Squares wildly different sizes across the model** → your texture detail will be uneven
+
+This one habit separates people who "can't do UVs" from people who can.
+
+---
+
+## 💣 The Gotcha That Wastes Everyone's Afternoon
+
+**Apply your scale before unwrapping.**
+
+If you scaled your object in Object Mode, Blender is still carrying that scale as a transform, and it will quietly distort your unwrap. In Object Mode, press **Ctrl+A → Scale**, then unwrap.
+
+Enormous numbers of "my UVs are broken and I don't know why" posts are this exact problem.
+
+> 💡 Also worth knowing: overlapping UV islands means two parts of your model share the same patch of texture. Sometimes deliberate and efficient — usually an accident that makes painting impossible.
+
+---
+
+## 🤷 When You Can Skip It Entirely
+
+Not everything needs careful UVs:
+
+- **Procedural materials** — noise, gradients, and the like often need no UV map at all
+- **Single-colour or simple metal objects** — nothing to align
+- **Hard-surface props** — Smart UV Project is usually enough
+- **Background objects** — nobody is inspecting them
+
+Save your patience for the hero object that's actually on screen.
+
+---
+
+## Why This One Is Worth Asking About
+
+UV unwrapping is unusually hard to learn from videos, because the answer to "where do the seams go" depends entirely on the model in front of you. A tutorial can show you the buttons; it can't look at your mesh and say *cut there, not there*.
+
+That's a five-minute conversation and a months-long frustration, depending on whether anyone's there to have it with you.
+
+*Stuck on your own model rather than a tutorial's? [Book a free intro call →](https://blendertutoring.com/#packages)*
+    `
+  },
+  {
     slug: "life-beyond-the-donut",
     title: "Life Beyond the Donut",
     description: "Finished Blender's famous donut tutorial? Here's how to escape tutorial hell and start making work that's actually yours.",
