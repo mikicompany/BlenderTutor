@@ -188,7 +188,7 @@ UV unwrapping is unusually hard to learn from videos, because the answer to "whe
 That's a five-minute conversation and a months-long frustration, depending on whether anyone's there to have it with you.
 
 *Stuck on your own model rather than a tutorial's? [Book a free intro call →](https://blendertutoring.com/#packages)*
-    `},{slug:"life-beyond-the-donut",title:"Life Beyond the Donut",description:"Finished Blender's famous donut tutorial? Here's how to escape tutorial hell and start making work that's actually yours.",date:"2026-07-24",content:`
+    `},{slug:"life-beyond-the-donut",title:"Life Beyond the Donut",description:"Finished Blender's famous donut tutorial? Here's how to escape tutorial hell and start making work that's actually yours.",date:"2026-07-24",thumbnail:"/blog-images/life-beyond-the-donut.jpg",content:`
 If you're reading this, chances are there's a render of a pink-frosted donut somewhere on your hard drive. Maybe with sprinkles that took an entire evening to get right.
 
 Congratulations — genuinely. Blender Guru's donut is where a huge share of all Blender artists start, and finishing it puts you ahead of everyone who gave up at "how do I rotate the camera."

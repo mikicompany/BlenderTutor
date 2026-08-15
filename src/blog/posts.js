@@ -189,6 +189,7 @@ That's a five-minute conversation and a months-long frustration, depending on wh
     title: "Life Beyond the Donut",
     description: "Finished Blender's famous donut tutorial? Here's how to escape tutorial hell and start making work that's actually yours.",
     date: "2026-07-24",
+    thumbnail: "/blog-images/life-beyond-the-donut.jpg",
     content: `
 If you're reading this, chances are there's a render of a pink-frosted donut somewhere on your hard drive. Maybe with sprinkles that took an entire evening to get right.
 
