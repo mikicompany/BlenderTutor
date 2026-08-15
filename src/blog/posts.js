@@ -4,6 +4,7 @@ export const posts = [
     title: "Cycles vs EEVEE: Which Blender Render Engine Should You Use?",
     description: "Blender ships with two render engines and never explains which to pick. Here's the honest answer, and when each one is the right call.",
     date: "2026-08-15",
+    thumbnail: "/blog-images/cycles-vs-eevee.jpg",
     content: `
 Blender ships with two render engines, offers no guidance on which to use, and quietly defaults you into one of them. So you render something, it looks wrong, and you have no idea whether you chose badly or did something wrong.
 
@@ -87,6 +88,7 @@ That's the kind of thing that's genuinely hard to diagnose from a tutorial, beca
     title: "UV Unwrapping in Blender, Without the Panic",
     description: "UV unwrapping is where most Blender beginners get stuck. Here's what UVs actually are, why your texture looks stretched, and the workflow that fixes it.",
     date: "2026-08-15",
+    thumbnail: "/blog-images/uv-unwrapping-blender-beginners.jpg",
     content: `
 Modelling clicks eventually. Materials sort of click. Then you try to put an image texture on your model, it comes out smeared into unrecognisable streaks, and you discover UV unwrapping.
 
