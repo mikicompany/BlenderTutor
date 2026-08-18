@@ -1,9 +1,6 @@
 import React, { useState } from 'react'
 import { Send } from 'lucide-react'
-
-const MC_U = import.meta.env.VITE_MAILCHIMP_U
-const MC_ID = import.meta.env.VITE_MAILCHIMP_ID
-const MC_SERVER = import.meta.env.VITE_MAILCHIMP_SERVER
+import { subscribeToNewsletter, isValidEmail } from '../../lib/mailchimp'
 
 export default function Subscribe() {
   const [email, setEmail] = useState('')
@@ -12,42 +9,22 @@ export default function Subscribe() {
 
   const submit = async (e) => {
     e.preventDefault()
-    if (!email.includes('@')) {
+    if (!isValidEmail(email)) {
       setErrorMsg('Enter a valid email address.')
       setStatus('error')
       return
     }
 
     setStatus('loading')
+    const result = await subscribeToNewsletter(email, { tags: 'the-radar' })
 
-    // Mailchimp JSONP — the only way to POST to Mailchimp from a browser without a backend
-    const url = `https://${MC_SERVER}.list-manage.com/subscribe/post-json?u=${MC_U}&id=${MC_ID}&EMAIL=${encodeURIComponent(email)}&tags=the-radar&c=__mailchimpCallback`
-
-    const timeout = setTimeout(() => {
+    if (result.ok) {
+      setStatus('success')
+      setEmail('')
+    } else {
       setStatus('error')
-      setErrorMsg('Request timed out. Try again.')
-      delete window.__mailchimpCallback
-    }, 8000)
-
-    window.__mailchimpCallback = (data) => {
-      clearTimeout(timeout)
-      delete window.__mailchimpCallback
-      document.getElementById('__mc_script')?.remove()
-
-      if (data.result === 'success') {
-        setStatus('success')
-        setEmail('')
-      } else {
-        setStatus('error')
-        // Strip Mailchimp's HTML tags from the error message
-        setErrorMsg(data.msg?.replace(/<[^>]+>/g, '') || 'Something went wrong.')
-      }
+      setErrorMsg(result.message)
     }
-
-    const script = document.createElement('script')
-    script.id = '__mc_script'
-    script.src = url
-    document.body.appendChild(script)
   }
 
   return (
@@ -64,12 +41,13 @@ export default function Subscribe() {
 
         <h3 className="text-2xl font-black text-white tracking-tight">Stay on the radar</h3>
         <p className="text-gray-500 text-sm mt-2 mb-6 font-mono">
-          Weekly digest of the biggest game releases, trending titles, and Metacritic highlights.
+          A PDF snapshot every two weeks: the biggest releases, trending titles,
+          and Metacritic highlights.
         </p>
 
         {status === 'success' ? (
           <div className="bg-green-950/40 border border-green-700/40 text-green-400 text-sm font-mono px-6 py-4 rounded">
-            ✓ You're on the radar. Weekly digest incoming.
+            ✓ You're on the radar. Your first snapshot arrives within two weeks.
           </div>
         ) : (
           <form onSubmit={submit} className="flex gap-2">
