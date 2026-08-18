@@ -31,10 +31,18 @@ email step fails.
 node scripts/radar-snapshot.js --fixture   # sample data, no API key needed
 node scripts/radar-snapshot.js             # live data
 DRY_RUN=1 node scripts/radar-email.js      # build the campaign without sending
+TEST_EMAIL=you@example.com node scripts/radar-email.js   # mail only that address
 ```
 
-Use the workflow's **Run workflow** button to trigger it manually; emailing is
-off for manual runs unless you tick the box.
+Use the workflow's **Run workflow** button for a manual run. It takes two
+inputs:
+
+- **test_email** — mails only that address, then deletes the draft. Subscribers
+  receive nothing. Use this to check the email before a real send.
+- **send_email** — sends to every subscriber. Leave it unticked unless you
+  mean it.
+
+Leaving both empty builds and publishes the PDF without sending anything.
 
 ---
 
