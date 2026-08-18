@@ -17,16 +17,25 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
+
+# Never let two snapshot runs deploy Pages over each other.
+concurrency:
+  group: radar-snapshot
+  cancel-in-progress: false
 
 jobs:
-  snapshot:
+  build:
     runs-on: ubuntu-latest
+    outputs:
+      published: ${{ steps.publish.outputs.published }}
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - run: npm ci
 
@@ -38,7 +47,7 @@ jobs:
           VITE_RAWG_API_KEY: ${{ secrets.VITE_RAWG_API_KEY }}
         run: node scripts/radar-snapshot.js
 
-      - name: Publish it to the site
+      - name: Commit it
         id: publish
         run: |
           git config user.name  "github-actions[bot]"
@@ -53,12 +62,38 @@ jobs:
             echo "published=true" >> "$GITHUB_OUTPUT"
           fi
 
-      # A test address only mails that address. A real send needs the schedule
-      # or an explicit tick, and never happens alongside a test.
-      - name: Email
-        if: >-
-          steps.publish.outputs.published == 'true' &&
-          (github.event_name == 'schedule' || inputs.send_email || inputs.test_email != '')
+      # This push is made with GITHUB_TOKEN, which by design does not trigger
+      # deploy.yml, so this workflow has to publish Pages itself or the PDF
+      # would never reach the web.
+      - uses: actions/upload-pages-artifact@v3
+        if: steps.publish.outputs.published == 'true'
+        with:
+          path: ./docs
+
+  deploy:
+    needs: build
+    if: needs.build.outputs.published == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
+
+  email:
+    needs: [build, deploy]
+    # A test address mails only that address. A real send needs the schedule or
+    # an explicit tick.
+    if: >-
+      github.event_name == 'schedule' || inputs.send_email || inputs.test_email != ''
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Send
         env:
           MAILCHIMP_API_KEY: ${{ secrets.MAILCHIMP_API_KEY }}
           MAILCHIMP_LIST_ID: ${{ secrets.MAILCHIMP_LIST_ID }}
