@@ -5,6 +5,7 @@ import remarkGfm from "remark-gfm"
 import { posts } from "./posts"
 import Navbar from "../navbar/Navbar"
 import { useState } from "react"
+import { subscribeToNewsletter, isValidEmail } from "../lib/mailchimp"
 
 const Subscribe = () => {
   const [email, setEmail] = useState("")
@@ -12,34 +13,13 @@ const Subscribe = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!email || !email.includes("@")) {
+    if (!isValidEmail(email)) {
       setStatus("error")
       return
     }
 
-    // Mailchimp JSONP submission (bypasses CORS)
-    const MAILCHIMP_URL = "https://blendertutoring.us8.list-manage.com/subscribe/post-json?u=448c4c0d61ffab1851464e145&id=fcb87c912d&f_id=00e218e1f0"
-    const url = `${MAILCHIMP_URL}&EMAIL=${encodeURIComponent(email)}&c=mailchimpCallback`
-
-    window.mailchimpCallback = (data) => {
-      if (data.result === "success") {
-        setStatus("success")
-      } else {
-        // Already subscribed is still a win
-        if (data.msg && data.msg.includes("already subscribed")) {
-          setStatus("success")
-        } else {
-          setStatus("error")
-        }
-      }
-      delete window.mailchimpCallback
-      document.getElementById("mc-jsonp")?.remove()
-    }
-
-    const script = document.createElement("script")
-    script.id = "mc-jsonp"
-    script.src = url
-    document.body.appendChild(script)
+    const result = await subscribeToNewsletter(email, { tags: "blog" })
+    setStatus(result.ok ? "success" : "error")
   }
 
   return (
