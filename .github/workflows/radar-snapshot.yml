@@ -6,8 +6,12 @@ on:
     - cron: '0 14 1,15 * *'
   workflow_dispatch:
     inputs:
+      test_email:
+        description: 'Send a test to this address only (no subscribers contacted)'
+        type: string
+        default: ''
       send_email:
-        description: 'Email the snapshot to subscribers'
+        description: 'Send for real, to every subscriber'
         type: boolean
         default: false
 
@@ -49,12 +53,16 @@ jobs:
             echo "published=true" >> "$GITHUB_OUTPUT"
           fi
 
-      # Only on the schedule, or when a manual run asks for it.
-      - name: Email subscribers
-        if: steps.publish.outputs.published == 'true' && (github.event_name == 'schedule' || inputs.send_email)
+      # A test address only mails that address. A real send needs the schedule
+      # or an explicit tick, and never happens alongside a test.
+      - name: Email
+        if: >-
+          steps.publish.outputs.published == 'true' &&
+          (github.event_name == 'schedule' || inputs.send_email || inputs.test_email != '')
         env:
           MAILCHIMP_API_KEY: ${{ secrets.MAILCHIMP_API_KEY }}
           MAILCHIMP_LIST_ID: ${{ secrets.MAILCHIMP_LIST_ID }}
           MAILCHIMP_REPLY_TO: ${{ secrets.MAILCHIMP_REPLY_TO }}
           MAILCHIMP_SEGMENT_ID: ${{ secrets.MAILCHIMP_SEGMENT_ID }}
+          TEST_EMAIL: ${{ inputs.test_email }}
         run: node scripts/radar-email.js

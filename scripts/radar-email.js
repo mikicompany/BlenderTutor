@@ -12,6 +12,8 @@
 //   MAILCHIMP_FROM_NAME   defaults to "The Radar"
 //   SNAPSHOT_URL          defaults to the published latest.pdf
 //   DRY_RUN=1             build and print the campaign without sending
+//   TEST_EMAIL            send a test to this address only, then delete the
+//                         draft. Subscribers receive nothing.
 const API_KEY = process.env.MAILCHIMP_API_KEY
 const LIST_ID = process.env.MAILCHIMP_LIST_ID
 const REPLY_TO = process.env.MAILCHIMP_REPLY_TO
@@ -20,6 +22,7 @@ const FROM_NAME = process.env.MAILCHIMP_FROM_NAME || 'The Radar'
 const SITE = 'https://www.blendertutoring.com'
 const SNAPSHOT_URL = process.env.SNAPSHOT_URL || `${SITE}/snapshots/latest.pdf`
 const DRY_RUN = process.env.DRY_RUN === '1'
+const TEST_EMAIL = (process.env.TEST_EMAIL || '').trim()
 
 const missing = ['MAILCHIMP_API_KEY', 'MAILCHIMP_LIST_ID', 'MAILCHIMP_REPLY_TO']
   .filter(k => !process.env[k])
@@ -29,7 +32,8 @@ if (missing.length && !DRY_RUN) {
 }
 
 const dc = (API_KEY || '').split('-').pop()
-const base = `https://${dc}.api.mailchimp.com/3.0`
+// MAILCHIMP_API_BASE exists so the flow can be exercised against a stub.
+const base = process.env.MAILCHIMP_API_BASE || `https://${dc}.api.mailchimp.com/3.0`
 const auth = 'Basic ' + Buffer.from(`key:${API_KEY}`).toString('base64')
 
 async function mc(path, method = 'GET', body) {
@@ -119,8 +123,14 @@ async function main() {
   }
 
   console.log(`waiting for ${SNAPSHOT_URL} ...`)
-  if (!(await waitForUrl(SNAPSHOT_URL))) {
-    throw new Error('Snapshot never became reachable; not sending an email with a dead link.')
+  // A test run should not sit through the full wait; a not-yet-published link
+  // is worth a warning there, but is fatal for a real send.
+  const live = await waitForUrl(SNAPSHOT_URL, TEST_EMAIL ? 2 * 60 * 1000 : 12 * 60 * 1000)
+  if (!live) {
+    if (!TEST_EMAIL) {
+      throw new Error('Snapshot never became reachable; not sending an email with a dead link.')
+    }
+    console.warn('WARNING: snapshot is not reachable yet — the test email will link to a 404.')
   }
 
   const recipients = { list_id: LIST_ID }
@@ -140,6 +150,24 @@ async function main() {
   console.log('created campaign', campaign.id)
 
   await mc(`/campaigns/${campaign.id}/content`, 'PUT', { html: emailHtml(dateLabel) })
+
+  if (TEST_EMAIL) {
+    await mc(`/campaigns/${campaign.id}/actions/test`, 'POST', {
+      test_emails: [TEST_EMAIL],
+      send_type: 'html',
+    })
+    console.log(`test email sent to ${TEST_EMAIL} — no subscribers were contacted`)
+    // Tidy up, so test runs do not litter the account with drafts. Left in
+    // place if the delete fails, since the test itself already succeeded.
+    try {
+      await mc(`/campaigns/${campaign.id}`, 'DELETE')
+      console.log('removed the draft campaign')
+    } catch (e) {
+      console.warn(`could not remove draft ${campaign.id}: ${e.message}`)
+    }
+    return
+  }
+
   await mc(`/campaigns/${campaign.id}/actions/send`, 'POST')
   console.log('sent campaign', campaign.id)
 }
