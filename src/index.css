@@ -1,4 +1,7 @@
 @import "tailwindcss";
+/* Tailwind v4 registers plugins from CSS. Without this the prose-* classes
+   on blog posts are inert and markdown renders as unstyled text. */
+@plugin "@tailwindcss/typography";
 
 *{
     font-family: Space Grotesk, sans-serif

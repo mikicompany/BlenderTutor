@@ -4,13 +4,26 @@ import Navbar from "../navbar/Navbar"
 const sections = [
   {
     title: "1. The short version",
-    body: `We collect as little as possible. This site has no ads, no tracking
-    pixels, and no analytics scripts. The only personal information we ever
-    receive is what you choose to give us — when you book a call or subscribe
-    to our newsletter — and we use it only for that purpose.`,
+    body: `We collect as little as we reasonably can. There are no ads on this
+    site and we never sell your information. We do use Google Tag Manager to
+    measure how the site is used, described below. Beyond that, the only
+    personal information we receive is what you choose to give us — when you
+    book a call or subscribe to our newsletter — and we use it only for that
+    purpose.`,
   },
   {
-    title: "2. Booking a call",
+    title: "2. Analytics",
+    body: `The Site loads Google Tag Manager, which we use to run analytics
+    such as Google Analytics. These tools record things like which pages are
+    visited, roughly where visitors are in the world, and which site referred
+    them, and they may set cookies in your browser to do so. We use this only
+    to understand which articles are useful and how people find us — never to
+    identify you personally. You can opt out with any standard cookie or
+    tracker blocker, and browsers offering "Do Not Track" or similar controls
+    will limit it further.`,
+  },
+  {
+    title: "3. Booking a call",
     body: `When you book an intro call, scheduling is handled by Calendly. They
     collect your name, email address, and the time you pick, and share it with
     us so we can hold the session. Calendly processes this data under its own
@@ -18,7 +31,7 @@ const sections = [
     your sessions — never for unrelated marketing, and we never sell them.`,
   },
   {
-    title: "3. Newsletter",
+    title: "4. Newsletter",
     body: `If you subscribe to updates on The Radar, your email address goes to
     Mailchimp, our newsletter provider, and is used solely to send you the
     digest you signed up for. Every email includes an unsubscribe link, and
@@ -26,22 +39,22 @@ const sections = [
     under its own privacy policy.`,
   },
   {
-    title: "4. Hosting",
+    title: "5. Hosting",
     body: `The Site is hosted on GitHub Pages. Like most web hosts, GitHub may
     log basic technical information about visits (such as IP addresses) for
     security and operational purposes, governed by GitHub's privacy statement.
     We do not receive or review these logs.`,
   },
   {
-    title: "5. Data stored in your browser",
+    title: "6. Data stored in your browser",
     body: `The Radar can store an API key you provide in your browser's local
     storage so you don't have to re-enter it. That key stays on your device —
     it is never sent to us — and you can remove it at any time with the key
-    button on The Radar or by clearing your browser data. We do not set
-    tracking cookies.`,
+    button on The Radar or by clearing your browser data. Aside from the
+    analytics cookies described above, we set no cookies of our own.`,
   },
   {
-    title: "6. Third-party data on The Radar",
+    title: "7. Third-party data on The Radar",
     body: `The Radar displays live gaming data fetched directly by your browser
     from third-party services (RAWG, Steam Spy, and news feeds from gaming
     publications). Those requests go from your browser to those services, so
@@ -50,7 +63,7 @@ const sections = [
     them.`,
   },
   {
-    title: "7. Your rights",
+    title: "8. Your rights",
     body: `You can ask us at any time what personal information we hold about
     you, ask us to correct it, or ask us to delete it. Since we keep so little,
     this is usually just your booking details and, if you subscribed, your
@@ -58,13 +71,13 @@ const sections = [
     exchanged and we'll sort it out promptly.`,
   },
   {
-    title: "8. Children",
+    title: "9. Children",
     body: `Some of our students are minors learning 3D with a parent or
     guardian's involvement. Bookings for anyone under 16 should be made by a
     parent or guardian, using the parent or guardian's contact details.`,
   },
   {
-    title: "9. Changes to this policy",
+    title: "10. Changes to this policy",
     body: `If we ever change how we handle your information, we'll update this
     page and the "last updated" date at the top. We won't start collecting
     more than described here without making that clear first.`,
@@ -87,7 +100,7 @@ const Privacy = () => {
 
       <div className="max-w-3xl mx-auto px-6 py-24 text-white">
         <h1 className="text-4xl font-bold mb-3">Privacy Policy</h1>
-        <p className="text-sm text-gray-500 mb-12">Last updated: July 24, 2026</p>
+        <p className="text-sm text-gray-500 mb-12">Last updated: August 18, 2026</p>
 
         {sections.map((s) => (
           <section key={s.title} className="mb-10">

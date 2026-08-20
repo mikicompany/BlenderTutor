@@ -1,5 +1,116 @@
 export const posts = [
   {
+    slug: "blender-and-unreal-the-happy-couple",
+    title: "Blender and Unreal Engine: The Happy Couple",
+    description: "One authors, the other makes it real-time — and both are free. Why this pairing is the most powerful free setup in 3D, and the gotchas nobody warns you about.",
+    date: "2026-08-18",
+    thumbnail: "/blog-images/blender-and-unreal-the-happy-couple.jpg",
+    content: `
+Some software pairings feel like a compromise. This one doesn't.
+
+Blender and Unreal Engine are good at almost exactly opposite things, which is precisely why they work so well together. Blender is where you *make* the thing. Unreal is where the thing becomes real — lit, walkable, interactive, rendered in milliseconds instead of hours.
+
+And the entire pipeline, end to end, costs nothing to start.
+
+---
+
+## 💑 Why They Fit So Well
+
+Neither tries to be the other, and that's the point.
+
+| | Blender | Unreal Engine |
+|---|---|---|
+| Job | Authoring | Presentation and interaction |
+| Best at | Modeling, sculpting, UVs, rigging, animation | Real-time lighting, worlds, gameplay, cinematics |
+| Render time | Minutes to hours (Cycles) | Milliseconds |
+| Output | Assets and finished frames | Playable, walkable, filmable experiences |
+| Cost to start | Free, forever | Free until you're making real money |
+
+Blender has one of the best modeling toolsets in existence and no serious real-time engine. Unreal has a world-class real-time renderer and modeling tools nobody would choose over Blender's. Together, there is very little in 3D you cannot do.
+
+> 💡 Think of it as **workshop and stage**. You don't build furniture on the stage, and you don't perform in the workshop.
+
+---
+
+## 🚀 What UE5 Changed
+
+Two Unreal 5 features moved this from "workable" to genuinely exciting, because both remove chores that used to eat entire days:
+
+**Nanite** handles enormous amounts of geometry without you hand-building levels of detail. Historically you'd sculpt something beautiful in Blender, then spend hours retopologising and baking it down so an engine could cope. For static meshes, Nanite largely removes that step — bring in the dense mesh.
+
+**Lumen** does dynamic global illumination in real time. No baking light, no waiting, no re-baking every time you move a lamp. You drag a light and the entire scene responds instantly.
+
+If you learned that game art means "optimise everything by hand, then wait for bakes," this is the part worth paying attention to. Some of that work simply isn't required any more.
+
+---
+
+## 🎯 What This Pairing Unlocks
+
+- **Games** — the obvious one, from solo projects to studio work
+- **Architectural visualisation** — instead of a still render, hand the client a walkthrough
+- **Virtual production** — the LED-wall workflow behind a lot of modern film and TV
+- **Animated shorts** — render a frame in milliseconds instead of minutes, and iterate the way you actually want to
+- **Product visualisation** — configurators where the viewer changes colours and parts live
+- **Motion graphics** — real-time output with quality that used to demand offline rendering
+
+That's an unusually wide range for two free downloads.
+
+---
+
+## 🔁 How the Handoff Works
+
+The practical loop is simple:
+
+1. Model, UV, and rig in Blender
+2. Export (**FBX** is the traditional path; **glTF** is a strong modern option)
+3. Import into Unreal
+4. Build materials and light the scene in Unreal
+5. Iterate — change the mesh in Blender, re-export, Unreal picks it up
+
+Epic also maintains a free set of **Blender add-ons**, including a "Send to Unreal" tool that pushes assets across without the manual export dance. Worth installing early, since it removes most of the friction people complain about.
+
+---
+
+## 💣 The Gotchas Nobody Warns You About
+
+**Units do not match.** Blender thinks in metres, Unreal thinks in centimetres. This is the single most common reason a model arrives either microscopic or the size of a building. Decide how you're handling scale before you build a whole scene around it.
+
+**Apply your transforms.** In Blender, press **Ctrl+A → All Transforms** before exporting. Unapplied scale and rotation cause a whole category of baffling problems on the other side — the same habit that saves you during UV unwrapping.
+
+**Your materials will not survive the trip.** This surprises everyone. Blender's shader nodes and Unreal's material graph are different systems, so a beautiful procedural Blender material does not arrive intact. Image textures transfer. Node graphs do not.
+
+**So bake procedurals to textures first.** If your material is generated from noise and gradients rather than image files, bake it down in Blender before exporting, or plan to rebuild it in Unreal's material editor.
+
+**Name things properly from day one.** Studios use prefixes like SM_ for static meshes and T_ for textures. It feels fussy with five assets and saves your sanity at five hundred.
+
+> 💡 Exact export settings shift between versions of both programs. Verify the values against your own versions rather than trusting any tutorial's screenshot — including this one's advice.
+
+---
+
+## 💸 What It Actually Costs
+
+Blender is free and always will be — it's open source, funded by donations and corporate sponsors.
+
+Unreal is free to download and use, with royalties owed only on games past a substantial revenue threshold, and separate terms for commercial non-game work. Epic changes these terms periodically, so check the current licensing before you build a business on an assumption.
+
+For a learner, an indie, or a freelancer starting out: **zero.**
+
+---
+
+## 🧭 Should You Learn Both?
+
+Learn Blender first. Every skill in it — modeling, topology, UVs, rigging — transfers to any engine you ever touch, and you can't hand Unreal good assets before you can make good assets.
+
+But knowing that Unreal is waiting changes how you learn Blender. You start caring about clean topology and sensible UVs, not because a tutorial told you to, but because you can see where they're going. That's a much better reason.
+
+---
+
+**Read next:** [UV Unwrapping in Blender, Without the Panic](/blog/uv-unwrapping-blender-beginners) — the skill that matters most once your models start leaving Blender.
+
+*Want to build toward a real-time portfolio piece rather than another tutorial file? [Book a free intro call →](https://blendertutoring.com/#packages)*
+    `
+  },
+  {
     slug: "cycles-vs-eevee",
     title: "Cycles vs EEVEE: Which Blender Render Engine Should You Use?",
     description: "Blender ships with two render engines and never explains which to pick. Here's the honest answer, and when each one is the right call.",
@@ -79,6 +190,10 @@ Materials mostly carry over between the two, though not always identically — w
 Most "bad render" problems turn out not to be engine problems at all. They're lighting problems, or material problems, or a camera at an unflattering angle — and no amount of extra samples fixes those.
 
 That's the kind of thing that's genuinely hard to diagnose from a tutorial, because it depends on your specific scene. It's also the fastest thing to fix with someone looking over your shoulder.
+
+---
+
+**Read next:** [UV Unwrapping in Blender, Without the Panic](/blog/uv-unwrapping-blender-beginners) — because a great render of a badly textured model is still a badly textured model.
 
 *Rendering something and can't tell why it looks off? [Book a free intro call →](https://blendertutoring.com/#packages)*
     `
@@ -183,6 +298,10 @@ UV unwrapping is unusually hard to learn from videos, because the answer to "whe
 
 That's a five-minute conversation and a months-long frustration, depending on whether anyone's there to have it with you.
 
+---
+
+**Read next:** [Cycles vs EEVEE](/blog/cycles-vs-eevee) — once your textures sit properly, the render engine decides how they actually look.
+
 *Stuck on your own model rather than a tutorial's? [Book a free intro call →](https://blendertutoring.com/#packages)*
     `
   },
@@ -285,6 +404,10 @@ Finish it anyway. Three finished, flawed projects will teach you more than one e
 There's one thing the make-search-finish loop can't give you: someone who looks at your work and tells you *why* it doesn't look right yet — the topology habit that will hurt you in month three, the lighting mistake you can't see because you've stared at the scene too long.
 
 That feedback gap is exactly why we do one-on-one mentoring: you build **your own project** from start to finish with a mentor who unblocks you in minutes instead of days.
+
+---
+
+**Read next:** two walls most people hit right after the donut — [UV Unwrapping, Without the Panic](/blog/uv-unwrapping-blender-beginners) and [Cycles vs EEVEE](/blog/cycles-vs-eevee). And if you're wondering how long all this takes, [here's an honest breakdown](/blog/how-long-to-learn-blender).
 
 *Finished your donut and want a clear path to work you're proud of? [Book a free intro call →](https://blendertutoring.com/#packages)*
     `
@@ -849,6 +972,10 @@ Free tutorials are incredible — but they have one gap: **they can't see what y
 You can follow 50 tutorials perfectly and still be building bad habits — topology mistakes, inefficient workflows, render settings that are hurting your results. A tutor can spot these in minutes and save you months of frustration.
 
 ---
+
+---
+
+**Read next:** [Life Beyond the Donut](/blog/life-beyond-the-donut) — what to do once the tutorials stop being enough.
 
 *Want feedback on your actual work instead of just following along? [Book a session →](https://blendertutoring.com/#packages)*
     `
