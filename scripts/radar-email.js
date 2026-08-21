@@ -3,31 +3,30 @@
 // Mailchimp campaigns cannot carry attachments, so the PDF is published to the
 // site by radar-snapshot.js and this links to it.
 //
+// The only thing you must supply is the API key. The audience and its sending
+// details are read from Mailchimp itself, so there is nothing else to keep in
+// sync or rotate.
+//
 // Required env:
 //   MAILCHIMP_API_KEY   e.g. abc123...-us8 (the suffix selects the datacenter)
-//   MAILCHIMP_LIST_ID   audience id
-//   MAILCHIMP_REPLY_TO  reply address (Mailchimp rejects campaigns without one)
-// Optional:
-//   MAILCHIMP_SEGMENT_ID  send to one saved segment instead of the whole audience
-//   MAILCHIMP_FROM_NAME   defaults to "The Radar"
+// Optional overrides (each is discovered automatically when unset):
+//   MAILCHIMP_LIST_ID     audience id — only needed if you have several
+//   MAILCHIMP_REPLY_TO    reply address — defaults to the audience's own
+//   MAILCHIMP_FROM_NAME   sender name — defaults to the audience's own
+//   MAILCHIMP_SEGMENT_ID  send to one saved segment instead of everyone
 //   SNAPSHOT_URL          defaults to the published latest.pdf
 //   DRY_RUN=1             build and print the campaign without sending
 //   TEST_EMAIL            send a test to this address only, then delete the
 //                         draft. Subscribers receive nothing.
 const API_KEY = process.env.MAILCHIMP_API_KEY
-const LIST_ID = process.env.MAILCHIMP_LIST_ID
-const REPLY_TO = process.env.MAILCHIMP_REPLY_TO
 const SEGMENT_ID = process.env.MAILCHIMP_SEGMENT_ID
-const FROM_NAME = process.env.MAILCHIMP_FROM_NAME || 'The Radar'
 const SITE = 'https://www.blendertutoring.com'
 const SNAPSHOT_URL = process.env.SNAPSHOT_URL || `${SITE}/snapshots/latest.pdf`
 const DRY_RUN = process.env.DRY_RUN === '1'
 const TEST_EMAIL = (process.env.TEST_EMAIL || '').trim()
 
-const missing = ['MAILCHIMP_API_KEY', 'MAILCHIMP_LIST_ID', 'MAILCHIMP_REPLY_TO']
-  .filter(k => !process.env[k])
-if (missing.length && !DRY_RUN) {
-  console.error(`Missing required env: ${missing.join(', ')}`)
+if (!API_KEY && !DRY_RUN) {
+  console.error('Missing required env: MAILCHIMP_API_KEY')
   process.exit(1)
 }
 
@@ -50,6 +49,42 @@ async function mc(path, method = 'GET', body) {
     throw new Error(`Mailchimp ${method} ${path} -> ${res.status}: ${detail}`)
   }
   return text ? JSON.parse(text) : {}
+}
+
+// Ask Mailchimp which audience to use and how it sends, rather than keeping
+// copies of that in repository secrets where they can drift or go stale.
+async function resolveAudience() {
+  let listId = process.env.MAILCHIMP_LIST_ID
+  let list
+
+  if (listId) {
+    list = await mc(`/lists/${listId}`)
+  } else {
+    const { lists = [] } = await mc('/lists?count=25&fields=lists.id,lists.name,lists.campaign_defaults')
+    if (lists.length === 0) {
+      throw new Error('This Mailchimp account has no audiences. Create one, then re-run.')
+    }
+    if (lists.length > 1) {
+      const names = lists.map(l => `${l.name} (${l.id})`).join(', ')
+      throw new Error(`This account has several audiences, so pick one with MAILCHIMP_LIST_ID: ${names}`)
+    }
+    list = lists[0]
+    listId = list.id
+  }
+
+  const defaults = list.campaign_defaults || {}
+  const replyTo = process.env.MAILCHIMP_REPLY_TO || defaults.from_email
+  const fromName = process.env.MAILCHIMP_FROM_NAME || defaults.from_name || 'The Radar'
+
+  if (!replyTo) {
+    throw new Error(
+      'No reply address available. Set a default "from" address on the audience in Mailchimp, or set MAILCHIMP_REPLY_TO.'
+    )
+  }
+
+  console.log(`audience: ${list.name || listId} (${listId})`)
+  console.log(`sending as: ${fromName} <${replyTo}>`)
+  return { listId, replyTo, fromName }
 }
 
 // GitHub Pages needs a moment to publish the freshly committed PDF; emailing a
@@ -133,7 +168,9 @@ async function main() {
     console.warn('WARNING: snapshot is not reachable yet — the test email will link to a 404.')
   }
 
-  const recipients = { list_id: LIST_ID }
+  const { listId, replyTo, fromName } = await resolveAudience()
+
+  const recipients = { list_id: listId }
   if (SEGMENT_ID) recipients.segment_opts = { saved_segment_id: Number(SEGMENT_ID) }
 
   const campaign = await mc('/campaigns', 'POST', {
@@ -142,8 +179,8 @@ async function main() {
     settings: {
       subject_line: subject,
       title: `Radar snapshot ${new Date().toISOString().split('T')[0]}`,
-      from_name: FROM_NAME,
-      reply_to: REPLY_TO,
+      from_name: fromName,
+      reply_to: replyTo,
       auto_footer: false,
     },
   })
