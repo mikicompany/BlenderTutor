@@ -12,18 +12,22 @@ Vite + React site, built to `docs/` and served by GitHub Pages.
 
 ### Repository secrets
 
-`radar-snapshot.yml` needs these under Settings → Secrets and variables → Actions:
+Under Settings → Secrets and variables → Actions:
 
-| Secret | Notes |
-|---|---|
-| `VITE_RAWG_API_KEY` | already used by the Discord job |
-| `MAILCHIMP_API_KEY` | from Mailchimp → Account → Extras → API keys. The `-usX` suffix selects the datacenter, so keep it intact |
-| `MAILCHIMP_LIST_ID` | the audience id (Audience → Settings → Audience name and defaults) |
-| `MAILCHIMP_REPLY_TO` | reply address; Mailchimp rejects campaigns without one |
-| `MAILCHIMP_SEGMENT_ID` | optional. Send to one saved segment (e.g. only `the-radar` subscribers) instead of the whole audience |
+| Secret | Required? | Notes |
+|---|---|---|
+| `VITE_RAWG_API_KEY` | yes | already used by the Discord job |
+| `MAILCHIMP_API_KEY` | yes, to email | Mailchimp → Account & billing → Extras → API keys. The `-usX` suffix selects the datacenter, so paste it whole |
+| `MAILCHIMP_LIST_ID` | no | discovered automatically. Only needed if the account has more than one audience |
+| `MAILCHIMP_REPLY_TO` | no | defaults to the audience's own "from" address |
+| `MAILCHIMP_FROM_NAME` | no | defaults to the audience's own sender name |
+| `MAILCHIMP_SEGMENT_ID` | no | send to one saved segment (e.g. only `the-radar` subscribers) instead of everyone |
 
-Until the Mailchimp secrets exist the PDF is still built and published; only the
-email step fails.
+The audience, its reply address, and its sender name are read from Mailchimp at
+send time, so there is nothing to keep in sync — **one API key is enough.**
+
+Until that key exists the PDF is still built and published; only the email step
+fails.
 
 ### Running the snapshot by hand
 
