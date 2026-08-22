@@ -53,6 +53,12 @@ async function mc(path, method = 'GET', body) {
 
 // Ask Mailchimp which audience to use and how it sends, rather than keeping
 // copies of that in repository secrets where they can drift or go stale.
+// The audience id baked into the site's signup form (src/lib/mailchimp.js).
+// Auto-discovery must land on this one: the account may hold other audiences
+// belonging to entirely different projects, and mailing those would reach
+// people who never asked for this.
+const SITE_AUDIENCE_ID = 'fcb87c912d'
+
 async function resolveAudience() {
   let listId = process.env.MAILCHIMP_LIST_ID
   let list
@@ -70,6 +76,17 @@ async function resolveAudience() {
     }
     list = lists[0]
     listId = list.id
+
+    // Fail closed: only mail the audience the website actually feeds.
+    if (listId !== SITE_AUDIENCE_ID) {
+      throw new Error(
+        `Refusing to send. The only audience in this account is "${list.name}" (${listId}), ` +
+        `but the site's signup form writes to ${SITE_AUDIENCE_ID}. These look like different ` +
+        `mailing lists, and the people in "${list.name}" did not subscribe to The Radar. ` +
+        `Check you are using the API key for the account that owns the signup form; if this ` +
+        `really is the right audience, set MAILCHIMP_LIST_ID=${listId} to confirm deliberately.`
+      )
+    }
   }
 
   const defaults = list.campaign_defaults || {}
