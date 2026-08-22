@@ -57,7 +57,7 @@ async function mc(path, method = 'GET', body) {
 // Auto-discovery must land on this one: the account may hold other audiences
 // belonging to entirely different projects, and mailing those would reach
 // people who never asked for this.
-const SITE_AUDIENCE_ID = 'fcb87c912d'
+const SITE_AUDIENCE_ID = 'acff18f22a'
 
 async function resolveAudience() {
   let listId = process.env.MAILCHIMP_LIST_ID
