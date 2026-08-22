@@ -4,8 +4,8 @@
 // bare server host (us8.list-manage.com) is not a valid endpoint, so the URL
 // must be used whole rather than reassembled from parts.
 const FORM_URL =
-  'https://blendertutoring.us8.list-manage.com/subscribe/post-json' +
-  '?u=448c4c0d61ffab1851464e145&id=fcb87c912d&f_id=00e218e1f0'
+  'https://mikibutler.us6.list-manage.com/subscribe/post-json' +
+  '?u=51b0be2ee0295662ce0f7f966&id=acff18f22a&f_id=003ad2e0f0'
 
 const DEFAULT_TIMEOUT = 8000
 
