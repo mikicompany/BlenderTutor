@@ -204,6 +204,26 @@ async function main() {
     const dated = join(OUT_DIR, `radar-${fmtDate(now)}.pdf`)
     writeFileSync(dated, pdf)
     writeFileSync(join(OUT_DIR, 'latest.pdf'), pdf)
+
+    // Publish the same figures as JSON so the email can show them inline
+    // rather than only linking to the PDF. One fetch, one source of truth.
+    const slim = g => ({
+      name: g.name,
+      metacritic: g.metacritic ?? null,
+      released: g.released ?? null,
+      genres: (g.genres ?? []).slice(0, 2).map(x => x.name),
+    })
+    writeFileSync(join(OUT_DIR, 'latest.json'), JSON.stringify({
+      date: fmtDate(now),
+      label,
+      newAndNotable: data.newAndNotable.slice(0, 6).map(slim),
+      metacriticTop: data.metacriticTop.slice(0, 5).map(slim),
+      steamTrending: data.steamTrending.slice(0, 5).map(s => ({
+        name: s.name, price: price(s.price),
+        positive: Number(s.positive) || 0, ccu: Number(s.ccu) || 0,
+      })),
+      releaseCount: data.releases.length,
+    }, null, 2))
     prune(OUT_DIR)
     console.log(`wrote ${dated} (${(pdf.length / 1024).toFixed(0)} KB)`)
     console.log(`counts: notable=${data.newAndNotable.length} metacritic=${data.metacriticTop.length} steam=${data.steamTrending.length} releases=${data.releases.length}`)
