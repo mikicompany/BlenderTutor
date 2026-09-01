@@ -1,7 +1,16 @@
 {
-  "date": "2026-08-25",
-  "label": "Aug 25, 2026",
+  "date": "2026-09-01",
+  "label": "Sep 1, 2026",
   "newAndNotable": [
+    {
+      "name": "Resonance: A Plague Tale Legacy",
+      "metacritic": null,
+      "released": "2026-08-27",
+      "genres": [
+        "Adventure",
+        "Action"
+      ]
+    },
     {
       "name": "Beast of Reincarnation",
       "metacritic": null,
@@ -21,12 +30,11 @@
       ]
     },
     {
-      "name": "Halo Campaign Evolved",
+      "name": "Star Wars Zero Company",
       "metacritic": null,
-      "released": "2026-07-28",
+      "released": "2026-08-27",
       "genres": [
-        "Shooter",
-        "Adventure"
+        "Strategy"
       ]
     },
     {
@@ -39,21 +47,12 @@
       ]
     },
     {
-      "name": "Mafia: The Old Country - Man of Honor",
+      "name": "1666: Amsterdam",
       "metacritic": null,
-      "released": "2026-08-14",
+      "released": "2026-08-25",
       "genres": [
         "Adventure",
         "Action"
-      ]
-    },
-    {
-      "name": "The Relic: First Guardian",
-      "metacritic": null,
-      "released": "2026-07-31",
-      "genres": [
-        "Action",
-        "RPG"
       ]
     }
   ],
@@ -134,5 +133,5 @@
       "ccu": 6187
     }
   ],
-  "releaseCount": 40
+  "releaseCount": 15
 }
