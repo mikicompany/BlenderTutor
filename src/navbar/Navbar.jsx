@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,6 +20,7 @@ const Navbar = () => {
   const navLinks = [
     { name: "Packages", href: "#packages" },
     { name: "About", href: "#about" },
+    { name: "Blog", to: "/blog" },
   ];
 
   const scrollToTop = (e) => {
@@ -32,16 +33,25 @@ const Navbar = () => {
     }
   };
 
+  const scrollToId = (id) => {
+    const element = document.querySelector(id);
+    if (!element) return;
+    const offset = 70;
+    const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+    window.scrollTo({ top: elementPosition - offset, behavior: "smooth" });
+  };
+
   const handleScroll = (e, id) => {
     e.preventDefault();
-    const element = document.querySelector(id);
-    if (element) {
-      setIsOpen(false);
-      const offset = 70;
-      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-      const offsetPosition = elementPosition - offset;
-      window.scrollTo({ top: offsetPosition, behavior: "smooth" });
+    setIsOpen(false);
+    // These targets only exist on the home page, so from any other route
+    // (the blog, The Radar) go home first and scroll once it has mounted.
+    if (location.pathname !== "/") {
+      navigate("/");
+      setTimeout(() => scrollToId(id), 120);
+      return;
     }
+    scrollToId(id);
   };
 
   return (
@@ -75,9 +85,15 @@ const Navbar = () => {
           <ul className="flex gap-8">
             {navLinks.map((link) => (
               <li key={link.name} className="text-gray-400 hover:text-white transition-colors text-[14px] font-medium">
-                <a href={link.href} onClick={(e) => handleScroll(e, link.href)}>
-                  {link.name}
-                </a>
+                {link.to ? (
+                  <Link to={link.to} onClick={() => setIsOpen(false)}>
+                    {link.name}
+                  </Link>
+                ) : (
+                  <a href={link.href} onClick={(e) => handleScroll(e, link.href)}>
+                    {link.name}
+                  </a>
+                )}
               </li>
             ))}
           </ul>
@@ -111,18 +127,28 @@ const Navbar = () => {
             initial="closed"
             animate="open"
             exit="closed"
-            className="fixed inset-0 h-[280px] w-full bg-[#0f1011] z-[50] flex flex-col items-start pt-[85px] pl-8 border-b border-white/10 shadow-2xl"
+            className="fixed inset-x-0 top-0 w-full bg-[#0f1011] z-[50] flex flex-col items-start pt-[85px] pb-10 pl-8 border-b border-white/10 shadow-2xl"
           >
             <ul className="flex flex-col gap-6 mb-6">
               {navLinks.map((link) => (
                 <motion.li key={link.name} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }}>
-                  <a
-                    href={link.href}
-                    onClick={(e) => handleScroll(e, link.href)}
-                    className="text-gray-400 text-lg font-bold hover:text-orange-500 transition-colors"
-                  >
-                    {link.name}
-                  </a>
+                  {link.to ? (
+                    <Link
+                      to={link.to}
+                      onClick={() => setIsOpen(false)}
+                      className="text-gray-400 text-lg font-bold hover:text-orange-500 transition-colors"
+                    >
+                      {link.name}
+                    </Link>
+                  ) : (
+                    <a
+                      href={link.href}
+                      onClick={(e) => handleScroll(e, link.href)}
+                      className="text-gray-400 text-lg font-bold hover:text-orange-500 transition-colors"
+                    >
+                      {link.name}
+                    </a>
+                  )}
                 </motion.li>
               ))}
             </ul>

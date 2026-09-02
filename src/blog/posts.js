@@ -307,7 +307,7 @@ That's a five-minute conversation and a months-long frustration, depending on wh
   },
   {
     slug: "life-beyond-the-donut",
-    title: "Life Beyond the Donut",
+    title: "What to Make After the Blender Donut Tutorial",
     description: "Finished Blender's famous donut tutorial? Here's how to escape tutorial hell and start making work that's actually yours.",
     date: "2026-07-24",
     thumbnail: "/blog-images/life-beyond-the-donut.jpg",
@@ -975,7 +975,7 @@ You can follow 50 tutorials perfectly and still be building bad habits — topol
 
 ---
 
-**Read next:** [Life Beyond the Donut](/blog/life-beyond-the-donut) — what to do once the tutorials stop being enough.
+**Read next:** [What to Make After the Blender Donut Tutorial](/blog/life-beyond-the-donut) — what to do once the tutorials stop being enough.
 
 *Want feedback on your actual work instead of just following along? [Book a session →](https://blendertutoring.com/#packages)*
     `
