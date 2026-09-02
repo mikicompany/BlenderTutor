@@ -1,4 +1,5 @@
 import React from "react";
+import { Helmet } from "react-helmet-async";
 import { motion, rgba } from "framer-motion";
 import hero from "../assets/hero-bg-CMX9Xi5b.mp4";
 import heroWebm from "../assets/hero-bg.webm";
@@ -27,6 +28,32 @@ const Home = () => {
 
   return (
     <div className="relative w-full">
+      {/* Every route sets its own head tags through Helmet, so index.html can
+          stay free of static copies that would otherwise duplicate them. */}
+      <Helmet>
+        <title>BlenderTutor – Blender Online Tutoring</title>
+        <meta
+          name="description"
+          content="Get Blender online tutoring. Learn modeling, sculpting, animation, shading, and rendering with beginner-friendly lessons and personalized teaching."
+        />
+        <link rel="canonical" href="https://www.blendertutoring.com/" />
+        <meta property="og:title" content="BlenderTutor – Blender Online Tutoring" />
+        <meta
+          property="og:description"
+          content="Blender tutorials and personalized online tutoring. Learn 3D modeling, sculpting, animation and more — beginner friendly."
+        />
+        <meta property="og:url" content="https://www.blendertutoring.com/" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://www.blendertutoring.com/og-image.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="BlenderTutor – Blender 3D Tutorials & Online Tutoring" />
+        <meta
+          name="twitter:description"
+          content="Blender tutorials and personalized online tutoring. Learn 3D modeling, sculpting, animation and more — beginner friendly."
+        />
+        <meta name="twitter:image" content="https://www.blendertutoring.com/og-image.png" />
+      </Helmet>
+
       {/* --- FIXED BACKGROUND VIDEO --- */}
       <div className="fixed inset-0 w-full h-screen z-0">
         <video
