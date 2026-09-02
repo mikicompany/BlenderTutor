@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en"><head>
+  <!-- Google Tag Manager -->
+  <script async="" src="https://www.googletagmanager.com/gtm.js?id=GTM-MRSNFX33"></script><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-MRSNFX33');</script>
+  <!-- End Google Tag Manager -->
+
+  <script>
+  var redirect = new URLSearchParams(window.location.search).get('redirect');
+  if (redirect) {
+    window.history.replaceState(null, null, redirect);
+  }
+</script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="keywords" content="Blender tutorials, Blender tutoring, Blender online tutoring, learn Blender, Blender 3D, Blender for beginners, Blender lessons, 3D modeling tutorials, Blender teaching, online Blender course, Blender training, Blender sculpting, Blender animation, Blender rendering">
+  <meta name="author" content="BlenderTutor">
+
+
+
+
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&amp;family=Roboto+Mono:wght@400;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <script type="module" crossorigin="" src="/assets/index-DJ4SnVjl.js"></script>
+  <link rel="stylesheet" crossorigin="" href="/assets/index-D_9GsYTU.css">
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
+<title>UV Unwrapping in Blender, Without the Panic – BlenderTutor</title><meta name="description" content="UV unwrapping is where most Blender beginners get stuck. Here's what UVs actually are, why your texture looks stretched, and the workflow that fixes it."><meta property="og:title" content="UV Unwrapping in Blender, Without the Panic"><meta property="og:description" content="UV unwrapping is where most Blender beginners get stuck. Here's what UVs actually are, why your texture looks stretched, and the workflow that fixes it."><meta property="og:url" content="https://www.blendertutoring.com/blog/uv-unwrapping-blender-beginners"><meta property="og:type" content="article"><meta property="og:image" content="https://www.blendertutoring.com/blog-images/uv-unwrapping-blender-beginners.jpg"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="UV Unwrapping in Blender, Without the Panic"><meta name="twitter:description" content="UV unwrapping is where most Blender beginners get stuck. Here's what UVs actually are, why your texture looks stretched, and the workflow that fixes it."><link rel="canonical" href="https://www.blendertutoring.com/blog/uv-unwrapping-blender-beginners"></head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MRSNFX33"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    "name": "BlenderTutor",
+    "url": "https://www.blendertutoring.com",
+    "logo": "https://www.blendertutoring.com/og-image.png",
+    "description": "Personalized 1-on-1 Blender online tutoring for beginners and intermediate users. Learn 3D modeling, sculpting, animation, and rendering.",
+    "offers": {
+      "@type": "Offer",
+      "description": "Personalized Blender tutoring sessions",
+      "url": "https://www.blendertutoring.com/#packages"
+    }
+  }
+  </script>
+  <div id="root"><div class="relative w-full min-h-screen bg-black"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"UV Unwrapping in Blender, Without the Panic","description":"UV unwrapping is where most Blender beginners get stuck. Here's what UVs actually are, why your texture looks stretched, and the workflow that fixes it.","datePublished":"2026-08-15","url":"https://www.blendertutoring.com/blog/uv-unwrapping-blender-beginners","image":"https://www.blendertutoring.com/blog-images/uv-unwrapping-blender-beginners.jpg","author":{"@type":"Organization","name":"BlenderTutor"},"publisher":{"@type":"Organization","name":"BlenderTutor","url":"https://www.blendertutoring.com"}}</script><nav><div class="fixed top-0 left-0 w-full z-[60] bg-[#0f1011]/80 backdrop-blur-md flex justify-between px-6 md:px-20 py-4 items-center h-[60px] border-b border-white/5" style="opacity: 0; transform: translateY(-13.0476px);"><h1 class="flex items-center gap-2 text-2xl font-bold tracking-tight text-white cursor-pointer relative z-[70]"><a href="#hero" class="flex items-center gap-2"><img alt="Blender Logo" class="w-6 h-6" src="data:image/svg+xml,%3c?xml%20version=%271.0%27%20encoding=%27UTF-8%27?%3e%3csvg%20style=%27clip-rule:evenodd;fill-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2%27%20version=%271.1%27%20viewBox=%270%200%20181%20148%27%20xml:space=%27preserve%27%20xmlns=%27http://www.w3.org/2000/svg%27%3e%3ctitle%3eBlender%20logo%20(without%20text)%3c/title%3e%3cg%20transform=%27matrix(.281%200%200%20.281%20-41.8%20-43.7)%27%3e%3cg%20transform=%27matrix(21.6%200%200%2021.6%20-4857%207665)%27%3e%3cpath%20d=%27m243-334c0.106-1.89%201.03-3.56%202.43-4.74%201.37-1.16%203.21-1.87%205.23-1.87%202.01%200%203.85%200.709%205.22%201.87%201.4%201.18%202.32%202.85%202.43%204.74%200.106%201.94-0.675%203.75-2.04%205.09-1.4%201.36-3.38%202.22-5.61%202.22s-4.22-0.854-5.61-2.22c-1.37-1.34-2.15-3.14-2.04-5.08z%27%20style=%27fill-rule:nonzero;fill:%23fff%27/%3e%3c/g%3e%3cg%20transform=%27matrix(11.1%200%200%2011.1%20-2215%204153)%27%3e%3cpath%20d=%27m243-334c0.106-1.89%201.03-3.56%202.43-4.74%201.37-1.16%203.21-1.87%205.23-1.87%202.01%200%203.85%200.709%205.22%201.87%201.4%201.18%202.32%202.85%202.43%204.74%200.106%201.94-0.675%203.75-2.04%205.09-1.4%201.36-3.38%202.22-5.61%202.22s-4.22-0.854-5.61-2.22c-1.37-1.34-2.15-3.14-2.04-5.08z%27%20style=%27fill-rule:nonzero;fill:%23265787%27/%3e%3cpath%20d=%27m231-330c0.013%200.74%200.249%202.18%200.603%203.3%200.744%202.38%202.01%204.58%203.76%206.51%201.8%201.99%204.02%203.59%206.58%204.73%202.69%201.19%205.61%201.8%208.64%201.8%203.03-4e-3%205.95-0.624%208.64-1.83%202.56-1.15%204.78-2.75%206.58-4.75%201.76-1.95%203.02-4.15%203.76-6.53%200.375-1.2%200.612-2.42%200.707-3.64%200.093-1.2%200.054-2.41-0.117-3.62-0.334-2.35-1.15-4.56-2.4-6.56-1.14-1.85-2.62-3.46-4.38-4.82l4e-3%20-3e-3%20-17.7-13.6c-0.016-0.012-0.029-0.025-0.046-0.036-1.16-0.892-3.12-0.889-4.39%205e-3%20-1.29%200.904-1.44%202.4-0.29%203.34l-5e-3%205e-3%207.39%206.01-22.5%200.024h-0.03c-1.86%202e-3%20-3.65%201.22-4%202.77-0.364%201.57%200.9%202.88%202.84%202.88l-3e-3%207e-3%2011.4-0.022-20.4%2015.6c-0.026%200.019-0.054%200.039-0.078%200.058-1.92%201.47-2.54%203.92-1.33%205.46%201.23%201.57%203.84%201.58%205.78%209e-3l11.1-9.1s-0.162%201.23-0.149%201.96zm28.6%204.11c-2.29%202.33-5.5%203.66-8.96%203.66-3.47%206e-3%20-6.68-1.3-8.97-3.63-1.12-1.14-1.94-2.44-2.45-3.83-0.497-1.37-0.69-2.82-0.562-4.28%200.121-1.43%200.547-2.8%201.23-4.03%200.668-1.21%201.59-2.31%202.72-3.24%202.23-1.81%205.06-2.8%208.02-2.8%202.97-4e-3%205.8%200.969%208.03%202.78%201.13%200.924%202.05%202.02%202.72%203.23%200.683%201.23%201.11%202.59%201.23%204.03%200.126%201.46-0.067%202.91-0.564%204.28-0.508%201.4-1.33%202.7-2.45%203.84z%27%20style=%27fill-rule:nonzero;fill:%23ea7600%27/%3e%3c/g%3e%3c/g%3e%3c/svg%3e"><span class="flex items-baseline" style="font-size: 20px;"><span class="mr-[1px]" style="font-family: &quot;space grotesk&quot;, serif; font-weight: 700; font-size: 20px; color: rgb(243, 125, 22);">B</span>lender Tutoring.com</span></a></h1><div class="hidden lg:flex gap-8 items-center"><ul class="flex gap-8"><li class="text-gray-400 hover:text-white transition-colors text-[14px] font-medium"><a href="#packages">Packages</a></li><li class="text-gray-400 hover:text-white transition-colors text-[14px] font-medium"><a href="#about">About</a></li><li class="text-gray-400 hover:text-white transition-colors text-[14px] font-medium"><a href="/blog" data-discover="true">Blog</a></li></ul><button class="px-5 py-2 rounded-full text-sm font-bold cursor-pointer hover:bg-orange-600 text-black transition-all" style="background-color: rgb(243, 125, 22);"><a href="https://calendly.com/blendertutoring-info/" class="flex items-center" target="_blank" rel="noreferrer">Book a call</a></button></div><div class="lg:hidden flex items-center gap-4 relative z-[70]"><button class="px-4 py-1.5 rounded-full text-xs font-bold cursor-pointer text-black md:flex hidden" style="background-color: rgb(243, 125, 22);">Book a call</button><button class="text-white p-2 hover:bg-white/5 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu" aria-hidden="true"><path d="M4 5h16"></path><path d="M4 12h16"></path><path d="M4 19h16"></path></svg></button></div></div></nav><div class="max-w-3xl mx-auto px-6 py-24 text-white"><a class="text-orange-400 hover:underline text-sm mb-8 block" href="/blog" data-discover="true">← Back to Blog</a><h1 class="text-4xl font-bold mb-4">UV Unwrapping in Blender, Without the Panic</h1><p class="text-gray-400 text-sm mb-10">2026-08-15</p><div class="prose prose-invert prose-orange max-w-none prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:text-orange-400 prose-blockquote:border-orange-400 prose-blockquote:bg-orange-400/5 prose-blockquote:rounded-r-lg prose-blockquote:py-1 prose-table:text-sm prose-td:border-white/10 prose-th:border-white/10 prose-hr:border-white/10"><p>Modelling clicks eventually. Materials sort of click. Then you try to put an image texture on your model, it comes out smeared into unrecognisable streaks, and you discover UV unwrapping.</p>
+<p>This is the wall. More beginners stall here than anywhere else in Blender, and it's almost always because nobody explained what the process is actually <em>for</em>.</p>
+<hr>
+<h2>📦 What UVs Actually Are</h2>
+<p>Take a cardboard box. Cut along some of its edges, flatten it out, and you get a flat cross shape on the table. That flat shape is the UV map. The cuts you made are the <strong>seams</strong>.</p>
+<p>That's the whole idea. Your 3D surface has to be flattened into 2D so that a flat image can be painted onto it. Blender can't do that flattening well without knowing where you're willing to cut.</p>
+<blockquote>
+<p>💡 If you never tell Blender where to cut, it makes a bad guess — and a bad guess is exactly what stretched, smeared textures look like.</p>
+</blockquote>
+<hr>
+<h2>🧵 Where to Put Seams</h2>
+<p>The instinct is to avoid cutting. Resist it. <strong>More seams in sensible places beats fewer seams in bad ones.</strong></p>
+<p>Two ways to think about it:</p>
+<ul>
+<li><strong>Like a cardboard box</strong> — cut along structural edges so the pieces lie flat without distorting</li>
+<li><strong>Like clothing patterns</strong> — a sewing pattern hides its seams under the arms and along the sides</li>
+</ul>
+<p>The practical rule: put seams where <strong>nobody will look</strong>. Under the object, inside a fold, along a sharp corner, behind the character. A seam is only a problem if it's visible.</p>
+<p>To mark one: in <strong>Edit Mode</strong>, switch to edge select, pick your edges, then <strong>Ctrl+E → Mark Seam</strong>. Marked seams turn red.</p>
+<hr>
+<h2>🔧 The Actual Workflow</h2>
+<table><thead><tr><th>Step</th><th>What you do</th></tr></thead><tbody><tr><td>1</td><td>Switch to the <strong>UV Editing</strong> workspace at the top of Blender</td></tr><tr><td>2</td><td>In Edit Mode, select edges and <strong>Ctrl+E → Mark Seam</strong></td></tr><tr><td>3</td><td>Select everything with <strong>A</strong></td></tr><tr><td>4</td><td>Press <strong>U → Unwrap</strong></td></tr><tr><td>5</td><td>Check the result in the UV editor on the left</td></tr><tr><td>6</td><td>Add seams and re-unwrap until nothing looks stretched</td></tr></tbody></table>
+<p>That's it. Unwrapping isn't one action, it's a loop — mark, unwrap, look, adjust.</p>
+<p><strong>The escape hatch:</strong> <strong>U → Smart UV Project</strong> lets Blender decide the seams itself. It's genuinely fine for hard-surface props, machinery, and anything you won't hand-paint. It's poor for characters and anything organic. Don't feel clever for avoiding it.</p>
+<hr>
+<h2>🏁 How to Tell If It Worked</h2>
+<p>You cannot judge an unwrap by looking at the UV layout. You judge it by putting a test pattern on the model.</p>
+<p>In the image editor, create a <strong>New</strong> image and set its type to <strong>UV Grid</strong> or <strong>Colour Grid</strong>, then apply it to your object. Now look at your model:</p>
+<ul>
+<li><strong>Squares still look square</strong> → your unwrap is good</li>
+<li><strong>Squares stretched into rectangles</strong> → that area needs more seams</li>
+<li><strong>Squares wildly different sizes across the model</strong> → your texture detail will be uneven</li>
+</ul>
+<p>This one habit separates people who "can't do UVs" from people who can.</p>
+<hr>
+<h2>💣 The Gotcha That Wastes Everyone's Afternoon</h2>
+<p><strong>Apply your scale before unwrapping.</strong></p>
+<p>If you scaled your object in Object Mode, Blender is still carrying that scale as a transform, and it will quietly distort your unwrap. In Object Mode, press <strong>Ctrl+A → Scale</strong>, then unwrap.</p>
+<p>Enormous numbers of "my UVs are broken and I don't know why" posts are this exact problem.</p>
+<blockquote>
+<p>💡 Also worth knowing: overlapping UV islands means two parts of your model share the same patch of texture. Sometimes deliberate and efficient — usually an accident that makes painting impossible.</p>
+</blockquote>
+<hr>
+<h2>🤷 When You Can Skip It Entirely</h2>
+<p>Not everything needs careful UVs:</p>
+<ul>
+<li><strong>Procedural materials</strong> — noise, gradients, and the like often need no UV map at all</li>
+<li><strong>Single-colour or simple metal objects</strong> — nothing to align</li>
+<li><strong>Hard-surface props</strong> — Smart UV Project is usually enough</li>
+<li><strong>Background objects</strong> — nobody is inspecting them</li>
+</ul>
+<p>Save your patience for the hero object that's actually on screen.</p>
+<hr>
+<h2>Why This One Is Worth Asking About</h2>
+<p>UV unwrapping is unusually hard to learn from videos, because the answer to "where do the seams go" depends entirely on the model in front of you. A tutorial can show you the buttons; it can't look at your mesh and say <em>cut there, not there</em>.</p>
+<p>That's a five-minute conversation and a months-long frustration, depending on whether anyone's there to have it with you.</p>
+<hr>
+<p><strong>Read next:</strong> <a href="/blog/cycles-vs-eevee">Cycles vs EEVEE</a> — once your textures sit properly, the render engine decides how they actually look.</p>
+<p><em>Stuck on your own model rather than a tutorial's? <a href="https://blendertutoring.com/#packages">Book a free intro call →</a></em></p></div><div class="mt-16 border border-orange-400/20 rounded-xl p-8 bg-orange-400/5"><p class="text-orange-400 text-xs font-semibold tracking-widest uppercase mb-3">Newsletter</p><h3 class="text-2xl font-bold text-white mb-2">Get more tips like this</h3><p class="text-gray-400 text-sm mb-6">Short, practical Blender guides for beginners — straight to your inbox. No spam. Unsubscribe any time.</p><form class="flex gap-3 flex-wrap"><input placeholder="your@email.com" class="flex-1 min-w-[200px] bg-black border rounded-lg px-4 py-2.5 text-white text-sm outline-none transition-colors
+              border-white/10 focus:border-orange-400" type="email" value=""><button type="submit" class="bg-orange-400 hover:bg-orange-300 text-black font-bold text-sm px-6 py-2.5 rounded-lg transition-colors whitespace-nowrap">Subscribe</button></form></div></div></div></div>
+
+</body></html>
