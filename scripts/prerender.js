@@ -16,6 +16,10 @@ import { posts } from '../src/blog/posts.js'
 
 const DIST = 'docs'
 
+// Must mirror the routes in src/App.jsx. 404.html no longer redirects into
+// the app, so anything routable but missing from this list is a hard 404 for
+// visitors as well as crawlers. Blog posts come from the posts data, so new
+// articles are picked up automatically; only new top-level routes need adding.
 const ROUTES = [
   '/',
   '/blog',
