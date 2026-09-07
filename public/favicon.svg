@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Blender Tutoring">
+  <title>Blender Tutoring</title>
+  <!-- The site's own mark: the orange B from the wordmark, drawn as a stroked
+       path so it does not depend on Space Grotesk being loaded. Deliberately
+       not the Blender logo — that belongs to the Blender Foundation, and using
+       it as this site's icon would read as an official affiliation.
+
+       The bowls start at x=22 rather than at the stem's centre line, so their
+       square cap covers the stem's corner instead of leaving a step in it. -->
+  <rect width="100" height="100" rx="22" fill="#0f1011"/>
+  <g fill="none" stroke="#F37D16" stroke-width="13">
+    <path d="M28.5 20.5V79.5"/>
+    <path d="M22 20.5h30.75a14.75 14.75 0 0 1 0 29.5H22"/>
+    <path d="M22 50h34a14.75 14.75 0 0 1 0 29.5H22"/>
+  </g>
+</svg>
