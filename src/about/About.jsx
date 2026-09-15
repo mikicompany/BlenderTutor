@@ -45,7 +45,7 @@ const About = () => {
     {
       name: "Godot",
       url: "https://godotengine.org",
-      logo: "https://blender-buddy-hub.lovable.app/assets/godot-logo-9wp0wbH6.svg",
+      logo: "/godot-logo.svg",
     },
   ];
 
