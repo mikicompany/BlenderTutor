@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
+import { BOOKING_URL, BOOKING_LABEL } from "../lib/links";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,6 +21,7 @@ const Navbar = () => {
   const navLinks = [
     { name: "Packages", href: "#packages" },
     { name: "About", href: "#about" },
+    { name: "Tutors", href: "#tutors" },
     { name: "Blog", to: "/blog" },
   ];
 
@@ -101,19 +103,23 @@ const Navbar = () => {
             className="px-5 py-2 rounded-full text-sm font-bold cursor-pointer hover:bg-orange-600 text-black transition-all"
             style={{ backgroundColor: "#F37D16" }}
           >
-            <a href="https://calendly.com/blendertutoring-info/" className="flex items-center" target="_blank" rel="noreferrer">
-              Book a call
+            <a href={BOOKING_URL} className="flex items-center" target="_blank" rel="noreferrer">
+              {BOOKING_LABEL}
             </a>
           </button>
         </div>
 
         <div className="lg:hidden flex items-center gap-4 relative z-[70]">
-          <button
-            className="px-4 py-1.5 rounded-full text-xs font-bold cursor-pointer text-black md:flex hidden"
+          {/* Was a bare <button> with no link, so tapping it did nothing. */}
+          <a
+            href={BOOKING_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="px-4 py-1.5 rounded-full text-xs font-bold cursor-pointer text-black md:flex hidden items-center"
             style={{ backgroundColor: "#F37D16" }}
           >
-            Book a call
-          </button>
+            Free call
+          </a>
           <button onClick={() => setIsOpen(!isOpen)} className="text-white p-2 hover:bg-white/5 rounded-lg">
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -152,9 +158,15 @@ const Navbar = () => {
                 </motion.li>
               ))}
             </ul>
-            <button className="px-6 py-2 rounded-full text-md font-bold bg-orange-500 text-black">
-              Book a call
-            </button>
+            <a
+              href={BOOKING_URL}
+              target="_blank"
+              rel="noreferrer"
+              onClick={() => setIsOpen(false)}
+              className="px-6 py-2 rounded-full text-md font-bold bg-orange-500 text-black inline-block"
+            >
+              {BOOKING_LABEL}
+            </a>
           </motion.div>
         )}
       </AnimatePresence>

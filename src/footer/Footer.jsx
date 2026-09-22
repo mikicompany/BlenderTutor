@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { BOOKING_URL, BOOKING_LABEL } from "../lib/links";
 
 const Footer = () => {
   return (
@@ -19,16 +20,24 @@ const Footer = () => {
         Ready to <span className="text-orange-500">create</span>?
       </h2>
 
-      <p className="text-gray-400 text-sm md:text-base mb-10 max-w-md mx-auto">
-        Book a free 15-minute intro call and take the first step toward building something that’s truly yours. We’ll talk about your goals, your interests, and the kind of projects you’ve always wanted to bring to life—and map out a clear path forward together.
-
-During the call, you’ll meet your mentor, ask questions, and get a feel for how the process works.
-
-After the intro call, you’ll continue working together step by step to create your own project from start to finish—something real you can show, share, and be proud of.
-
-Let’s turn your ideas into something tangible.
-
-      </p>
+      <div className="text-gray-400 text-sm md:text-base mb-10 max-w-lg mx-auto space-y-4 leading-relaxed">
+        <p>
+          Book a free 15-minute intro call and take the first step toward
+          building something that’s truly yours. We’ll talk about your goals,
+          your interests, and the kind of projects you’ve always wanted to
+          bring to life—and map out a clear path forward together.
+        </p>
+        <p>
+          During the call, you’ll meet your mentor, ask questions, and get a
+          feel for how the process works.
+        </p>
+        <p>
+          After the intro call, you’ll continue working together step by step
+          to create your own project from start to finish—something real you
+          can show, share, and be proud of.
+        </p>
+        <p className="text-gray-300">Let’s turn your ideas into something tangible.</p>
+      </div>
 
       <motion.button
         whileHover={{ opacity: 0.9 }}
@@ -36,12 +45,12 @@ Let’s turn your ideas into something tangible.
         style={{ backgroundColor: "#F37D16", padding: "8px 32px" }}
       >
         <a
-          href="https://calendly.com/blendertutoring-info/"
+          href={BOOKING_URL}
           className="flex items-center"
           target="_blank"
           rel="noreferrer"
         >
-          Book a free call <ArrowRight size={18} />
+          {BOOKING_LABEL} <ArrowRight size={18} />
         </a>
       </motion.button>
     </motion.div>
