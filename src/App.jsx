@@ -7,6 +7,7 @@ import BlogPost from './blog/BlogPost'
 import Radar from './radar/Radar'
 import Terms from './terms/Terms'
 import Privacy from './privacy/Privacy'
+import ShareButton from './share/ShareButton'
 
 // Without this, navigating via links at the bottom of a page (e.g. the
 // footer) keeps the scroll position and lands visitors at the bottom of
@@ -32,6 +33,9 @@ const App = () => {
           <Route path="/terms" element={<Terms />} />
           <Route path="/privacy" element={<Privacy />} />
         </Routes>
+        {/* Outside Routes so it is present on every page, including The Radar,
+            which does not use the site navbar. */}
+        <ShareButton />
       </BrowserRouter>
     </HelmetProvider>
   )
