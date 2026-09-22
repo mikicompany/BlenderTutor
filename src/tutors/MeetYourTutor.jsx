@@ -16,7 +16,9 @@ const tutors = [
     // two sites cannot drift into saying different things.
     name: "Miki Butler",
     role: "Senior Environment Artist · 18 years in games",
-    photo: null,
+    // The Miki mark from mikibutler.ca, resized to 160px for a 64px slot.
+    // Its own background is black, so it sits cleanly in the circular crop.
+    photo: "/tutors/miki-butler.jpg",
     bio: "Senior Environment Artist in Vancouver, building game worlds for 18 years — shipped titles with Capcom, EA, Ubisoft, Offworld Industries and Next Level Games, across PC, PlayStation, Xbox, Nintendo and mobile. Also mentors at Think Tank Training Centre, guiding artists through portfolio development and production-ready game art.",
     teaches: [
       "Environment art",
