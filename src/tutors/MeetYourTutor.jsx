@@ -4,10 +4,8 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { BOOKING_URL, BOOKING_LABEL } from "../lib/links";
 
 // ---------------------------------------------------------------------------
-// The second entry is still a placeholder and is written to read as
-// instructions rather than as a person, so nothing here can be mistaken for a
-// real bio while it is unfinished. Delete it if there is only one tutor — the
-// grid re-centres on its own.
+// Add another entry to this array to add a tutor; the layout handles one, two
+// or three without further changes.
 //
 // photo: drop a square image in public/tutors/ and reference it as
 // "/tutors/name.jpg". Leave it null and the card falls back to the initial.
@@ -30,14 +28,6 @@ const tutors = [
       { label: "Portfolio", href: "https://mikibutler.ca/work.html" },
       { label: "ArtStation", href: "https://www.artstation.com/mikicompany" },
     ],
-  },
-  {
-    name: "Second tutor (optional)",
-    role: "Role or specialism",
-    photo: null,
-    bio: "Delete this whole entry if there is only one tutor. The section is built from the array above, so removing it is the only change needed — the layout re-centres on its own.",
-    teaches: ["Animation", "Rigging"],
-    links: [],
   },
 ];
 
