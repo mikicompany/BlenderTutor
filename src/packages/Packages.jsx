@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Check } from "lucide-react"; // npm install lucide-react
+import { BOOKING_URL } from "../lib/links";
 
 const packages = [
   {
@@ -66,6 +67,10 @@ const Packages = () => {
           <h3 className="text-3xl font-bold">
             Choose your <span className="text-orange-500">path</span>
           </h3>
+          <p className="text-gray-400 text-sm mt-4 max-w-lg mx-auto leading-relaxed">
+            Nothing to decide yet — every path starts with the same free intro
+            call, and we work out which one fits from there.
+          </p>
         </motion.div>
         {/* Pricing Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -115,15 +120,21 @@ const Packages = () => {
                   </li>
                 ))}
               </ul>
-              <button
-                className={`w-full py-2.5 rounded-lg text-xs font-bold transition-all ${
+              {/* These were bare buttons with no handler, so all three did
+                  nothing. There is no checkout, so the intro call is where
+                  every package actually starts. */}
+              <a
+                href={BOOKING_URL}
+                target="_blank"
+                rel="noreferrer"
+                className={`w-full py-2.5 rounded-lg text-xs font-bold transition-all text-center block ${
                   pkg.highlighted
                     ? "bg-orange-500 text-black hover:bg-orange-600"
                     : "bg-white/5 border border-white/10 hover:bg-white/10 text-white"
                 }`}
               >
-                Get Started
-              </button>
+                Start with a free call
+              </a>
             </motion.div>
           ))}
         </div>

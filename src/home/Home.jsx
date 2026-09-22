@@ -1,12 +1,24 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
-import { motion, rgba } from "framer-motion";
+import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 import hero from "../assets/hero-bg-CMX9Xi5b.mp4";
 import heroWebm from "../assets/hero-bg.webm";
 import Navbar from "../navbar/Navbar";
 import Packages from "../packages/Packages";
 import About from "../about/About";
+import MeetYourTutor from "../tutors/MeetYourTutor";
 import Footer from "../footer/Footer";
+import { BOOKING_URL, BOOKING_LABEL } from "../lib/links";
+
+// Shared by the hero buttons so the fixed navbar does not cover the heading
+// of whichever section is scrolled to.
+const scrollToSection = (selector) => {
+  const element = document.querySelector(selector);
+  if (!element) return;
+  const top = element.getBoundingClientRect().top + window.scrollY - 70;
+  window.scrollTo({ top, behavior: "smooth" });
+};
 
 const Home = () => {
   const fadeInUp = {
@@ -85,92 +97,80 @@ const Home = () => {
           >
             <motion.h2
               variants={fadeInUp}
-              className="uppercase -tracking-normal text-[14px]  mb-3"
+              className="uppercase tracking-[0.2em] text-[11px] md:text-[12px] mb-4 font-bold"
               style={{color: '#F37D16'}}
             >
-              Master Blender with Guidance
+              1-on-1 Blender Tutoring
             </motion.h2>
 
+            {/* The promise leads. The brand is already in the navbar, the tab
+                title and the logo, so the biggest text on the page is better
+                spent on what a visitor actually gets. "Blender" stays in the
+                h1 so the page keeps its main keyword. */}
             <motion.h1
               variants={fadeInUp}
-              className="text-white text-7xl font-bold leading-tight mb-4"
-              style={{fontFamily: 'JetBrains Mono, Roboto Mono '}}
+              className="text-white text-4xl md:text-6xl font-bold leading-[1.1] mb-6 max-w-3xl"
             >
-              <span className="whitespace-nowrap">
-                <span
-                  className="inline-block"
-                  style={{ fontFamily: "'space grotesk', sans-serif", fontWeight: 700 }}
-                >
-                  B
-                </span>
-                lender
-              </span>{" "}<br />
-              <span className="text-orange-500">Tutoring</span>
+              Master the complete{" "}
+              <span className="text-orange-500">Blender game art pipeline</span>
             </motion.h1>
 
             <motion.p
               variants={fadeInUp}
-              className="max-w-md text-gray-400 text-[20px] md:text-sm leading-relaxed mb-8"
+              className="max-w-xl text-gray-300 text-base md:text-lg leading-relaxed mb-10"
             >
-              Master the complete game art pipeline. Personalized 1-on-1
-              mentoring for building high-quality, optimized game assets — from
-              low-poly modeling to engine-ready exports.
+              Personalized mentoring for building high-quality, optimized game
+              assets — from low-poly modeling to engine-ready exports. Taught
+              live, one student at a time.
             </motion.p>
 
             <motion.div
               variants={fadeInUp}
-              className="flex flex-col md:flex-row gap-3 w-full md:w-auto"
+              className="flex flex-col md:flex-row gap-3 w-full md:w-auto items-center"
             >
-              {/* View Packages / Preview Button */}
-              <button
-                onClick={(e) => {
-                  const element = document.querySelector("#packages");
-                  if (element) {
-                    const offset = 70;
-                    const elementTop =
-                      element.getBoundingClientRect().top + window.scrollY;
-                    window.scrollTo({
-                      top: elementTop - offset,
-                      behavior: "smooth",
-                    });
-                  }
-                }}
-                className="w-full md:w-auto  text-md text-black rounded-2xl transition-all  hover:shadow-[0_0_15px_rgba(255,165,0,0.6)]"
-                style={{backgroundColor: "#F37D16", padding: "0px 32px"}}
+              {/* The free call is the only conversion on the site, so it is the
+                  primary action here rather than the pricing table. */}
+              <a
+                href={BOOKING_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 text-[15px] font-bold text-black rounded-xl transition-all hover:shadow-[0_0_20px_rgba(255,165,0,0.5)]"
+                style={{ backgroundColor: "#F37D16" }}
               >
-                View Packages
-              </button>
+                {BOOKING_LABEL} <ArrowRight size={18} />
+              </a>
 
-              {/* Learn More Button */}
               <button
-                onClick={(e) => {
-                  const element = document.querySelector("#about");
-                  if (element) {
-                    const offset = 70;
-                    const elementTop =
-                      element.getBoundingClientRect().top + window.scrollY;
-                    window.scrollTo({
-                      top: elementTop - offset,
-                      behavior: "smooth",
-                    });
-                  }
-                }}
-                className="w-full md:w-auto px-6 py-3 text-md bg-transparent border-1 border-gray-700 text-white rounded-2xl transition-all hover:bg-orange-500 hover:text-white hover:scale-105 hover:shadow-[0_0_15px_rgba(255,165,0,0.6)]"
+                onClick={() => scrollToSection("#about")}
+                className="w-full md:w-auto px-7 py-3.5 text-[15px] bg-transparent border border-gray-700 text-white rounded-xl transition-all hover:border-orange-500/60 hover:text-orange-400"
               >
-                Learn More
+                How it works
               </button>
             </motion.div>
+
+            <motion.p
+              variants={fadeInUp}
+              className="text-gray-500 text-xs mt-5"
+            >
+              15 minutes · No cost · No commitment
+            </motion.p>
           </motion.div>
         </section>
 
-        {/* PACKAGES SECTION */}
+        {/* Order matters here: what you get, then who teaches it, then what it
+            costs. Pricing used to sit directly under the hero, which asked
+            visitors to judge the price before they knew what they were buying. */}
+        <section id="about">
+          <About />
+        </section>
+
+        <section id="tutors">
+          <MeetYourTutor />
+        </section>
+
         {/* Note: Ensure the Packages component background is set to transparent! */}
         <section id="packages">
           <Packages />
-        </section>
-
-        <section id="about">
-          <About />
         </section>
 
         <Footer />
