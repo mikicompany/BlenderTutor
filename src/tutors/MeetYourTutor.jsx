@@ -1,26 +1,35 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { BOOKING_URL, BOOKING_LABEL } from "../lib/links";
 
 // ---------------------------------------------------------------------------
-// PLACEHOLDER CONTENT — replace before this matters to a visitor.
-//
-// Everything below is written to be obviously unfinished rather than to look
-// like a real person, so nothing here can be mistaken for a genuine bio while
-// it is still live. Fill in each field and delete any entry you do not need;
-// the grid handles one, two or three tutors on its own.
+// The second entry is still a placeholder and is written to read as
+// instructions rather than as a person, so nothing here can be mistaken for a
+// real bio while it is unfinished. Delete it if there is only one tutor — the
+// grid re-centres on its own.
 //
 // photo: drop a square image in public/tutors/ and reference it as
 // "/tutors/name.jpg". Leave it null and the card falls back to the initial.
 // ---------------------------------------------------------------------------
 const tutors = [
   {
-    name: "Tutor name",
-    role: "Lead tutor — game art & pipeline",
+    // Every claim here comes from resume-data.json on mikibutler.ca, so the
+    // two sites cannot drift into saying different things.
+    name: "Miki Butler",
+    role: "Senior Environment Artist · 18 years in games",
     photo: null,
-    bio: "A short paragraph here: who you are, what you have shipped, and what a student walks away able to do. Two or three sentences is plenty — this is the part people read before they book.",
-    teaches: ["Modeling", "Texturing", "Game pipeline"],
+    bio: "Senior Environment Artist in Vancouver, building game worlds for 18 years — shipped titles with Capcom, EA, Ubisoft, Offworld Industries and Next Level Games, across PC, PlayStation, Xbox, Nintendo and mobile. Also mentors at Think Tank Training Centre, guiding artists through portfolio development and production-ready game art.",
+    teaches: [
+      "Environment art",
+      "Modeling & sculpting",
+      "Texturing",
+      "Game pipeline",
+    ],
+    links: [
+      { label: "Portfolio", href: "https://mikibutler.ca/work.html" },
+      { label: "ArtStation", href: "https://www.artstation.com/mikicompany" },
+    ],
   },
   {
     name: "Second tutor (optional)",
@@ -28,6 +37,7 @@ const tutors = [
     photo: null,
     bio: "Delete this whole entry if there is only one tutor. The section is built from the array above, so removing it is the only change needed — the layout re-centres on its own.",
     teaches: ["Animation", "Rigging"],
+    links: [],
   },
 ];
 
@@ -113,6 +123,23 @@ const MeetYourTutor = () => {
                     >
                       {topic}
                     </span>
+                  ))}
+                </div>
+              )}
+
+              {tutor.links?.length > 0 && (
+                <div className="flex flex-wrap gap-4 mt-5 pt-5 border-t border-white/10">
+                  {tutor.links.map((link) => (
+                    <a
+                      key={link.label}
+                      href={link.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1 text-[12px] font-medium text-orange-500 hover:text-orange-400 transition-colors"
+                    >
+                      {link.label}
+                      <ArrowUpRight size={13} />
+                    </a>
                   ))}
                 </div>
               )}
