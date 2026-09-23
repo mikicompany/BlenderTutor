@@ -18,11 +18,15 @@ const Navbar = () => {
     },
   };
 
+  // The nav is the path to booking a call, so it stays on the home page's own
+  // sections. The blog is reached from the home page footer instead, which is
+  // the only internal link to it now — worth keeping, since search engines
+  // need a crawl path to /blog and the footer only renders on the home page.
+  // Entries with `to` render as router links; the blog used one.
   const navLinks = [
     { name: "Packages", href: "#packages" },
     { name: "About", href: "#about" },
     { name: "Tutors", href: "#tutors" },
-    { name: "Blog", to: "/blog" },
   ];
 
   const scrollToTop = (e) => {
