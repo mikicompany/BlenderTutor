@@ -2,38 +2,39 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, ArrowUpRight } from "lucide-react";
 
-// Miki's own production art. Captions stay generic — no project name and no
-// internal asset names — because this work comes from a gallery that is
-// otherwise kept private, and the engine chrome carrying those names has been
-// cropped out of the images themselves.
+// Miki's own Starship Troopers: Extermination environment art, taken from the
+// public work gallery on mikibutler.ca — the same ArtStation URLs that site
+// serves, on his own ArtStation account.
 //
-// Ordered finished-first: the renders earn attention, the blockout and kit
-// then show how the finished shot was actually built, which is the part a
-// prospective student is buying.
+// These are hotlinked rather than copied into public/. That is a third-party
+// dependency, which is normally worth avoiding, but these are his own uploads
+// on his own account and mikibutler.ca already depends on exactly these URLs,
+// so the two sites fail or survive together rather than drifting apart.
 const pieces = [
   {
-    img: "/work/env-village.jpg",
-    title: "Tropical village",
-    meta: "Environment art · Unreal Engine",
-    alt: "Game environment: a tropical village with power lines, palms and a corrugated roof at dusk",
+    // The shot he features in his own site's carousel.
+    img: "https://cdnb.artstation.com/p/assets/images/images/063/045/963/4k/miki-butler-starshiptroopers-extermination-lookout-miki-butler-02.jpg?1684570986",
+    title: "Lookout",
+    meta: "Starship Troopers: Extermination · Environment Art",
+    alt: "Lookout environment from Starship Troopers: Extermination",
   },
   {
-    img: "/work/env-roadside.jpg",
-    title: "Roadside approach",
-    meta: "Environment art · Unreal Engine",
-    alt: "Game environment: a dirt road lined with palms and undergrowth, trucks in the distance",
+    img: "https://cdna.artstation.com/p/assets/images/images/063/425/778/4k/miki-butler-ste-showcase-mikibutler-caverox-08.jpg?1685504021",
+    title: "Cave Road",
+    meta: "Starship Troopers: Extermination · Environment Art",
+    alt: "Cave road environment from Starship Troopers: Extermination",
   },
   {
-    img: "/work/blockout-street.jpg",
-    title: "Street blockout",
-    meta: "Blockout · Blender",
-    alt: "Untextured grey blockout of a three-storey street building with awnings",
+    img: "https://cdna.artstation.com/p/assets/images/images/063/045/640/4k/miki-butler-starshiptroopers-extermination-garrison-gate-miki-butler-02.jpg?1684570080",
+    title: "Garrison Gate",
+    meta: "Starship Troopers: Extermination · Environment Art",
+    alt: "Garrison gate structure from Starship Troopers: Extermination",
   },
   {
-    img: "/work/modular-kit.jpg",
-    title: "Modular building kit",
-    meta: "Modeling · Maya",
-    alt: "Wireframe view of modular wall, floor and roof pieces laid out separately",
+    img: "https://cdna.artstation.com/p/assets/images/images/063/045/584/4k/miki-butler-starshiptroopers-extermination-ucf-statue-miki-butler-01.jpg?1684569850",
+    title: "UCF Statue",
+    meta: "Starship Troopers: Extermination · Prop Art",
+    alt: "UCF statue prop from Starship Troopers: Extermination",
   },
 ];
 
@@ -100,8 +101,8 @@ const WorkCarousel = () => {
               <span className="text-orange-500">teaching</span>
             </h3>
             <p className="text-gray-400 text-sm mt-3 max-w-md leading-relaxed">
-              Production environment art — and the blockouts and kit pieces it
-              was built from.
+              Shipped environment art from Starship Troopers: Extermination —
+              the same pipeline you&apos;ll be taught.
             </p>
           </div>
 
@@ -141,15 +142,18 @@ const WorkCarousel = () => {
               key={piece.img}
               className="snap-start shrink-0 w-[280px] sm:w-[340px] group m-0"
             >
-              <div className="rounded-xl overflow-hidden border border-white/10 bg-white/[0.03] transition-colors group-hover:border-orange-500/40">
+              {/* A fixed frame, because these come in mixed shapes and an
+                  unset height would make the row jump as each one loads. The
+                  dark panel also means a failed fetch reads as an empty card
+                  rather than a broken-image icon. */}
+              <div className="rounded-xl overflow-hidden border border-white/10 bg-white/[0.04] aspect-[16/9] transition-colors group-hover:border-orange-500/40">
                 <img
                   src={piece.img}
                   alt={piece.alt}
-                  width="640"
-                  height="360"
                   loading="lazy"
                   decoding="async"
-                  className="w-full h-auto block"
+                  referrerPolicy="no-referrer"
+                  className="w-full h-full object-cover block"
                 />
               </div>
               <figcaption className="mt-3">
