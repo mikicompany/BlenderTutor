@@ -8,6 +8,7 @@ import Navbar from "../navbar/Navbar";
 import Packages from "../packages/Packages";
 import About from "../about/About";
 import MeetYourTutor from "../tutors/MeetYourTutor";
+import WorkCarousel from "../work/WorkCarousel";
 import Footer from "../footer/Footer";
 import { BOOKING_URL, BOOKING_LABEL } from "../lib/links";
 
@@ -166,6 +167,12 @@ const Home = () => {
 
         <section id="tutors">
           <MeetYourTutor />
+        </section>
+
+        {/* Directly after the tutor, where it backs up who they just read
+            about rather than floating as a separate credential. */}
+        <section id="work">
+          <WorkCarousel />
         </section>
 
         {/* Note: Ensure the Packages component background is set to transparent! */}
