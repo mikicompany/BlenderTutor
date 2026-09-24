@@ -88,8 +88,9 @@ const Home = () => {
       <main className="relative z-20 w-full">
         <Navbar />
 
-        {/* HERO SECTION */}
-        <section className="h-screen w-full flex flex-col items-center justify-center text-center px-6">
+        {/* HERO SECTION — the id also gives the navbar logo's #hero link a
+            real target, and lets click tracking name this section. */}
+        <section id="hero" className="h-screen w-full flex flex-col items-center justify-center text-center px-6">
           <motion.div
             variants={container}
             initial="hidden"

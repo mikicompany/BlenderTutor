@@ -8,6 +8,7 @@ import Radar from './radar/Radar'
 import Terms from './terms/Terms'
 import Privacy from './privacy/Privacy'
 import ShareButton from './share/ShareButton'
+import { useBookingTracking } from './booking/useBookingTracking'
 
 // Without this, navigating via links at the bottom of a page (e.g. the
 // footer) keeps the scroll position and lands visitors at the bottom of
@@ -21,6 +22,9 @@ const ScrollToTop = () => {
 }
 
 const App = () => {
+  // Delegated, so it covers every booking link on every route at once.
+  useBookingTracking()
+
   return (
     <HelmetProvider>
       <BrowserRouter>
