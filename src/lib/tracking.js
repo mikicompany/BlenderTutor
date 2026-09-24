@@ -51,21 +51,47 @@ export function trackBookingClick(anchor) {
 
   if (!WEBHOOK) return
 
-  const body = JSON.stringify({
-    ...detail,
-    at: new Date().toISOString(),
-    referrer: document.referrer || null,
-  })
+  const when = new Date()
+
+  // Form-encoded rather than JSON, for two reasons. It is CORS-safelisted, so
+  // the request goes without a preflight that sendBeacon cannot perform; and
+  // form-to-email services turn each field into a line of the email, so the
+  // message arrives readable instead of as a wall of JSON. Zapier and Make
+  // parse the same encoding, so one format serves every likely receiver.
+  const fields = {
+    // Underscore-prefixed keys are instructions to form-to-email services and
+    // are ignored by everything else.
+    _subject: `Book a call clicked — ${detail.section}`,
+    _captcha: "false",
+    _template: "table",
+
+    button: detail.label,
+    section: detail.section,
+    page: detail.page,
+    time: when.toLocaleString("en-CA", { timeZone: "America/Vancouver" }),
+    time_utc: when.toISOString(),
+    // Where the visitor came from is the part that turns a notification into
+    // something actionable — it says which channel is actually working.
+    referrer: document.referrer || "direct",
+  }
+
+  const body = new URLSearchParams(fields).toString()
 
   // sendBeacon survives the page being left, which a plain fetch may not.
-  // text/plain is deliberate: it is CORS-safelisted, so the request goes
-  // without a preflight that sendBeacon cannot perform. Receivers like Zapier
-  // parse the JSON body regardless of the declared type.
   try {
     if (navigator.sendBeacon) {
-      navigator.sendBeacon(WEBHOOK, new Blob([body], { type: "text/plain" }))
+      navigator.sendBeacon(
+        WEBHOOK,
+        new Blob([body], { type: "application/x-www-form-urlencoded" })
+      )
     } else {
-      fetch(WEBHOOK, { method: "POST", body, keepalive: true, mode: "no-cors" })
+      fetch(WEBHOOK, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body,
+        keepalive: true,
+        mode: "no-cors",
+      })
     }
   } catch {
     // Tracking must never interfere with the click that triggered it.
