@@ -1,6 +1,7 @@
 import { Helmet } from "react-helmet-async"
 import Navbar from "../navbar/Navbar"
 
+import Footer from "../footer/Footer"
 const sections = [
   {
     title: "1. Who we are",
@@ -106,6 +107,7 @@ const Terms = () => {
           </section>
         ))}
       </div>
+      <Footer />
     </div>
   )
 }
