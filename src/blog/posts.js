@@ -382,6 +382,22 @@ That's it. Unwrapping isn't one action, it's a loop — mark, unwrap, look, adju
 
 ---
 
+## 🗺️ Which Method, and When
+
+The **U** menu offers more than Unwrap, and picking the right one saves a lot of seam-marking.
+
+| Method | Best for | Watch out for |
+|---|---|---|
+| **Unwrap** | Anything you've marked seams on | Needs seams, or it guesses badly |
+| **Smart UV Project** | Hard-surface props, machinery, background assets | Produces many small islands; messy to hand-paint |
+| **Cube / Cylinder / Sphere Projection** | Objects that genuinely are that shape | Distorts the moment the shape deviates |
+| **Project from View** | Flat things photographed head-on — signs, posters, decals | Only correct from that one camera angle |
+| **Follow Active Quads** | Long even runs — roads, pipes, corridors, brick walls | Needs clean quad topology to behave |
+
+**Unwrap** itself has two methods in the operator panel. **Angle Based** is the default and the one you want almost always. **Conformal** preserves angles more strictly and can behave better on simple tube-like shapes, but tends to produce more stretch elsewhere. If an unwrap looks wrong, it is worth one click to try the other before adding more seams.
+
+---
+
 ## 🏁 How to Tell If It Worked
 
 You cannot judge an unwrap by looking at the UV layout. You judge it by putting a test pattern on the model.
@@ -396,6 +412,36 @@ This one habit separates people who "can't do UVs" from people who can.
 
 ---
 
+## 📏 Texel Density: The Professional Bit
+
+Here is the thing tutorials skip, and it is the main reason hobby work looks like hobby work.
+
+**Texel density** is how many texture pixels land on a given amount of surface. If one island is scaled twice as large as another in the UV editor, that part of the model gets twice the texture resolution — and it will look visibly sharper than the part next to it.
+
+You see this on student work constantly: a crisp door handle on a blurry door.
+
+The fix is to decide on one density for the whole asset and hold everything to it. Blender gives you a blunt but effective tool: select everything in the UV editor and use **UV ▸ Average Islands Scale**. That equalises the islands relative to each other, so nothing is accidentally four times sharper than its neighbour.
+
+> 💡 For game work the density is usually set per project — every asset in the scene shares one number, so a wall and a crate placed side by side match. Pick a value early; retrofitting it across a finished set is miserable.
+
+Deliberate exceptions are fine. A hero prop the camera lingers on can justify more density than a background wall. The point is that it is a decision, not an accident.
+
+---
+
+## 📦 Packing and Margins
+
+Once your islands are unwrapped, they have to share one square efficiently. **UV ▸ Pack Islands** arranges them for you.
+
+The setting that matters is **Margin** — the gap left between islands.
+
+Set it to zero and you will get **bleeding**: colour from one island leaking into its neighbour along the edges. It gets dramatically worse at distance, because smaller mipmaps blend neighbouring pixels together, so an object that looked fine close up develops coloured fringes across the room.
+
+A small margin costs you a little texture space and prevents the problem entirely. Leave the default rather than chasing maximum coverage.
+
+> 💡 Empty space in a UV map is wasted resolution, but overlapping islands you did not intend are far worse. Pack tightly, not perfectly.
+
+---
+
 ## 💣 The Gotcha That Wastes Everyone's Afternoon
 
 **Apply your scale before unwrapping.**
@@ -404,7 +450,38 @@ If you scaled your object in Object Mode, Blender is still carrying that scale a
 
 Enormous numbers of "my UVs are broken and I don't know why" posts are this exact problem.
 
-> 💡 Also worth knowing: overlapping UV islands means two parts of your model share the same patch of texture. Sometimes deliberate and efficient — usually an accident that makes painting impossible.
+> 💡 The same applies to rotation. **Ctrl+A** offers **Rotation** and **All Transforms** alongside Scale — if an object has been rotated in Object Mode and then unwrapped, projections like Cube and Project from View will come out on an axis you did not expect.
+
+---
+
+## 🔁 Overlapping and Mirrored UVs
+
+Overlapping islands mean two parts of the model share the same patch of texture. Whether that is a bug or a feature depends entirely on what you are making.
+
+**When it helps.** Both sides of a symmetrical object can share one set of pixels, halving the texture you need. A game asset built with the [Mirror Modifier](/blog/blender-mirror-modifier) does this by default — the mirrored half lands exactly on top of the original in UV space. For tiling surfaces and symmetrical wear it is free efficiency.
+
+**When it hurts.** Anything that must be unique on each side: text, logos, a scar on one cheek, asymmetric damage. Paint one and it appears mirrored on the other.
+
+**Baking is the hard limit.** If you are baking lighting, ambient occlusion or a normal map, overlapping islands corrupt the result — two surfaces compete to write the same pixels. Baking needs every island in its own space, even when the final colour texture reuses them.
+
+If you need to break the overlap after mirroring: apply the modifier, select the islands of one half in the UV editor, and move them off the original — commonly into the neighbouring UV tile or simply beside it.
+
+---
+
+## 🎛️ Worth Memorising
+
+Only a handful of these matter day to day.
+
+| Key | Where | Does |
+|---|---|---|
+| **U** | 3D viewport, Edit Mode | Opens the unwrap menu |
+| **Ctrl+E** | 3D viewport, Edit Mode | Edge menu — Mark and Clear Seam |
+| **P** | UV editor | Pin a vertex so re-unwrapping leaves it alone |
+| **Alt+P** | UV editor | Unpin |
+| **L** | UV editor | Select a whole island under the cursor |
+| **Ctrl+A** | Object Mode | Apply transforms — do this before unwrapping |
+
+**Pinning** is the one most people never find. Pin a few vertices where you want them, turn on **UV ▸ Live Unwrap**, and the rest of the island re-solves around them as you drag. It turns unwrapping from guess-and-repeat into something you steer directly.
 
 ---
 
