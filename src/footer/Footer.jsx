@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
 import { BOOKING_URL, BOOKING_LABEL } from "../lib/links";
 
@@ -56,8 +56,29 @@ const Footer = () => {
     </motion.div>
   </div>
 
+  {/* CONTACT — the call suits people ready to start; this is for everyone
+      with a question first, who would otherwise just leave. */}
+  <div className="max-w-4xl mx-auto px-6 text-center mb-20">
+    <h2 className="text-orange-500 uppercase tracking-[0.3em] text-[10px] font-bold mb-3">
+      Contact
+    </h2>
+    <p className="text-gray-400 text-sm mb-5 max-w-md mx-auto leading-relaxed">
+      Not ready to book? Ask anything about the packages, your project, or
+      whether tutoring is the right fit.
+    </p>
+    <a
+      href="mailto:info@blendertutoring.com"
+      className="inline-flex items-center gap-2 text-white hover:text-orange-400 transition-colors font-medium"
+    >
+      <Mail size={17} className="text-orange-500" />
+      info@blendertutoring.com
+    </a>
+  </div>
+
   {/* FULL WIDTH BOTTOM BAR */}
-  <div className="border-t border-white/10 pt-12 px-32 flex flex-col md:flex-row justify-between items-center gap-4 text-[12px] text-gray-500">
+  {/* px-6 up to md: the unconditional px-32 left roughly 130px of usable
+      width on a phone and crushed this row. */}
+  <div className="border-t border-white/10 pt-12 px-6 md:px-32 flex flex-col md:flex-row justify-between items-center gap-4 text-[12px] text-gray-500">
     <p>© 2026 Blender Tutor. All rights reserved.</p>
 
     <div className="flex gap-6">
