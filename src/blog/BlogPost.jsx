@@ -4,6 +4,7 @@ import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 import { posts } from "./posts"
 import Navbar from "../navbar/Navbar"
+import Footer from "../footer/Footer"
 import { useState } from "react"
 import { subscribeToNewsletter, isValidEmail } from "../lib/mailchimp"
 
@@ -64,12 +65,68 @@ const Subscribe = () => {
   )
 }
 
+// Picks the next few posts in order, wrapping around. Deterministic, so the
+// link graph is stable between builds, and because every post is somebody's
+// neighbour it guarantees each one is both linked from and linking to others
+// — most posts previously ended with no onward link at all, which leaves
+// readers at a dead end and gives search engines nothing to follow.
+function relatedTo(post, count = 3) {
+  const i = posts.findIndex((p) => p.slug === post.slug)
+  return Array.from({ length: Math.min(count, posts.length - 1) }, (_, n) =>
+    posts[(i + n + 1) % posts.length]
+  )
+}
+
+const RelatedPosts = ({ post }) => {
+  const related = relatedTo(post)
+  if (!related.length) return null
+
+  return (
+    <nav aria-label="More articles" className="mt-16 pt-10 border-t border-white/10">
+      <h2 className="text-xs font-semibold tracking-widest uppercase text-orange-400 mb-5">
+        Read next
+      </h2>
+      <ul className="space-y-4">
+        {related.map((p) => (
+          <li key={p.slug}>
+            <Link
+              to={`/blog/${p.slug}`}
+              className="group flex flex-col gap-1 rounded-lg -mx-3 px-3 py-2 transition hover:bg-white/5"
+            >
+              <span className="font-semibold text-white group-hover:text-orange-400 transition">
+                {p.title}
+              </span>
+              <span className="text-sm text-gray-400 line-clamp-2">
+                {p.description}
+              </span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+
+// Google truncates around 60 characters. Several post titles are long enough
+// that appending the brand pushed them past it, so the headline itself got
+// cut in the results — the worst possible thing to lose. The suffix is good
+// for recognition but it is the expendable half, so it is only added when it
+// fits.
+const MAX_TITLE = 60
+const SUFFIX = " \u2013 BlenderTutor"
+
+function titleFor(post) {
+  const withBrand = post.title + SUFFIX
+  return withBrand.length <= MAX_TITLE ? withBrand : post.title
+}
+
 const BlogPost = () => {
   const { slug } = useParams()
   const post = posts.find((p) => p.slug === slug)
 
   if (!post) return <div className="text-white p-10">Post not found.</div>
 
+  const pageTitle = titleFor(post)
   const url = `https://www.blendertutoring.com/blog/${post.slug}`
   const jsonLd = {
     "@context": "https://schema.org",
@@ -88,7 +145,7 @@ const BlogPost = () => {
       <Helmet>
         {/* Must be a single child — an expression plus adjacent text
             makes react-helmet-async emit an empty <title>. */}
-        <title>{`${post.title} – BlenderTutor`}</title>
+        <title>{pageTitle}</title>
         <meta name="description" content={post.description} />
         <link rel="canonical" href={url} />
         <meta property="og:title" content={post.title} />
@@ -111,8 +168,10 @@ const BlogPost = () => {
         <div className="prose prose-invert prose-orange max-w-none prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:text-orange-400 prose-blockquote:border-orange-400 prose-blockquote:bg-orange-400/5 prose-blockquote:rounded-r-lg prose-blockquote:py-1 prose-table:text-sm prose-td:border-white/10 prose-th:border-white/10 prose-hr:border-white/10">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
         </div>
+        <RelatedPosts post={post} />
         <Subscribe />
       </div>
+      <Footer />
     </div>
   )
 }

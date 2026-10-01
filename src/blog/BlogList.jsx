@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet-async"
 import { posts } from "./posts"
 import Navbar from "../navbar/Navbar"
 
+import Footer from "../footer/Footer"
 const BlogList = () => {
   return (
     <div className="relative w-full min-h-screen bg-black">
@@ -48,6 +49,7 @@ const BlogList = () => {
           </Link>
         ))}
       </div>
+      <Footer />
     </div>
   )
 }

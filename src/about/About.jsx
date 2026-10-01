@@ -62,9 +62,10 @@ const About = () => {
           <h2 className="text-orange-500 uppercase tracking-[0.3em] text-[10px] font-bold">
             About
           </h2>
-          <h1 className="text-4xl md:text-5xl font-bold leading-tight">
+          {/* h2: the hero already carries the page's h1. */}
+          <h2 className="text-4xl md:text-5xl font-bold leading-tight">
             Specialized in <span className="text-orange-500">game dev</span>
-          </h1>
+          </h2>
           <p className="text-gray-400 text-sm md:text-base leading-relaxed max-w-md">
             We live and breathe game development with Blender. From stylized
             mobile characters to AAA-quality environment art, our mentoring is
