@@ -5,8 +5,15 @@
     <link>https://www.blendertutoring.com/blog</link>
     <description>Practical Blender guides for beginners and game artists.</description>
     <language>en</language>
-    <lastBuildDate>Tue, 18 Aug 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 01 Oct 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://www.blendertutoring.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Mastering the Mirror Modifier in Blender</title>
+      <link>https://www.blendertutoring.com/blog/blender-mirror-modifier</link>
+      <guid isPermaLink="true">https://www.blendertutoring.com/blog/blender-mirror-modifier</guid>
+      <pubDate>Thu, 01 Oct 2026 00:00:00 GMT</pubDate>
+      <description>Model half, get the whole thing. How the Mirror Modifier works, the three settings that matter, and the mistakes that make it misbehave.</description>
+    </item>
     <item>
       <title>Blender and Unreal Engine: The Happy Couple</title>
       <link>https://www.blendertutoring.com/blog/blender-and-unreal-the-happy-couple</link>
