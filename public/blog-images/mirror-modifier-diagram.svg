@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="380" viewBox="0 0 720 380" role="img" aria-label="Mirror modifier: half mesh becomes a full symmetrical object">
+  <rect width="720" height="380" fill="#0f1011"/>
+  <text x="360" y="36" text-anchor="middle" font-family="system-ui, sans-serif" font-size="19" font-weight="700" fill="#ffffff">Mirror Modifier: Half Mesh to Full Symmetrical Object</text>
+
+  <text x="150" y="74" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" fill="#9a9a9a">1. Model half the object</text>
+  <polygon points="100,110 200,110 190,260 110,260" fill="#F37D16" fill-opacity="0.85" stroke="#F37D16" stroke-width="2"/>
+  <line x1="200" y1="100" x2="200" y2="270" stroke="#ffffff" stroke-width="2" stroke-dasharray="6,5" stroke-opacity="0.7"/>
+  <text x="200" y="291" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#cfcfcf">mirror axis (origin)</text>
+
+  <line x1="262" y1="180" x2="338" y2="180" stroke="#9a9a9a" stroke-width="2.5" marker-end="url(#arrow)"/>
+  <text x="300" y="164" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12.5" fill="#cfcfcf">Add Mirror</text>
+  <text x="300" y="201" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12.5" fill="#cfcfcf">Modifier</text>
+
+  <text x="560" y="74" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" fill="#9a9a9a">2. Result: full symmetrical mesh</text>
+  <polygon points="510,110 610,110 600,260 520,260" fill="#F37D16" fill-opacity="0.85" stroke="#F37D16" stroke-width="2"/>
+  <polygon points="610,110 710,110 700,260 620,260" fill="#F37D16" fill-opacity="0.38" stroke="#F37D16" stroke-width="2" stroke-opacity="0.8"/>
+  <line x1="610" y1="100" x2="610" y2="270" stroke="#ffffff" stroke-width="2" stroke-dasharray="6,5" stroke-opacity="0.7"/>
+
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#9a9a9a"/>
+    </marker>
+  </defs>
+
+  <text x="360" y="342" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#8a8a8a">Original geometry (left half) stays editable — the mirrored copy (right, lighter) updates automatically.</text>
+</svg>

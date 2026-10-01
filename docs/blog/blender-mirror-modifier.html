@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en"><head>
+  <!-- Google Tag Manager -->
+  <script async="" src="https://www.googletagmanager.com/gtm.js?id=GTM-MRSNFX33"></script><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-MRSNFX33');</script>
+  <!-- End Google Tag Manager -->
+
+  <script>
+  var redirect = new URLSearchParams(window.location.search).get('redirect');
+  if (redirect) {
+    window.history.replaceState(null, null, redirect);
+  }
+</script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="keywords" content="Blender tutorials, Blender tutoring, Blender online tutoring, learn Blender, Blender 3D, Blender for beginners, Blender lessons, 3D modeling tutorials, Blender teaching, online Blender course, Blender training, Blender sculpting, Blender animation, Blender rendering">
+  <meta name="author" content="BlenderTutor">
+
+
+
+
+  <!-- .ico first for the bare /favicon.ico that browsers request on their own,
+       then the SVG, which anything current will prefer and scale cleanly. -->
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="alternate" type="application/rss+xml" title="BlenderTutor Blog" href="/rss.xml">
+  <meta name="theme-color" content="#0f1011">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&amp;family=Roboto+Mono:wght@400;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <script type="module" crossorigin="" src="/assets/index-B1Ny3WUi.js"></script>
+  <link rel="stylesheet" crossorigin="" href="/assets/index-CKqT6LQM.css">
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
+<title>Mastering the Mirror Modifier in Blender – BlenderTutor</title><meta name="description" content="Model half, get the whole thing. How the Mirror Modifier works, the three settings that matter, and the mistakes that make it misbehave."><meta property="og:title" content="Mastering the Mirror Modifier in Blender"><meta property="og:description" content="Model half, get the whole thing. How the Mirror Modifier works, the three settings that matter, and the mistakes that make it misbehave."><meta property="og:url" content="https://www.blendertutoring.com/blog/blender-mirror-modifier"><meta property="og:type" content="article"><meta property="og:image" content="https://www.blendertutoring.com/blog-images/mirror-modifier-diagram.svg"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Mastering the Mirror Modifier in Blender"><meta name="twitter:description" content="Model half, get the whole thing. How the Mirror Modifier works, the three settings that matter, and the mistakes that make it misbehave."><link rel="canonical" href="https://www.blendertutoring.com/blog/blender-mirror-modifier"></head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MRSNFX33"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    "name": "BlenderTutor",
+    "url": "https://www.blendertutoring.com",
+    "logo": "https://www.blendertutoring.com/apple-touch-icon.png",
+    "description": "Personalized 1-on-1 Blender online tutoring for beginners and intermediate users. Learn 3D modeling, sculpting, animation, and rendering.",
+    "offers": {
+      "@type": "Offer",
+      "description": "Personalized Blender tutoring sessions",
+      "url": "https://www.blendertutoring.com/#packages"
+    }
+  }
+  </script>
+  <div id="root"><div class="relative w-full min-h-screen bg-black"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Mastering the Mirror Modifier in Blender","description":"Model half, get the whole thing. How the Mirror Modifier works, the three settings that matter, and the mistakes that make it misbehave.","datePublished":"2026-10-01","url":"https://www.blendertutoring.com/blog/blender-mirror-modifier","image":"https://www.blendertutoring.com/blog-images/mirror-modifier-diagram.svg","author":{"@type":"Organization","name":"BlenderTutor"},"publisher":{"@type":"Organization","name":"BlenderTutor","url":"https://www.blendertutoring.com"}}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://www.blendertutoring.com/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://www.blendertutoring.com/blog"},{"@type":"ListItem","position":3,"name":"Mastering the Mirror Modifier in Blender","item":"https://www.blendertutoring.com/blog/blender-mirror-modifier"}]}</script><nav><div class="fixed top-0 left-0 w-full z-[60] bg-[#0f1011]/80 backdrop-blur-md flex justify-between px-6 md:px-20 py-4 items-center h-[60px] border-b border-white/5" style="opacity: 0; transform: translateY(-8.59082px);"><div class="flex items-center gap-2 text-2xl font-bold tracking-tight text-white cursor-pointer relative z-[70]"><a href="#hero" class="flex items-center gap-2"><img alt="Blender Logo" class="w-6 h-6" src="data:image/svg+xml,%3c?xml%20version=%271.0%27%20encoding=%27UTF-8%27?%3e%3csvg%20style=%27clip-rule:evenodd;fill-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2%27%20version=%271.1%27%20viewBox=%270%200%20181%20148%27%20xml:space=%27preserve%27%20xmlns=%27http://www.w3.org/2000/svg%27%3e%3ctitle%3eBlender%20logo%20(without%20text)%3c/title%3e%3cg%20transform=%27matrix(.281%200%200%20.281%20-41.8%20-43.7)%27%3e%3cg%20transform=%27matrix(21.6%200%200%2021.6%20-4857%207665)%27%3e%3cpath%20d=%27m243-334c0.106-1.89%201.03-3.56%202.43-4.74%201.37-1.16%203.21-1.87%205.23-1.87%202.01%200%203.85%200.709%205.22%201.87%201.4%201.18%202.32%202.85%202.43%204.74%200.106%201.94-0.675%203.75-2.04%205.09-1.4%201.36-3.38%202.22-5.61%202.22s-4.22-0.854-5.61-2.22c-1.37-1.34-2.15-3.14-2.04-5.08z%27%20style=%27fill-rule:nonzero;fill:%23fff%27/%3e%3c/g%3e%3cg%20transform=%27matrix(11.1%200%200%2011.1%20-2215%204153)%27%3e%3cpath%20d=%27m243-334c0.106-1.89%201.03-3.56%202.43-4.74%201.37-1.16%203.21-1.87%205.23-1.87%202.01%200%203.85%200.709%205.22%201.87%201.4%201.18%202.32%202.85%202.43%204.74%200.106%201.94-0.675%203.75-2.04%205.09-1.4%201.36-3.38%202.22-5.61%202.22s-4.22-0.854-5.61-2.22c-1.37-1.34-2.15-3.14-2.04-5.08z%27%20style=%27fill-rule:nonzero;fill:%23265787%27/%3e%3cpath%20d=%27m231-330c0.013%200.74%200.249%202.18%200.603%203.3%200.744%202.38%202.01%204.58%203.76%206.51%201.8%201.99%204.02%203.59%206.58%204.73%202.69%201.19%205.61%201.8%208.64%201.8%203.03-4e-3%205.95-0.624%208.64-1.83%202.56-1.15%204.78-2.75%206.58-4.75%201.76-1.95%203.02-4.15%203.76-6.53%200.375-1.2%200.612-2.42%200.707-3.64%200.093-1.2%200.054-2.41-0.117-3.62-0.334-2.35-1.15-4.56-2.4-6.56-1.14-1.85-2.62-3.46-4.38-4.82l4e-3%20-3e-3%20-17.7-13.6c-0.016-0.012-0.029-0.025-0.046-0.036-1.16-0.892-3.12-0.889-4.39%205e-3%20-1.29%200.904-1.44%202.4-0.29%203.34l-5e-3%205e-3%207.39%206.01-22.5%200.024h-0.03c-1.86%202e-3%20-3.65%201.22-4%202.77-0.364%201.57%200.9%202.88%202.84%202.88l-3e-3%207e-3%2011.4-0.022-20.4%2015.6c-0.026%200.019-0.054%200.039-0.078%200.058-1.92%201.47-2.54%203.92-1.33%205.46%201.23%201.57%203.84%201.58%205.78%209e-3l11.1-9.1s-0.162%201.23-0.149%201.96zm28.6%204.11c-2.29%202.33-5.5%203.66-8.96%203.66-3.47%206e-3%20-6.68-1.3-8.97-3.63-1.12-1.14-1.94-2.44-2.45-3.83-0.497-1.37-0.69-2.82-0.562-4.28%200.121-1.43%200.547-2.8%201.23-4.03%200.668-1.21%201.59-2.31%202.72-3.24%202.23-1.81%205.06-2.8%208.02-2.8%202.97-4e-3%205.8%200.969%208.03%202.78%201.13%200.924%202.05%202.02%202.72%203.23%200.683%201.23%201.11%202.59%201.23%204.03%200.126%201.46-0.067%202.91-0.564%204.28-0.508%201.4-1.33%202.7-2.45%203.84z%27%20style=%27fill-rule:nonzero;fill:%23ea7600%27/%3e%3c/g%3e%3c/g%3e%3c/svg%3e"><span class="flex items-baseline" style="font-size: 20px;"><span class="mr-[1px]" style="font-family: &quot;space grotesk&quot;, serif; font-weight: 700; font-size: 20px; color: rgb(243, 125, 22);">B</span>lender Tutoring.com</span></a></div><div class="hidden lg:flex gap-8 items-center"><ul class="flex gap-8"><li class="text-gray-400 hover:text-white transition-colors text-[14px] font-medium"><a href="#packages">Packages</a></li><li class="text-gray-400 hover:text-white transition-colors text-[14px] font-medium"><a href="#about">About</a></li><li class="text-gray-400 hover:text-white transition-colors text-[14px] font-medium"><a href="#tutors">Tutors</a></li></ul><button class="px-5 py-2 rounded-full text-sm font-bold cursor-pointer hover:bg-orange-600 text-black transition-all" style="background-color: rgb(243, 125, 22);"><a href="https://calendly.com/blendertutoring-info/" class="flex items-center" target="_blank" rel="noreferrer">Book a free call</a></button></div><div class="lg:hidden flex items-center gap-4 relative z-[70]"><a href="https://calendly.com/blendertutoring-info/" target="_blank" rel="noreferrer" class="px-4 py-1.5 rounded-full text-xs font-bold cursor-pointer text-black md:flex hidden items-center" style="background-color: rgb(243, 125, 22);">Free call</a><button class="text-white p-2 hover:bg-white/5 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu" aria-hidden="true"><path d="M4 5h16"></path><path d="M4 12h16"></path><path d="M4 19h16"></path></svg></button></div></div></nav><div class="max-w-3xl mx-auto px-6 py-24 text-white"><a class="text-orange-400 hover:underline text-sm mb-8 block" href="/blog" data-discover="true">← Back to Blog</a><h1 class="text-4xl font-bold mb-4">Mastering the Mirror Modifier in Blender</h1><p class="text-gray-400 text-sm mb-10">2026-10-01</p><div class="prose prose-invert prose-orange max-w-none prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:text-orange-400 prose-blockquote:border-orange-400 prose-blockquote:bg-orange-400/5 prose-blockquote:rounded-r-lg prose-blockquote:py-1 prose-table:text-sm prose-td:border-white/10 prose-th:border-white/10 prose-hr:border-white/10"><p>If you have ever tried to model a character's face, a car, or a butterfly by hand, you already know the pain: build one wing, then build the exact same wing again on the other side — perfectly. One misplaced vertex and the whole thing looks lopsided.</p>
+<p>Blender's <strong>Mirror Modifier</strong> removes that problem entirely. You model <em>half</em> an object, and Blender generates a perfect mirrored copy in real time. Both sides stay identical because there is only ever one side being edited.</p>
+<p>It is one of the first modifiers worth learning properly, and it will save you hours on nearly every symmetrical thing you ever build.</p>
+<p><img alt="How the Mirror Modifier turns half a mesh into a full symmetrical object" src="/blog-images/mirror-modifier-diagram.svg"></p>
+<hr>
+<h2>What a Modifier Actually Is</h2>
+<p>A modifier is a <strong>non-destructive</strong> operation stacked on top of your mesh. It changes how the object looks and behaves without touching the underlying geometry until you choose to make it permanent.</p>
+<p>That word — non-destructive — is the whole value. You can turn it off, change the axis, or delete it, and your original half is exactly as you left it. Nothing is baked in until you say so.</p>
+<p>The Mirror Modifier specifically:</p>
+<ul>
+<li>Duplicates your mesh across a chosen axis — X, Y, or Z</li>
+<li>Keeps the duplicate perfectly symmetrical at all times</li>
+<li>Updates live as you edit the original half</li>
+<li>Can weld the two halves together at the centre seam so there is no visible join</li>
+</ul>
+<hr>
+<h2>The Setup, Step by Step</h2>
+<h3>1. Start with half an object</h3>
+<p>Delete the half you do not need. In Edit Mode:</p>
+<ol>
+<li>Select the vertices on one side — box select with <code>B</code> works well from a front orthographic view (<code>Numpad 1</code>)</li>
+<li>Press <code>X</code> and choose <strong>Vertices</strong></li>
+<li>You are left with exactly one half</li>
+</ol>
+<h3>2. Centre the object's origin</h3>
+<p>This is the step people skip, and it is the single most common reason the modifier "does not work".</p>
+<p><strong>The Mirror Modifier mirrors across the object's origin, not the centre of the mesh.</strong> If the origin is not sitting on the line you want to mirror across, the copy appears offset — sometimes wildly.</p>
+<p>To fix it: place the 3D cursor where the mirror line should be (<code>Shift + C</code> snaps it to the world origin), then <strong>Object ▸ Set Origin ▸ Origin to 3D Cursor</strong>.</p>
+<h3>3. Add the modifier</h3>
+<p>Select the object, open the <strong>Properties Panel</strong>, click the wrench icon, then <strong>Add Modifier ▸ Generate ▸ Mirror</strong>. A mirrored copy appears immediately.</p>
+<h3>4. Pick the axis</h3>
+<p>It defaults to <strong>X</strong>. If the copy lands in the wrong place, toggle <strong>X</strong>, <strong>Y</strong> or <strong>Z</strong> in the modifier panel. You can enable more than one at once — useful for something radially symmetrical like a four-legged table.</p>
+<h3>5. Turn on Clipping</h3>
+<p>Tick <strong>Clipping</strong>. This stops vertices near the centre seam from crossing over to the other side while you work.</p>
+<p>Without it, a vertex nudged slightly past the middle produces a hole, a pinch, or a strange overlapping flap right down the centre of your model. With it on, vertices at the seam are locked to the mirror plane and slide along it instead of through it.</p>
+<p>One thing worth knowing: Clipping prevents vertices from <em>crossing</em>, but it only locks the ones already sitting on the seam. If you need to pull a seam vertex away from the middle deliberately, switch Clipping off, move it, and switch it back on.</p>
+<h3>6. Model as usual</h3>
+<p>Extrude, loop cut, sculpt, scale. Every change mirrors instantly. You only ever think about one half.</p>
+<h3>7. Apply it — when you are genuinely finished</h3>
+<p>Click the dropdown beside the modifier and choose <strong>Apply</strong>. Both halves merge into one real mesh.</p>
+<p>Only do this when you are confident you will not need the symmetry again. After applying, the two sides are independent, and fixing one means fixing the other by hand.</p>
+<hr>
+<h2>The Three Settings That Actually Matter</h2>
+<p>Most of the Mirror Modifier panel can be left alone. These three earn their place.</p>
+<table><thead><tr><th>Setting</th><th>What it does</th><th>When you want it</th></tr></thead><tbody><tr><td><strong>Clipping</strong></td><td>Locks seam vertices to the mirror plane</td><td>Almost always, while modelling</td></tr><tr><td><strong>Merge</strong> + distance</td><td>Welds vertices within a threshold of the seam</td><td>On, so the halves join into one surface</td></tr><tr><td><strong>Bisect</strong></td><td>Cuts the mesh at the axis instead of mirroring the whole thing</td><td>When you did not delete half first</td></tr></tbody></table>
+<p><strong>Bisect</strong> is the one people do not discover for years. If you already modelled a whole object and then decided you want symmetry, you do not have to delete half manually — enable Bisect on the relevant axis and Blender cuts it for you. <strong>Flip</strong> next to it reverses which half is kept.</p>
+<p>There is also a <strong>Mirror Object</strong> field. Leave it empty and the object mirrors around its own origin. Drop an Empty in there and it mirrors around <em>that</em> object instead — handy when the mirror line is not where the origin can reasonably live, such as a pair of wings on a body you do not want to re-origin.</p>
+<hr>
+<h2>Mistakes That Waste an Afternoon</h2>
+<p><strong>The origin is not where you think it is.</strong> The number one cause of a copy appearing in the wrong place, at the wrong distance, or seemingly not at all. Check the origin before you check anything else.</p>
+<p><strong>Clipping was off while sculpting.</strong> You will find out later, when the seam shows a crack or a ridge that will not smooth out.</p>
+<p><strong>Applying too early.</strong> You lose the automatic symmetry and inherit twice the work.</p>
+<p><strong>The modifier order is wrong.</strong> Modifiers evaluate top to bottom. Mirror should sit <em>above</em> Subdivision Surface — if subdivision runs first, the seam gets smoothed before it is welded and you get a visible pinch down the middle.</p>
+<p><strong>Flipped normals on the mirrored half.</strong> If the copy looks dark or inside-out, the original half likely had inconsistent normals to begin with. Select all in Edit Mode and press <code>Shift + N</code> to recalculate.</p>
+<p><strong>Expecting it to help with UVs.</strong> It will not, and this surprises people. A mirrored mesh produces mirrored UVs that sit exactly on top of the originals. For a tiling or symmetrical texture this is free efficiency. For anything with text, logos, or asymmetric wear, you will need to separate the islands after applying — see <a href="/blog/uv-unwrapping-blender-beginners">UV unwrapping in Blender</a> for what that involves.</p>
+<hr>
+<h2>Mirror Modifier or Sculpt Symmetry?</h2>
+<p>They are different tools and it is worth knowing which you want.</p>
+<p>The <strong>Mirror Modifier</strong> generates geometry. Half your mesh genuinely does not exist until the modifier runs.</p>
+<p><strong>Sculpt Mode symmetry</strong> (the X/Y/Z toggles in the Sculpt header) does not generate anything — it mirrors your <em>strokes</em> across a whole mesh that already has both halves.</p>
+<p>Use the modifier while blocking out and modelling. Use sculpt symmetry once you have applied it and are detailing a complete mesh.</p>
+<hr>
+<h2>Why It Is Worth the Ten Minutes</h2>
+<p>The Mirror Modifier turns symmetrical modelling from a tedious, error-prone chore into something you stop thinking about. Centre your origin, pick the axis, turn on Clipping — three habits, and you will reach for it on almost every character, vehicle and prop you ever build.</p>
+<p>Next time you start something symmetrical, build one half first. The rest arrives for free.</p></div><nav aria-label="More articles" class="mt-16 pt-10 border-t border-white/10"><h2 class="text-xs font-semibold tracking-widest uppercase text-orange-400 mb-5">Read next</h2><ul class="space-y-4"><li><a class="group flex flex-col gap-1 rounded-lg -mx-3 px-3 py-2 transition hover:bg-white/5" href="/blog/blender-and-unreal-the-happy-couple" data-discover="true"><span class="font-semibold text-white group-hover:text-orange-400 transition">Blender and Unreal Engine: The Happy Couple</span><span class="text-sm text-gray-400 line-clamp-2">One authors, the other makes it real-time — and both are free. Why this pairing is the most powerful free setup in 3D, and the gotchas nobody warns you about.</span></a></li><li><a class="group flex flex-col gap-1 rounded-lg -mx-3 px-3 py-2 transition hover:bg-white/5" href="/blog/cycles-vs-eevee" data-discover="true"><span class="font-semibold text-white group-hover:text-orange-400 transition">Cycles vs EEVEE: Which Blender Render Engine Should You Use?</span><span class="text-sm text-gray-400 line-clamp-2">Blender ships with two render engines and never explains which to pick. Here's the honest answer, and when each one is the right call.</span></a></li><li><a class="group flex flex-col gap-1 rounded-lg -mx-3 px-3 py-2 transition hover:bg-white/5" href="/blog/uv-unwrapping-blender-beginners" data-discover="true"><span class="font-semibold text-white group-hover:text-orange-400 transition">UV Unwrapping in Blender, Without the Panic</span><span class="text-sm text-gray-400 line-clamp-2">UV unwrapping is where most Blender beginners get stuck. Here's what UVs actually are, why your texture looks stretched, and the workflow that fixes it.</span></a></li></ul></nav><div class="mt-16 border border-orange-400/20 rounded-xl p-8 bg-orange-400/5"><p class="text-orange-400 text-xs font-semibold tracking-widest uppercase mb-3">Newsletter</p><h3 class="text-2xl font-bold text-white mb-2">Get more tips like this</h3><p class="text-gray-400 text-sm mb-6">Short, practical Blender guides for beginners — straight to your inbox. No spam. Unsubscribe any time.</p><form class="flex gap-3 flex-wrap"><input placeholder="your@email.com" class="flex-1 min-w-[200px] bg-black border rounded-lg px-4 py-2.5 text-white text-sm outline-none transition-colors
+              border-white/10 focus:border-orange-400" type="email" value=""><button type="submit" class="bg-orange-400 hover:bg-orange-300 text-black font-bold text-sm px-6 py-2.5 rounded-lg transition-colors whitespace-nowrap">Subscribe</button></form></div></div><footer class="relative z-20 bg-transparent text-white pt-24 pb-10"><div class="max-w-4xl mx-auto text-center px-6"><div class="mb-32" style="opacity: 0; transform: translateY(20px);"><h2 class="text-4xl md:text-5xl font-bold mb-6">Ready to <span class="text-orange-500">create</span>?</h2><div class="text-gray-400 text-sm md:text-base mb-10 max-w-lg mx-auto space-y-4 leading-relaxed"><p>Book a free 15-minute intro call and take the first step toward building something that’s truly yours. We’ll talk about your goals, your interests, and the kind of projects you’ve always wanted to bring to life—and map out a clear path forward together.</p><p>During the call, you’ll meet your mentor, ask questions, and get a feel for how the process works.</p><p>After the intro call, you’ll continue working together step by step to create your own project from start to finish—something real you can show, share, and be proud of.</p><p class="text-gray-300">Let’s turn your ideas into something tangible.</p></div><button class="text-black font-bold rounded-lg inline-flex items-center gap-2" style="background-color: rgb(243, 125, 22); padding: 8px 32px;"><a href="https://calendly.com/blendertutoring-info/" class="flex items-center" target="_blank" rel="noreferrer">Book a free call <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a></button></div></div><div class="border-t border-white/10 pt-12 px-32 flex flex-col md:flex-row justify-between items-center gap-4 text-[12px] text-gray-500"><p>© 2026 Blender Tutor. All rights reserved.</p><div class="flex gap-6"><a class="hover:text-white transition-colors" href="/blog" data-discover="true">Blog</a><a class="hover:text-white transition-colors" href="/radar" data-discover="true">The Radar</a><a class="hover:text-white transition-colors" href="/privacy" data-discover="true">Privacy</a><a class="hover:text-white transition-colors" href="/terms" data-discover="true">Terms</a></div></div></footer></div><div class="fixed bottom-5 right-5 z-40 print:hidden"><button type="button" aria-label="Share with a friend" class="group flex items-center gap-2 rounded-full border border-white/15 bg-[#0f1011]/90 backdrop-blur-md px-4 py-3 text-white shadow-lg transition-all hover:border-orange-500/60 hover:text-orange-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"><svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-share2 lucide-share-2 shrink-0" aria-hidden="true"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"></line><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"></line></svg><span class="hidden sm:inline text-[13px] font-medium whitespace-nowrap">Share with a friend</span></button></div></div>
+
+</body></html>
