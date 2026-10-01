@@ -57,14 +57,17 @@ const Home = () => {
         />
         <meta property="og:url" content="https://www.blendertutoring.com/" />
         <meta property="og:type" content="website" />
-        <meta property="og:image" content="https://www.blendertutoring.com/og-image.png" />
+        <meta property="og:image" content="https://www.blendertutoring.com/og-image.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="Blender Tutoring — master the complete Blender game art pipeline" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="BlenderTutor – Blender 3D Tutorials & Online Tutoring" />
         <meta
           name="twitter:description"
           content="Blender tutorials and personalized online tutoring. Learn 3D modeling, sculpting, animation and more — beginner friendly."
         />
-        <meta name="twitter:image" content="https://www.blendertutoring.com/og-image.png" />
+        <meta name="twitter:image" content="https://www.blendertutoring.com/og-image.jpg" />
       </Helmet>
 
       {/* --- FIXED BACKGROUND VIDEO --- */}
@@ -74,7 +77,12 @@ const Home = () => {
           muted
           loop
           playsInline
-          preload="auto"
+          // "auto" pulled the whole file down on every visit before the
+          // visitor had done anything. The webm is small, but Safari and iOS
+          // fall back to the 2MB mp4, and this is the page that has to load
+          // fastest. "metadata" lets the browser decide.
+          preload="metadata"
+          aria-hidden="true"
           className="h-full w-full object-cover"
         >
           <source src={heroWebm} type="video/webm" />

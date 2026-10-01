@@ -21,7 +21,7 @@ const BlogList = () => {
         />
         <meta property="og:url" content="https://www.blendertutoring.com/blog" />
         <meta property="og:type" content="website" />
-        <meta property="og:image" content="https://www.blendertutoring.com/og-image.png" />
+        <meta property="og:image" content="https://www.blendertutoring.com/og-image.jpg" />
       </Helmet>
       <Navbar />
       <div className="max-w-3xl mx-auto px-6 py-24 text-white">
@@ -36,6 +36,12 @@ const BlogList = () => {
               <img
                 src={post.thumbnail}
                 alt=""
+                width="128"
+                height="96"
+                // Explicit dimensions reserve the space before the file
+                // arrives, so the list does not jump as thumbnails load.
+                loading="lazy"
+                decoding="async"
                 className="h-24 w-32 shrink-0 rounded-lg object-cover"
               />
             )}

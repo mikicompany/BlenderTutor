@@ -128,6 +128,19 @@ const BlogPost = () => {
 
   const pageTitle = titleFor(post)
   const url = `https://www.blendertutoring.com/blog/${post.slug}`
+  // Breadcrumbs let Google show "blendertutoring.com > Blog > <post>" in the
+  // result instead of a bare URL, which reads as a real section of a site
+  // rather than a loose page.
+  const breadcrumbs = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.blendertutoring.com/" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://www.blendertutoring.com/blog" },
+      { "@type": "ListItem", "position": 3, "name": post.title, "item": url },
+    ],
+  }
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -135,7 +148,7 @@ const BlogPost = () => {
     "description": post.description,
     "datePublished": post.date,
     "url": url,
-    "image": post.thumbnail ? `https://www.blendertutoring.com${post.thumbnail}` : "https://www.blendertutoring.com/og-image.png",
+    "image": post.thumbnail ? `https://www.blendertutoring.com${post.thumbnail}` : "https://www.blendertutoring.com/og-image.jpg",
     "author": { "@type": "Organization", "name": "BlenderTutor" },
     "publisher": { "@type": "Organization", "name": "BlenderTutor", "url": "https://www.blendertutoring.com" }
   }
@@ -152,11 +165,12 @@ const BlogPost = () => {
         <meta property="og:description" content={post.description} />
         <meta property="og:url" content={url} />
         <meta property="og:type" content="article" />
-        <meta property="og:image" content={post.thumbnail ? `https://www.blendertutoring.com${post.thumbnail}` : "https://www.blendertutoring.com/og-image.png"} />
+        <meta property="og:image" content={post.thumbnail ? `https://www.blendertutoring.com${post.thumbnail}` : "https://www.blendertutoring.com/og-image.jpg"} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={post.title} />
         <meta name="twitter:description" content={post.description} />
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+        <script type="application/ld+json">{JSON.stringify(breadcrumbs)}</script>
       </Helmet>
       <Navbar />
       <div className="max-w-3xl mx-auto px-6 py-24 text-white">
