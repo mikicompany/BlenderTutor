@@ -19,10 +19,13 @@ const sections = [
   },
   {
     title: "3. Payments",
-    body: `Paid packages and session prices are presented before you commit to
-    them. Payment is due before or at the time of the session unless we agree
-    otherwise in writing. Prices may change, but changes never apply
-    retroactively to sessions you have already paid for.`,
+    body: `All prices are quoted and charged in US dollars (USD). If your
+    payment method uses another currency, your bank or card issuer sets the
+    exchange rate and may add its own fees, so the amount leaving your account
+    can differ from the figure shown here. Paid packages and session prices are
+    presented before you commit to them. Payment is due before or at the time
+    of the session unless we agree otherwise in writing. Prices may change, but
+    changes never apply retroactively to sessions you have already paid for.`,
   },
   {
     title: "4. Cancellations and rescheduling",
