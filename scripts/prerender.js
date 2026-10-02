@@ -70,7 +70,7 @@ async function main() {
 
   // The Radar calls third-party APIs that need a key and network access;
   // blocking them keeps a transient error state out of the saved markup.
-  await page.route(/rawg\.io|steamspy|corsproxy|allorigins|codetabs|rss2json|calendly/,
+  await page.route(/rawg\.io|steamspy|corsproxy|allorigins|codetabs|rss2json|calendly|frankfurter/,
     r => r.abort())
 
   // Collected and written only once every route has been rendered, so no

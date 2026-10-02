@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Check, Target } from "lucide-react"; // npm install lucide-react
 import { BOOKING_URL } from "../lib/links";
+import { CURRENCIES, loadRates, formatConverted } from "../lib/currency";
 
 // The packages are sold on what a student ends up with, not on how many hours
 // they buy — so each one that promises an outcome states it as a guarantee,
@@ -67,6 +68,22 @@ const packages = [
 ];
 
 const Packages = () => {
+  const [rates, setRates] = useState(null)
+  const [currency, setCurrency] = useState("USD")
+
+  useEffect(() => {
+    let cancelled = false
+    loadRates()
+      .then((r) => { if (!cancelled) setRates(r) })
+      // No rates means no selector. The prices are still correct without it,
+      // so there is nothing to tell the visitor and nothing to recover from.
+      .catch(() => {})
+    return () => { cancelled = true }
+  }, [])
+
+  const converted = (price) =>
+    rates && currency !== "USD" ? formatConverted(Number(price), currency, rates) : null
+
   return (
     <section className="py-16 px-6 text-white">
       <div className="max-w-5xl mx-auto">
@@ -126,6 +143,14 @@ const Packages = () => {
                     <span className="text-gray-500 text-[11px] ml-1.5">
                       {pkg.unit}
                     </span>
+                    {/* Secondary and explicitly approximate: the USD figure
+                        above is the one that gets charged. */}
+                    {converted(pkg.price) && (
+                      <span className="block text-gray-500 text-[11px] mt-1.5">
+                        ≈ {converted(pkg.price)}{" "}
+                        <span className="text-gray-600">· charged in USD</span>
+                      </span>
+                    )}
                   </>
                 ) : (
                   <>
@@ -189,10 +214,33 @@ const Packages = () => {
         {/* "$" alone reads as the reader's own dollar. Students book from
             outside North America, so the currency is stated rather than
             assumed. */}
-        <p className="text-center text-gray-500 text-xs mt-8">
-          All prices in US dollars (USD). Your bank may apply its own
-          conversion and fees.
-        </p>
+        <div className="mt-8 flex flex-col items-center gap-3">
+          <p className="text-center text-gray-500 text-xs">
+            All prices in US dollars (USD). Your bank may apply its own
+            conversion and fees.
+          </p>
+
+          {/* Only rendered once rates have actually arrived — offering a
+              selector that cannot convert would be worse than not offering
+              one. */}
+          {rates && (
+            <label className="flex items-center gap-2 text-xs text-gray-500">
+              <span>Show approximate price in</span>
+              <select
+                value={currency}
+                onChange={(e) => setCurrency(e.target.value)}
+                aria-label="Show approximate prices in another currency"
+                className="bg-white/[0.06] border border-white/10 rounded-md px-2 py-1 text-gray-300 text-xs focus:outline-none focus:border-orange-500/60 hover:border-white/20 transition-colors"
+              >
+                {CURRENCIES.map((c) => (
+                  <option key={c.code} value={c.code} className="bg-[#0f1011]">
+                    {c.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
+        </div>
       </div>
     </section>
   );
