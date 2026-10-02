@@ -5,8 +5,15 @@
     <link>https://www.blendertutoring.com/blog</link>
     <description>Practical Blender guides for beginners and game artists.</description>
     <language>en</language>
-    <lastBuildDate>Thu, 01 Oct 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 02 Oct 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://www.blendertutoring.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Connecting GPT-6 Astra to Blender</title>
+      <link>https://www.blendertutoring.com/blog/connect-gpt-astra-to-blender</link>
+      <guid isPermaLink="true">https://www.blendertutoring.com/blog/connect-gpt-astra-to-blender</guid>
+      <pubDate>Fri, 02 Oct 2026 00:00:00 GMT</pubDate>
+      <description>Astra can drive Blender directly through MCP rather than handing you Python to paste. Here's the setup, a worked example, and where it stops being useful.</description>
+    </item>
     <item>
       <title>Mastering the Mirror Modifier in Blender</title>
       <link>https://www.blendertutoring.com/blog/blender-mirror-modifier</link>
