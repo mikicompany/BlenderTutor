@@ -13,7 +13,7 @@ const packages = [
   {
     name: "Starter",
     price: "49",
-    unit: "per session",
+    unit: "USD per session",
     description: "A single session, to see how we work together.",
     outcome: null,
     features: [
@@ -27,7 +27,7 @@ const packages = [
   {
     name: "Portfolio Prop",
     price: "399",
-    unit: "for 8 sessions",
+    unit: "USD for 8 sessions",
     description: "Take one prop from blockout to portfolio-ready.",
     outcome: "You finish with a game-ready prop in your portfolio.",
     features: [
@@ -44,7 +44,7 @@ const packages = [
     // Priced on the call rather than listed — a four-figure number on a card
     // asks for a decision before there has been any conversation.
     price: null,
-    priceNote: "Priced on your free call",
+    priceNote: "Priced in USD on your free call",
     unit: "16 sessions",
     description: "A complete environment, built the way studios build them.",
     outcome: "You finish with a full scene in your portfolio.",
@@ -185,6 +185,14 @@ const Packages = () => {
             </motion.div>
           ))}
         </div>
+
+        {/* "$" alone reads as the reader's own dollar. Students book from
+            outside North America, so the currency is stated rather than
+            assumed. */}
+        <p className="text-center text-gray-500 text-xs mt-8">
+          All prices in US dollars (USD). Your bank may apply its own
+          conversion and fees.
+        </p>
       </div>
     </section>
   );
