@@ -3,6 +3,22 @@ import { useNewsFeed } from '../hooks/useNewsFeed'
 
 const rawgLink = (g) => (g.slug ? `https://rawg.io/games/${g.slug}` : '#')
 
+// Headline URLs arrive from third-party RSS feeds relayed through public CORS
+// proxies — nothing in that chain is under our control. React escapes text it
+// renders, but it does not vet a URL placed in href, so a feed returning
+// "javascript:..." would produce a link that runs script when a visitor clicks
+// it. Only http and https are allowed through; anything else becomes inert.
+const safeHref = (url) => {
+  if (typeof url !== 'string') return '#'
+  try {
+    const { protocol } = new URL(url, window.location.origin)
+    return protocol === 'http:' || protocol === 'https:' ? url : '#'
+  } catch {
+    // Not a parseable URL at all.
+    return '#'
+  }
+}
+
 export default function NewsMarquee({ data }) {
   const headlines = useNewsFeed()
 
@@ -28,7 +44,7 @@ export default function NewsMarquee({ data }) {
       {items.map((h, i) => (
         <a
           key={`${h.link}-${i}`}
-          href={h.link}
+          href={safeHref(h.link)}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 text-xs font-mono whitespace-nowrap px-5 text-gray-400 hover:text-green-300 transition-colors"
