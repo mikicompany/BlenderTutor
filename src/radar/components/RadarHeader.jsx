@@ -1,15 +1,25 @@
 import React, { useState, useEffect } from 'react'
-import { RefreshCw, Key } from 'lucide-react'
+import { RefreshCw, Key, Share2, Check } from 'lucide-react'
+import { shareCurrentPage, SHARE_IDLE, SHARE_COPIED, SHARE_FAILED } from '../../lib/share'
 
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December']
 
 export default function RadarHeader({ lastUpdated, loading, onRefresh, onResetKey }) {
   const [now, setNow] = useState(new Date())
+  const [shared, setShared] = useState(SHARE_IDLE)
 
   useEffect(() => {
     const t = setInterval(() => setNow(new Date()), 1000)
     return () => clearInterval(t)
   }, [])
+
+  // Reverts to the idle label so the button does not sit reading "COPIED"
+  // indefinitely on a page the visitor keeps open.
+  useEffect(() => {
+    if (shared === SHARE_IDLE) return
+    const t = setTimeout(() => setShared(SHARE_IDLE), 2200)
+    return () => clearTimeout(t)
+  }, [shared])
 
   return (
     <header className="border-b border-green-500/20 bg-[#0a0a0a]">
@@ -47,6 +57,20 @@ export default function RadarHeader({ lastUpdated, loading, onRefresh, onResetKe
                   synced {lastUpdated.toLocaleTimeString()}
                 </span>
               )}
+              <button
+                onClick={async () => setShared(await shareCurrentPage())}
+                aria-label="Share The Radar"
+                className="flex items-center gap-1.5 text-xs text-green-400 hover:text-green-300 border border-green-500/30 hover:border-green-400/60 px-3 py-1.5 rounded transition-all font-mono"
+              >
+                {shared === SHARE_COPIED
+                  ? <Check size={11} />
+                  : <Share2 size={11} />}
+                {shared === SHARE_COPIED
+                  ? 'COPIED'
+                  : shared === SHARE_FAILED
+                    ? 'FAILED'
+                    : 'SHARE'}
+              </button>
               <button
                 onClick={onRefresh}
                 disabled={loading}

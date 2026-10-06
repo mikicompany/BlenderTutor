@@ -1,51 +1,36 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { Share2, Check } from "lucide-react";
+import {
+  shareCurrentPage,
+  SHARE_IDLE,
+  SHARE_COPIED,
+  SHARE_FAILED,
+} from "../lib/share";
 
-// Rendered once in App so it reaches every route, including The Radar, which
-// has its own header rather than the site navbar.
-//
-// The URL and title are read at click time rather than at render time on
-// purpose: the build prerenders each route from a local server, so anything
-// derived from window.location during render would bake a 127.0.0.1 address
-// into the shipped HTML.
+// Rendered once in App so it reaches every route. The one exception is The
+// Radar, which has its own share control in its header styled to match that
+// page — two share buttons on one screen is just clutter.
+const HIDDEN_ON = ["/radar"];
+
 const ShareButton = () => {
-  const [state, setState] = useState("idle"); // idle | copied | failed
+  const { pathname } = useLocation();
+  const [state, setState] = useState(SHARE_IDLE);
 
   useEffect(() => {
-    if (state === "idle") return;
-    const t = setTimeout(() => setState("idle"), 2200);
+    if (state === SHARE_IDLE) return;
+    const t = setTimeout(() => setState(SHARE_IDLE), 2200);
     return () => clearTimeout(t);
   }, [state]);
 
-  const handleShare = async () => {
-    const url = window.location.href;
-    const title = document.title;
+  if (HIDDEN_ON.includes(pathname.replace(/\/$/, ""))) return null;
 
-    // Phones and most tablets get the real share sheet, which is what people
-    // actually want when sending a link to a friend.
-    if (navigator.share) {
-      try {
-        await navigator.share({ title, url });
-        return;
-      } catch (err) {
-        // Dismissing the sheet rejects with AbortError — that is a deliberate
-        // cancel, not a failure, so fall through to copying only otherwise.
-        if (err?.name === "AbortError") return;
-      }
-    }
-
-    try {
-      await navigator.clipboard.writeText(url);
-      setState("copied");
-    } catch {
-      setState("failed");
-    }
-  };
+  const handleShare = async () => setState(await shareCurrentPage());
 
   const label =
-    state === "copied"
+    state === SHARE_COPIED
       ? "Link copied"
-      : state === "failed"
+      : state === SHARE_FAILED
         ? "Copy failed"
         : "Share with a friend";
 
@@ -57,13 +42,12 @@ const ShareButton = () => {
         aria-label={label}
         className="group flex items-center gap-2 rounded-full border border-white/15 bg-[#0f1011]/90 backdrop-blur-md px-4 py-3 text-white shadow-lg transition-all hover:border-orange-500/60 hover:text-orange-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
       >
-        {state === "copied" ? (
+        {state === SHARE_COPIED ? (
           <Check size={17} className="text-orange-500 shrink-0" />
         ) : (
           <Share2 size={17} className="shrink-0" />
         )}
-        {/* The label is hidden on small screens so the button stays out of the
-            way of content, and appears from sm upwards where there is room. */}
+        {/* Hidden on small screens so the button stays clear of content. */}
         <span className="hidden sm:inline text-[13px] font-medium whitespace-nowrap">
           {label}
         </span>
