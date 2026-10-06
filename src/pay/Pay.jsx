@@ -12,17 +12,17 @@ import {
   Globe,
   Landmark,
   Wallet,
+  CheckCircle2,
 } from "lucide-react"
 import { FaPaypal } from "react-icons/fa"
 import Navbar from "../navbar/Navbar"
-import CalendlyEmbed from "./CalendlyEmbed"
+import BookingEmbed from "./BookingEmbed"
 import { SESSION_BOOKING_URL } from "../lib/links"
 import {
   resolveItem,
   resolveName,
   methodsFor,
-  bankRows,
-  BANK_TRANSFER,
+  transfersToShow,
 } from "../lib/payments"
 import { CURRENCIES, loadRates, formatConverted } from "../lib/currency"
 import { trackPaymentClick } from "../lib/tracking"
@@ -98,7 +98,12 @@ const Pay = () => {
   const item = resolveItem(params.get("item"))
   const name = resolveName(params.get("name"))
   const methods = methodsFor(item)
-  const bank = bankRows()
+  const transfers = transfersToShow()
+  // Set by the payment provider redirecting back here after a successful
+  // charge. It is self-asserted and anyone can type it, so it changes what
+  // the page SAYS and never what it allows — booking is open either way,
+  // exactly as it was before.
+  const justPaid = params.get("paid") === "1"
 
   const [rates, setRates] = useState(null)
   const [currency, setCurrency] = useState("USD")
@@ -225,10 +230,21 @@ const Pay = () => {
         </div>
 
         <div className="space-y-12">
-          <Step n="1" title="Pay for the session">
+          <Step n="1" title={justPaid ? "Payment received" : "Pay for the session"}>
+            {justPaid && (
+              <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/[0.07] p-5 flex gap-3">
+                <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-px" />
+                <p className="text-[13px] text-emerald-50/90 leading-relaxed">
+                  Thanks — that went through. Your receipt is on its way by
+                  email from the payment provider. All that is left is picking
+                  a time below.
+                </p>
+              </div>
+            )}
+
             {/* Only ever rendered for a configured provider, so there is no
                 such thing as a dead button here. */}
-            {methods.length > 0 && (
+            {!justPaid && methods.length > 0 && (
               <div className="space-y-3 mb-4">
                 {methods.map((method) => {
                   const Icon = ICONS[method.id] || Wallet
@@ -265,40 +281,49 @@ const Pay = () => {
               </div>
             )}
 
-            {/* Bank transfer is details rather than a button — there is
-                nothing to click, the payer copies these into their own
-                banking app. Between euro accounts a SEPA transfer is normally
-                free and same-day, which beats every option above on cost. */}
-            {bank.length > 0 && (
-              <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5 mb-4">
-                <div className="flex items-center gap-2.5 mb-4">
-                  <Landmark size={17} className="text-orange-500 shrink-0" />
-                  <h3 className="text-sm font-bold">Bank transfer</h3>
+            {/* Transfers are details rather than buttons — there is nothing
+                to click, the payer copies these into their own banking app.
+                They carry no fee, which on the $399 package is about $16 that
+                stays with you. */}
+            {!justPaid &&
+              transfers.map((transfer) => (
+                <div
+                  key={transfer.id}
+                  className="rounded-xl border border-white/10 bg-white/[0.03] p-5 mb-4"
+                >
+                  <div className="flex items-center gap-2.5 mb-1">
+                    <Landmark size={17} className="text-orange-500 shrink-0" />
+                    <h3 className="text-sm font-bold">{transfer.title}</h3>
+                  </div>
+                  {transfer.note && (
+                    <p className="text-[11.5px] text-gray-500 mb-4 ml-[26px]">
+                      {transfer.note}
+                    </p>
+                  )}
+                  <dl className="space-y-2.5">
+                    {transfer.rows.map(([label, value]) => (
+                      <div
+                        key={label}
+                        className="flex flex-wrap gap-x-3 gap-y-0.5 text-[13px]"
+                      >
+                        <dt className="text-gray-500 w-28 shrink-0">{label}</dt>
+                        {/* break-all so a long IBAN wraps instead of forcing
+                            the whole page to scroll sideways on a phone. */}
+                        <dd className="text-gray-200 font-mono text-[12.5px] break-all">
+                          {value}
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
+                  {transfer.footer && (
+                    <p className="text-[11.5px] text-gray-500 mt-4 pt-4 border-t border-white/10">
+                      {transfer.footer}
+                    </p>
+                  )}
                 </div>
-                <dl className="space-y-2.5">
-                  {bank.map(([label, value]) => (
-                    <div
-                      key={label}
-                      className="flex flex-wrap gap-x-3 gap-y-0.5 text-[13px]"
-                    >
-                      <dt className="text-gray-500 w-28 shrink-0">{label}</dt>
-                      {/* break-all so a long IBAN wraps instead of forcing
-                          the whole page to scroll sideways on a phone. */}
-                      <dd className="text-gray-200 font-mono text-[12.5px] break-all">
-                        {value}
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
-                {BANK_TRANSFER.reference && (
-                  <p className="text-[11.5px] text-gray-500 mt-4 pt-4 border-t border-white/10">
-                    {BANK_TRANSFER.reference}
-                  </p>
-                )}
-              </div>
-            )}
+              ))}
 
-            {methods.length === 0 && bank.length === 0 && (
+            {!justPaid && methods.length === 0 && transfers.length === 0 && (
               // Reached only if the link is shared before anything is filled
               // in in src/lib/payments.js. Better an honest notice with a way
               // to reach a human than a button that goes nowhere.
@@ -318,7 +343,7 @@ const Pay = () => {
               </div>
             )}
 
-            {methods.length > 0 && (
+            {!justPaid && methods.length > 0 && (
               <p className="flex items-start gap-2 text-[11.5px] text-gray-500 leading-relaxed">
                 <ShieldCheck className="w-4 h-4 mt-px shrink-0 text-gray-600" />
                 <span>
@@ -329,7 +354,7 @@ const Pay = () => {
               </p>
             )}
 
-            {rates && (
+            {!justPaid && rates && (
               <label className="flex items-center gap-2 text-xs text-gray-500 mt-5">
                 <span>Show approximate price in</span>
                 <select
@@ -359,7 +384,7 @@ const Pay = () => {
                     Choose any slot that suits you. Times are shown in your own
                     timezone, so there is nothing to convert.
                   </p>
-                  <CalendlyEmbed />
+                  <BookingEmbed />
                 </>
               ) : (
                 // No self-serve calendar for the paid hour yet — see the note

@@ -7,21 +7,29 @@ export const BOOKING_URL = "https://calendly.com/blendertutoring-info/"
 // "free", which is the part that makes people click.
 export const BOOKING_LABEL = "Book a free call"
 
-// The paid hour, used only on /pay. Empty means /pay shows "I'll send you an
-// invite" instead of an embedded calendar — see Pay.jsx.
+// The booking calendar for the paid hour, embedded on /pay. Empty means /pay
+// tells the student to email instead — which is the one step we are trying
+// to remove, so this is worth filling in.
 //
-// It is empty because Calendly's free plan allows exactly ONE active event
-// type, and that one has to be the free intro call: it is what every button
-// on the site points at, and it is where every student comes from.
+// It is NOT a Calendly-only field. The embed is a plain iframe, so any
+// scheduler that gives you a bookable page works: Calendly, Cal.com, Google
+// Calendar appointment schedules. Paste the page's own URL.
 //
-// A "1-Hour Tutoring Session" event type does exist, already configured —
-// 60 minutes, Google Meet as its location, created for exactly this. It is
-// deactivated, because activating it is what deactivates the free call.
-// Upgrading Calendly to a plan with multiple event types is the only thing
-// standing between here and a working embed. Once that is done, activate it
-// and set this to:
+// It is empty today because Calendly's free plan allows exactly ONE active
+// event type, and that one has to be the free intro call — it is what every
+// button on the site points at, and where every student comes from.
 //
-//   https://calendly.com/blendertutoring-info/1-hour-tutoring-session
+// Two ways out, either of which makes this a one-line change:
+//
+//   Calendly paid plan — a "1-Hour Tutoring Session" event type already
+//   exists, configured and ready (60 minutes, Google Meet as its location).
+//   It is deactivated, because activating it is what deactivates the free
+//   call. Upgrade, reactivate it, then set this to:
+//     https://calendly.com/blendertutoring-info/1-hour-tutoring-session
+//
+//   Cal.com free plan — unlimited event types at no cost, and it embeds the
+//   same way. Make a 60-minute event type there, connect Google Meet, and
+//   paste its URL. The free Calendly intro call keeps working untouched.
 //
 // Do not point this at the free intro call. That one is 15 minutes and
 // titled "No Charge", so a paying student sent there books a quarter of
