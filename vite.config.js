@@ -27,7 +27,12 @@ export default defineConfig({
       dynamicRoutes: ['/blog', ...postRoutes, '/radar', '/terms', '/privacy'],
       // The SPA fallback page and the Search Console verification file are
       // real .html files in docs/, but neither belongs in a sitemap.
-      exclude: ['/404', '/googlea46d0184849e086f'],
+      //
+      // /pay is excluded for a different reason: it is a payment link sent
+      // privately. The plugin scans docs/ for .html files, and prerender.js
+      // writes docs/pay.html — so from the second build onward it would be
+      // picked up automatically without this.
+      exclude: ['/404', '/googlea46d0184849e086f', '/pay'],
       priority: {
         '/': 1.0,
         '/blog': 0.8,

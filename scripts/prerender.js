@@ -27,6 +27,10 @@ const ROUTES = [
   '/radar',
   '/terms',
   '/privacy',
+  // Needs a real file like any other route — it is sent as a link and must
+  // answer 200 when someone opens it. It is kept out of the sitemap and
+  // marked noindex instead of being left to 404.
+  '/pay',
 ]
 
 const MIME = {

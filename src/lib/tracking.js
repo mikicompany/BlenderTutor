@@ -41,41 +41,27 @@ function describe(anchor) {
   }
 }
 
-export function trackBookingClick(anchor) {
-  const detail = describe(anchor)
-
-  // GTM reads this array. Creating it if absent means the push survives the
-  // container being slow, blocked, or not yet configured.
-  window.dataLayer = window.dataLayer || []
-  window.dataLayer.push({ event: "book_call_click", ...detail })
-
+// Form-encoded rather than JSON, for two reasons. It is CORS-safelisted, so
+// the request goes without a preflight that sendBeacon cannot perform; and
+// form-to-email services turn each field into a line of the email, so the
+// message arrives readable instead of as a wall of JSON. Zapier and Make
+// parse the same encoding, so one format serves every likely receiver.
+function post(fields) {
   if (!WEBHOOK) return
 
   const when = new Date()
-
-  // Form-encoded rather than JSON, for two reasons. It is CORS-safelisted, so
-  // the request goes without a preflight that sendBeacon cannot perform; and
-  // form-to-email services turn each field into a line of the email, so the
-  // message arrives readable instead of as a wall of JSON. Zapier and Make
-  // parse the same encoding, so one format serves every likely receiver.
-  const fields = {
+  const body = new URLSearchParams({
     // Underscore-prefixed keys are instructions to form-to-email services and
     // are ignored by everything else.
-    _subject: `Book a call clicked — ${detail.section}`,
     _captcha: "false",
     _template: "table",
-
-    button: detail.label,
-    section: detail.section,
-    page: detail.page,
+    ...fields,
     time: when.toLocaleString("en-CA", { timeZone: "America/Vancouver" }),
     time_utc: when.toISOString(),
     // Where the visitor came from is the part that turns a notification into
     // something actionable — it says which channel is actually working.
     referrer: document.referrer || "direct",
-  }
-
-  const body = new URLSearchParams(fields).toString()
+  }).toString()
 
   // sendBeacon survives the page being left, which a plain fetch may not.
   try {
@@ -96,4 +82,46 @@ export function trackBookingClick(anchor) {
   } catch {
     // Tracking must never interfere with the click that triggered it.
   }
+}
+
+export function trackBookingClick(anchor) {
+  const detail = describe(anchor)
+
+  // GTM reads this array. Creating it if absent means the push survives the
+  // container being slow, blocked, or not yet configured.
+  window.dataLayer = window.dataLayer || []
+  window.dataLayer.push({ event: "book_call_click", ...detail })
+
+  post({
+    _subject: `Book a call clicked — ${detail.section}`,
+    button: detail.label,
+    section: detail.section,
+    page: detail.page,
+  })
+}
+
+// Someone reaching for a payment button is the most consequential click on
+// the site, and unlike a booking there is no Calendly to report it. If the
+// payment never lands, the gap between this and the money arriving is the
+// only signal that something went wrong at the checkout.
+export function trackPaymentClick({ item, method, name }) {
+  window.dataLayer = window.dataLayer || []
+  window.dataLayer.push({
+    event: "payment_click",
+    item: item.id,
+    method,
+    value: item.amount,
+    currency: "USD",
+  })
+
+  post({
+    _subject: `Payment started — ${item.name} ($${item.amount} USD)`,
+    item: item.name,
+    amount: `$${item.amount} USD`,
+    method,
+    // Set when the link was personalised with ?name=, which is the only clue
+    // the page has about who is paying.
+    sent_to: name || "not specified",
+    page: window.location.pathname,
+  })
 }
