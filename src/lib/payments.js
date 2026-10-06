@@ -12,13 +12,18 @@
 // the visitor at the contact address instead of offering a dead button.
 // ──────────────────────────────────────────────────────────────────────────
 
-// Your PayPal.me handle — just the name, not the whole address. If your
-// PayPal.me page is paypal.me/mikibutler then this is "mikibutler".
+// Your PayPal.me handle — just the name, not an email address. PayPal.me
+// links are built from a username, so a payment cannot be addressed to
+// "someone@example.com" this way; receiving by email address is what PayPal
+// invoicing does instead, and that is sent from PayPal rather than from here.
 //
 // One handle covers every amount: the amount is appended to the URL, so
-// adding a package here never needs a new PayPal link. Find or create the
-// handle at paypal.com/paypalme.
-export const PAYPAL_ME_HANDLE = ""
+// adding a package below never needs a new PayPal link. The handle lives at
+// paypal.com/paypalme.
+//
+// This must be the handle of the account the money should land in. Opening
+// https://www.paypal.com/paypalme/mikibutler should show your own name.
+export const PAYPAL_ME_HANDLE = "mikibutler"
 
 // Stripe Payment Links, one per item — a Stripe link has its price baked in,
 // so unlike PayPal it cannot be reused across amounts. Create them at
