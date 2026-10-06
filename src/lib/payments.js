@@ -2,39 +2,16 @@
 //
 // The page is a link you send directly to someone — in Discord, in an email,
 // in a DM — rather than something reached by browsing the site. It carries no
-// merchant integration of its own: it hands the payer off to Stripe or PayPal,
-// who take the card details. Nothing sensitive passes through this site, which
-// is the whole reason to do it this way.
+// merchant integration of its own: it hands the payer off to a provider, who
+// takes the card or account details. Nothing sensitive passes through this
+// site, which is the whole reason to do it this way.
 //
 // ──────────────────────────────────────────────────────────────────────────
-// TO MAKE THE PAGE LIVE, FILL IN ONE OF THE TWO BELOW AND REBUILD.
-// Until at least one is set, /pay shows a "not ready yet" notice and points
-// the visitor at the contact address instead of offering a dead button.
+// TO ADD A PAYMENT OPTION, FILL IN ITS ENTRY BELOW AND REBUILD.
+// Options with nothing filled in are not rendered, so the page can never
+// show a button that goes nowhere. With none filled in at all, it shows a
+// notice and the contact address instead.
 // ──────────────────────────────────────────────────────────────────────────
-
-// Your PayPal.me handle — just the name, not an email address. PayPal.me
-// links are built from a username, so a payment cannot be addressed to
-// "someone@example.com" this way; receiving by email address is what PayPal
-// invoicing does instead, and that is sent from PayPal rather than from here.
-//
-// One handle covers every amount: the amount is appended to the URL, so
-// adding a package below never needs a new PayPal link. The handle lives at
-// paypal.com/paypalme.
-//
-// This must be the handle of the account the money should land in. Opening
-// https://www.paypal.com/paypalme/mikibutler should show your own name.
-export const PAYPAL_ME_HANDLE = "mikibutler"
-
-// Stripe Payment Links, one per item — a Stripe link has its price baked in,
-// so unlike PayPal it cannot be reused across amounts. Create them at
-// dashboard.stripe.com → Payment links → New. Each looks like
-// https://buy.stripe.com/xxxxxxxxxxxx
-//
-// Keys must match the keys of ITEMS below.
-export const STRIPE_LINKS = {
-  session: "",
-  prop: "",
-}
 
 // What can be paid for here. Prices mirror the cards in Packages.jsx and are
 // in USD, matching what the site quotes everywhere else.
@@ -70,6 +47,87 @@ export const ITEMS = {
 
 export const DEFAULT_ITEM = "session"
 
+// Payment options, in the order they appear on the page. The first one with a
+// working link renders as the primary button.
+//
+// Each entry is enabled by exactly one of two fields:
+//
+//   handle — a username the link is BUILT from. Only PayPal works this way,
+//            because its URL format is documented and takes the amount as a
+//            path segment, so one handle serves every price.
+//
+//   url    — a link you PASTE, because the provider generates it rather than
+//            letting you construct it. Either:
+//              a string  — one link used for every item. If the link has no
+//                          amount baked in, the payer types it; the page
+//                          shows the amount right above the button.
+//              an object — a different link per item, keyed as in ITEMS.
+//                          Stripe needs this: a Stripe link has its price
+//                          fixed, so it cannot be reused across amounts.
+//
+// Adding a provider that is not here is a matter of adding an entry: give it
+// an id, a label, a note, and a url. Nothing else needs changing.
+export const PROVIDERS = [
+  {
+    id: "card",
+    label: "Pay by card",
+    note: "Visa, Mastercard, Amex. No account needed.",
+    // Stripe Payment Links, created at dashboard.stripe.com → Payment links.
+    // Each looks like https://buy.stripe.com/xxxxxxxxxxxx
+    url: {
+      session: "",
+      prop: "",
+    },
+  },
+  {
+    id: "paypal",
+    label: "Pay with PayPal",
+    note: "Use your PayPal balance, or a card as a guest.",
+    // Just the username, not an email address — PayPal.me links are built
+    // from a handle, so a payment cannot be addressed to an email this way.
+    // This must be the handle of the account the money should land in:
+    // opening paypal.me/<handle> should show your own name.
+    handle: "mikibutler",
+  },
+  {
+    id: "revolut",
+    label: "Pay with Revolut",
+    note: "Instant, and free to send from anywhere in Europe.",
+    // Paste a Revolut.me link from the app — Revolut generates these, they
+    // are not built from a username, so there is nothing to construct here.
+    // A link with an amount set is per-item and belongs in an object;
+    // a plain revolut.me link works for everything as a string.
+    url: "",
+  },
+  {
+    id: "wise",
+    label: "Pay with Wise",
+    note: "Good exchange rates when paying from another currency.",
+    // Paste a Wise payment-request link.
+    url: "",
+  },
+]
+
+// Bank transfer, shown as details rather than a button because there is
+// nothing to click — the payer copies these into their own banking app.
+//
+// Worth filling in for students in the EU and Ireland especially: a SEPA
+// transfer between euro accounts is normally free and arrives the same day,
+// which beats every card option above on cost for both sides.
+//
+// Fill in `enabled: true` along with the fields that apply. Leave out
+// anything that does not — only filled rows are shown.
+export const BANK_TRANSFER = {
+  enabled: false,
+  accountName: "",
+  iban: "",
+  bic: "",
+  bank: "",
+  // Shown under the details. Say what the payer should put as a reference so
+  // an arriving transfer can be matched to a person.
+  reference: "Use your name as the payment reference.",
+}
+
 // The ?item= value arrives from a URL, so it is untrusted input. Looking it up
 // with hasOwn rather than `ITEMS[key]` keeps inherited keys such as
 // "constructor" or "toString" from resolving to something that is not an item
@@ -94,40 +152,48 @@ export function resolveName(raw) {
 
 // PayPal.me takes the amount and currency in the path, e.g.
 // /paypalme/mikibutler/49USD, and opens with that amount already filled in.
-function paypalUrl(amount) {
-  const handle = encodeURIComponent(PAYPAL_ME_HANDLE.replace(/^@/, ""))
-  return `https://www.paypal.com/paypalme/${handle}/${amount}USD`
+function paypalUrl(handle, amount) {
+  return `https://www.paypal.com/paypalme/${encodeURIComponent(
+    handle.replace(/^@/, "")
+  )}/${amount}USD`
 }
 
-// Only methods that are actually configured come back, so the page can never
-// render a button that goes nowhere.
-//
-// Card first: it is the lowest-friction option — no account, no sign-in — and
-// it is what most people reach for. PayPal second, for people who prefer to
-// pay from a balance they already have.
+// A provider's url may be one string for every item or an object keyed by
+// item. Anything else — including a half-filled object with a blank for this
+// particular item — counts as not configured.
+function urlFor(provider, item) {
+  if (provider.handle) return paypalUrl(provider.handle, item.amount)
+
+  const { url } = provider
+  if (typeof url === "string") return url.trim()
+  if (url && typeof url === "object" && Object.hasOwn(url, item.id)) {
+    const specific = url[item.id]
+    return typeof specific === "string" ? specific.trim() : ""
+  }
+  return ""
+}
+
+// Only providers that are actually configured come back, so the page can
+// never render a button that goes nowhere. The first survivor is primary.
 export function methodsFor(item) {
-  const methods = []
+  return PROVIDERS.map((provider) => ({
+    id: provider.id,
+    label: provider.label,
+    note: provider.note,
+    url: urlFor(provider, item),
+  }))
+    .filter((method) => method.url)
+    .map((method, index) => ({ ...method, primary: index === 0 }))
+}
 
-  const stripe = Object.hasOwn(STRIPE_LINKS, item.id) ? STRIPE_LINKS[item.id] : ""
-  if (stripe) {
-    methods.push({
-      id: "card",
-      label: "Pay by card",
-      note: "Visa, Mastercard, Amex. No account needed.",
-      url: stripe,
-      primary: true,
-    })
-  }
-
-  if (PAYPAL_ME_HANDLE) {
-    methods.push({
-      id: "paypal",
-      label: "Pay with PayPal",
-      note: "Use your PayPal balance, or a card as a guest.",
-      url: paypalUrl(item.amount),
-      primary: !stripe,
-    })
-  }
-
-  return methods
+// Only the rows that have been filled in, so a partly completed block does
+// not render as a list of empty labels.
+export function bankRows() {
+  if (!BANK_TRANSFER.enabled) return []
+  return [
+    ["Account name", BANK_TRANSFER.accountName],
+    ["IBAN", BANK_TRANSFER.iban],
+    ["BIC / SWIFT", BANK_TRANSFER.bic],
+    ["Bank", BANK_TRANSFER.bank],
+  ].filter(([, value]) => typeof value === "string" && value.trim())
 }

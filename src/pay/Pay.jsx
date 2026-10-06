@@ -1,12 +1,29 @@
 import React, { useEffect, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { Link, useLocation } from "react-router-dom"
-import { Check, ShieldCheck, Mail, ArrowRight, CreditCard, Video } from "lucide-react"
+import {
+  Check,
+  ShieldCheck,
+  Mail,
+  ArrowRight,
+  CreditCard,
+  Video,
+  Smartphone,
+  Globe,
+  Landmark,
+  Wallet,
+} from "lucide-react"
 import { FaPaypal } from "react-icons/fa"
 import Navbar from "../navbar/Navbar"
 import CalendlyEmbed from "./CalendlyEmbed"
 import { SESSION_BOOKING_URL } from "../lib/links"
-import { resolveItem, resolveName, methodsFor } from "../lib/payments"
+import {
+  resolveItem,
+  resolveName,
+  methodsFor,
+  bankRows,
+  BANK_TRANSFER,
+} from "../lib/payments"
 import { CURRENCIES, loadRates, formatConverted } from "../lib/currency"
 import { trackPaymentClick } from "../lib/tracking"
 
@@ -24,7 +41,15 @@ import { trackPaymentClick } from "../lib/tracking"
 //
 // Neither is required, so the bare /pay URL is always valid.
 
-const ICONS = { card: CreditCard, paypal: FaPaypal }
+// Keyed by provider id. A provider with no entry here still renders — it
+// just gets the generic wallet — so adding one to lib/payments.js never
+// requires touching this file.
+const ICONS = {
+  card: CreditCard,
+  paypal: FaPaypal,
+  revolut: Smartphone,
+  wise: Globe,
+}
 
 // The page is two things in sequence — pay, then pick a time — and numbering
 // them is what stops the calendar at the bottom reading as an alternative to
@@ -73,6 +98,7 @@ const Pay = () => {
   const item = resolveItem(params.get("item"))
   const name = resolveName(params.get("name"))
   const methods = methodsFor(item)
+  const bank = bankRows()
 
   const [rates, setRates] = useState(null)
   const [currency, setCurrency] = useState("USD")
@@ -118,7 +144,7 @@ const Pay = () => {
         />
         <meta
           property="og:description"
-          content="1:1 Blender tutoring with a senior environment artist. Pay by card or PayPal, then pick your time."
+          content="1:1 Blender tutoring with a senior environment artist. Pay securely, then pick your time."
         />
         <meta
           property="og:image"
@@ -138,7 +164,7 @@ const Pay = () => {
         />
         <meta
           name="twitter:description"
-          content="1:1 Blender tutoring with a senior environment artist. Pay by card or PayPal, then pick your time."
+          content="1:1 Blender tutoring with a senior environment artist. Pay securely, then pick your time."
         />
         <meta
           name="twitter:image"
@@ -202,10 +228,10 @@ const Pay = () => {
           <Step n="1" title="Pay for the session">
             {/* Only ever rendered for a configured provider, so there is no
                 such thing as a dead button here. */}
-            {methods.length > 0 ? (
+            {methods.length > 0 && (
               <div className="space-y-3 mb-4">
                 {methods.map((method) => {
-                  const Icon = ICONS[method.id]
+                  const Icon = ICONS[method.id] || Wallet
                   return (
                     <a
                       key={method.id}
@@ -237,8 +263,43 @@ const Pay = () => {
                   )
                 })}
               </div>
-            ) : (
-              // Reached only if the link is shared before a provider is filled
+            )}
+
+            {/* Bank transfer is details rather than a button — there is
+                nothing to click, the payer copies these into their own
+                banking app. Between euro accounts a SEPA transfer is normally
+                free and same-day, which beats every option above on cost. */}
+            {bank.length > 0 && (
+              <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5 mb-4">
+                <div className="flex items-center gap-2.5 mb-4">
+                  <Landmark size={17} className="text-orange-500 shrink-0" />
+                  <h3 className="text-sm font-bold">Bank transfer</h3>
+                </div>
+                <dl className="space-y-2.5">
+                  {bank.map(([label, value]) => (
+                    <div
+                      key={label}
+                      className="flex flex-wrap gap-x-3 gap-y-0.5 text-[13px]"
+                    >
+                      <dt className="text-gray-500 w-28 shrink-0">{label}</dt>
+                      {/* break-all so a long IBAN wraps instead of forcing
+                          the whole page to scroll sideways on a phone. */}
+                      <dd className="text-gray-200 font-mono text-[12.5px] break-all">
+                        {value}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+                {BANK_TRANSFER.reference && (
+                  <p className="text-[11.5px] text-gray-500 mt-4 pt-4 border-t border-white/10">
+                    {BANK_TRANSFER.reference}
+                  </p>
+                )}
+              </div>
+            )}
+
+            {methods.length === 0 && bank.length === 0 && (
+              // Reached only if the link is shared before anything is filled
               // in in src/lib/payments.js. Better an honest notice with a way
               // to reach a human than a button that goes nowhere.
               <div className="rounded-xl border border-orange-500/30 bg-orange-500/[0.07] p-5 mb-4">
@@ -257,14 +318,16 @@ const Pay = () => {
               </div>
             )}
 
-            <p className="flex items-start gap-2 text-[11.5px] text-gray-500 leading-relaxed">
-              <ShieldCheck className="w-4 h-4 mt-px shrink-0 text-gray-600" />
-              <span>
-                Payment is handled entirely by Stripe or PayPal — card details
-                are entered on their site, never on this one. You&apos;ll get a
-                receipt from them by email.
-              </span>
-            </p>
+            {methods.length > 0 && (
+              <p className="flex items-start gap-2 text-[11.5px] text-gray-500 leading-relaxed">
+                <ShieldCheck className="w-4 h-4 mt-px shrink-0 text-gray-600" />
+                <span>
+                  Payment is handled entirely by the provider you choose — card
+                  and account details are entered on their site, never on this
+                  one. You&apos;ll get a receipt from them by email.
+                </span>
+              </p>
+            )}
 
             {rates && (
               <label className="flex items-center gap-2 text-xs text-gray-500 mt-5">
