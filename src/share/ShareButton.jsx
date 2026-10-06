@@ -8,10 +8,12 @@ import {
   SHARE_FAILED,
 } from "../lib/share";
 
-// Rendered once in App so it reaches every route. The one exception is The
-// Radar, which has its own share control in its header styled to match that
-// page — two share buttons on one screen is just clutter.
-const HIDDEN_ON = ["/radar"];
+// Rendered once in App so it reaches every route, with two exceptions. The
+// Radar has its own share control in its header styled to match that page,
+// and two share buttons on one screen is just clutter. And /pay is sent to
+// one person to settle an invoice — inviting them to pass it to a friend
+// makes no sense there.
+const HIDDEN_ON = ["/radar", "/pay"];
 
 const ShareButton = () => {
   const { pathname } = useLocation();

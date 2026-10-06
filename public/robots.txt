@@ -1,3 +1,19 @@
 User-agent: *
 Allow: /
+
+# /pay is deliberately NOT disallowed here, though it is a private payment
+# link. Two reasons:
+#
+#   1. Disallow blocks crawling, not indexing — a blocked URL can still be
+#      listed with no description. The page carries <meta name="robots"
+#      content="noindex"> instead, which is the tag that actually keeps it
+#      out, and a crawler has to be allowed in to read it.
+#
+#   2. Discord, Slack and iMessage check this file before fetching a link to
+#      build its preview card. Disallowing the path would strip the page's
+#      preview in exactly the places it gets shared.
+#
+# It stays out of search by being unlinked, absent from the sitemap, and
+# noindex — not by being hidden from crawlers.
+
 Sitemap: https://www.blendertutoring.com/sitemap.xml
