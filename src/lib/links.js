@@ -7,11 +7,23 @@ export const BOOKING_URL = "https://calendly.com/blendertutoring-info/"
 // "free", which is the part that makes people click.
 export const BOOKING_LABEL = "Book a free call"
 
-// The paid hour, used only on /pay. Deliberately a different event type from
-// the one above: that one is 15 minutes and titled "No Charge", so sending a
-// paying student there books them a quarter of what they bought.
+// The paid hour, used only on /pay. Empty means /pay shows "I'll send you an
+// invite" instead of an embedded calendar — see Pay.jsx.
 //
-// Both event types have Google Meet set as their location, so the invite
-// carries a join link without anyone having to create one.
-export const SESSION_BOOKING_URL =
-  "https://calendly.com/blendertutoring-info/1-hour-tutoring-session"
+// It is empty because Calendly's free plan allows exactly ONE active event
+// type, and that one has to be the free intro call: it is what every button
+// on the site points at, and it is where every student comes from.
+//
+// A "1-Hour Tutoring Session" event type does exist, already configured —
+// 60 minutes, Google Meet as its location, created for exactly this. It is
+// deactivated, because activating it is what deactivates the free call.
+// Upgrading Calendly to a plan with multiple event types is the only thing
+// standing between here and a working embed. Once that is done, activate it
+// and set this to:
+//
+//   https://calendly.com/blendertutoring-info/1-hour-tutoring-session
+//
+// Do not point this at the free intro call. That one is 15 minutes and
+// titled "No Charge", so a paying student sent there books a quarter of
+// what they bought.
+export const SESSION_BOOKING_URL = ""
