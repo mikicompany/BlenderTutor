@@ -77,13 +77,16 @@ export default function Radar() {
         <meta property="og:url" content={canonicalUrl} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
-        <meta property="og:image" content="https://www.blendertutoring.com/og-image.jpg" />
+        <meta property="og:image" content="https://www.blendertutoring.com/radar-card.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="The Radar — game news in a glimpse" />
         <meta property="og:site_name" content="BlenderTutoring" />
 
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
-        <meta name="twitter:image" content="https://www.blendertutoring.com/og-image.jpg" />
+        <meta name="twitter:image" content="https://www.blendertutoring.com/radar-card.jpg" />
 
         <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
       </Helmet>

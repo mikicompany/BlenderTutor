@@ -4,7 +4,7 @@ export const posts = [
     title: "Connecting GPT-6 Astra to Blender",
     description: "Astra can drive Blender directly through MCP rather than handing you Python to paste. Here's the setup, a worked example, and where it stops being useful.",
     date: "2026-10-02",
-    thumbnail: "/blog-images/gpt-astra-blender-stack.svg",
+    thumbnail: "/blog-images/gpt-astra-blender-stack.jpg",
     content: `
 Most "AI in Blender" posts show you a chat window producing a Python script, which you then paste into the Scripting tab and hope. That is not a workflow. That is a very slow way to copy text.
 
@@ -145,7 +145,7 @@ If you are early enough that modelling itself is still hard, this is a distracti
     title: "Mastering the Mirror Modifier in Blender",
     description: "Model half, get the whole thing. How the Mirror Modifier works, the three settings that matter, and the mistakes that make it misbehave.",
     date: "2026-10-01",
-    thumbnail: "/blog-images/mirror-modifier-diagram.svg",
+    thumbnail: "/blog-images/mirror-modifier-diagram.jpg",
     content: `
 If you have ever tried to model a character's face, a car, or a butterfly by hand, you already know the pain: build one wing, then build the exact same wing again on the other side — perfectly. One misplaced vertex and the whole thing looks lopsided.
 
