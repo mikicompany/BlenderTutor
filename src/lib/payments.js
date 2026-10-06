@@ -74,6 +74,19 @@ export const PROVIDERS = [
     note: "Visa, Mastercard, Amex. No account needed.",
     // Stripe Payment Links, created at dashboard.stripe.com → Payment links.
     // Each looks like https://buy.stripe.com/xxxxxxxxxxxx
+    //
+    // Stripe operates in Canada, so this is the one card option actually
+    // open to a Vancouver-based business here.
+    //
+    // IMPORTANT, when creating each link: under "After payment", choose
+    // "Redirect customers to your website" and paste the matching URL —
+    //
+    //   https://www.blendertutoring.com/pay?paid=1&item=session
+    //   https://www.blendertutoring.com/pay?paid=1&item=prop
+    //
+    // That is what sends someone straight back to the booking calendar the
+    // moment they have paid, instead of leaving them on a Stripe receipt
+    // with no idea what happens next.
     url: {
       session: "",
       prop: "",
@@ -108,25 +121,43 @@ export const PROVIDERS = [
   },
 ]
 
-// Bank transfer, shown as details rather than a button because there is
-// nothing to click — the payer copies these into their own banking app.
+// Transfers, shown as copyable details rather than buttons because there is
+// nothing to click — the payer types these into their own banking app.
 //
-// Worth filling in for students in the EU and Ireland especially: a SEPA
-// transfer between euro accounts is normally free and arrives the same day,
-// which beats every card option above on cost for both sides.
+// These cost nothing in fees, which is what makes them worth the extra step:
+// on the $399 package a card takes roughly $16, and a transfer takes none.
 //
-// Fill in `enabled: true` along with the fields that apply. Leave out
-// anything that does not — only filled rows are shown.
-export const BANK_TRANSFER = {
-  enabled: false,
-  accountName: "",
-  iban: "",
-  bic: "",
-  bank: "",
-  // Shown under the details. Say what the payer should put as a reference so
-  // an arriving transfer can be matched to a person.
-  reference: "Use your name as the payment reference.",
-}
+// Set `enabled: true` and fill in the fields that apply. Blank fields are
+// not rendered, and an entry with no filled fields is skipped entirely, so a
+// half-finished block never shows up as a row of empty labels.
+export const TRANSFERS = [
+  {
+    id: "interac",
+    title: "Interac e-Transfer",
+    note: "From any Canadian bank. Free, and usually arrives within minutes.",
+    enabled: false,
+    fields: {
+      // The email or phone number registered for Interac Autodeposit. With
+      // Autodeposit on there is no security question to agree, which is what
+      // makes this genuinely one step for the sender.
+      "Send to": "",
+    },
+    footer: "Put your name in the message so I can match the payment to you.",
+  },
+  {
+    id: "bank",
+    title: "Bank transfer",
+    note: "Best from inside the EU, where a SEPA transfer is free and same-day.",
+    enabled: false,
+    fields: {
+      "Account name": "",
+      IBAN: "",
+      "BIC / SWIFT": "",
+      Bank: "",
+    },
+    footer: "Use your name as the payment reference.",
+  },
+]
 
 // The ?item= value arrives from a URL, so it is untrusted input. Looking it up
 // with hasOwn rather than `ITEMS[key]` keeps inherited keys such as
@@ -186,14 +217,15 @@ export function methodsFor(item) {
     .map((method, index) => ({ ...method, primary: index === 0 }))
 }
 
-// Only the rows that have been filled in, so a partly completed block does
-// not render as a list of empty labels.
-export function bankRows() {
-  if (!BANK_TRANSFER.enabled) return []
-  return [
-    ["Account name", BANK_TRANSFER.accountName],
-    ["IBAN", BANK_TRANSFER.iban],
-    ["BIC / SWIFT", BANK_TRANSFER.bic],
-    ["Bank", BANK_TRANSFER.bank],
-  ].filter(([, value]) => typeof value === "string" && value.trim())
+// Enabled transfers, each reduced to the rows actually filled in. An entry
+// left blank disappears rather than rendering as empty labels.
+export function transfersToShow() {
+  return TRANSFERS.filter((t) => t.enabled)
+    .map((t) => ({
+      ...t,
+      rows: Object.entries(t.fields).filter(
+        ([, value]) => typeof value === "string" && value.trim()
+      ),
+    }))
+    .filter((t) => t.rows.length > 0)
 }
