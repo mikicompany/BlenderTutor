@@ -95,7 +95,12 @@ export const PROVIDERS = [
   {
     id: "paypal",
     label: "Pay with PayPal",
-    note: "Use your PayPal balance, or a card as a guest.",
+    // Deliberately does not promise card-without-an-account. PayPal's guest
+    // checkout exists but is not guaranteed: it depends on the payer's
+    // country, the merchant setup and PayPal's own risk checks, and it
+    // silently does not appear when those do not line up. A payment page
+    // should not promise a route that may not be there when someone arrives.
+    note: "From your PayPal balance or a linked card.",
     // Just the username, not an email address — PayPal.me links are built
     // from a handle, so a payment cannot be addressed to an email this way.
     // This must be the handle of the account the money should land in:

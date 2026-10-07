@@ -14,7 +14,7 @@ import {
   CheckCircle2,
   Lock,
 } from "lucide-react"
-import { FaPaypal } from "react-icons/fa"
+import { FaPaypal, FaCcVisa, FaCcMastercard, FaCcAmex } from "react-icons/fa"
 import Navbar from "../navbar/Navbar"
 import BookingCalendar from "./BookingCalendar"
 import {
@@ -309,6 +309,20 @@ const Pay = () => {
                           {method.note}
                         </span>
                       </span>
+                      {/* The card button says "Visa, Mastercard, Amex" in
+                          words, but the marks are what people actually scan
+                          for when deciding whether their card will work. */}
+                      {method.id === "card" && (
+                        <span
+                          className={`flex items-center gap-1.5 shrink-0 ${
+                            method.primary ? "text-black/70" : "text-gray-400"
+                          }`}
+                        >
+                          <FaCcVisa size={22} aria-hidden="true" />
+                          <FaCcMastercard size={22} aria-hidden="true" />
+                          <FaCcAmex size={22} aria-hidden="true" />
+                        </span>
+                      )}
                       <ArrowRight size={17} className="shrink-0 opacity-60" />
                     </a>
                   )
