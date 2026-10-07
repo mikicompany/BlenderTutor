@@ -94,6 +94,22 @@ export const PROVIDERS = [
     //   https://www.blendertutoring.com/pay?paid=1&item=session
     //   https://www.blendertutoring.com/pay?paid=1&item=prop
     //
+    // CURRENCY. A Canadian Square account can only charge CAD — there is no
+    // USD option and no multi-currency setting. The site quotes USD, so the
+    // card link charges the CAD equivalent, and the exact CAD figure is
+    // declared below and shown on the button. Without that, a student agrees
+    // to $49 and meets a different number at checkout, which is the kind of
+    // surprise that loses the sale rather than just annoying someone.
+    //
+    // These must match the amounts actually set on the links. Exchange rates
+    // move, so revisit them now and then; nothing here updates by itself, and
+    // a stale figure on the button is worse than none at all.
+    chargeCurrency: "CAD",
+    chargeAmounts: {
+      session: 0,
+      prop: 0,
+    },
+    //
     // That is what sends someone straight back to the booking calendar the
     // moment they have paid, instead of leaving them on a receipt page with
     // no idea what happens next.
@@ -278,6 +294,30 @@ function urlFor(provider, item) {
   return ""
 }
 
+// The figure a provider will actually charge, when that differs from the USD
+// price on the card — currently only the Square link, which is CAD-only.
+// Returns null when the provider charges what the page says, so the button
+// stays uncluttered in the normal case.
+function chargeLabel(provider, item) {
+  const amount = provider.chargeAmounts?.[item.id]
+  if (!provider.chargeCurrency || !amount) return null
+
+  // The currency code is appended rather than left to Intl, which renders
+  // CAD as a bare "$69" in most locales — indistinguishable from the USD
+  // price above it, which is the exact confusion this label exists to stop.
+  try {
+    const formatted = new Intl.NumberFormat("en-CA", {
+      style: "currency",
+      currency: provider.chargeCurrency,
+      currencyDisplay: "narrowSymbol",
+      maximumFractionDigits: 0,
+    }).format(amount)
+    return `${formatted} ${provider.chargeCurrency}`
+  } catch {
+    return `${amount} ${provider.chargeCurrency}`
+  }
+}
+
 // Only providers that are actually configured come back, so the page can
 // never render a button that goes nowhere. The first survivor is primary.
 export function methodsFor(item) {
@@ -285,6 +325,7 @@ export function methodsFor(item) {
     id: provider.id,
     label: provider.label,
     note: provider.note,
+    charge: chargeLabel(provider, item),
     url: urlFor(provider, item),
   }))
     .filter((method) => method.url)
