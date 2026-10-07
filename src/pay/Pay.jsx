@@ -12,6 +12,7 @@ import {
   Landmark,
   Wallet,
   CheckCircle2,
+  Lock,
 } from "lucide-react"
 import { FaPaypal } from "react-icons/fa"
 import Navbar from "../navbar/Navbar"
@@ -42,6 +43,8 @@ import { trackPaymentClick } from "../lib/tracking"
 // Keyed by provider id. A provider with no entry here still renders — it
 // just gets the generic wallet — so adding one to lib/payments.js never
 // requires touching this file.
+const STARTED_KEY = "bt_payment_started"
+
 const ICONS = {
   card: CreditCard,
   paypal: FaPaypal,
@@ -102,6 +105,39 @@ const Pay = () => {
   // the page SAYS and never what it allows — booking is open either way,
   // exactly as it was before.
   const justPaid = params.get("paid") === "1"
+
+  // The calendar is held back until payment is under way, so the page reads
+  // as one thing at a time rather than offering a free booking beside a
+  // request for money.
+  //
+  // ?paid=1 only arrives from providers that can redirect after a charge —
+  // Stripe can, PayPal.me cannot. Relying on it alone would lock every
+  // PayPal payer out of booking entirely. So clicking any payment button
+  // also unlocks it: the provider opens in a new tab, this one stays put,
+  // and the calendar is waiting when they come back.
+  //
+  // sessionStorage so a reload does not lock it again mid-booking. It is a
+  // convenience, not a gate — the same page with ?paid=1 typed by hand shows
+  // the same calendar, exactly as it did when it was always visible.
+  const [started, setStarted] = useState(() => {
+    try {
+      return sessionStorage.getItem(STARTED_KEY) === "1"
+    } catch {
+      // Private browsing can throw on access alone.
+      return false
+    }
+  })
+
+  const markStarted = () => {
+    setStarted(true)
+    try {
+      sessionStorage.setItem(STARTED_KEY, "1")
+    } catch {
+      // Not being able to remember is not a reason to block the booking.
+    }
+  }
+
+  const unlocked = justPaid || started
 
   const [rates, setRates] = useState(null)
   const [currency, setCurrency] = useState("USD")
@@ -252,9 +288,10 @@ const Pay = () => {
                       href={method.url}
                       target="_blank"
                       rel="noreferrer"
-                      onClick={() =>
+                      onClick={() => {
                         trackPaymentClick({ item, method: method.id, name })
-                      }
+                        markStarted()
+                      }}
                       className={`flex items-center gap-3 w-full px-5 py-4 rounded-xl font-bold transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 ${
                         method.primary
                           ? "bg-orange-500 text-black hover:bg-orange-600"
@@ -369,6 +406,23 @@ const Pay = () => {
                 </select>
               </label>
             )}
+
+            {/* Transfers have no button to click, so a bank or Interac payer
+                would otherwise have no way through. This also covers anyone
+                coming back in a fresh session after paying earlier.
+
+                It is not a loophole: the calendar was reachable by anyone
+                with the link before this gate existed, and bookings are
+                reconciled against payments either way. */}
+            {!unlocked && (
+              <button
+                type="button"
+                onClick={markStarted}
+                className="text-[12px] text-gray-500 hover:text-orange-400 underline underline-offset-2 transition-colors mt-5"
+              >
+                Already paid? Open the calendar
+              </button>
+            )}
           </Step>
 
           {/* The section id is what the booking-click tracking reports as the
@@ -376,7 +430,18 @@ const Pay = () => {
               from one started on the home page. */}
           <section id="book-session">
             <Step n="2" title="Pick your time">
-              <BookingCalendar item={item} prefillName={name} />
+              {unlocked ? (
+                <BookingCalendar item={item} prefillName={name} />
+              ) : (
+                <div className="rounded-xl border border-white/10 bg-white/[0.02] p-6 text-center">
+                  <Lock className="w-4 h-4 text-gray-600 mx-auto mb-3" />
+                  <p className="text-[13px] text-gray-500 leading-relaxed max-w-xs mx-auto">
+                    The calendar opens as soon as your payment is on its way.
+                    Pay above and it appears here — your payment opens in a
+                    new tab, so leave this one where it is.
+                  </p>
+                </div>
+              )}
             </Step>
           </section>
         </div>
