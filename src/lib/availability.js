@@ -30,18 +30,20 @@ export const HORIZON_DAYS = 21
 // windows in 24-hour HOST_TIMEZONE time, and each window is cut into
 // SESSION_MINUTES slots.
 //
-// Current hours are 21:00–23:00 Monday to Friday. Worth knowing what that
-// means for the people actually booking: 21:00 here is 05:00 in Ireland and
-// 06:00 in Spain, so every slot on offer lands before dawn for a European
-// student. A morning window — say ["08:00", "10:00"] — is late afternoon in
-// both, which is when people actually book.
+// Mornings, because of where the students are. 08:00–11:00 here is
+// 16:00–19:00 in Ireland and 17:00–20:00 in Spain: after work, which is when
+// people book. The previous 21:00–23:00 window was 05:00–07:00 for them,
+// which is why the one booking that came through landed at 5:30am.
+//
+// To offer evenings as well, add the old window back alongside this one:
+//   1: [["08:00", "11:00"], ["21:00", "23:00"]],
 export const WEEKLY = {
   0: [],
-  1: [["21:00", "23:00"]],
-  2: [["21:00", "23:00"]],
-  3: [["21:00", "23:00"]],
-  4: [["21:00", "23:00"]],
-  5: [["21:00", "23:00"]],
+  1: [["08:00", "11:00"]],
+  2: [["08:00", "11:00"]],
+  3: [["08:00", "11:00"]],
+  4: [["08:00", "11:00"]],
+  5: [["08:00", "11:00"]],
   6: [],
 }
 

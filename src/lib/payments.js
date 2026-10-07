@@ -116,8 +116,14 @@ export const PROVIDERS = [
     id: "wise",
     label: "Pay with Wise",
     note: "Good exchange rates when paying from another currency.",
-    // Paste a Wise payment-request link.
-    url: "",
+    // A Wise pay-me link. It carries no amount, so the payer types it — the
+    // figure is shown directly above this button, which is why that is fine.
+    //
+    // Wise does document an ?amount= parameter for some link types, but it
+    // is not used here: it could not be verified from the build environment,
+    // and a payment link that silently stops working is the worst kind to
+    // guess at.
+    url: "https://wise.com/pay/me/miguelc293",
   },
 ]
 
