@@ -7,7 +7,6 @@ import {
   Mail,
   ArrowRight,
   CreditCard,
-  Video,
   Smartphone,
   Globe,
   Landmark,
@@ -16,8 +15,7 @@ import {
 } from "lucide-react"
 import { FaPaypal } from "react-icons/fa"
 import Navbar from "../navbar/Navbar"
-import BookingEmbed from "./BookingEmbed"
-import { SESSION_BOOKING_URL } from "../lib/links"
+import BookingCalendar from "./BookingCalendar"
 import {
   resolveItem,
   resolveName,
@@ -378,50 +376,7 @@ const Pay = () => {
               from one started on the home page. */}
           <section id="book-session">
             <Step n="2" title="Pick your time">
-              {SESSION_BOOKING_URL ? (
-                <>
-                  {/* The calendar offers 15 minutes (the free intro call) and
-                      60 (a paid session) from one event type, so the length
-                      has to be said out loud here — a paying student who
-                      leaves it on the default books a quarter of their
-                      hour. */}
-                  <p className="text-[13px] text-gray-400 leading-relaxed mb-5">
-                    Pick the <strong className="text-white">60 minute</strong>{" "}
-                    option, then any slot that suits you. Times are shown in
-                    your own timezone, so there is nothing to convert.
-                  </p>
-                  <BookingEmbed />
-                </>
-              ) : (
-                // No self-serve calendar for the paid hour yet — see the note
-                // on SESSION_BOOKING_URL in lib/links.js. Saying plainly what
-                // happens next is better than embedding the free intro call
-                // here and booking someone fifteen minutes of the hour they
-                // just paid for.
-                <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5">
-                  <p className="text-[13px] text-gray-400 leading-relaxed">
-                    Reply to your receipt, or email{" "}
-                    <a
-                      href="mailto:info@blendertutoring.com"
-                      className="text-gray-300 hover:text-orange-400 underline underline-offset-2"
-                    >
-                      info@blendertutoring.com
-                    </a>
-                    , with two or three times that suit you — including your
-                    timezone. You&apos;ll get a calendar invite back the same
-                    day.
-                  </p>
-                </div>
-              )}
-
-              <p className="flex items-start gap-2 text-[11.5px] text-gray-500 leading-relaxed mt-5">
-                <Video className="w-4 h-4 mt-px shrink-0 text-gray-600" />
-                <span>
-                  A Google Meet link comes with the calendar invite
-                  automatically — there is nothing to install and nothing to
-                  set up.
-                </span>
-              </p>
+              <BookingCalendar item={item} prefillName={name} />
             </Step>
           </section>
         </div>

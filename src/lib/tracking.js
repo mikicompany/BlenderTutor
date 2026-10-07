@@ -46,8 +46,37 @@ function describe(anchor) {
 // form-to-email services turn each field into a line of the email, so the
 // message arrives readable instead of as a wall of JSON. Zapier and Make
 // parse the same encoding, so one format serves every likely receiver.
+// Awaited variant, for the booking form. Tracking can be fire-and-forget;
+// a booking cannot — somebody is waiting to be told whether it worked.
+//
+// The response is opaque under no-cors, so a resolved promise means the
+// request left the browser, not that the far end accepted it. That is the
+// most a static site can honestly know, and the booking UI is worded to
+// match rather than claiming a confirmation it cannot have.
+export async function postAwait(fields) {
+  if (!WEBHOOK) throw new Error("no webhook configured")
+
+  const when = new Date()
+  const body = new URLSearchParams({
+    _captcha: "false",
+    _template: "table",
+    ...fields,
+    time: when.toLocaleString("en-CA", { timeZone: "America/Vancouver" }),
+    time_utc: when.toISOString(),
+    referrer: document.referrer || "direct",
+  }).toString()
+
+  await fetch(WEBHOOK, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body,
+    mode: "no-cors",
+  })
+  return true
+}
+
 function post(fields) {
-  if (!WEBHOOK) return
+  if (!WEBHOOK) return false
 
   const when = new Date()
   const body = new URLSearchParams({
