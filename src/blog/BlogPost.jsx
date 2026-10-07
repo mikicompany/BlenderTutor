@@ -113,7 +113,7 @@ const RelatedPosts = ({ post }) => {
 // for recognition but it is the expendable half, so it is only added when it
 // fits.
 const MAX_TITLE = 60
-const SUFFIX = " \u2013 BlenderTutor"
+const SUFFIX = " \u2013 Blender Tutoring"
 
 function titleFor(post) {
   const withBrand = post.title + SUFFIX
@@ -149,8 +149,8 @@ const BlogPost = () => {
     "datePublished": post.date,
     "url": url,
     "image": post.thumbnail ? `https://www.blendertutoring.com${post.thumbnail}` : "https://www.blendertutoring.com/og-image.jpg",
-    "author": { "@type": "Organization", "name": "BlenderTutor" },
-    "publisher": { "@type": "Organization", "name": "BlenderTutor", "url": "https://www.blendertutoring.com" }
+    "author": { "@type": "Organization", "name": "Blender Tutoring" },
+    "publisher": { "@type": "Organization", "name": "Blender Tutoring", "url": "https://www.blendertutoring.com" }
   }
 
   return (

@@ -37,7 +37,7 @@ const items = byNewest
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>BlenderTutor Blog</title>
+    <title>Blender Tutoring Blog</title>
     <link>${SITE}/blog</link>
     <description>Practical Blender guides for beginners and game artists.</description>
     <language>en</language>

@@ -8,13 +8,13 @@ const BlogList = () => {
   return (
     <div className="relative w-full min-h-screen bg-black">
       <Helmet>
-        <title>Blender Tutorials &amp; Guides — BlenderTutor Blog</title>
+        <title>Blender Tutorials &amp; Guides — Blender Tutoring Blog</title>
         <meta
           name="description"
           content="Honest, experience-based guides for learning Blender: how long it takes, essential shortcuts, the best addons, and what to make after the donut."
         />
         <link rel="canonical" href="https://www.blendertutoring.com/blog" />
-        <meta property="og:title" content="Blender Tutorials &amp; Guides — BlenderTutor Blog" />
+        <meta property="og:title" content="Blender Tutorials &amp; Guides — Blender Tutoring Blog" />
         <meta
           property="og:description"
           content="Honest, experience-based guides for learning Blender from a working tutor."
