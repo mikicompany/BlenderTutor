@@ -114,7 +114,9 @@ export const PROVIDERS = [
     // moment they have paid, instead of leaving them on a receipt page with
     // no idea what happens next.
     url: {
-      session: "",
+      session: "https://square.link/u/HtzvfdHJ",
+      // No link for the 8-session package yet, so the card button simply
+      // does not appear on /pay?item=prop. PayPal and Wise still do.
       prop: "",
     },
   },
