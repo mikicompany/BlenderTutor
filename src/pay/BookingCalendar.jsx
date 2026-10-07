@@ -20,30 +20,54 @@ import { postAwait } from "../lib/tracking"
 const VIEWER_TZ =
   Intl.DateTimeFormat().resolvedOptions().timeZone || "your local time"
 
+// Everything on this calendar is shown in Pacific time, the same clock the
+// sessions are actually run on, rather than in each visitor's own zone.
+// One clock means one set of numbers to talk about afterwards.
+//
+// The cost is that a student abroad has to convert, so wherever a specific
+// time is being committed to the local equivalent is shown beside it.
+const SHOWS_LOCAL_TOO = VIEWER_TZ !== HOST_TIMEZONE
+
 // Everything the student sees is in the student's own timezone, headings
 // included. Grouping by the host's date instead looks tidier from this end
 // and is actively dangerous from theirs: a 21:00 Monday slot in Vancouver is
 // 05:00 Tuesday in Dublin, so a heading reading "Monday" over a button
 // reading 05:00 invites someone to arrive a day late.
 const dayLabel = (ms) =>
-  new Intl.DateTimeFormat(undefined, {
+  new Intl.DateTimeFormat("en-GB", {
     weekday: "long",
     day: "numeric",
     month: "long",
+    timeZone: HOST_TIMEZONE,
   }).format(new Date(ms))
 
 // The viewer's own calendar date for an instant, used only as a grouping key.
+// Grouping key must match the clock the times are rendered on, or a heading
+// ends up over slots belonging to a different day. Now that everything is
+// Pacific, the key is Pacific too.
 const localDateKey = (ms) =>
   new Intl.DateTimeFormat("en-CA", {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
+    timeZone: HOST_TIMEZONE,
   }).format(new Date(ms))
 
 // 12-hour with AM/PM. "4 PM" is read at a glance; "16:00" is arithmetic for
 // most people outside continental Europe.
 const timeLabel = (ms) =>
   new Intl.DateTimeFormat("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+    timeZone: HOST_TIMEZONE,
+  }).format(new Date(ms))
+
+// The same instant on the visitor's own clock, for the moments where being
+// wrong costs them a session.
+const localLabel = (ms) =>
+  new Intl.DateTimeFormat("en-US", {
+    weekday: "short",
     hour: "numeric",
     minute: "2-digit",
     hour12: true,
@@ -59,10 +83,10 @@ const timeLabel = (ms) =>
 // Dublin and GMT-7 for Vancouver. GMT+1 is the better of those two anyway —
 // "IST" means both Irish and India Standard Time, and an ambiguous timezone
 // on a booking page is worse than a plain offset.
-const zoneAbbr = (ms, timeZone) => {
+const zoneAbbr = (ms, timeZone = HOST_TIMEZONE) => {
   try {
     return new Intl.DateTimeFormat("en-US", {
-      ...(timeZone ? { timeZone } : {}),
+      timeZone,
       timeZoneName: "short",
     })
       .formatToParts(new Date(ms))
@@ -176,7 +200,7 @@ const BookingCalendar = ({ item, prefillName, alreadyPaid, onBooked }) => {
           hour12: true,
           timeZone: HOST_TIMEZONE,
         }).format(new Date(slot))} (${zoneAbbr(slot, HOST_TIMEZONE)})`,
-        slot_student_time: `${fullLabel(slot)} — ${VIEWER_TZ}`,
+        slot_student_time: `${localLabel(slot)} (${VIEWER_TZ})`,
         length: `${SESSION_MINUTES} minutes`,
       })
       setStatus("done")
@@ -197,7 +221,7 @@ const BookingCalendar = ({ item, prefillName, alreadyPaid, onBooked }) => {
               {fullLabel(slot)}
             </h3>
             <p className="text-[12.5px] text-emerald-50/70">
-              Your local time · {VIEWER_TZ}
+              Pacific time{SHOWS_LOCAL_TOO ? ` · ${localLabel(slot)} your time` : ""}
             </p>
           </div>
         </div>
@@ -257,7 +281,8 @@ const BookingCalendar = ({ item, prefillName, alreadyPaid, onBooked }) => {
           <div>
             <p className="text-sm font-bold">{fullLabel(slot)}</p>
             <p className="text-[12px] text-gray-500 mt-0.5">
-              {SESSION_MINUTES} minutes · your local time · {VIEWER_TZ}
+              {SESSION_MINUTES} minutes · Pacific time
+              {SHOWS_LOCAL_TOO && ` · ${localLabel(slot)} your time`}
             </p>
           </div>
         </div>
@@ -374,9 +399,14 @@ const BookingCalendar = ({ item, prefillName, alreadyPaid, onBooked }) => {
       <p className="flex items-start gap-2 text-[11.5px] text-gray-500 leading-relaxed mt-3">
         <Video className="w-4 h-4 mt-px shrink-0 text-gray-600" />
         <span>
-          Times are shown in your own timezone ({VIEWER_TZ}), so there is
-          nothing to convert. Each session is {SESSION_MINUTES} minutes, held
-          over Google Meet.
+          {/* Read off the first slot rather than the clock: a date, not
+              "now", so rendering stays pure and the abbreviation matches the
+              slots actually on screen. */}
+          All times are Pacific ({zoneAbbr(days[0][0])}), the clock the
+          sessions run on.
+          {SHOWS_LOCAL_TOO &&
+            " Your own local time is shown beside whichever slot you pick."}{" "}
+          Each session is {SESSION_MINUTES} minutes, held over Google Meet.
         </span>
       </p>
     </div>
