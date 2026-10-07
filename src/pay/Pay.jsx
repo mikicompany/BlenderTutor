@@ -272,8 +272,10 @@ const Pay = () => {
                       weekday: "long",
                       day: "numeric",
                       month: "long",
-                      hour: "2-digit",
+                      hour: "numeric",
                       minute: "2-digit",
+                      hour12: true,
+                      timeZoneName: "short",
                     }).format(new Date(bookedSlot))}
                   </strong>{" "}
                   for you. It is confirmed once payment arrives.

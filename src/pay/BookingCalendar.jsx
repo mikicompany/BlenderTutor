@@ -40,20 +40,53 @@ const localDateKey = (ms) =>
     day: "2-digit",
   }).format(new Date(ms))
 
+// 12-hour with AM/PM. "4 PM" is read at a glance; "16:00" is arithmetic for
+// most people outside continental Europe.
 const timeLabel = (ms) =>
-  new Intl.DateTimeFormat(undefined, {
-    hour: "2-digit",
+  new Intl.DateTimeFormat("en-US", {
+    hour: "numeric",
     minute: "2-digit",
+    hour12: true,
   }).format(new Date(ms))
 
-const fullLabel = (ms) =>
-  new Intl.DateTimeFormat(undefined, {
+// The zone abbreviation as it stands ON THAT DATE — PDT through the summer,
+// PST from November — rather than a fixed string. Hardcoding "PST" would be
+// wrong for roughly eight months of the year, and a wrong timezone on a
+// booking is how someone misses their session by an hour.
+//
+// Forced to en-US because no locale abbreviates every zone well: en-US gives
+// a clean PDT/PST for Pacific but GMT+1 for Dublin, while en-IE gives IST for
+// Dublin and GMT-7 for Vancouver. GMT+1 is the better of those two anyway —
+// "IST" means both Irish and India Standard Time, and an ambiguous timezone
+// on a booking page is worse than a plain offset.
+const zoneAbbr = (ms, timeZone) => {
+  try {
+    return new Intl.DateTimeFormat("en-US", {
+      ...(timeZone ? { timeZone } : {}),
+      timeZoneName: "short",
+    })
+      .formatToParts(new Date(ms))
+      .find((part) => part.type === "timeZoneName")?.value
+  } catch {
+    return null
+  }
+}
+
+// "4:00 PM PDT" — the zone named every time a specific time is shown, so a
+// student never has to work out whose clock a figure belongs to.
+const timeWithZone = (ms) => {
+  const abbr = zoneAbbr(ms)
+  return abbr ? `${timeLabel(ms)} ${abbr}` : timeLabel(ms)
+}
+
+const fullLabel = (ms) => {
+  const date = new Intl.DateTimeFormat(undefined, {
     weekday: "long",
     day: "numeric",
     month: "long",
-    hour: "2-digit",
-    minute: "2-digit",
   }).format(new Date(ms))
+  return `${date} at ${timeWithZone(ms)}`
+}
 
 // Calendar files and Google's template URL both want UTC basic format:
 // 20261008T040000Z
@@ -137,12 +170,13 @@ const BookingCalendar = ({ item, prefillName, alreadyPaid, onBooked }) => {
         email: form.email.trim(),
         item: item?.name || "session",
         slot_utc: new Date(slot).toISOString(),
-        slot_your_time: new Intl.DateTimeFormat("en-GB", {
+        slot_your_time: `${new Intl.DateTimeFormat("en-US", {
           dateStyle: "full",
           timeStyle: "short",
+          hour12: true,
           timeZone: HOST_TIMEZONE,
-        }).format(new Date(slot)),
-        slot_student_time: `${fullLabel(slot)} (${VIEWER_TZ})`,
+        }).format(new Date(slot))} (${zoneAbbr(slot, HOST_TIMEZONE)})`,
+        slot_student_time: `${fullLabel(slot)} — ${VIEWER_TZ}`,
         length: `${SESSION_MINUTES} minutes`,
       })
       setStatus("done")
@@ -163,7 +197,7 @@ const BookingCalendar = ({ item, prefillName, alreadyPaid, onBooked }) => {
               {fullLabel(slot)}
             </h3>
             <p className="text-[12.5px] text-emerald-50/70">
-              Times shown in {VIEWER_TZ}
+              Your local time · {VIEWER_TZ}
             </p>
           </div>
         </div>
@@ -223,7 +257,7 @@ const BookingCalendar = ({ item, prefillName, alreadyPaid, onBooked }) => {
           <div>
             <p className="text-sm font-bold">{fullLabel(slot)}</p>
             <p className="text-[12px] text-gray-500 mt-0.5">
-              {SESSION_MINUTES} minutes · times shown in {VIEWER_TZ}
+              {SESSION_MINUTES} minutes · your local time · {VIEWER_TZ}
             </p>
           </div>
         </div>
@@ -312,8 +346,14 @@ const BookingCalendar = ({ item, prefillName, alreadyPaid, onBooked }) => {
             key={slots[0]}
             className="px-5 py-4 border-b border-white/5 last:border-0"
           >
+            {/* The zone sits here rather than on each chip: stated once per
+                day it is still unmissable, and three identical suffixes in a
+                row is noise. */}
             <p className="text-[12px] text-gray-500 mb-3">
               {dayLabel(slots[0])}
+              {zoneAbbr(slots[0]) && (
+                <span className="text-gray-600"> · {zoneAbbr(slots[0])}</span>
+              )}
             </p>
             <div className="flex flex-wrap gap-2">
               {slots.map((at) => (
@@ -334,8 +374,9 @@ const BookingCalendar = ({ item, prefillName, alreadyPaid, onBooked }) => {
       <p className="flex items-start gap-2 text-[11.5px] text-gray-500 leading-relaxed mt-3">
         <Video className="w-4 h-4 mt-px shrink-0 text-gray-600" />
         <span>
-          Times are shown in {VIEWER_TZ}, so there is nothing to convert. Each
-          session is {SESSION_MINUTES} minutes, held over Google Meet.
+          Times are shown in your own timezone ({VIEWER_TZ}), so there is
+          nothing to convert. Each session is {SESSION_MINUTES} minutes, held
+          over Google Meet.
         </span>
       </p>
     </div>
