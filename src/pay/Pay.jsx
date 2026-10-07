@@ -312,6 +312,18 @@ const Pay = () => {
                         >
                           {method.note}
                         </span>
+                        {/* Stated before the click, not discovered at
+                            checkout: the Square link can only charge CAD
+                            while the page quotes USD. */}
+                        {method.charge && (
+                          <span
+                            className={`block text-[11px] font-semibold mt-1 ${
+                              method.primary ? "text-black/75" : "text-gray-300"
+                            }`}
+                          >
+                            Charged as {method.charge}
+                          </span>
+                        )}
                       </span>
                       {/* The card button says "Visa, Mastercard, Amex" in
                           words, but the marks are what people actually scan
