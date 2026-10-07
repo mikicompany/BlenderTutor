@@ -12,7 +12,7 @@ import {
   Landmark,
   Wallet,
   CheckCircle2,
-  Lock,
+  Clock,
 } from "lucide-react"
 import { FaPaypal, FaCcVisa, FaCcMastercard, FaCcAmex } from "react-icons/fa"
 import Navbar from "../navbar/Navbar"
@@ -43,8 +43,6 @@ import { trackPaymentClick } from "../lib/tracking"
 // Keyed by provider id. A provider with no entry here still renders — it
 // just gets the generic wallet — so adding one to lib/payments.js never
 // requires touching this file.
-const STARTED_KEY = "bt_payment_started"
-
 const ICONS = {
   card: CreditCard,
   paypal: FaPaypal,
@@ -106,38 +104,9 @@ const Pay = () => {
   // exactly as it was before.
   const justPaid = params.get("paid") === "1"
 
-  // The calendar is held back until payment is under way, so the page reads
-  // as one thing at a time rather than offering a free booking beside a
-  // request for money.
-  //
-  // ?paid=1 only arrives from providers that can redirect after a charge —
-  // Stripe can, PayPal.me cannot. Relying on it alone would lock every
-  // PayPal payer out of booking entirely. So clicking any payment button
-  // also unlocks it: the provider opens in a new tab, this one stays put,
-  // and the calendar is waiting when they come back.
-  //
-  // sessionStorage so a reload does not lock it again mid-booking. It is a
-  // convenience, not a gate — the same page with ?paid=1 typed by hand shows
-  // the same calendar, exactly as it did when it was always visible.
-  const [started, setStarted] = useState(() => {
-    try {
-      return sessionStorage.getItem(STARTED_KEY) === "1"
-    } catch {
-      // Private browsing can throw on access alone.
-      return false
-    }
-  })
-
-  const markStarted = () => {
-    setStarted(true)
-    try {
-      sessionStorage.setItem(STARTED_KEY, "1")
-    } catch {
-      // Not being able to remember is not a reason to block the booking.
-    }
-  }
-
-  const unlocked = justPaid || started
+  // The slot chosen in step one, so step two can name it instead of asking
+  // for money against nothing in particular.
+  const [bookedSlot, setBookedSlot] = useState(null)
 
   const [rates, setRates] = useState(null)
   const [currency, setCurrency] = useState("USD")
@@ -164,10 +133,10 @@ const Pay = () => {
   return (
     <div className="relative w-full min-h-screen bg-black">
       <Helmet>
-        <title>Pay and book your session — Blender Tutoring</title>
+        <title>Book and pay for your session — Blender Tutoring</title>
         <meta
           name="description"
-          content="Pay for your Blender Tutoring session and book your time. Card or PayPal."
+          content="Choose a time for your Blender Tutoring session, then pay. Card, PayPal or Wise."
         />
         {/* Sent privately, so it has no business being indexed — and a
             payment page in search results is worth impersonating. */}
@@ -179,11 +148,11 @@ const Pay = () => {
         <meta property="og:type" content="website" />
         <meta
           property="og:title"
-          content="Pay and book your Blender session — Blender Tutoring"
+          content="Book and pay for your Blender session — Blender Tutoring"
         />
         <meta
           property="og:description"
-          content="1:1 Blender tutoring with a senior environment artist. Pay securely, then pick your time."
+          content="1:1 Blender tutoring with a senior environment artist. Pick your time, then pay securely."
         />
         <meta
           property="og:image"
@@ -199,11 +168,11 @@ const Pay = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:title"
-          content="Pay and book your Blender session — Blender Tutoring"
+          content="Book and pay for your Blender session — Blender Tutoring"
         />
         <meta
           name="twitter:description"
-          content="1:1 Blender tutoring with a senior environment artist. Pay securely, then pick your time."
+          content="1:1 Blender tutoring with a senior environment artist. Pick your time, then pay securely."
         />
         <meta
           name="twitter:image"
@@ -218,14 +187,14 @@ const Pay = () => {
         <p className="text-orange-500 uppercase tracking-[0.3em] text-[10px] font-bold mb-3">
           Payment
         </p>
-        <h1 className="text-3xl font-bold mb-2">Pay and book your session</h1>
+        <h1 className="text-3xl font-bold mb-2">Book and pay for your session</h1>
         {name ? (
           <p className="text-gray-400 text-sm mb-10">
             Prepared for <span className="text-white font-medium">{name}</span>.
           </p>
         ) : (
           <p className="text-gray-400 text-sm mb-10">
-            Pay, pick a time, done. Takes about two minutes.
+            Pick a time, then pay. Takes about two minutes.
           </p>
         )}
 
@@ -264,14 +233,50 @@ const Pay = () => {
         </div>
 
         <div className="space-y-12">
-          <Step n="1" title={justPaid ? "Payment received" : "Pay for the session"}>
+          {/* The section id is what the booking-click tracking reports as the
+              origin of a click, so a booking started here is distinguishable
+              from one started on the home page. */}
+          <section id="book-session">
+            <Step n="1" title="Pick your time">
+              <BookingCalendar
+                item={item}
+                prefillName={name}
+                alreadyPaid={justPaid}
+                onBooked={setBookedSlot}
+              />
+            </Step>
+          </section>
+
+          <Step n="2" title={justPaid ? "Payment received" : "Pay for the session"}>
             {justPaid && (
               <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/[0.07] p-5 flex gap-3">
                 <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-px" />
                 <p className="text-[13px] text-emerald-50/90 leading-relaxed">
                   Thanks — that went through. Your receipt is on its way by
-                  email from the payment provider. All that is left is picking
-                  a time below.
+                  email from the payment provider, and your session is
+                  confirmed.
+                </p>
+              </div>
+            )}
+
+            {/* Named once a slot is chosen, so the payment is attached to a
+                specific session rather than being money asked for in the
+                abstract. */}
+            {!justPaid && bookedSlot && (
+              <div className="rounded-xl border border-orange-500/25 bg-orange-500/[0.07] p-4 mb-4 flex gap-2.5">
+                <Clock className="w-4 h-4 text-orange-500 shrink-0 mt-0.5" />
+                <p className="text-[13px] text-orange-100/90 leading-relaxed">
+                  Holding{" "}
+                  <strong className="font-semibold">
+                    {new Intl.DateTimeFormat(undefined, {
+                      weekday: "long",
+                      day: "numeric",
+                      month: "long",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    }).format(new Date(bookedSlot))}
+                  </strong>{" "}
+                  for you. It is confirmed once payment arrives.
                 </p>
               </div>
             )}
@@ -290,7 +295,6 @@ const Pay = () => {
                       rel="noreferrer"
                       onClick={() => {
                         trackPaymentClick({ item, method: method.id, name })
-                        markStarted()
                       }}
                       className={`flex items-center gap-3 w-full px-5 py-4 rounded-xl font-bold transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 ${
                         method.primary
@@ -421,43 +425,7 @@ const Pay = () => {
               </label>
             )}
 
-            {/* Transfers have no button to click, so a bank or Interac payer
-                would otherwise have no way through. This also covers anyone
-                coming back in a fresh session after paying earlier.
-
-                It is not a loophole: the calendar was reachable by anyone
-                with the link before this gate existed, and bookings are
-                reconciled against payments either way. */}
-            {!unlocked && (
-              <button
-                type="button"
-                onClick={markStarted}
-                className="text-[12px] text-gray-500 hover:text-orange-400 underline underline-offset-2 transition-colors mt-5"
-              >
-                Already paid? Open the calendar
-              </button>
-            )}
           </Step>
-
-          {/* The section id is what the booking-click tracking reports as the
-              origin of a click, so a booking started here is distinguishable
-              from one started on the home page. */}
-          <section id="book-session">
-            <Step n="2" title="Pick your time">
-              {unlocked ? (
-                <BookingCalendar item={item} prefillName={name} />
-              ) : (
-                <div className="rounded-xl border border-white/10 bg-white/[0.02] p-6 text-center">
-                  <Lock className="w-4 h-4 text-gray-600 mx-auto mb-3" />
-                  <p className="text-[13px] text-gray-500 leading-relaxed max-w-xs mx-auto">
-                    The calendar opens as soon as your payment is on its way.
-                    Pay above and it appears here — your payment opens in a
-                    new tab, so leave this one where it is.
-                  </p>
-                </div>
-              )}
-            </Step>
-          </section>
         </div>
 
         <p className="text-[11.5px] text-gray-500 leading-relaxed mt-12 pt-8 border-t border-white/10">
