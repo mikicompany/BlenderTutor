@@ -95,6 +95,28 @@ const Privacy = () => {
           content="What information Blender Tutoring collects, how it's used, and your rights."
         />
         <link rel="canonical" href="https://www.blendertutoring.com/privacy" />
+
+        {/* Without these a shared link unfurls as a bare URL. Legal pages
+            get linked more than you would think — in emails, in disputes —
+            and an unfurl with no image reads as an untrustworthy link. */}
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Blender Tutoring" />
+        <meta property="og:title" content="Privacy Policy — Blender Tutoring" />
+        <meta
+          property="og:url"
+          content="https://www.blendertutoring.com/privacy"
+        />
+        <meta
+          property="og:image"
+          content="https://www.blendertutoring.com/og-image.jpg"
+        />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:image"
+          content="https://www.blendertutoring.com/og-image.jpg"
+        />
       </Helmet>
 
       <Navbar />
