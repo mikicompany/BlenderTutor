@@ -23,6 +23,7 @@ import {
   methodsFor,
   transfersToShow,
 } from "../lib/payments"
+import { HOST_TIMEZONE } from "../lib/availability"
 import { CURRENCIES, loadRates, formatConverted } from "../lib/currency"
 import { trackPaymentClick } from "../lib/tracking"
 
@@ -268,13 +269,17 @@ const Pay = () => {
                 <p className="text-[13px] text-orange-100/90 leading-relaxed">
                   Holding{" "}
                   <strong className="font-semibold">
-                    {new Intl.DateTimeFormat(undefined, {
+                    {/* Pacific, matching step one. The same slot shown on two
+                        different clocks on one page is how somebody ends up
+                        certain of the wrong hour. */}
+                    {new Intl.DateTimeFormat("en-US", {
                       weekday: "long",
                       day: "numeric",
                       month: "long",
                       hour: "numeric",
                       minute: "2-digit",
                       hour12: true,
+                      timeZone: HOST_TIMEZONE,
                       timeZoneName: "short",
                     }).format(new Date(bookedSlot))}
                   </strong>{" "}
