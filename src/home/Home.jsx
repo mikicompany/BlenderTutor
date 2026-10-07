@@ -44,13 +44,17 @@ const Home = () => {
       {/* Every route sets its own head tags through Helmet, so index.html can
           stay free of static copies that would otherwise duplicate them. */}
       <Helmet>
-        <title>BlenderTutor – Blender Online Tutoring</title>
+        <title>Blender Tutoring — 1:1 Online Blender Lessons</title>
         <meta
           name="description"
           content="Get Blender online tutoring. Learn modeling, sculpting, animation, shading, and rendering with beginner-friendly lessons and personalized teaching."
         />
         <link rel="canonical" href="https://www.blendertutoring.com/" />
-        <meta property="og:title" content="BlenderTutor – Blender Online Tutoring" />
+        <meta property="og:title" content="Blender Tutoring — 1:1 Online Blender Lessons" />
+        {/* Names the brand on its own, which is what Google reads as the
+            site's entity name. Absent until now, while the domain said
+            "blendertutoring" and the title said "BlenderTutor". */}
+        <meta property="og:site_name" content="Blender Tutoring" />
         <meta
           property="og:description"
           content="Blender tutorials and personalized online tutoring. Learn 3D modeling, sculpting, animation and more — beginner friendly."
@@ -62,7 +66,7 @@ const Home = () => {
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content="Blender Tutoring — master the complete Blender game art pipeline" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="BlenderTutor – Blender 3D Tutorials & Online Tutoring" />
+        <meta name="twitter:title" content="Blender Tutoring – Blender 3D Tutorials & Online Tutoring" />
         <meta
           name="twitter:description"
           content="Blender tutorials and personalized online tutoring. Learn 3D modeling, sculpting, animation and more — beginner friendly."
