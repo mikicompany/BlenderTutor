@@ -30,23 +30,24 @@ export const HORIZON_DAYS = 21
 // windows in 24-hour HOST_TIMEZONE time, and each window is cut into
 // SESSION_MINUTES slots.
 //
-// Afternoons: 12:00–15:00, so every slot on offer reads as a PM time.
+// Evenings: 20:00–23:00, giving slots at 8, 9 and 10 PM Pacific.
 //
-// Pacific and Ireland are eight hours apart, so an afternoon here is always
-// an evening there — these slots land at 20:00, 21:00 and 22:00 in Dublin,
-// 21:00 to 23:00 in Spain. That is late but workable; a later start here
-// pushes European students past midnight, which is not.
+// Pacific is eight hours behind Ireland and nine behind Spain, so these land
+// between 04:00 and 07:00 the following morning for a European student. The
+// page shows each visitor their own local time beside the slot they pick,
+// precisely so nobody books 4am without noticing.
 //
-// To widen or shift, edit the window. Mornings — 08:00–11:00, which is
-// late afternoon in Europe — are the other option worth knowing about:
-//   1: [["08:00", "11:00"], ["12:00", "15:00"]],
+// If European bookings dry up, this window is the first thing to look at.
+// Mornings here are late afternoon there, which is when people actually
+// book:
+//   1: [["08:00", "11:00"], ["20:00", "23:00"]],
 export const WEEKLY = {
   0: [],
-  1: [["12:00", "15:00"]],
-  2: [["12:00", "15:00"]],
-  3: [["12:00", "15:00"]],
-  4: [["12:00", "15:00"]],
-  5: [["12:00", "15:00"]],
+  1: [["20:00", "23:00"]],
+  2: [["20:00", "23:00"]],
+  3: [["20:00", "23:00"]],
+  4: [["20:00", "23:00"]],
+  5: [["20:00", "23:00"]],
   6: [],
 }
 
