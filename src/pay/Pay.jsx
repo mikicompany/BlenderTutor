@@ -146,6 +146,7 @@ const Pay = () => {
         {/* Sent privately, so it has no business being indexed — and a
             payment page in search results is worth impersonating. */}
         <meta name="robots" content="noindex, nofollow" />
+        <link rel="canonical" href="https://www.blendertutoring.com/pay" />
 
         {/* This link gets pasted into Discord and chat apps, which show a
             preview card from these tags. Without them the unfurl is a bare
