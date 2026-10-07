@@ -96,7 +96,7 @@ function icsHref(ms, title) {
 
 const looksLikeEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value)
 
-const BookingCalendar = ({ item, prefillName }) => {
+const BookingCalendar = ({ item, prefillName, alreadyPaid, onBooked }) => {
   // Computed once per mount. Recomputing on every render would let a slot
   // vanish mid-interaction as the lead-time cutoff rolls past it.
   //
@@ -146,6 +146,8 @@ const BookingCalendar = ({ item, prefillName }) => {
         length: `${SESSION_MINUTES} minutes`,
       })
       setStatus("done")
+      // Lets the payment step name the slot being paid for.
+      onBooked?.(slot)
     } catch {
       setStatus("error")
     }
@@ -167,9 +169,9 @@ const BookingCalendar = ({ item, prefillName }) => {
         </div>
 
         <p className="text-[13px] text-gray-300 leading-relaxed mb-5">
-          That slot is requested and I have been notified. You will get a
-          calendar invite with a Google Meet link — if anything about the time
-          needs changing, I will say so before confirming.
+          {alreadyPaid
+            ? "That slot is requested and I have been notified. You will get a calendar invite with a Google Meet link — if anything about the time needs changing, I will say so before confirming."
+            : "That slot is held and I have been notified. Complete payment below and I will send the calendar invite with a Google Meet link."}
         </p>
 
         {/* Given immediately, so the student is holding the details even if
