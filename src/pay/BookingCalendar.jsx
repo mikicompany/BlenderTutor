@@ -103,11 +103,17 @@ const timeWithZone = (ms) => {
   return abbr ? `${timeLabel(ms)} ${abbr}` : timeLabel(ms)
 }
 
+// The date MUST be resolved on the same clock as the time beside it. Without
+// the timeZone here the date came from the visitor's zone while the time came
+// from Pacific, so an 8 PM Thursday slot in Vancouver announced itself as
+// "Friday, 9 October at 8:00 PM PDT" to someone in Dublin — a date and a time
+// that never belonged to the same moment.
 const fullLabel = (ms) => {
-  const date = new Intl.DateTimeFormat(undefined, {
+  const date = new Intl.DateTimeFormat("en-GB", {
     weekday: "long",
     day: "numeric",
     month: "long",
+    timeZone: HOST_TIMEZONE,
   }).format(new Date(ms))
   return `${date} at ${timeWithZone(ms)}`
 }
