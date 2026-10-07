@@ -71,22 +71,32 @@ export const PROVIDERS = [
   {
     id: "card",
     label: "Pay by card",
-    note: "Visa, Mastercard, Amex. No account needed.",
-    // Stripe Payment Links, created at dashboard.stripe.com → Payment links.
-    // Each looks like https://buy.stripe.com/xxxxxxxxxxxx
+    note: "Visa, Mastercard, Amex, Apple Pay. No account needed.",
+    // Takes a hosted checkout link from EITHER processor — whichever account
+    // exists. Both operate in Canada and both charge 2.9% + 30c on a link.
     //
-    // Stripe operates in Canada, so this is the one card option actually
-    // open to a Vancouver-based business here.
+    //   Square  — Dashboard → Payments → Links → Create a payment link.
+    //             Comes out as https://square.link/u/xxxxxxxx
+    //   Stripe  — dashboard.stripe.com → Payment links → New.
+    //             Comes out as https://buy.stripe.com/xxxxxxxxxxxx
     //
-    // IMPORTANT, when creating each link: under "After payment", choose
-    // "Redirect customers to your website" and paste the matching URL —
+    // Not to be confused with a Weebly or Square *admin* URL. Anything
+    // containing /app/, /deeplink/, a site_id or a dashboard path is a link
+    // into the account's own back office: it asks the visitor to sign in and
+    // takes no payment. A real checkout link opens a payment page for
+    // somebody who has never heard of the account behind it.
+    //
+    // IMPORTANT, when creating each link: turn on the redirect-after-payment
+    // option — Square calls it "Redirect to a website after checkout",
+    // Stripe "Redirect customers to your website" — and paste the matching
+    // URL:
     //
     //   https://www.blendertutoring.com/pay?paid=1&item=session
     //   https://www.blendertutoring.com/pay?paid=1&item=prop
     //
     // That is what sends someone straight back to the booking calendar the
-    // moment they have paid, instead of leaving them on a Stripe receipt
-    // with no idea what happens next.
+    // moment they have paid, instead of leaving them on a receipt page with
+    // no idea what happens next.
     url: {
       session: "",
       prop: "",
@@ -200,6 +210,60 @@ function paypalUrl(handle, amount) {
   )}/${amount}USD`
 }
 
+// Shapes that mean somebody has pasted a link into their OWN back office
+// rather than a customer-facing checkout. It is an easy mistake — those URLs
+// are what you are looking at while setting a payment link up, and they are
+// right there in the address bar — and a silent one, because the button looks
+// perfectly fine and simply shows the student a login screen.
+const BACK_OFFICE = [
+  /\/app\//i,
+  /deeplink/i,
+  /[?&]site_id=/i,
+  /\/dashboard(\/|$|\?)/i,
+  /\/admin(\/|$|\?)/i,
+  /\/login(\/|$|\?)/i,
+  /\/signin(\/|$|\?)/i,
+]
+
+// Fails closed: anything suspect is treated as not configured, so the button
+// does not render at all. A missing payment option is recoverable; one that
+// sends a paying student to a sign-in page is not, because they will assume
+// the business is broken and leave.
+function usableUrl(raw) {
+  const url = typeof raw === "string" ? raw.trim() : ""
+  if (!url) return ""
+
+  let parsed
+  try {
+    parsed = new URL(url)
+  } catch {
+    return warnUnusable(url, "is not a valid URL")
+  }
+
+  if (parsed.protocol !== "https:" && parsed.protocol !== "http:") {
+    return warnUnusable(url, "is not an http(s) link")
+  }
+
+  if (BACK_OFFICE.some((pattern) => pattern.test(url))) {
+    return warnUnusable(
+      url,
+      "looks like an admin or dashboard page rather than a checkout link " +
+        "a customer can pay through"
+    )
+  }
+
+  return url
+}
+
+function warnUnusable(url, why) {
+  // Says so out loud rather than failing mutely, so the reason is findable
+  // the moment anyone opens the console wondering where the button went.
+  if (typeof console !== "undefined") {
+    console.warn(`[payments] ignoring payment link — it ${why}:`, url)
+  }
+  return ""
+}
+
 // A provider's url may be one string for every item or an object keyed by
 // item. Anything else — including a half-filled object with a blank for this
 // particular item — counts as not configured.
@@ -207,10 +271,9 @@ function urlFor(provider, item) {
   if (provider.handle) return paypalUrl(provider.handle, item.amount)
 
   const { url } = provider
-  if (typeof url === "string") return url.trim()
+  if (typeof url === "string") return usableUrl(url)
   if (url && typeof url === "object" && Object.hasOwn(url, item.id)) {
-    const specific = url[item.id]
-    return typeof specific === "string" ? specific.trim() : ""
+    return usableUrl(url[item.id])
   }
   return ""
 }
