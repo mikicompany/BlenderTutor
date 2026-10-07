@@ -380,9 +380,15 @@ const Pay = () => {
             <Step n="2" title="Pick your time">
               {SESSION_BOOKING_URL ? (
                 <>
+                  {/* The calendar offers 15 minutes (the free intro call) and
+                      60 (a paid session) from one event type, so the length
+                      has to be said out loud here — a paying student who
+                      leaves it on the default books a quarter of their
+                      hour. */}
                   <p className="text-[13px] text-gray-400 leading-relaxed mb-5">
-                    Choose any slot that suits you. Times are shown in your own
-                    timezone, so there is nothing to convert.
+                    Pick the <strong className="text-white">60 minute</strong>{" "}
+                    option, then any slot that suits you. Times are shown in
+                    your own timezone, so there is nothing to convert.
                   </p>
                   <BookingEmbed />
                 </>
