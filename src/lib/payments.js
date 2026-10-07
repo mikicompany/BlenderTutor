@@ -327,7 +327,11 @@ export function methodsFor(item) {
     id: provider.id,
     label: provider.label,
     note: provider.note,
+    // The formatted figure when one is configured, and the currency on its
+    // own regardless — so the page can warn that a conversion happens even
+    // before the exact amount is known.
     charge: chargeLabel(provider, item),
+    chargeCurrency: provider.chargeCurrency || null,
     url: urlFor(provider, item),
   }))
     .filter((method) => method.url)
