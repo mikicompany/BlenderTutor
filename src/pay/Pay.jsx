@@ -12,6 +12,7 @@ import {
   Landmark,
   Wallet,
   CheckCircle2,
+  Info,
   Clock,
 } from "lucide-react"
 import { FaPaypal, FaCcVisa, FaCcMastercard, FaCcAmex } from "react-icons/fa"
@@ -99,6 +100,9 @@ const Pay = () => {
   const name = resolveName(params.get("name"))
   const methods = methodsFor(item)
   const transfers = transfersToShow()
+  // A method that settles in something other than the currency on the card.
+  // Only Square today, which is CAD-only on a Canadian account.
+  const converting = methods.find((m) => m.chargeCurrency)
   // Set by the payment provider redirecting back here after a successful
   // charge. It is self-asserted and anyone can type it, so it changes what
   // the page SAYS and never what it allows — booking is open either way,
@@ -412,6 +416,40 @@ const Pay = () => {
                   <Mail size={15} className="text-orange-500" />
                   info@blendertutoring.com
                 </a>
+              </div>
+            )}
+
+            {/* Spelled out rather than left to the button line, because a
+                figure in an unexpected currency at checkout is the moment
+                people abandon a payment — and the surprise, not the amount,
+                is what does the damage. */}
+            {!justPaid && converting && (
+              <div className="rounded-xl border border-orange-500/25 bg-orange-500/[0.07] p-4 mb-4 flex gap-2.5">
+                <Info className="w-4 h-4 text-orange-500 shrink-0 mt-0.5" />
+                <p className="text-[12.5px] text-orange-100/90 leading-relaxed">
+                  <strong className="font-semibold">
+                    Paying by card is processed in Canadian dollars.
+                  </strong>{" "}
+                  {converting.charge ? (
+                    <>
+                      The ${item.amount} USD above is charged as{" "}
+                      <strong className="font-semibold">
+                        {converting.charge}
+                      </strong>
+                      .
+                    </>
+                  ) : (
+                    <>
+                      The ${item.amount} USD above is charged as the equivalent
+                      in {converting.chargeCurrency}.
+                    </>
+                  )}{" "}
+                  Blender Tutoring is based in Canada, so the card processor
+                  settles in {converting.chargeCurrency}. Your bank then
+                  converts that to your own currency at its own rate, so the
+                  final amount can differ by a little. PayPal and Wise are
+                  charged in USD.
+                </p>
               </div>
             )}
 
