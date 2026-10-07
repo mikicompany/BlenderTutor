@@ -10,29 +10,50 @@ import { SESSION_BOOKING_URL } from "../lib/links"
 // a URL change — and it adds no third-party JavaScript to a page that is
 // handling a payment.
 //
-// Calendly reads these as theme parameters and other schedulers ignore
-// unknown query keys, so they are safe to send either way. Without them a
-// Calendly embed is a white panel in a black page.
-const THEME_PARAMS = {
+// Calendly takes its theme from query parameters. Without these its embed is
+// a white panel dropped into a black page.
+const CALENDLY_THEME = {
   hide_gdpr_banner: "1",
   background_color: "0f1011",
   text_color: "ffffff",
   primary_color: "f37d16",
 }
 
-function embedUrl(base) {
+// Suffix match rather than `includes`, so "calendly.com.example.net" is not
+// mistaken for Calendly.
+const hostMatches = (hostname, domain) =>
+  hostname === domain || hostname.endsWith(`.${domain}`)
+
+// Google's booking pages have no theming options at all — they render white
+// whatever the surrounding page does. Rather than let that read as a broken
+// frame, the container is given a matching light surround so it looks like a
+// deliberate panel.
+function describeUrl(base) {
   try {
     const url = new URL(base)
-    for (const [key, value] of Object.entries(THEME_PARAMS)) {
-      // Never clobber a parameter already on the configured URL — it was put
-      // there deliberately.
-      if (!url.searchParams.has(key)) url.searchParams.set(key, value)
+    const host = url.hostname.toLowerCase()
+
+    if (hostMatches(host, "calendly.com")) {
+      for (const [key, value] of Object.entries(CALENDLY_THEME)) {
+        // Never clobber a parameter already on the configured URL — it was
+        // put there deliberately.
+        if (!url.searchParams.has(key)) url.searchParams.set(key, value)
+      }
+      return { href: url.toString(), light: false }
     }
-    return url.toString()
+
+    if (hostMatches(host, "google.com") || hostMatches(host, "app.google")) {
+      // Google's own embed form. Pasting the plain share link without this
+      // renders the full Calendar UI instead of the booking page.
+      if (!url.searchParams.has("gv")) url.searchParams.set("gv", "true")
+      return { href: url.toString(), light: true }
+    }
+
+    return { href: url.toString(), light: false }
   } catch {
     // A malformed URL in config should not take the page down; the fallback
     // link below still gives the visitor somewhere to go.
-    return base
+    return { href: base, light: false }
   }
 }
 
@@ -88,17 +109,21 @@ const BookingEmbed = () => {
 
   if (!SESSION_BOOKING_URL) return null
 
+  const { href, light } = describeUrl(SESSION_BOOKING_URL)
+
   return (
     <div>
       <div
-        className="relative rounded-xl overflow-hidden border border-white/10 bg-[#0f1011]"
+        className={`relative rounded-xl overflow-hidden border border-white/10 ${
+          light && status === "ready" ? "bg-white" : "bg-[#0f1011]"
+        }`}
         style={{ height: status === "failed" ? "auto" : "660px" }}
       >
         {/* Mounted only once the probe has succeeded, so a blocked frame is
             never shown mid-failure. */}
         {status === "ready" && (
           <iframe
-            src={embedUrl(SESSION_BOOKING_URL)}
+            src={href}
             title="Booking calendar"
             className="absolute inset-0 w-full h-full"
             style={{ border: 0, minWidth: "280px" }}
