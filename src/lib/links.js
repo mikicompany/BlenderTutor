@@ -19,7 +19,22 @@ export const BOOKING_LABEL = "Book a free call"
 // event type, and that one has to be the free intro call — it is what every
 // button on the site points at, and where every student comes from.
 //
-// Two ways out, either of which makes this a one-line change:
+// Three ways out, any of which makes this a one-line change:
+//
+//   Google Calendar appointment schedule — RECOMMENDED. Free on a personal
+//   Google account, which dg1company@gmail.com is, and it books straight
+//   into the calendar that already exists rather than through anyone else's
+//   service. A free account gets exactly one booking page, which is all
+//   this needs. In Google Calendar: Create → Appointment schedule, set the
+//   length to 60 minutes, set the hours, and under its settings add Google
+//   Meet as the conferencing option.
+//
+//   Then take the EMBED url, not the share link. Open the schedule → Share →
+//   Embed, and copy the address out of the iframe code. It looks like
+//     https://calendar.google.com/calendar/appointments/schedules/AcZ...?gv=true
+//   The short calendar.app.google/... share link opens the full Calendar UI
+//   when framed, which is not what anyone wants on a payment page. (If the
+//   gv=true is missing, the embed adds it.)
 //
 //   Calendly paid plan — a "1-Hour Tutoring Session" event type already
 //   exists, configured and ready (60 minutes, Google Meet as its location).
