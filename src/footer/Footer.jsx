@@ -85,6 +85,13 @@ const Footer = () => {
       <Link to="/blog" className="hover:text-white transition-colors">
         Blog
       </Link>
+      <a
+        href="/blender-theme-maker/"
+        className="hover:text-white transition-colors"
+      >
+        Theme Maker
+      </a>
+
       <Link to="/radar" className="hover:text-white transition-colors">
         The Radar
       </Link>
