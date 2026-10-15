@@ -1,0 +1,136 @@
+{
+  "date": "2026-10-15",
+  "label": "Oct 15, 2026",
+  "newAndNotable": [
+    {
+      "name": "Enshrouded",
+      "metacritic": null,
+      "released": "2026-10-15",
+      "genres": [
+        "Adventure",
+        "Action"
+      ]
+    },
+    {
+      "name": "Marvel's Wolverine",
+      "metacritic": null,
+      "released": "2026-09-15",
+      "genres": [
+        "Action"
+      ]
+    },
+    {
+      "name": "Control Resonant",
+      "metacritic": null,
+      "released": "2026-09-24",
+      "genres": [
+        "Adventure",
+        "Action"
+      ]
+    },
+    {
+      "name": "Gears of War: E-Day",
+      "metacritic": null,
+      "released": "2026-10-06",
+      "genres": [
+        "Adventure",
+        "Action"
+      ]
+    },
+    {
+      "name": "Valor Mortis",
+      "metacritic": null,
+      "released": "2026-10-13",
+      "genres": [
+        "Action",
+        "RPG"
+      ]
+    },
+    {
+      "name": "Silent Hill: Townfall",
+      "metacritic": null,
+      "released": "2026-09-23",
+      "genres": [
+        "Adventure"
+      ]
+    }
+  ],
+  "metacriticTop": [
+    {
+      "name": "The Legend of Zelda: Ocarina of Time (1998)",
+      "metacritic": 99,
+      "released": "1998-11-21",
+      "genres": [
+        "Adventure",
+        "Action"
+      ]
+    },
+    {
+      "name": "Soulcalibur (1998)",
+      "metacritic": 98,
+      "released": "1998-07-30",
+      "genres": [
+        "Fighting"
+      ]
+    },
+    {
+      "name": "Soulcalibur",
+      "metacritic": 98,
+      "released": "1998-07-30",
+      "genres": [
+        "Action",
+        "Fighting"
+      ]
+    },
+    {
+      "name": "Metroid Prime",
+      "metacritic": 97,
+      "released": "2002-11-17",
+      "genres": [
+        "Shooter",
+        "Adventure"
+      ]
+    },
+    {
+      "name": "Super Mario Galaxy",
+      "metacritic": 97,
+      "released": "2007-11-01",
+      "genres": [
+        "Platformer"
+      ]
+    }
+  ],
+  "steamTrending": [
+    {
+      "name": "Counter-Strike",
+      "price": "$9.99",
+      "positive": 243818,
+      "ccu": 7323
+    },
+    {
+      "name": "Half-Life",
+      "price": "$9.99",
+      "positive": 143086,
+      "ccu": 634
+    },
+    {
+      "name": "Counter-Strike: Condition Zero",
+      "price": "$9.99",
+      "positive": 13442,
+      "ccu": 83
+    },
+    {
+      "name": "Half-Life 2",
+      "price": "$9.99",
+      "positive": 239721,
+      "ccu": 1555
+    },
+    {
+      "name": "Counter-Strike: Source",
+      "price": "$9.99",
+      "positive": 175426,
+      "ccu": 6187
+    }
+  ],
+  "releaseCount": 40
+}
