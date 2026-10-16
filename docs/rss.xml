@@ -5,8 +5,15 @@
     <link>https://www.blendertutoring.com/blog</link>
     <description>Practical Blender guides for beginners and game artists.</description>
     <language>en</language>
-    <lastBuildDate>Fri, 02 Oct 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 16 Oct 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://www.blendertutoring.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Text-to-3D in Blender: What AI Can and Can't Model Yet</title>
+      <link>https://www.blendertutoring.com/blog/text-to-3d-blender-ai</link>
+      <guid isPermaLink="true">https://www.blendertutoring.com/blog/text-to-3d-blender-ai</guid>
+      <pubDate>Fri, 16 Oct 2026 00:00:00 GMT</pubDate>
+      <description>An honest look at AI 3D generators in a real Blender pipeline — what they save you, where the topology falls apart, and the jobs they are actually good for.</description>
+    </item>
     <item>
       <title>Connecting GPT-6 Astra to Blender</title>
       <link>https://www.blendertutoring.com/blog/connect-gpt-astra-to-blender</link>

@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 640" width="1200" height="640" role="img" aria-label="Two wireframes of the same bent arm. Left: an AI remesh with evenly spaced quads, which pinches at the elbow. Right: hand retopology with edge loops crowded around the elbow and sparse elsewhere, which bends cleanly.">
+  <rect width="1200" height="640" fill="#0f1011"/>
+
+  <defs>
+    <!-- The L-shaped arm, reused by both panels so the only difference is the wireframe. -->
+    <path id="arm" d="M20 50 L330 50 L330 360 L255 360 L255 125 L20 125 Z"/>
+  </defs>
+
+  <!-- ── LEFT: even quads ───────────────────────────────── -->
+  <g transform="translate(90,80)">
+    <text x="0" y="0" fill="#9aa0a6" font-family="system-ui,sans-serif" font-size="15" font-weight="700" letter-spacing="2">AI REMESH — EVEN QUADS</text>
+
+    <use href="#arm" fill="#191b1d" stroke="#4a4f55" stroke-width="2"/>
+
+    <g stroke="#3f4449" stroke-width="1.3" fill="none">
+      <!-- horizontal arm: a column every 37px, all the way along -->
+      <path d="M57 50 L57 125"/><path d="M94 50 L94 125"/><path d="M131 50 L131 125"/>
+      <path d="M168 50 L168 125"/><path d="M205 50 L205 125"/><path d="M242 50 L242 125"/>
+      <!-- through the elbow and down: a row every 37px -->
+      <path d="M255 162 L330 162"/><path d="M255 199 L330 199"/><path d="M255 236 L330 236"/>
+      <path d="M255 273 L330 273"/><path d="M255 310 L330 310"/><path d="M255 347 L330 347"/>
+      <!-- one lengthwise division, same spacing as the rest -->
+      <path d="M20 87 L292 87 L292 360"/>
+      <path d="M279 50 L279 125"/><path d="M316 50 L316 125"/>
+    </g>
+
+    <circle cx="292" cy="92" r="40" fill="none" stroke="#e5484d" stroke-width="2.5" stroke-dasharray="5 4"/>
+  </g>
+
+  <text x="300" y="512" fill="#e5484d" font-family="system-ui,sans-serif" font-size="16" font-weight="600" text-anchor="middle">pinches at the elbow</text>
+  <text x="300" y="546" fill="#74797e" font-family="system-ui,sans-serif" font-size="14.5" text-anchor="middle">Same density everywhere. Tidy — and wrong</text>
+  <text x="300" y="568" fill="#74797e" font-family="system-ui,sans-serif" font-size="14.5" text-anchor="middle">in the one place it matters.</text>
+
+  <line x1="600" y1="70" x2="600" y2="580" stroke="#282b2e" stroke-width="2"/>
+
+  <!-- ── RIGHT: edge loops ──────────────────────────────── -->
+  <g transform="translate(690,80)">
+    <text x="0" y="0" fill="#f37d16" font-family="system-ui,sans-serif" font-size="15" font-weight="700" letter-spacing="2">HAND RETOPO — EDGE LOOPS</text>
+
+    <use href="#arm" fill="#191b1d" stroke="#6b5230" stroke-width="2"/>
+
+    <!-- sparse where nothing deforms -->
+    <g stroke="#7d6137" stroke-width="1.3" fill="none">
+      <path d="M85 50 L85 125"/><path d="M150 50 L150 125"/>
+      <path d="M255 300 L330 300"/><path d="M255 347 L330 347"/>
+      <path d="M20 87 L292 87 L292 360"/>
+    </g>
+    <!-- crowded through the elbow -->
+    <g stroke="#f37d16" stroke-width="1.8" fill="none">
+      <path d="M205 50 L205 125"/><path d="M224 50 L224 125"/><path d="M243 50 L243 125"/>
+      <path d="M262 50 L262 125"/><path d="M281 50 L281 125"/><path d="M300 50 L300 125"/>
+      <path d="M255 144 L330 144"/><path d="M255 163 L330 163"/><path d="M255 182 L330 182"/>
+      <path d="M255 201 L330 201"/><path d="M255 220 L330 220"/>
+    </g>
+
+    <circle cx="292" cy="92" r="40" fill="none" stroke="#3fb950" stroke-width="2.5" stroke-dasharray="5 4"/>
+  </g>
+
+  <text x="900" y="512" fill="#3fb950" font-family="system-ui,sans-serif" font-size="16" font-weight="600" text-anchor="middle">bends cleanly</text>
+  <text x="900" y="546" fill="#74797e" font-family="system-ui,sans-serif" font-size="14.5" text-anchor="middle">Sparse where nothing moves, crowded where</text>
+  <text x="900" y="568" fill="#74797e" font-family="system-ui,sans-serif" font-size="14.5" text-anchor="middle">it does. Deliberately uneven.</text>
+
+  <text x="600" y="616" fill="#55595e" font-family="system-ui,sans-serif" font-size="13" text-anchor="middle">Quad-dominant is not the same as good topology — blendertutoring.com</text>
+</svg>
