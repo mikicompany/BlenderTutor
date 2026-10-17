@@ -8,6 +8,13 @@
     <lastBuildDate>Sat, 17 Oct 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://www.blendertutoring.com/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>Why Your Blender Render Is Noisy — and How to Fix It</title>
+      <link>https://www.blendertutoring.com/blog/blender-render-noisy-fix</link>
+      <guid isPermaLink="true">https://www.blendertutoring.com/blog/blender-render-noisy-fix</guid>
+      <pubDate>Sat, 17 Oct 2026 00:00:00 GMT</pubDate>
+      <description>Noise is four different problems, not one. How to tell grain from fireflies from caustics, what fixes each, and why raising the sample count comes last.</description>
+    </item>
+    <item>
       <title>Should You Upgrade to Blender 5.2 LTS?</title>
       <link>https://www.blendertutoring.com/blog/blender-5-2-lts-upgrade</link>
       <guid isPermaLink="true">https://www.blendertutoring.com/blog/blender-5-2-lts-upgrade</guid>
