@@ -5,8 +5,15 @@
     <link>https://www.blendertutoring.com/blog</link>
     <description>Practical Blender guides for beginners and game artists.</description>
     <language>en</language>
-    <lastBuildDate>Fri, 16 Oct 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 17 Oct 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://www.blendertutoring.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Should You Upgrade to Blender 5.2 LTS?</title>
+      <link>https://www.blendertutoring.com/blog/blender-5-2-lts-upgrade</link>
+      <guid isPermaLink="true">https://www.blendertutoring.com/blog/blender-5-2-lts-upgrade</guid>
+      <pubDate>Sat, 17 Oct 2026 00:00:00 GMT</pubDate>
+      <description>Your files are fine — your addons are the risk. What the 5.x Python changes broke, a ten-minute check before you move, and when to simply wait.</description>
+    </item>
     <item>
       <title>Text-to-3D in Blender: What AI Can and Can't Model Yet</title>
       <link>https://www.blendertutoring.com/blog/text-to-3d-blender-ai</link>
