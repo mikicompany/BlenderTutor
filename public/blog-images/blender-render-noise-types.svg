@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" width="1200" height="700" role="img" aria-label="Four kinds of Cycles render noise and their fixes: even grain is fixed by denoising and adaptive sampling; fireflies by clamping indirect light; caustic noise in glass and metal by disabling caustics; many-light noise by the light tree.">
+  <rect width="1200" height="700" fill="#0f1011"/>
+
+  <defs>
+    <style>
+      .card  { fill:#17191b; stroke:#2f3539; stroke-width:2; }
+      .ttl   { fill:#e8e6e3; font-family:system-ui,sans-serif; font-size:20px; font-weight:700; }
+      .cause { fill:#8a9097; font-family:system-ui,sans-serif; font-size:14.5px; }
+      .fixl  { fill:#5e6469; font-family:system-ui,sans-serif; font-size:12px; font-weight:700; letter-spacing:1.5px; }
+      .fix   { fill:#f37d16; font-family:system-ui,sans-serif; font-size:16px; font-weight:700; }
+      .sw    { stroke:#2f3539; stroke-width:1.5; }
+    </style>
+    <clipPath id="sq"><rect x="0" y="0" width="118" height="118" rx="8"/></clipPath>
+  </defs>
+
+  <text x="60" y="52" fill="#f37d16" font-family="system-ui,sans-serif" font-size="16" font-weight="700" letter-spacing="2">FOUR KINDS OF NOISE — AND WHAT EACH ONE NEEDS</text>
+
+  <!-- ── 1. even grain ── -->
+  <g transform="translate(60,90)">
+    <rect class="card" x="0" y="0" width="520" height="250" rx="14"/>
+    <g transform="translate(26,30)">
+      <rect class="sw" x="0" y="0" width="118" height="118" rx="8" fill="#3a3d40"/>
+      <g clip-path="url(#sq)" fill="#8d9296" opacity="0.85">
+        <rect x="6" y="11" width="3" height="3"/><rect x="24" y="5" width="3" height="3"/><rect x="48" y="18" width="3" height="3"/><rect x="70" y="8" width="3" height="3"/><rect x="96" y="15" width="3" height="3"/>
+        <rect x="14" y="34" width="3" height="3"/><rect x="38" y="42" width="3" height="3"/><rect x="60" y="30" width="3" height="3"/><rect x="88" y="38" width="3" height="3"/><rect x="106" y="46" width="3" height="3"/>
+        <rect x="4" y="60" width="3" height="3"/><rect x="30" y="66" width="3" height="3"/><rect x="54" y="56" width="3" height="3"/><rect x="78" y="70" width="3" height="3"/><rect x="100" y="62" width="3" height="3"/>
+        <rect x="18" y="88" width="3" height="3"/><rect x="44" y="96" width="3" height="3"/><rect x="66" y="84" width="3" height="3"/><rect x="92" y="92" width="3" height="3"/><rect x="110" y="100" width="3" height="3"/>
+        <rect x="8" y="110" width="3" height="3"/><rect x="36" y="112" width="3" height="3"/><rect x="72" y="108" width="3" height="3"/>
+      </g>
+    </g>
+    <text class="ttl" x="172" y="54">Even grain, everywhere</text>
+    <text class="cause" x="172" y="84">Undersampled, or no denoiser.</text>
+    <text class="cause" x="172" y="106">The ordinary kind.</text>
+    <text class="fixl" x="172" y="150">FIX</text>
+    <text class="fix" x="172" y="176">Denoise + Albedo &amp; Normal passes,</text>
+    <text class="fix" x="172" y="200">then adaptive sampling at 0.01</text>
+  </g>
+
+  <!-- ── 2. fireflies ── -->
+  <g transform="translate(620,90)">
+    <rect class="card" x="0" y="0" width="520" height="250" rx="14"/>
+    <g transform="translate(26,30)">
+      <rect class="sw" x="0" y="0" width="118" height="118" rx="8" fill="#2c2f32"/>
+      <g clip-path="url(#sq)">
+        <circle cx="30" cy="34" r="3.5" fill="#ffffff"/>
+        <circle cx="86" cy="22" r="2.5" fill="#ffffff"/>
+        <circle cx="58" cy="76" r="4" fill="#ffffff"/>
+        <circle cx="99" cy="92" r="2.8" fill="#ffffff"/>
+        <circle cx="18" cy="100" r="2.2" fill="#ffffff"/>
+      </g>
+    </g>
+    <text class="ttl" x="172" y="54">Bright white specks</text>
+    <text class="cause" x="172" y="84">Fireflies. Rare rays carrying</text>
+    <text class="cause" x="172" y="106">enormous energy.</text>
+    <text class="fixl" x="172" y="150">FIX</text>
+    <text class="fix" x="172" y="176">Clamp Indirect — not more</text>
+    <text class="fix" x="172" y="200">samples. They will not converge.</text>
+  </g>
+
+  <!-- ── 3. caustics ── -->
+  <g transform="translate(60,370)">
+    <rect class="card" x="0" y="0" width="520" height="250" rx="14"/>
+    <g transform="translate(26,30)">
+      <rect class="sw" x="0" y="0" width="118" height="118" rx="8" fill="#2c2f32"/>
+      <g clip-path="url(#sq)">
+        <ellipse cx="59" cy="60" rx="34" ry="30" fill="#4a5054" opacity="0.9"/>
+        <g fill="#cfd4d8" opacity="0.95">
+          <rect x="40" y="48" width="3" height="3"/><rect x="52" y="42" width="3" height="3"/><rect x="66" y="50" width="3" height="3"/>
+          <rect x="46" y="62" width="3" height="3"/><rect x="60" y="66" width="3" height="3"/><rect x="74" y="58" width="3" height="3"/>
+          <rect x="54" y="78" width="3" height="3"/><rect x="68" y="80" width="3" height="3"/><rect x="38" y="72" width="3" height="3"/>
+        </g>
+      </g>
+    </g>
+    <text class="ttl" x="172" y="54">Grain only in glass or metal</text>
+    <text class="cause" x="172" y="84">Caustics. Light bending through</text>
+    <text class="cause" x="172" y="106">or bouncing off a surface.</text>
+    <text class="fixl" x="172" y="150">FIX</text>
+    <text class="fix" x="172" y="176">Disable reflective / refractive</text>
+    <text class="fix" x="172" y="200">caustics, or enlarge the light</text>
+  </g>
+
+  <!-- ── 4. many lights ── -->
+  <g transform="translate(620,370)">
+    <rect class="card" x="0" y="0" width="520" height="250" rx="14"/>
+    <g transform="translate(26,30)">
+      <rect class="sw" x="0" y="0" width="118" height="118" rx="8" fill="#2c2f32"/>
+      <g clip-path="url(#sq)">
+        <g fill="#f0b429" opacity="0.9">
+          <circle cx="24" cy="26" r="6"/><circle cx="58" cy="20" r="5"/><circle cx="92" cy="30" r="6"/>
+          <circle cx="30" cy="62" r="5"/><circle cx="66" cy="56" r="6"/><circle cx="100" cy="66" r="5"/>
+          <circle cx="22" cy="96" r="6"/><circle cx="58" cy="100" r="5"/><circle cx="94" cy="94" r="6"/>
+        </g>
+        <g fill="#9aa0a6" opacity="0.6">
+          <rect x="44" y="40" width="3" height="3"/><rect x="78" y="44" width="3" height="3"/><rect x="40" y="80" width="3" height="3"/><rect x="80" y="78" width="3" height="3"/>
+        </g>
+      </g>
+    </g>
+    <text class="ttl" x="172" y="54">Many small lights, all noisy</text>
+    <text class="cause" x="172" y="84">Sampling spread too thin across</text>
+    <text class="cause" x="172" y="106">too many sources.</text>
+    <text class="fixl" x="172" y="150">FIX</text>
+    <text class="fix" x="172" y="176">Light tree (on by default) —</text>
+    <text class="fix" x="172" y="200">and watch for huge mesh lights</text>
+  </g>
+
+  <text x="600" y="672" fill="#55595e" font-family="system-ui,sans-serif" font-size="13" text-anchor="middle">Raise the sample count last, not first — blendertutoring.com</text>
+</svg>
