@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" width="1200" height="700" role="img" aria-label="Top-down three point lighting diagram. The camera faces the subject. The key light sits 30 to 60 degrees off the camera axis, the fill sits opposite the key at much lower strength, and the rim light sits behind the subject. A light placed at the camera is marked as the flat-render mistake.">
+  <rect width="1200" height="700" fill="#0f1011"/>
+
+  <defs>
+    <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#5a6066"/>
+    </marker>
+    <style>
+      .ray  { stroke:#4a5056; stroke-width:1.6; stroke-dasharray:6 5; fill:none; }
+      .nm   { font-family:system-ui,sans-serif; font-size:17px; font-weight:700; }
+      .note { fill:#868c92; font-family:system-ui,sans-serif; font-size:13.5px; }
+      .ang  { fill:#71787e; font-family:system-ui,sans-serif; font-size:13px; font-weight:700; letter-spacing:1px; }
+    </style>
+  </defs>
+
+  <text x="60" y="52" fill="#f37d16" font-family="system-ui,sans-serif" font-size="16" font-weight="700" letter-spacing="2">THREE POINT LIGHTING, FROM ABOVE</text>
+
+  <!-- subject -->
+  <circle cx="600" cy="360" r="46" fill="#2a2e31" stroke="#596067" stroke-width="2"/>
+  <text x="600" y="366" fill="#c9ced3" font-family="system-ui,sans-serif" font-size="15" font-weight="700" text-anchor="middle">SUBJECT</text>
+
+  <!-- camera -->
+  <g>
+    <rect x="552" y="572" width="96" height="54" rx="9" fill="#17191b" stroke="#596067" stroke-width="2"/>
+    <text x="600" y="605" fill="#c9ced3" font-family="system-ui,sans-serif" font-size="14" font-weight="700" text-anchor="middle">CAMERA</text>
+    <path class="ray" d="M600 568 L600 412" marker-end="url(#a2)"/>
+  </g>
+
+  <!-- KEY -->
+  <g>
+    <circle cx="316" cy="214" r="34" fill="#3a2a10" stroke="#f0b429" stroke-width="2.5"/>
+    <text class="nm" x="316" y="220" fill="#f0b429" text-anchor="middle">KEY</text>
+    <path class="ray" d="M346 240 L561 335" marker-end="url(#a2)"/>
+    <text class="note" x="150" y="286">Area light, large.</text>
+    <text class="note" x="150" y="306">Does all the shaping.</text>
+  </g>
+
+  <!-- angle arc between camera axis and key -->
+  <path d="M600 250 A 110 110 0 0 0 522 283" fill="none" stroke="#5a6066" stroke-width="1.5"/>
+  <text class="ang" x="516" y="238">30–60° OFF CAMERA</text>
+
+  <!-- FILL -->
+  <g>
+    <circle cx="892" cy="300" r="30" fill="#1d2529" stroke="#5f7d8a" stroke-width="2"/>
+    <text class="nm" x="892" y="306" fill="#8fb2c0" text-anchor="middle" font-size="15">FILL</text>
+    <path class="ray" d="M864 316 L648 349" marker-end="url(#a2)"/>
+    <text class="note" x="938" y="296">Opposite the key.</text>
+    <text class="note" x="938" y="316">Several times dimmer —</text>
+    <text class="note" x="938" y="336">it only lifts the shadows.</text>
+  </g>
+
+  <!-- RIM -->
+  <g>
+    <circle cx="600" cy="130" r="30" fill="#2a1f33" stroke="#9b7fc4" stroke-width="2"/>
+    <text class="nm" x="600" y="136" fill="#bda4de" text-anchor="middle" font-size="15">RIM</text>
+    <path class="ray" d="M600 162 L600 310" marker-end="url(#a2)"/>
+    <text class="note" x="648" y="126">Behind the subject. Catches the edge</text>
+    <text class="note" x="648" y="146">and lifts it off the background.</text>
+  </g>
+
+  <!-- the mistake -->
+  <g>
+    <circle cx="316" cy="600" r="30" fill="#2a1414" stroke="#e5484d" stroke-width="2" stroke-dasharray="5 4"/>
+    <text class="nm" x="316" y="606" fill="#e5484d" text-anchor="middle" font-size="14">✕</text>
+    <text class="note" x="60" y="664" fill="#e5484d">A light here — beside the camera — throws every shadow</text>
+    <text class="note" x="60" y="684" fill="#e5484d">behind the object, where you cannot see it. That is flat.</text>
+  </g>
+
+  <text x="1140" y="664" fill="#55595e" font-family="system-ui,sans-serif" font-size="13" text-anchor="end">blendertutoring.com</text>
+</svg>
