@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" width="1200" height="700" role="img" aria-label="Two columns. What most junior portfolios show: original concepts, mixed styles, beauty renders only, no wireframes or counts, many unfinished pieces. What job postings ask for: work from supplied concept art, matching a specified style, optimised game-ready assets, in-engine integration, and an eye for composition.">
+  <rect width="1200" height="700" fill="#0f1011"/>
+
+  <defs>
+    <style>
+      .hd  { font-family:system-ui,sans-serif; font-size:15px; font-weight:700; letter-spacing:2px; }
+      .it  { font-family:system-ui,sans-serif; font-size:17px; font-weight:600; }
+      .sb  { fill:#7d848a; font-family:system-ui,sans-serif; font-size:13.5px; }
+      .mk  { font-family:system-ui,sans-serif; font-size:17px; font-weight:700; }
+    </style>
+  </defs>
+
+  <!-- LEFT -->
+  <text class="hd" x="60" y="52" fill="#9aa0a6">WHAT MOST PORTFOLIOS SHOW</text>
+  <rect x="60" y="78" width="500" height="520" rx="14" fill="#161718" stroke="#2c3033" stroke-width="2"/>
+
+  <g>
+    <text class="mk" x="92" y="134" fill="#6f767c">✕</text><text class="it" x="124" y="134" fill="#aeb4ba">Original ideas, self-directed</text>
+    <text class="sb" x="124" y="158">Shows taste. Not the daily job.</text>
+
+    <text class="mk" x="92" y="222" fill="#6f767c">✕</text><text class="it" x="124" y="222" fill="#aeb4ba">A different style every piece</text>
+    <text class="sb" x="124" y="246">Reads as still finding yourself.</text>
+
+    <text class="mk" x="92" y="310" fill="#6f767c">✕</text><text class="it" x="124" y="310" fill="#aeb4ba">Beauty renders only</text>
+    <text class="sb" x="124" y="334">Hides everything a lead needs to see.</text>
+
+    <text class="mk" x="92" y="398" fill="#6f767c">✕</text><text class="it" x="124" y="398" fill="#aeb4ba">No wireframes, no counts</text>
+    <text class="sb" x="124" y="422">No evidence it is game-ready.</text>
+
+    <text class="mk" x="92" y="486" fill="#6f767c">✕</text><text class="it" x="124" y="486" fill="#aeb4ba">Eight pieces, three finished</text>
+    <text class="sb" x="124" y="510">The weakest one sets your level.</text>
+
+    <text class="sb" x="92" y="564" fill="#8a9097">Answers: “can you make something pretty?”</text>
+  </g>
+
+  <!-- arrow -->
+  <path d="M580 338 L616 338" stroke="#f37d16" stroke-width="3" fill="none"/>
+  <path d="M612 330 L624 338 L612 346 z" fill="#f37d16"/>
+
+  <!-- RIGHT -->
+  <text class="hd" x="640" y="52" fill="#f37d16">WHAT POSTINGS ASK FOR</text>
+  <rect x="640" y="78" width="500" height="520" rx="14" fill="#13211a" stroke="#2f7d4f" stroke-width="2"/>
+
+  <g>
+    <text class="mk" x="672" y="134" fill="#5ddb8b">✓</text><text class="it" x="704" y="134" fill="#cfe9d8">Built from supplied concept art</text>
+    <text class="sb" x="704" y="158">Credit the concept artist clearly.</text>
+
+    <text class="mk" x="672" y="222" fill="#5ddb8b">✓</text><text class="it" x="704" y="222" fill="#cfe9d8">Matching a specified style</text>
+    <text class="sb" x="704" y="246">Two or three pieces, one look.</text>
+
+    <text class="mk" x="672" y="310" fill="#5ddb8b">✓</text><text class="it" x="704" y="310" fill="#cfe9d8">Optimised and game-ready</text>
+    <text class="sb" x="704" y="334">Topology, low-poly, clean FBX.</text>
+
+    <text class="mk" x="672" y="398" fill="#5ddb8b">✓</text><text class="it" x="704" y="398" fill="#cfe9d8">Wireframes and triangle counts</text>
+    <text class="sb" x="704" y="422">The technical proof, on every piece.</text>
+
+    <text class="mk" x="672" y="486" fill="#5ddb8b">✓</text><text class="it" x="704" y="486" fill="#cfe9d8">Screenshotted in the engine</text>
+    <text class="sb" x="704" y="510">It imported, shaded and performed.</text>
+
+    <text class="sb" x="672" y="564" fill="#8fc9a6">Answers: “can you do this job?”</text>
+  </g>
+
+  <text x="600" y="652" fill="#55595e" font-family="system-ui,sans-serif" font-size="13" text-anchor="middle">A portfolio is not a gallery. It is an argument — blendertutoring.com</text>
+</svg>
