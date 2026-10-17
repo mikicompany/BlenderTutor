@@ -1,5 +1,117 @@
 export const posts = [
   {
+    slug: "game-art-portfolio-what-studios-want",
+    title: "What a Game Art Portfolio Actually Needs in 2026",
+    description: "Job postings describe the role in detail, for free. The gap between what they ask for and what most junior portfolios show \u2014 and how to close it.",
+    date: "2026-10-17",
+    thumbnail: "/blog-images/portfolio-vs-job-postings.jpg",
+    content: `
+Most beginner portfolios are built around a reasonable assumption: make impressive-looking things, and studios will be impressed.
+
+The assumption is reasonable and it is wrong, because it answers a question nobody asked. A portfolio is not an art gallery. It is evidence that you can do a specific job, and the job is described — in some detail, for free — in the postings themselves.
+
+Read a few and a gap appears immediately between what they ask for and what most portfolios show.
+
+![What portfolios show versus what job postings ask for](/blog-images/portfolio-vs-job-postings.svg)
+
+---
+
+## 📋 What The Postings Actually Say
+
+Environment art listings ask for the same handful of things with striking consistency:
+
+- **Software**: Maya or 3ds Max, ZBrush, Substance Painter, and working knowledge of Unreal.
+- **Working from concept art or reference** — not from your own imagination.
+- **Matching a specified art style.**
+- **Optimising assets for performance.**
+- **Game-ready output**: sensible topology, low-poly discipline, clean FBX export.
+- **An eye for composition, shape, colour and detail.**
+
+Now compare that to a typical junior portfolio: four or five original pieces, beautifully rendered in Cycles, each in a different style, with no wireframes, no poly counts, and no engine screenshots.
+
+Every piece in that portfolio is answering "can you make something pretty?" Not one of them answers "can you do this job?"
+
+---
+
+## 🎯 The Four Things Usually Missing
+
+### 1. Evidence you can work to someone else's brief
+
+Original work shows taste. It does not show that you can take a concept sheet from an art director and produce the thing on it, which is what the job is almost every day.
+
+**Fix it:** take a published concept piece — credit the artist clearly — and build it faithfully. One of these is worth three original pieces, because it is the only one that proves the part they are actually worried about.
+
+### 2. Evidence you can hit a style
+
+"Matching a specified art style" appears constantly in postings, and almost never in portfolios. A folio where every piece is in a different look reads as someone finding themselves, not someone who can be deployed on a project.
+
+**Fix it:** build two or three pieces in one consistent, recognisable style. Preferably the style of the studios you are applying to.
+
+### 3. The technical proof
+
+Pretty renders hide everything a lead needs to see. Wireframes, poly counts, texel density, UV layouts, the material breakdown — these are not decoration on a portfolio page. For a technical art role they *are* the portfolio.
+
+**Fix it:** every piece gets a wireframe shot and a stated triangle count. If you are not confident those numbers are defensible, [that is worth fixing before you apply](/blog/quads-vs-triangles-blender).
+
+### 4. The asset in an engine
+
+If the listing says Unreal, show Unreal. A Cycles beauty render proves you can light a still. An in-engine screenshot proves the asset imported, shaded correctly, performed, and survived contact with a real pipeline.
+
+**Fix it:** get it into the engine and screenshot it there. [Which is less painful than it sounds once the file is clean.](/blog/blender-and-unreal-the-happy-couple)
+
+---
+
+## 🧩 Fewer Pieces, Finished Properly
+
+Three excellent pieces beat eight decent ones, every time, and it is not close.
+
+A reviewer is forming an impression of your ceiling, not your output. Weak work in a portfolio does not get politely ignored — it gets read as the limit of what you can do. The piece you are least sure about is the one setting your level.
+
+Cut it. Then spend that time finishing the ones that remain: the presentation renders, the wireframes, the breakdowns, the short note on what the asset is for and what constraints it was built to.
+
+---
+
+## 🔎 The Job Pool Is Wider Than "Games"
+
+Worth knowing if you are only searching for game studios.
+
+A large share of environment and 3D artist listings are not games at all — simulation, architectural and real-time visualisation, Roblox work, training environments. Some explicitly prefer candidates who have *not* come from games.
+
+The skills transfer almost completely. The pay can be comparable. And the competition is a fraction of what it is for an entry-level games role, because everyone who wanted to make games is applying to the studios.
+
+If you want to work in games specifically, that is a legitimate goal and ignore this. If you want to work in 3D, you are searching one tenth of the market.
+
+---
+
+## ⚠️ An Honest Note On The Market
+
+You will read a lot about how brutal the industry is. Some of that is true and some is repetition.
+
+What I can say with confidence, because it is visible in the listings themselves: **many postings ask for three or four years of experience even when the title is not senior.** That is a real squeeze on entry level and worth planning around rather than being surprised by.
+
+What I would not do is quote you a figure for this year. The widely-shared layoff numbers date from 2023 and 2024 — a period of genuine contraction — and I have not found reliable data for 2026. Anyone presenting current percentages with confidence is probably recycling those older figures.
+
+Plan for a competitive market. Do not let a statistic from three years ago decide whether you try.
+
+---
+
+## 🎯 The Short Version
+
+Your portfolio is not a gallery, it is an argument. Every piece should be answering a question the posting actually asked.
+
+Three pieces. One consistent style. At least one built from someone else's concept. Wireframes and triangle counts on all of them. At least one screenshotted in the engine the listing names.
+
+That portfolio is less fun to make than five original hero renders. It is also the one that gets replies.
+
+---
+
+**Read next:** [What to Make After the Blender Donut](/blog/life-beyond-the-donut) — if you are at the stage of picking your first real portfolio piece.
+
+*Want an honest review of what you have so far? [Book a free intro call →](https://www.blendertutoring.com/#packages) — portfolio feedback is most of what mentoring actually is.*
+`,
+  },
+
+  {
     slug: "quads-vs-triangles-blender",
     title: "Quads vs Triangles in Blender: What Actually Matters",
     description: "Your engine triangulates everything on export, so the never-use-triangles rule misses the point. Where quads genuinely matter, and why n-gons are worse.",
