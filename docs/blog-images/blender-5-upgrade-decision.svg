@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" width="1200" height="700" role="img" aria-label="Decision flow for upgrading to Blender 5.2 LTS. Mid-project? Yes: finish first. No: do you depend on addons? No: upgrade today. Yes: do they have 5.x builds? Yes: upgrade but keep 4.5 installed. No: wait or replace the addon.">
+  <rect width="1200" height="700" fill="#0f1011"/>
+
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#4e545a"/>
+    </marker>
+    <style>
+      .q    { fill:#17191b; stroke:#3a4046; stroke-width:2; }
+      .qt   { fill:#e8e6e3; font-family:system-ui,sans-serif; font-size:19px; font-weight:600; }
+      .go   { fill:#11261a; stroke:#2f7d4f; stroke-width:2; }
+      .got  { fill:#5ddb8b; font-family:system-ui,sans-serif; font-size:18px; font-weight:700; }
+      .wait { fill:#2a1f10; stroke:#8a6420; stroke-width:2; }
+      .wt   { fill:#f0b429; font-family:system-ui,sans-serif; font-size:18px; font-weight:700; }
+      .sub  { fill:#8a9097; font-family:system-ui,sans-serif; font-size:14px; }
+      .lbl  { fill:#71787e; font-family:system-ui,sans-serif; font-size:14px; font-weight:700; letter-spacing:1px; }
+      .ln   { stroke:#4e545a; stroke-width:2; fill:none; }
+    </style>
+  </defs>
+
+  <text x="60" y="54" fill="#f37d16" font-family="system-ui,sans-serif" font-size="16" font-weight="700" letter-spacing="2">SHOULD YOU UPGRADE TO BLENDER 5.2 LTS?</text>
+
+  <!-- Q1 -->
+  <rect class="q" x="60" y="100" width="420" height="78" rx="12"/>
+  <text class="qt" x="90" y="146">Mid-project right now?</text>
+
+  <path class="ln" d="M480 139 L700 139" marker-end="url(#ar)"/>
+  <text class="lbl" x="560" y="128">YES</text>
+  <rect class="wait" x="710" y="100" width="430" height="78" rx="12"/>
+  <text class="wt" x="740" y="134">Finish it first</text>
+  <text class="sub" x="740" y="159">Never upgrade mid-delivery.</text>
+
+  <path class="ln" d="M270 178 L270 268" marker-end="url(#ar)"/>
+  <text class="lbl" x="285" y="228">NO</text>
+
+  <!-- Q2 -->
+  <rect class="q" x="60" y="270" width="420" height="78" rx="12"/>
+  <text class="qt" x="90" y="316">Do you rely on addons?</text>
+
+  <path class="ln" d="M480 309 L700 309" marker-end="url(#ar)"/>
+  <text class="lbl" x="563" y="298">NO</text>
+  <rect class="go" x="710" y="270" width="430" height="78" rx="12"/>
+  <text class="got" x="740" y="304">Upgrade today</text>
+  <text class="sub" x="740" y="329">Nothing to break. Go.</text>
+
+  <path class="ln" d="M270 348 L270 438" marker-end="url(#ar)"/>
+  <text class="lbl" x="285" y="398">YES</text>
+
+  <!-- Q3 -->
+  <rect class="q" x="60" y="440" width="420" height="78" rx="12"/>
+  <text class="qt" x="90" y="478">Do they have real</text>
+  <text class="qt" x="90" y="503">5.x builds?</text>
+
+  <path class="ln" d="M480 479 L700 479" marker-end="url(#ar)"/>
+  <text class="lbl" x="560" y="468">YES</text>
+  <rect class="go" x="710" y="440" width="430" height="78" rx="12"/>
+  <text class="got" x="740" y="474">Upgrade — keep 4.5 too</text>
+  <text class="sub" x="740" y="499">Install alongside, don't replace.</text>
+
+  <path class="ln" d="M270 518 L270 588" marker-end="url(#ar)"/>
+  <text class="lbl" x="285" y="562">NO</text>
+
+  <rect class="wait" x="60" y="590" width="1080" height="78" rx="12"/>
+  <text class="wt" x="90" y="624">Wait, or replace the addon</text>
+  <text class="sub" x="90" y="649">"Works in 4.x" on a product page in late 2026 usually means nobody is maintaining it.</text>
+</svg>
