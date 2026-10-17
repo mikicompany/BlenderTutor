@@ -8,6 +8,13 @@
     <lastBuildDate>Sat, 17 Oct 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://www.blendertutoring.com/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>Quads vs Triangles in Blender: What Actually Matters</title>
+      <link>https://www.blendertutoring.com/blog/quads-vs-triangles-blender</link>
+      <guid isPermaLink="true">https://www.blendertutoring.com/blog/quads-vs-triangles-blender</guid>
+      <pubDate>Sat, 17 Oct 2026 00:00:00 GMT</pubDate>
+      <description>Your engine triangulates everything on export, so the never-use-triangles rule misses the point. Where quads genuinely matter, and why n-gons are worse.</description>
+    </item>
+    <item>
       <title>Why Your Blender Render Looks Flat</title>
       <link>https://www.blendertutoring.com/blog/blender-render-looks-flat</link>
       <guid isPermaLink="true">https://www.blendertutoring.com/blog/blender-render-looks-flat</guid>

@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" width="1200" height="700" role="img" aria-label="Left: one non-planar quad split along either diagonal gives two different surfaces, so the engine's choice changes the shading. Right: triangles are safe on flat panels, closing odd loops, and static props, and risky at joints, on curved surfaces, under subdivision, and in dense Nanite meshes.">
+  <rect width="1200" height="700" fill="#0f1011"/>
+
+  <defs>
+    <style>
+      .hd   { fill:#f37d16; font-family:system-ui,sans-serif; font-size:15px; font-weight:700; letter-spacing:2px; }
+      .lb   { fill:#c9ced3; font-family:system-ui,sans-serif; font-size:15px; font-weight:700; }
+      .nt   { fill:#868c92; font-family:system-ui,sans-serif; font-size:13.5px; }
+      .ok   { fill:#5ddb8b; font-family:system-ui,sans-serif; font-size:15px; font-weight:600; }
+      .no   { fill:#ff7b72; font-family:system-ui,sans-serif; font-size:15px; font-weight:600; }
+      .face { stroke:#6b7279; stroke-width:2; }
+      .diag { stroke:#f37d16; stroke-width:2.5; }
+    </style>
+  </defs>
+
+  <!-- ── LEFT: the non-planar quad ── -->
+  <text class="hd" x="60" y="52">ONE NON-PLANAR QUAD, TWO LEGAL SPLITS</text>
+
+  <g transform="translate(70,100)">
+    <!-- split A -->
+    <polygon class="face" points="20,90 130,20 240,80 120,170" fill="#24282b"/>
+    <line class="diag" x1="20" y1="90" x2="240" y2="80"/>
+    <text class="lb" x="76" y="214">Split this way…</text>
+    <circle cx="20" cy="90" r="4" fill="#9aa0a6"/><circle cx="130" cy="20" r="4" fill="#9aa0a6"/>
+    <circle cx="240" cy="80" r="4" fill="#9aa0a6"/><circle cx="120" cy="170" r="4" fill="#9aa0a6"/>
+  </g>
+
+  <g transform="translate(360,100)">
+    <!-- split B -->
+    <polygon class="face" points="20,90 130,20 240,80 120,170" fill="#24282b"/>
+    <line class="diag" x1="130" y1="20" x2="120" y2="170"/>
+    <text class="lb" x="52" y="214">…or this way.</text>
+    <circle cx="20" cy="90" r="4" fill="#9aa0a6"/><circle cx="130" cy="20" r="4" fill="#9aa0a6"/>
+    <circle cx="240" cy="80" r="4" fill="#9aa0a6"/><circle cx="120" cy="170" r="4" fill="#9aa0a6"/>
+  </g>
+
+  <text class="nt" x="70" y="366">Four corners that are not coplanar describe no single surface. The two</text>
+  <text class="nt" x="70" y="388">splits are different shapes, and they shade differently.</text>
+  <text class="nt" x="70" y="418" fill="#ff7b72">The engine picks one at export. You did not choose it.</text>
+  <text class="nt" x="70" y="440" fill="#5ddb8b">A triangle has no such problem — three points are always coplanar.</text>
+
+  <line x1="640" y1="70" x2="640" y2="630" stroke="#272a2d" stroke-width="2"/>
+
+  <!-- ── RIGHT: safe vs risky ── -->
+  <text class="hd" x="690" y="52">WHERE A TRIANGLE IS FINE</text>
+
+  <g transform="translate(690,86)">
+    <rect x="0" y="0" width="450" height="236" rx="13" fill="#10211a" stroke="#2f7d4f" stroke-width="2"/>
+    <text class="ok" x="26" y="42">✓  Flat panels, plates, boxes</text>
+    <text class="nt" x="46" y="66">Nothing to interpolate badly.</text>
+    <text class="ok" x="26" y="106">✓  Closing an odd loop</text>
+    <text class="nt" x="46" y="130">One triangle beats three contorted loops.</text>
+    <text class="ok" x="26" y="170">✓  Static props and set dressing</text>
+    <text class="nt" x="46" y="194">Never rigged, never subdivided.</text>
+    <text class="nt" x="26" y="222" fill="#5ddb8b">It renders identically to the quad it replaced.</text>
+  </g>
+
+  <text class="hd" x="690" y="372" fill="#ff7b72" style="letter-spacing:2px">WHERE IT GENUINELY HURTS</text>
+
+  <g transform="translate(690,406)">
+    <rect x="0" y="0" width="450" height="224" rx="13" fill="#231314" stroke="#8a3034" stroke-width="2"/>
+    <text class="no" x="26" y="42">✕  Joints and anything that deforms</text>
+    <text class="nt" x="46" y="66">Elbows, knees, shoulders, mouths.</text>
+    <text class="no" x="26" y="106">✕  Curved surfaces</text>
+    <text class="nt" x="46" y="130">Irregular faces break normal interpolation.</text>
+    <text class="no" x="26" y="170">✕  Under subdivision, and in Nanite</text>
+    <text class="nt" x="46" y="194">Messy triangles make worse clusters.</text>
+  </g>
+
+  <text x="600" y="672" fill="#55595e" font-family="system-ui,sans-serif" font-size="13" text-anchor="middle">Quads for editing, deforming and subdividing. Elsewhere, whatever is cleanest — blendertutoring.com</text>
+</svg>
