@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" width="1200" height="700" role="img" aria-label="Left: texture maps wired to the Principled BSDF, with base colour set to sRGB and roughness, metallic, normal and ambient occlusion set to Non-Color, and the normal map passing through a Normal Map node. Right: safe value ranges — roughness between 0.1 and 0.9 with variation, metallic either 0 or 1, albedo between roughly 30 and 240 with no baked lighting.">
+  <rect width="1200" height="700" fill="#0f1011"/>
+
+  <defs>
+    <style>
+      .hd  { font-family:system-ui,sans-serif; font-size:15px; font-weight:700; letter-spacing:2px; fill:#f37d16; }
+      .nd  { fill:#1b1e20; stroke:#3b4247; stroke-width:1.8; }
+      .nm  { fill:#d6dade; font-family:system-ui,sans-serif; font-size:14px; font-weight:600; }
+      .cs  { font-family:system-ui,sans-serif; font-size:12.5px; font-weight:700; }
+      .wire{ stroke:#5a6167; stroke-width:1.8; fill:none; }
+      .ttl { fill:#e8e6e3; font-family:system-ui,sans-serif; font-size:16px; font-weight:700; }
+      .sb  { fill:#868c92; font-family:system-ui,sans-serif; font-size:13px; }
+      .big { font-family:system-ui,sans-serif; font-size:15px; font-weight:700; }
+    </style>
+  </defs>
+
+  <text class="hd" x="60" y="48">WIRE IT LIKE THIS</text>
+
+  <!-- texture nodes -->
+  <g>
+    <rect class="nd" x="60" y="80" width="232" height="56" rx="9"/>
+    <text class="nm" x="78" y="104">Base Colour</text>
+    <text class="cs" x="78" y="124" fill="#5ddb8b">sRGB  ✓</text>
+
+    <rect class="nd" x="60" y="156" width="232" height="56" rx="9"/>
+    <text class="nm" x="78" y="180">Roughness</text>
+    <text class="cs" x="78" y="200" fill="#f0b429">Non-Color  ✓</text>
+
+    <rect class="nd" x="60" y="232" width="232" height="56" rx="9"/>
+    <text class="nm" x="78" y="256">Metallic</text>
+    <text class="cs" x="78" y="276" fill="#f0b429">Non-Color  ✓</text>
+
+    <rect class="nd" x="60" y="308" width="232" height="56" rx="9"/>
+    <text class="nm" x="78" y="332">Ambient Occlusion</text>
+    <text class="cs" x="78" y="352" fill="#f0b429">Non-Color  ✓</text>
+
+    <rect class="nd" x="60" y="384" width="232" height="56" rx="9"/>
+    <text class="nm" x="78" y="408">Normal</text>
+    <text class="cs" x="78" y="428" fill="#f0b429">Non-Color  ✓</text>
+  </g>
+
+  <!-- normal map node -->
+  <rect class="nd" x="318" y="384" width="126" height="56" rx="9" stroke="#8a6ac4"/>
+  <text class="nm" x="334" y="410" fill="#bda4de">Normal Map</text>
+  <text class="sb" x="334" y="428" fill="#8d7fb0">required</text>
+
+  <!-- principled -->
+  <rect class="nd" x="470" y="156" width="150" height="208" rx="10" stroke="#5a6167"/>
+  <text class="nm" x="492" y="246">Principled</text>
+  <text class="nm" x="492" y="266">BSDF</text>
+
+  <!-- wires -->
+  <path class="wire" d="M292 108 C 400 108, 400 200, 470 200"/>
+  <path class="wire" d="M292 184 C 390 184, 400 230, 470 230"/>
+  <path class="wire" d="M292 260 L470 260"/>
+  <path class="wire" d="M292 336 C 390 336, 400 295, 470 295"/>
+  <path class="wire" d="M292 412 L318 412"/>
+  <path class="wire" d="M444 412 C 470 412, 450 340, 470 330"/>
+
+  <text class="sb" x="60" y="486">Base colour is a picture. Everything else is a set of</text>
+  <text class="sb" x="60" y="506">numbers — leave one on sRGB and Blender colour-transforms</text>
+  <text class="sb" x="60" y="526">your data, distorting every mid-range value.</text>
+
+  <line x1="660" y1="70" x2="660" y2="630" stroke="#272a2d" stroke-width="2"/>
+
+  <!-- RIGHT: value ranges -->
+  <text class="hd" x="700" y="48">PLAUSIBLE VALUES</text>
+
+  <!-- roughness bar -->
+  <text class="ttl" x="700" y="104">Roughness</text>
+  <rect x="700" y="120" width="440" height="26" rx="6" fill="#1b1e20" stroke="#3b4247"/>
+  <rect x="744" y="120" width="352" height="26" rx="6" fill="#2f7d4f" opacity="0.5"/>
+  <text class="sb" x="700" y="168">0 and 1 do not exist in the real world. Stay inside,</text>
+  <text class="sb" x="700" y="188" fill="#5ddb8b">and vary it across the surface — that is the whole trick.</text>
+
+  <!-- metallic -->
+  <text class="ttl" x="700" y="246">Metallic</text>
+  <rect x="700" y="262" width="440" height="26" rx="6" fill="#1b1e20" stroke="#3b4247"/>
+  <rect x="700" y="262" width="34" height="26" rx="6" fill="#2f7d4f" opacity="0.65"/>
+  <rect x="1106" y="262" width="34" height="26" rx="6" fill="#2f7d4f" opacity="0.65"/>
+  <text class="big" x="704" y="312" fill="#5ddb8b">0</text>
+  <text class="big" x="1124" y="312" fill="#5ddb8b">1</text>
+  <text class="sb" x="730" y="312" fill="#ff7b72">everything between is for transitions only</text>
+  <text class="sb" x="700" y="340">Painted, rusted or dirty metal is dielectric — not metallic 1.</text>
+
+  <!-- albedo -->
+  <text class="ttl" x="700" y="398">Albedo</text>
+  <rect x="700" y="414" width="440" height="26" rx="6" fill="#1b1e20" stroke="#3b4247"/>
+  <rect x="748" y="414" width="344" height="26" rx="6" fill="#2f7d4f" opacity="0.5"/>
+  <text class="sb" x="700" y="462">Roughly 30–240 sRGB. No pure black, no pure white,</text>
+  <text class="sb" x="700" y="482" fill="#ff7b72">and absolutely no baked shadows or AO in the colour map.</text>
+
+  <text class="sb" x="700" y="534" fill="#6f767c">Ranges are commonly quoted rules of thumb, not law.</text>
+  <text class="sb" x="700" y="554" fill="#6f767c">The variation matters more than the numbers.</text>
+
+  <text x="600" y="664" fill="#55595e" font-family="system-ui,sans-serif" font-size="13" text-anchor="middle">A fake-looking render is usually an impossible material, accurately rendered — blendertutoring.com</text>
+</svg>
