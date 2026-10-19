@@ -8,6 +8,13 @@
     <lastBuildDate>Mon, 19 Oct 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://www.blendertutoring.com/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>Blender Shading Artifacts: Why Your Model Has Black Patches</title>
+      <link>https://www.blendertutoring.com/blog/blender-shading-artifacts</link>
+      <guid isPermaLink="true">https://www.blendertutoring.com/blog/blender-shading-artifacts</guid>
+      <pubDate>Mon, 19 Oct 2026 00:00:00 GMT</pubDate>
+      <description>Black faces, smudged curves, a grey band down a bevel — six causes that look alike, in the order worth checking. Plus what Blender 4.1 changed.</description>
+    </item>
+    <item>
       <title>Weight Painting in Blender: Why Your Rig Deforms Badly</title>
       <link>https://www.blendertutoring.com/blog/blender-rig-deforms-badly</link>
       <guid isPermaLink="true">https://www.blendertutoring.com/blog/blender-rig-deforms-badly</guid>
