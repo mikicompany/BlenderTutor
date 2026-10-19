@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" width="1200" height="700" role="img" aria-label="Left: the Face Orientation overlay on a faceted ball, most wedges blue for outward-facing and two red for inward-facing, with a note that if recalculating does not clear the red the mesh has holes. Right: a six-step ladder for diagnosing bad shading — check face orientation, give Shade Smooth an angle through the Smooth by Angle modifier, clear custom split normals, harden normals on bevels, apply the scale, and only then suspect the geometry itself.">
+  <rect width="1200" height="700" fill="#0f1011"/>
+
+  <defs>
+    <style>
+      .hd  { font-family:system-ui,sans-serif; font-size:15px; font-weight:700; letter-spacing:2px; fill:#f37d16; }
+      .it  { fill:#e8e6e3; font-family:system-ui,sans-serif; font-size:17px; font-weight:700; }
+      .sub { fill:#868c92; font-family:system-ui,sans-serif; font-size:13.5px; }
+      .num { font-family:system-ui,sans-serif; font-size:15px; font-weight:700; }
+      .cap { fill:#7d848a; font-family:system-ui,sans-serif; font-size:13.5px; }
+    </style>
+  </defs>
+
+  <text class="hd" x="60" y="48">THE FIRST TEST</text>
+
+  <g>
+    <polygon points="232,250 232.0,118.0 309.6,143.2" fill="#3f7fc4" fill-opacity="0.80" stroke="#0f1011" stroke-width="1.5"/>
+    <polygon points="232,250 309.6,143.2 357.5,209.2" fill="#3f7fc4" fill-opacity="0.80" stroke="#0f1011" stroke-width="1.5"/>
+    <polygon points="232,250 357.5,209.2 357.5,290.8" fill="#3f7fc4" fill-opacity="0.80" stroke="#0f1011" stroke-width="1.5"/>
+    <polygon points="232,250 357.5,290.8 309.6,356.8" fill="#e8503a" fill-opacity="0.92" stroke="#0f1011" stroke-width="1.5"/>
+    <polygon points="232,250 309.6,356.8 232.0,382.0" fill="#e8503a" fill-opacity="0.92" stroke="#0f1011" stroke-width="1.5"/>
+    <polygon points="232,250 232.0,382.0 154.4,356.8" fill="#3f7fc4" fill-opacity="0.80" stroke="#0f1011" stroke-width="1.5"/>
+    <polygon points="232,250 154.4,356.8 106.5,290.8" fill="#3f7fc4" fill-opacity="0.80" stroke="#0f1011" stroke-width="1.5"/>
+    <polygon points="232,250 106.5,290.8 106.5,209.2" fill="#3f7fc4" fill-opacity="0.80" stroke="#0f1011" stroke-width="1.5"/>
+    <polygon points="232,250 106.5,209.2 154.4,143.2" fill="#3f7fc4" fill-opacity="0.80" stroke="#0f1011" stroke-width="1.5"/>
+    <polygon points="232,250 154.4,143.2 232.0,118.0" fill="#3f7fc4" fill-opacity="0.80" stroke="#0f1011" stroke-width="1.5"/>
+  </g>
+
+  <text class="cap" x="60" y="430" fill="#9aa0a6">Viewport Overlays &#8227; Face Orientation.</text>
+  <text class="cap" x="60" y="458">Blue faces point out. Red faces point in, and render</text>
+  <text class="cap" x="60" y="478">black or see-through depending on the engine.</text>
+  <text class="cap" x="60" y="512" fill="#ff7b72">If Shift+N does not clear the red, the mesh has holes:</text>
+  <text class="cap" x="60" y="532" fill="#ff7b72">the solver works from a closed volume, so it cannot</text>
+  <text class="cap" x="60" y="552" fill="#ff7b72">tell inside from outside. Fix the holes first.</text>
+
+  <line x1="452" y1="70" x2="452" y2="630" stroke="#272a2d" stroke-width="2"/>
+
+  <text class="hd" x="500" y="48">WORK DOWN, NOT RANDOMLY</text>
+
+  <g>
+    <circle cx="506" cy="99" r="15" fill="none" stroke="#f37d16" stroke-width="2"/>
+    <text class="num" x="501" y="104" fill="#f37d16">1</text>
+    <text class="it" x="540" y="94">Turn on Face Orientation</text>
+    <text class="sub" x="540" y="118">Blue is outward, red points in. Shift+N recalculates.</text>
+    <line x1="506" y1="116" x2="506" y2="176" stroke="#2c3033" stroke-width="2"/>
+    <circle cx="506" cy="187" r="15" fill="none" stroke="#f37d16" stroke-width="2"/>
+    <text class="num" x="501" y="192" fill="#f37d16">2</text>
+    <text class="it" x="540" y="182">Give Shade Smooth an angle</text>
+    <text class="sub" x="540" y="206">Since 4.1 that is Shade Auto Smooth — a modifier, not a checkbox.</text>
+    <line x1="506" y1="204" x2="506" y2="264" stroke="#2c3033" stroke-width="2"/>
+    <circle cx="506" cy="275" r="15" fill="none" stroke="#f37d16" stroke-width="2"/>
+    <text class="num" x="501" y="280" fill="#f37d16">3</text>
+    <text class="it" x="540" y="270">Clear custom split normals</text>
+    <text class="sub" x="540" y="294">Imported meshes arrive carrying normals from another program.</text>
+    <line x1="506" y1="292" x2="506" y2="352" stroke="#2c3033" stroke-width="2"/>
+    <circle cx="506" cy="363" r="15" fill="none" stroke="#f37d16" stroke-width="2"/>
+    <text class="num" x="501" y="368" fill="#f37d16">4</text>
+    <text class="it" x="540" y="358">Harden Normals on the bevel</text>
+    <text class="sub" x="540" y="382">Or a Weighted Normal modifier. Stops flat faces smearing.</text>
+    <line x1="506" y1="380" x2="506" y2="440" stroke="#2c3033" stroke-width="2"/>
+    <circle cx="506" cy="451" r="15" fill="none" stroke="#f37d16" stroke-width="2"/>
+    <text class="num" x="501" y="456" fill="#f37d16">5</text>
+    <text class="it" x="540" y="446">Apply the scale</text>
+    <text class="sub" x="540" y="470">Especially non-uniform scale. Free to rule out, easy to forget.</text>
+    <line x1="506" y1="468" x2="506" y2="528" stroke="#2c3033" stroke-width="2"/>
+    <circle cx="506" cy="539" r="15" fill="none" stroke="#5ddb8b" stroke-width="2"/>
+    <text class="num" x="501" y="544" fill="#5ddb8b">6</text>
+    <text class="it" x="540" y="534">Only then suspect geometry</text>
+    <text class="sub" x="540" y="558">Doubles, interior faces, an n-gon lying across a curve.</text>
+  </g>
+
+  <text x="600" y="672" fill="#55595e" font-family="system-ui,sans-serif" font-size="13" text-anchor="middle">Smooth shading is interpolated normals. Every cause here hands the interpolator bad ones &#8212; blendertutoring.com</text>
+</svg>

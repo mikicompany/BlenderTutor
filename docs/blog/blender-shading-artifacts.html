@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en"><head>
+  <!-- Google Tag Manager -->
+  <script async="" src="https://www.googletagmanager.com/gtm.js?id=GTM-MRSNFX33"></script><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-MRSNFX33');</script>
+  <!-- End Google Tag Manager -->
+
+  <script>
+  var redirect = new URLSearchParams(window.location.search).get('redirect');
+  if (redirect) {
+    window.history.replaceState(null, null, redirect);
+  }
+</script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="keywords" content="Blender tutorials, Blender tutoring, Blender online tutoring, learn Blender, Blender 3D, Blender for beginners, Blender lessons, 3D modeling tutorials, Blender teaching, online Blender course, Blender training, Blender sculpting, Blender animation, Blender rendering">
+  <meta name="author" content="Blender Tutoring">
+  <meta property="og:site_name" content="Blender Tutoring">
+
+
+
+
+  <!-- .ico first for the bare /favicon.ico that browsers request on their own,
+       then the SVG, which anything current will prefer and scale cleanly. -->
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="alternate" type="application/rss+xml" title="Blender Tutoring Blog" href="/rss.xml">
+  <meta name="theme-color" content="#0f1011">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&amp;family=Roboto+Mono:wght@400;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <script type="module" crossorigin="" src="/assets/index-B18R0kO9.js"></script>
+  <link rel="stylesheet" crossorigin="" href="/assets/index-CqfuZHT-.css">
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
+<title>Blender Shading Artifacts: Why Your Model Has Black Patches</title><meta name="description" content="Black faces, smudged curves, a grey band down a bevel — six causes that look alike, in the order worth checking. Plus what Blender 4.1 changed."><meta property="og:title" content="Blender Shading Artifacts: Why Your Model Has Black Patches"><meta property="og:description" content="Black faces, smudged curves, a grey band down a bevel — six causes that look alike, in the order worth checking. Plus what Blender 4.1 changed."><meta property="og:url" content="https://www.blendertutoring.com/blog/blender-shading-artifacts"><meta property="og:type" content="article"><meta property="og:image" content="https://www.blendertutoring.com/blog-images/shading-artifact-ladder.jpg"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Blender Shading Artifacts: Why Your Model Has Black Patches"><meta name="twitter:description" content="Black faces, smudged curves, a grey band down a bevel — six causes that look alike, in the order worth checking. Plus what Blender 4.1 changed."><link rel="canonical" href="https://www.blendertutoring.com/blog/blender-shading-artifacts"></head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MRSNFX33"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    "name": "Blender Tutoring",
+    "url": "https://www.blendertutoring.com",
+    "logo": "https://www.blendertutoring.com/apple-touch-icon.png",
+    "description": "Personalized 1-on-1 Blender online tutoring for beginners and intermediate users. Learn 3D modeling, sculpting, animation, and rendering.",
+    "offers": {
+      "@type": "AggregateOffer",
+      "priceCurrency": "USD",
+      "lowPrice": "49",
+      "description": "Personalized Blender tutoring sessions",
+      "url": "https://www.blendertutoring.com/#packages"
+    }
+  }
+  </script>
+  <div id="root"><div class="relative w-full min-h-screen bg-black"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Blender Shading Artifacts: Why Your Model Has Black Patches","description":"Black faces, smudged curves, a grey band down a bevel — six causes that look alike, in the order worth checking. Plus what Blender 4.1 changed.","datePublished":"2026-10-19","url":"https://www.blendertutoring.com/blog/blender-shading-artifacts","image":"https://www.blendertutoring.com/blog-images/shading-artifact-ladder.jpg","author":{"@type":"Organization","name":"Blender Tutoring"},"publisher":{"@type":"Organization","name":"Blender Tutoring","url":"https://www.blendertutoring.com"}}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://www.blendertutoring.com/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://www.blendertutoring.com/blog"},{"@type":"ListItem","position":3,"name":"Blender Shading Artifacts: Why Your Model Has Black Patches","item":"https://www.blendertutoring.com/blog/blender-shading-artifacts"}]}</script><nav><div class="fixed top-0 left-0 w-full z-[60] bg-[#0f1011]/80 backdrop-blur-md flex justify-between px-6 md:px-20 py-4 items-center h-[60px] border-b border-white/5" style="opacity: 0; transform: translateY(-41.2873px);"><div class="flex items-center gap-2 text-2xl font-bold tracking-tight text-white cursor-pointer relative z-[70]"><a href="#hero" class="flex items-center gap-2"><img alt="Blender Logo" class="w-6 h-6" src="data:image/svg+xml,%3c?xml%20version=%271.0%27%20encoding=%27UTF-8%27?%3e%3csvg%20style=%27clip-rule:evenodd;fill-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2%27%20version=%271.1%27%20viewBox=%270%200%20181%20148%27%20xml:space=%27preserve%27%20xmlns=%27http://www.w3.org/2000/svg%27%3e%3ctitle%3eBlender%20logo%20(without%20text)%3c/title%3e%3cg%20transform=%27matrix(.281%200%200%20.281%20-41.8%20-43.7)%27%3e%3cg%20transform=%27matrix(21.6%200%200%2021.6%20-4857%207665)%27%3e%3cpath%20d=%27m243-334c0.106-1.89%201.03-3.56%202.43-4.74%201.37-1.16%203.21-1.87%205.23-1.87%202.01%200%203.85%200.709%205.22%201.87%201.4%201.18%202.32%202.85%202.43%204.74%200.106%201.94-0.675%203.75-2.04%205.09-1.4%201.36-3.38%202.22-5.61%202.22s-4.22-0.854-5.61-2.22c-1.37-1.34-2.15-3.14-2.04-5.08z%27%20style=%27fill-rule:nonzero;fill:%23fff%27/%3e%3c/g%3e%3cg%20transform=%27matrix(11.1%200%200%2011.1%20-2215%204153)%27%3e%3cpath%20d=%27m243-334c0.106-1.89%201.03-3.56%202.43-4.74%201.37-1.16%203.21-1.87%205.23-1.87%202.01%200%203.85%200.709%205.22%201.87%201.4%201.18%202.32%202.85%202.43%204.74%200.106%201.94-0.675%203.75-2.04%205.09-1.4%201.36-3.38%202.22-5.61%202.22s-4.22-0.854-5.61-2.22c-1.37-1.34-2.15-3.14-2.04-5.08z%27%20style=%27fill-rule:nonzero;fill:%23265787%27/%3e%3cpath%20d=%27m231-330c0.013%200.74%200.249%202.18%200.603%203.3%200.744%202.38%202.01%204.58%203.76%206.51%201.8%201.99%204.02%203.59%206.58%204.73%202.69%201.19%205.61%201.8%208.64%201.8%203.03-4e-3%205.95-0.624%208.64-1.83%202.56-1.15%204.78-2.75%206.58-4.75%201.76-1.95%203.02-4.15%203.76-6.53%200.375-1.2%200.612-2.42%200.707-3.64%200.093-1.2%200.054-2.41-0.117-3.62-0.334-2.35-1.15-4.56-2.4-6.56-1.14-1.85-2.62-3.46-4.38-4.82l4e-3%20-3e-3%20-17.7-13.6c-0.016-0.012-0.029-0.025-0.046-0.036-1.16-0.892-3.12-0.889-4.39%205e-3%20-1.29%200.904-1.44%202.4-0.29%203.34l-5e-3%205e-3%207.39%206.01-22.5%200.024h-0.03c-1.86%202e-3%20-3.65%201.22-4%202.77-0.364%201.57%200.9%202.88%202.84%202.88l-3e-3%207e-3%2011.4-0.022-20.4%2015.6c-0.026%200.019-0.054%200.039-0.078%200.058-1.92%201.47-2.54%203.92-1.33%205.46%201.23%201.57%203.84%201.58%205.78%209e-3l11.1-9.1s-0.162%201.23-0.149%201.96zm28.6%204.11c-2.29%202.33-5.5%203.66-8.96%203.66-3.47%206e-3%20-6.68-1.3-8.97-3.63-1.12-1.14-1.94-2.44-2.45-3.83-0.497-1.37-0.69-2.82-0.562-4.28%200.121-1.43%200.547-2.8%201.23-4.03%200.668-1.21%201.59-2.31%202.72-3.24%202.23-1.81%205.06-2.8%208.02-2.8%202.97-4e-3%205.8%200.969%208.03%202.78%201.13%200.924%202.05%202.02%202.72%203.23%200.683%201.23%201.11%202.59%201.23%204.03%200.126%201.46-0.067%202.91-0.564%204.28-0.508%201.4-1.33%202.7-2.45%203.84z%27%20style=%27fill-rule:nonzero;fill:%23ea7600%27/%3e%3c/g%3e%3c/g%3e%3c/svg%3e"><span class="flex items-baseline" style="font-size: 20px;"><span class="mr-[1px]" style="font-family: &quot;space grotesk&quot;, serif; font-weight: 700; font-size: 20px; color: rgb(243, 125, 22);">B</span>lender Tutoring.com</span></a></div><div class="hidden lg:flex gap-8 items-center"><ul class="flex gap-8"><li class="text-gray-400 hover:text-white transition-colors text-[14px] font-medium"><a href="#packages">Packages</a></li><li class="text-gray-400 hover:text-white transition-colors text-[14px] font-medium"><a href="#about">About</a></li><li class="text-gray-400 hover:text-white transition-colors text-[14px] font-medium"><a href="#tutors">Tutors</a></li></ul><button class="px-5 py-2 rounded-full text-sm font-bold cursor-pointer hover:bg-orange-600 text-black transition-all" style="background-color: rgb(243, 125, 22);"><a href="https://calendly.com/blendertutoring-info/" class="flex items-center" target="_blank" rel="noreferrer">Book a free call</a></button></div><div class="lg:hidden flex items-center gap-4 relative z-[70]"><a href="https://calendly.com/blendertutoring-info/" target="_blank" rel="noreferrer" class="px-4 py-1.5 rounded-full text-xs font-bold cursor-pointer text-black md:flex hidden items-center" style="background-color: rgb(243, 125, 22);">Free call</a><button class="text-white p-2 hover:bg-white/5 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu" aria-hidden="true"><path d="M4 5h16"></path><path d="M4 12h16"></path><path d="M4 19h16"></path></svg></button></div></div></nav><div class="max-w-3xl mx-auto px-6 py-24 text-white"><a class="text-orange-400 hover:underline text-sm mb-8 block" href="/blog" data-discover="true">← Back to Blog</a><h1 class="text-4xl font-bold mb-4">Blender Shading Artifacts: Why Your Model Has Black Patches</h1><p class="text-gray-400 text-sm mb-10">2026-10-19</p><div class="prose prose-invert prose-orange max-w-none prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:text-orange-400 prose-blockquote:border-orange-400 prose-blockquote:bg-orange-400/5 prose-blockquote:rounded-r-lg prose-blockquote:py-1 prose-table:text-sm prose-td:border-white/10 prose-th:border-white/10 prose-hr:border-white/10"><p>You hit Shade Smooth and your clean model develops dark smudges across the curves. Or one face renders solid black. Or a bevel you were pleased with grows a grey band down its length.</p>
+<p>Nothing about the geometry looks wrong. You delete faces and rebuild them and the smudge comes back somewhere else.</p>
+<p>The frustrating part is that there are about six separate causes for this, they produce symptoms that look alike, and most advice online picks one and presents it as the answer. So you apply a fix for a problem you do not have, and move on none the wiser.</p>
+<p>Here they are in the order worth checking, cheapest first.</p>
+<p><img alt="The face orientation test, and a six-step ladder for diagnosing bad shading" src="/blog-images/shading-artifact-ladder.svg"></p>
+<hr>
+<h2>🧭 First: Which Way Are The Faces Pointing?</h2>
+<p>Open the Viewport Overlays dropdown in the top right of the 3D viewport and tick <strong>Face Orientation</strong>.</p>
+<p>Your model turns blue. Blue means the face points outward, which is correct. Any face pointing inward turns <strong>red</strong>, and a red face renders black, see-through or strangely lit depending on the engine.</p>
+<p>The fix is usually one shortcut. In Edit Mode, select everything with A, then <strong>Shift+N</strong> for Recalculate Outside. The full normals menu is on <strong>Alt+N</strong>, which also has Flip and Recalculate Inside if a particular model wants them.</p>
+<p><strong>If recalculating does not clear the red, stop and read this bit</strong>, because it is the part most tutorials skip. Recalculate Outside works by reasoning about a closed volume — it figures out which side is "outside" and points everything that way. If your mesh has holes, it has no reliable outside to reason about, and the operation produces nonsense.</p>
+<p>So when Shift+N fails, the real problem is not normals. It is holes. Select ‣ Select All by Trait ‣ Non Manifold, see what lights up, close it, then recalculate again.</p>
+<hr>
+<h2>🔺 Shade Smooth Has No Idea Where Your Hard Edges Are</h2>
+<p>Plain <strong>Shade Smooth</strong> smooths everything, including the ninety-degree corners you wanted to stay crisp. The result is that soft, melted, vaguely dented look on what should be a hard-surface object.</p>
+<p>What you want is smoothing <em>up to an angle</em> — smooth the curves, leave the corners sharp.</p>
+<p><strong>This is where a lot of people get stuck, and it is not their fault.</strong> It changed in Blender 4.1. Before then, Auto Smooth was a checkbox in Object Data Properties with an angle next to it. It is gone. Every tutorial made before 4.1 tells you to tick a box that is no longer there, and there are a great many of those tutorials.</p>
+<p>The current equivalent is <strong>Object ‣ Shade Auto Smooth</strong>, which does not edit the mesh directly — it adds a <strong>Smooth by Angle</strong> modifier, pinned to the end of your modifier stack. The angle you used to set in the mesh data is now a setting on that modifier.</p>
+<p>Two things worth knowing about the new arrangement:</p>
+<ul>
+<li><strong>Shade Smooth removes the Smooth by Angle modifier</strong>, and so does Shade Flat. If you auto-smoothed something and then hit Shade Smooth to "refresh" it, you just threw the angle away.</li>
+<li>Because it is a modifier rather than mesh data, it does not come along with linked duplicates the way the old setting did. You copy it to each object.</li>
+</ul>
+<p>The change was not universally loved when it landed, and the forum threads about it are long. But it is the system now, and knowing it is a modifier rather than a checkbox saves a genuinely baffling half hour.</p>
+<hr>
+<h2>👻 The Mesh May Be Carrying Someone Else's Normals</h2>
+<p>If the face orientation is correct and the smoothing is set up properly and it <em>still</em> looks wrong, the mesh may have custom split normals baked into it.</p>
+<p>These are per-face-corner normals stored on the mesh that override what the geometry would otherwise produce. They are a legitimate feature — they are how you fake soft foliage or clean up a game asset deliberately. The problem is when you did not put them there.</p>
+<p>They arrive most often on <strong>imported models</strong>. An FBX or Collada file from another program can carry normals that made sense in that program and do not here. One commonly reported example: the same character downloaded from Mixamo imports cleanly as FBX but arrives with broken custom normals as Collada.</p>
+<p>The fix is in <strong>Object Data Properties ‣ Geometry Data ‣ Clear Custom Split Normals Data</strong>. One button.</p>
+<p><strong>The caveat matters:</strong> clearing it resets the mesh to its raw smoothing, driven by sharp edges and angle. If somebody authored those normals deliberately, you have just deleted their work. On your own untouched model it is safe. On an asset you bought or downloaded, look before you clear.</p>
+<hr>
+<h2>🔨 Bevels Smear Unless You Tell Them Not To</h2>
+<p>A bevel on a hard-surface object, under smooth shading, commonly produces a soft grey gradient bleeding from the bevel across the flat face beside it. The flat face should be flat. It is being dragged into the curve.</p>
+<p>Two standard fixes, and they do much the same job:</p>
+<ul>
+<li><strong>Harden Normals</strong>, a checkbox in the Bevel modifier, used together with smooth shading.</li>
+<li>The <strong>Weighted Normal</strong> modifier, which weights each vertex normal by face area so large flat faces dominate small bevel faces. Its <strong>Keep Sharp</strong> option is worth trying when you still get jagged edges.</li>
+</ul>
+<p>There is also <strong>Clamp Overlap</strong>, on by default in the Bevel modifier, which stops a bevel eating further into the mesh than there is room for. Leave it on. People turn it off chasing an artifact and get torn geometry instead — if the bevel is overlapping, the width is too high or the supporting geometry is too tight, and that is the thing to fix.</p>
+<hr>
+<h2>📐 Apply The Scale</h2>
+<p>Check the N-panel. If your object's scale is not 1, 1, 1 — especially if it is non-uniform, like 1, 1, 2.4 — apply it with <strong>Ctrl+A ‣ Scale</strong> in Object Mode.</p>
+<p>This is worth ruling out early because it costs nothing and it is invisible until it bites. Modifiers behave oddly on unapplied scale, bevel widths come out uneven, and shading can go with them.</p>
+<p>I will be honest about the limits of what I can tell you here: the exact mechanism by which non-uniform scale degrades shading is not something I found cleanly documented, and I would rather say so than invent an explanation. What is well established is the practical rule — apply your scale before you trust your shading or your modifiers, and before you export anything.</p>
+<p>Unapplied scale is also <a href="/blog/blender-rig-deforms-badly">the first thing to check when a rig deforms badly</a>. It causes an unreasonable share of unrelated-looking problems.</p>
+<hr>
+<h2>🕳️ Now You Can Blame The Geometry</h2>
+<p>Only once the five above are ruled out is the mesh itself the likely suspect. The usual offenders:</p>
+<ul>
+<li><strong>Doubled vertices.</strong> Select all, Merge by Distance. Two vertices in the same place give you two normals fighting over one point.</li>
+<li><strong>Interior faces.</strong> Select ‣ Select All by Trait ‣ Interior Faces. Invisible from outside, perfectly capable of ruining the shading around them.</li>
+<li><strong>N-gons across a curve.</strong> An n-gon on a flat panel is harmless. An n-gon spanning a curved surface has no good answer for how to shade itself, and it shows. This is the real version of <a href="/blog/quads-vs-triangles-blender">the quads-versus-triangles rule</a> — the shape of the face matters where the surface bends, and barely matters where it does not.</li>
+<li><strong>Extremely thin or zero-area faces</strong>, which produce meaningless normals.</li>
+</ul>
+<hr>
+<h2>🎛️ If It Survives All Six, It Might Not Be The Mesh</h2>
+<p>Worth a glance before you start over: a normal map plugged in with the wrong colour space produces its own species of strange shading, and it is not a geometry problem at all.</p>
+<p>Data maps must be set to <strong>Non-Color</strong>, and normal maps need a Normal Map node between the image and the shader. That is <a href="/blog/blender-materials-look-like-plastic">a different article's territory</a>, but it is worth checking before you rebuild a model that was fine all along.</p>
+<hr>
+<h2>✅ The Order</h2>
+<ol>
+<li><strong>Face Orientation overlay.</strong> Red faces, Shift+N. Red that will not clear means holes, not normals.</li>
+<li><strong>Shade Auto Smooth</strong>, and remember it is a modifier now.</li>
+<li><strong>Clear Custom Split Normals Data</strong> — carefully, on imports.</li>
+<li><strong>Harden Normals</strong> or <strong>Weighted Normal</strong> if bevels are smearing.</li>
+<li><strong>Apply the scale.</strong></li>
+<li><strong>Then</strong> merge by distance, hunt interior faces, and look at your n-gons.</li>
+</ol>
+<p>Working down that list beats trying things at random, which is what most of us do for the first year.</p>
+<hr>
+<h2>🎯 The Underlying Idea</h2>
+<p>Smooth shading is not a surface property. It is an interpolation: Blender takes the normals at each corner of a face and blends between them across the face to fake a curve that the geometry does not actually have.</p>
+<p>Every cause in this article is a different way of handing that interpolation bad normals. Flipped faces give it normals pointing the wrong way. Missing angle control gives it normals that blend across corners that should be hard. Custom split normals give it someone else's answer. A bevel without hardening lets tiny faces outvote big ones. Doubles give it two answers for one point.</p>
+<p>Once you see the problem that way, the six fixes stop being a list to memorise and start being obvious — because you are always asking the same question. <strong>What is wrong with the normals arriving at this face, and which step put them there?</strong></p>
+<hr>
+<p><strong>Read next:</strong> <a href="/blog/blender-materials-look-like-plastic">Why Your Blender Materials Look Like Plastic</a> — for when the shading is correct and the surface still does not convince.</p>
+<p><em>Stuck on one that will not clear? <a href="https://www.blendertutoring.com/#packages">Book a free intro call →</a> and bring the file. Shading bugs are usually a two-minute diagnosis with the mesh in front of us, and an afternoon alone.</em></p></div><nav aria-label="More articles" class="mt-16 pt-10 border-t border-white/10"><h2 class="text-xs font-semibold tracking-widest uppercase text-orange-400 mb-5">Read next</h2><ul class="space-y-4"><li><a class="group flex flex-col gap-1 rounded-lg -mx-3 px-3 py-2 transition hover:bg-white/5" href="/blog/blender-rig-deforms-badly" data-discover="true"><span class="font-semibold text-white group-hover:text-orange-400 transition">Weight Painting in Blender: Why Your Rig Deforms Badly</span><span class="text-sm text-gray-400 line-clamp-2">Most weight-painting pain is not a painting problem. The mesh, the scale and the normalisation to fix first — plus why the candy-wrapper needs a bone.</span></a></li><li><a class="group flex flex-col gap-1 rounded-lg -mx-3 px-3 py-2 transition hover:bg-white/5" href="/blog/blender-materials-look-like-plastic" data-discover="true"><span class="font-semibold text-white group-hover:text-orange-400 transition">Why Your Blender Materials Look Like Plastic</span><span class="text-sm text-gray-400 line-clamp-2">Four fixable causes, starting with a colour space checkbox that quietly ruins every data map — plus what changed in the Principled BSDF in Blender 4.0.</span></a></li><li><a class="group flex flex-col gap-1 rounded-lg -mx-3 px-3 py-2 transition hover:bg-white/5" href="/blog/game-art-portfolio-what-studios-want" data-discover="true"><span class="font-semibold text-white group-hover:text-orange-400 transition">What a Game Art Portfolio Actually Needs in 2026</span><span class="text-sm text-gray-400 line-clamp-2">Job postings describe the role in detail, for free. The gap between what they ask for and what most junior portfolios show — and how to close it.</span></a></li></ul></nav><div class="mt-16 border border-orange-400/20 rounded-xl p-8 bg-orange-400/5"><p class="text-orange-400 text-xs font-semibold tracking-widest uppercase mb-3">Newsletter</p><h3 class="text-2xl font-bold text-white mb-2">Get more tips like this</h3><p class="text-gray-400 text-sm mb-6">Short, practical Blender guides for beginners — straight to your inbox. No spam. Unsubscribe any time.</p><form class="flex gap-3 flex-wrap"><input placeholder="your@email.com" class="flex-1 min-w-[200px] bg-black border rounded-lg px-4 py-2.5 text-white text-sm outline-none transition-colors
+              border-white/10 focus:border-orange-400" type="email" value=""><button type="submit" class="bg-orange-400 hover:bg-orange-300 text-black font-bold text-sm px-6 py-2.5 rounded-lg transition-colors whitespace-nowrap">Subscribe</button></form></div></div><footer class="relative z-20 bg-transparent text-white pt-24 pb-10"><div class="max-w-4xl mx-auto text-center px-6"><div class="mb-32" style="opacity: 0; transform: translateY(20px);"><h2 class="text-4xl md:text-5xl font-bold mb-6">Ready to <span class="text-orange-500">create</span>?</h2><div class="text-gray-400 text-sm md:text-base mb-10 max-w-lg mx-auto space-y-4 leading-relaxed"><p>Book a free 15-minute intro call and take the first step toward building something that’s truly yours. We’ll talk about your goals, your interests, and the kind of projects you’ve always wanted to bring to life—and map out a clear path forward together.</p><p>During the call, you’ll meet your mentor, ask questions, and get a feel for how the process works.</p><p>After the intro call, you’ll continue working together step by step to create your own project from start to finish—something real you can show, share, and be proud of.</p><p class="text-gray-300">Let’s turn your ideas into something tangible.</p></div><button class="text-black font-bold rounded-lg inline-flex items-center gap-2" style="background-color: rgb(243, 125, 22); padding: 8px 32px;"><a href="https://calendly.com/blendertutoring-info/" class="flex items-center" target="_blank" rel="noreferrer">Book a free call <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a></button></div></div><div class="max-w-4xl mx-auto px-6 text-center mb-20"><h2 class="text-orange-500 uppercase tracking-[0.3em] text-[10px] font-bold mb-3">Contact</h2><p class="text-gray-400 text-sm mb-5 max-w-md mx-auto leading-relaxed">Not ready to book? Ask anything about the packages, your project, or whether tutoring is the right fit.</p><a href="mailto:info@blendertutoring.com" class="inline-flex items-center gap-2 text-white hover:text-orange-400 transition-colors font-medium"><svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail text-orange-500" aria-hidden="true"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path><rect x="2" y="4" width="20" height="16" rx="2"></rect></svg>info@blendertutoring.com</a></div><div class="border-t border-white/10 pt-12 px-6 md:px-32 flex flex-col md:flex-row justify-between items-center gap-4 text-[12px] text-gray-500"><p>© 2026 Blender Tutor. All rights reserved.</p><div class="flex gap-6"><a class="hover:text-white transition-colors" href="/blog" data-discover="true">Blog</a><a href="/blender-theme-maker/" class="hover:text-white transition-colors">Theme Maker</a><a class="hover:text-white transition-colors" href="/radar" data-discover="true">The Radar</a><a class="hover:text-white transition-colors" href="/privacy" data-discover="true">Privacy</a><a class="hover:text-white transition-colors" href="/terms" data-discover="true">Terms</a></div></div></footer></div><div class="fixed bottom-5 right-5 z-40 print:hidden"><button type="button" aria-label="Share with a friend" class="group flex items-center gap-2 rounded-full border border-white/15 bg-[#0f1011]/90 backdrop-blur-md px-4 py-3 text-white shadow-lg transition-all hover:border-orange-500/60 hover:text-orange-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"><svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-share2 lucide-share-2 shrink-0" aria-hidden="true"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"></line><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"></line></svg><span class="hidden sm:inline text-[13px] font-medium whitespace-nowrap">Share with a friend</span></button></div></div>
+
+</body></html>
