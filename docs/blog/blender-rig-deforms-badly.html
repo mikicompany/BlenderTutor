@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en"><head>
+  <!-- Google Tag Manager -->
+  <script async="" src="https://www.googletagmanager.com/gtm.js?id=GTM-MRSNFX33"></script><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-MRSNFX33');</script>
+  <!-- End Google Tag Manager -->
+
+  <script>
+  var redirect = new URLSearchParams(window.location.search).get('redirect');
+  if (redirect) {
+    window.history.replaceState(null, null, redirect);
+  }
+</script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="keywords" content="Blender tutorials, Blender tutoring, Blender online tutoring, learn Blender, Blender 3D, Blender for beginners, Blender lessons, 3D modeling tutorials, Blender teaching, online Blender course, Blender training, Blender sculpting, Blender animation, Blender rendering">
+  <meta name="author" content="Blender Tutoring">
+  <meta property="og:site_name" content="Blender Tutoring">
+
+
+
+
+  <!-- .ico first for the bare /favicon.ico that browsers request on their own,
+       then the SVG, which anything current will prefer and scale cleanly. -->
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="alternate" type="application/rss+xml" title="Blender Tutoring Blog" href="/rss.xml">
+  <meta name="theme-color" content="#0f1011">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&amp;family=Roboto+Mono:wght@400;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <script type="module" crossorigin="" src="/assets/index-D5NinAZ1.js"></script>
+  <link rel="stylesheet" crossorigin="" href="/assets/index-CqfuZHT-.css">
+  <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml">
+<title>Weight Painting in Blender: Why Your Rig Deforms Badly</title><meta name="description" content="Most weight-painting pain is not a painting problem. The mesh, the scale and the normalisation to fix first — plus why the candy-wrapper needs a bone."><meta property="og:title" content="Weight Painting in Blender: Why Your Rig Deforms Badly"><meta property="og:description" content="Most weight-painting pain is not a painting problem. The mesh, the scale and the normalisation to fix first — plus why the candy-wrapper needs a bone."><meta property="og:url" content="https://www.blendertutoring.com/blog/blender-rig-deforms-badly"><meta property="og:type" content="article"><meta property="og:image" content="https://www.blendertutoring.com/blog-images/rig-deformation-symptoms.jpg"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Weight Painting in Blender: Why Your Rig Deforms Badly"><meta name="twitter:description" content="Most weight-painting pain is not a painting problem. The mesh, the scale and the normalisation to fix first — plus why the candy-wrapper needs a bone."><link rel="canonical" href="https://www.blendertutoring.com/blog/blender-rig-deforms-badly"></head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MRSNFX33"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    "name": "Blender Tutoring",
+    "url": "https://www.blendertutoring.com",
+    "logo": "https://www.blendertutoring.com/apple-touch-icon.png",
+    "description": "Personalized 1-on-1 Blender online tutoring for beginners and intermediate users. Learn 3D modeling, sculpting, animation, and rendering.",
+    "offers": {
+      "@type": "AggregateOffer",
+      "priceCurrency": "USD",
+      "lowPrice": "49",
+      "description": "Personalized Blender tutoring sessions",
+      "url": "https://www.blendertutoring.com/#packages"
+    }
+  }
+  </script>
+  <div id="root"><div class="relative w-full min-h-screen bg-black"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Weight Painting in Blender: Why Your Rig Deforms Badly","description":"Most weight-painting pain is not a painting problem. The mesh, the scale and the normalisation to fix first — plus why the candy-wrapper needs a bone.","datePublished":"2026-10-19","url":"https://www.blendertutoring.com/blog/blender-rig-deforms-badly","image":"https://www.blendertutoring.com/blog-images/rig-deformation-symptoms.jpg","author":{"@type":"Organization","name":"Blender Tutoring"},"publisher":{"@type":"Organization","name":"Blender Tutoring","url":"https://www.blendertutoring.com"}}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://www.blendertutoring.com/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://www.blendertutoring.com/blog"},{"@type":"ListItem","position":3,"name":"Weight Painting in Blender: Why Your Rig Deforms Badly","item":"https://www.blendertutoring.com/blog/blender-rig-deforms-badly"}]}</script><nav><div class="fixed top-0 left-0 w-full z-[60] bg-[#0f1011]/80 backdrop-blur-md flex justify-between px-6 md:px-20 py-4 items-center h-[60px] border-b border-white/5" style="opacity: 0; transform: translateY(-17.9068px);"><div class="flex items-center gap-2 text-2xl font-bold tracking-tight text-white cursor-pointer relative z-[70]"><a href="#hero" class="flex items-center gap-2"><img alt="Blender Logo" class="w-6 h-6" src="data:image/svg+xml,%3c?xml%20version=%271.0%27%20encoding=%27UTF-8%27?%3e%3csvg%20style=%27clip-rule:evenodd;fill-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2%27%20version=%271.1%27%20viewBox=%270%200%20181%20148%27%20xml:space=%27preserve%27%20xmlns=%27http://www.w3.org/2000/svg%27%3e%3ctitle%3eBlender%20logo%20(without%20text)%3c/title%3e%3cg%20transform=%27matrix(.281%200%200%20.281%20-41.8%20-43.7)%27%3e%3cg%20transform=%27matrix(21.6%200%200%2021.6%20-4857%207665)%27%3e%3cpath%20d=%27m243-334c0.106-1.89%201.03-3.56%202.43-4.74%201.37-1.16%203.21-1.87%205.23-1.87%202.01%200%203.85%200.709%205.22%201.87%201.4%201.18%202.32%202.85%202.43%204.74%200.106%201.94-0.675%203.75-2.04%205.09-1.4%201.36-3.38%202.22-5.61%202.22s-4.22-0.854-5.61-2.22c-1.37-1.34-2.15-3.14-2.04-5.08z%27%20style=%27fill-rule:nonzero;fill:%23fff%27/%3e%3c/g%3e%3cg%20transform=%27matrix(11.1%200%200%2011.1%20-2215%204153)%27%3e%3cpath%20d=%27m243-334c0.106-1.89%201.03-3.56%202.43-4.74%201.37-1.16%203.21-1.87%205.23-1.87%202.01%200%203.85%200.709%205.22%201.87%201.4%201.18%202.32%202.85%202.43%204.74%200.106%201.94-0.675%203.75-2.04%205.09-1.4%201.36-3.38%202.22-5.61%202.22s-4.22-0.854-5.61-2.22c-1.37-1.34-2.15-3.14-2.04-5.08z%27%20style=%27fill-rule:nonzero;fill:%23265787%27/%3e%3cpath%20d=%27m231-330c0.013%200.74%200.249%202.18%200.603%203.3%200.744%202.38%202.01%204.58%203.76%206.51%201.8%201.99%204.02%203.59%206.58%204.73%202.69%201.19%205.61%201.8%208.64%201.8%203.03-4e-3%205.95-0.624%208.64-1.83%202.56-1.15%204.78-2.75%206.58-4.75%201.76-1.95%203.02-4.15%203.76-6.53%200.375-1.2%200.612-2.42%200.707-3.64%200.093-1.2%200.054-2.41-0.117-3.62-0.334-2.35-1.15-4.56-2.4-6.56-1.14-1.85-2.62-3.46-4.38-4.82l4e-3%20-3e-3%20-17.7-13.6c-0.016-0.012-0.029-0.025-0.046-0.036-1.16-0.892-3.12-0.889-4.39%205e-3%20-1.29%200.904-1.44%202.4-0.29%203.34l-5e-3%205e-3%207.39%206.01-22.5%200.024h-0.03c-1.86%202e-3%20-3.65%201.22-4%202.77-0.364%201.57%200.9%202.88%202.84%202.88l-3e-3%207e-3%2011.4-0.022-20.4%2015.6c-0.026%200.019-0.054%200.039-0.078%200.058-1.92%201.47-2.54%203.92-1.33%205.46%201.23%201.57%203.84%201.58%205.78%209e-3l11.1-9.1s-0.162%201.23-0.149%201.96zm28.6%204.11c-2.29%202.33-5.5%203.66-8.96%203.66-3.47%206e-3%20-6.68-1.3-8.97-3.63-1.12-1.14-1.94-2.44-2.45-3.83-0.497-1.37-0.69-2.82-0.562-4.28%200.121-1.43%200.547-2.8%201.23-4.03%200.668-1.21%201.59-2.31%202.72-3.24%202.23-1.81%205.06-2.8%208.02-2.8%202.97-4e-3%205.8%200.969%208.03%202.78%201.13%200.924%202.05%202.02%202.72%203.23%200.683%201.23%201.11%202.59%201.23%204.03%200.126%201.46-0.067%202.91-0.564%204.28-0.508%201.4-1.33%202.7-2.45%203.84z%27%20style=%27fill-rule:nonzero;fill:%23ea7600%27/%3e%3c/g%3e%3c/g%3e%3c/svg%3e"><span class="flex items-baseline" style="font-size: 20px;"><span class="mr-[1px]" style="font-family: &quot;space grotesk&quot;, serif; font-weight: 700; font-size: 20px; color: rgb(243, 125, 22);">B</span>lender Tutoring.com</span></a></div><div class="hidden lg:flex gap-8 items-center"><ul class="flex gap-8"><li class="text-gray-400 hover:text-white transition-colors text-[14px] font-medium"><a href="#packages">Packages</a></li><li class="text-gray-400 hover:text-white transition-colors text-[14px] font-medium"><a href="#about">About</a></li><li class="text-gray-400 hover:text-white transition-colors text-[14px] font-medium"><a href="#tutors">Tutors</a></li></ul><button class="px-5 py-2 rounded-full text-sm font-bold cursor-pointer hover:bg-orange-600 text-black transition-all" style="background-color: rgb(243, 125, 22);"><a href="https://calendly.com/blendertutoring-info/" class="flex items-center" target="_blank" rel="noreferrer">Book a free call</a></button></div><div class="lg:hidden flex items-center gap-4 relative z-[70]"><a href="https://calendly.com/blendertutoring-info/" target="_blank" rel="noreferrer" class="px-4 py-1.5 rounded-full text-xs font-bold cursor-pointer text-black md:flex hidden items-center" style="background-color: rgb(243, 125, 22);">Free call</a><button class="text-white p-2 hover:bg-white/5 rounded-lg"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu" aria-hidden="true"><path d="M4 5h16"></path><path d="M4 12h16"></path><path d="M4 19h16"></path></svg></button></div></div></nav><div class="max-w-3xl mx-auto px-6 py-24 text-white"><a class="text-orange-400 hover:underline text-sm mb-8 block" href="/blog" data-discover="true">← Back to Blog</a><h1 class="text-4xl font-bold mb-4">Weight Painting in Blender: Why Your Rig Deforms Badly</h1><p class="text-gray-400 text-sm mb-10">2026-10-19</p><div class="prose prose-invert prose-orange max-w-none prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:text-orange-400 prose-blockquote:border-orange-400 prose-blockquote:bg-orange-400/5 prose-blockquote:rounded-r-lg prose-blockquote:py-1 prose-table:text-sm prose-td:border-white/10 prose-th:border-white/10 prose-hr:border-white/10"><p>Your character bends at the elbow and something goes wrong. The surface pinches to a point. A patch of shoulder stays floating where it was. The forearm rotates and collapses in on itself like a twisted sweet wrapper.</p>
+<p>So you open Weight Paint mode, pick up the brush, and three hours later it is broken in a different way.</p>
+<p>Here is the thing nobody tells you early enough: <strong>most weight-painting problems are not painting problems.</strong> They are mesh problems, scale problems or normalisation problems, and brushing over them is sanding a wall with the wallpaper still on.</p>
+<p><img alt="Deformation symptoms, their causes, and what to check before painting" src="/blog-images/rig-deformation-symptoms.svg"></p>
+<hr>
+<h2>📏 First: Apply Your Scale</h2>
+<p>If you have scaled your character in Object Mode, the armature and the mesh now disagree about how big the world is.</p>
+<p>Bones read the mesh data, not the object-level scale sitting on top of it. The symptom is deformation that looks roughly right but behaves strangely — influence falling off over the wrong distance, automatic weights producing nonsense, or the whole thing simply refusing to bind.</p>
+<p><strong>Ctrl+A, Apply Scale, on the mesh and on the armature.</strong> Do it before you parent anything. If you have already parented, clear the parent, apply the scale, and parent again — it is faster than any amount of repainting.</p>
+<p>It is also one of the two usual suspects behind the error in the next section.</p>
+<hr>
+<h2>🧹 Then: Clean The Mesh</h2>
+<p>When you parent with automatic weights and Blender replies <strong>Bone Heat Weighting: failed to find solution for one or more bones</strong>, it is not being obtuse. The solver builds a mathematical description of your surface, and that description requires the surface to actually be a surface.</p>
+<p>Things that stop it being one:</p>
+<ul>
+<li><strong>Doubled vertices.</strong> Select all in Edit Mode, then Merge by Distance with a small threshold.</li>
+<li><strong>Non-manifold geometry.</strong> Select ‣ Select All by Trait ‣ Non Manifold. Anything that lights up is a suspect — holes, edges shared by three faces, stray floating geometry.</li>
+<li><strong>Interior faces.</strong> Select ‣ Select All by Trait ‣ Interior Faces finds faces accidentally created inside the mesh rather than on its surface. These are invisible in the viewport and perfectly capable of breaking the bind.</li>
+<li><strong>Bones fully enclosed inside geometry,</strong> or mesh parts that are disconnected from everything else.</li>
+</ul>
+<p>Community troubleshooting guides generally put bad geometry at the top of the list for this error, with unapplied scale close behind. I would treat that ordering as experience rather than measurement — but as a checking order it is a good one, because both are quick to rule out.</p>
+<p>One more that costs nothing: delete the existing vertex groups before you retry. Leftover weight data from a previous attempt confuses the result more often than you would expect.</p>
+<hr>
+<h2>🚫 Check The Deform Flag</h2>
+<p>This one wastes entire evenings.</p>
+<p>A bone with <strong>Deform</strong> switched off moves nothing. Not a little — nothing. It does not matter how carefully you painted, how red the weights are, or how correct the vertex group name is. The weights are sitting there doing nothing at all.</p>
+<p>Control bones, IK targets and pole targets are supposed to have Deform off. The problem is when it is off on a bone that should be deforming, usually because it was duplicated from a control bone.</p>
+<p>Bone Properties, Deform panel, check the box is ticked. If a limb is completely ignoring the rig, check this before you check anything else.</p>
+<hr>
+<h2>🔢 Keep The Weights Normalised</h2>
+<p>This is the invisible one, and it explains a large share of pinching.</p>
+<p>Every vertex should have its deforming influences add up to <strong>1.0</strong>. If the upper arm holds 1.0 at a vertex and you then paint 0.5 of forearm onto it, that vertex is now being pulled by 1.5 of total influence. It will not move a sensible amount, and nothing in the viewport tells you why.</p>
+<p>Blender gives you two tools, and the manual is clear about what each does:</p>
+<ul>
+<li><strong>Auto Normalize</strong>, in the Weight Paint tool options, keeps deforming vertex groups summing to one <em>as you paint</em>. Turn it on and most of this problem disappears before it starts.</li>
+<li><strong>Normalize All</strong>, under the Weights menu, fixes it after the fact: it makes each vertex's weights sum to one across all groups, leaving locked groups untouched.</li>
+</ul>
+<p>Note that plain <strong>Normalize</strong> is a different and narrower thing — it works on the active group only, scaling it so the highest value becomes 1.0 while keeping the relative values. Useful, but not the fix for this.</p>
+<p>Two more from the same menu worth knowing:</p>
+<ul>
+<li><strong>Mirror Vertex Group</strong> — when one side of the character bends correctly and the other does not, this is usually the whole answer.</li>
+<li><strong>Show Zero Weights</strong>, a display option rather than a tool, makes unweighted vertices obvious instead of letting you hunt for them by posing.</li>
+</ul>
+<hr>
+<h2>🧱 Put Loops At The Joint</h2>
+<p>A joint with one edge loop through it cannot bend well. There is nothing to distribute the rotation across, so the surface has to crease, and no weight map rescues geometry that has nowhere to go.</p>
+<p>Two or three loops through each major joint, following the direction of the crease, costs almost nothing and does more for your deformation than hours of painting. This is also the main practical reason <a href="/blog/quads-vs-triangles-blender">quad topology matters where things deform</a> — edge loops are what you are relying on, and triangles interrupt them.</p>
+<p>If you take one thing from this article, take this: <strong>the mesh sets your ceiling.</strong> Painting decides how close to that ceiling you get.</p>
+<hr>
+<h2>🍬 The Candy Wrapper Is A Different Problem</h2>
+<p>The collapsing twist at the wrist or the shoulder is worth separating out, because it is the one failure here that is genuinely <em>not</em> fixable by painting.</p>
+<p>It happens because of how the deformation is calculated. Blender's default is linear blend skinning, which is fast, does not bulge, and is prone to exactly this collapse when a bone rotates far around its own axis. Switching on <strong>Preserve Volume</strong> on the Armature modifier changes the method to dual quaternion skinning, which holds the volume much better — and in exchange tends to bulge around joints, with its own discontinuity near 180 degrees from the rest pose.</p>
+<p>So it is a trade, not an upgrade. Try it, look at the shoulders.</p>
+<p><strong>The catch that catches everyone:</strong> Preserve Volume is a modifier setting, not mesh data. FBX and glTF do not carry it, and most engines skin linearly regardless. Turn it on, admire the fixed wrist, export to Unreal, and the candy wrapper is back — because the engine never knew about it.</p>
+<p>If the rig is going into an engine, the robust fix is structural: add a <strong>twist bone</strong> between the forearm and the hand, give it a Copy Rotation constraint reading the hand's roll, and weight the forearm so the twist is shared along its length instead of landing on one joint. Corrective shape keys are the other common approach. Both survive export, because both are real geometry and real bones rather than a viewport setting.</p>
+<hr>
+<h2>🔁 The Workflow That Actually Works</h2>
+<p>Do not paint a rig from scratch. Nobody does.</p>
+<ol>
+<li><strong>Parent with automatic weights.</strong> It gets you most of the way in one click.</li>
+<li><strong>Pose the rig into its worst positions.</strong> Arm fully up, elbow fully bent, head turned hard. Problems only exist in poses.</li>
+<li><strong>Fix what breaks, in that pose.</strong> You can weight paint while posed, and you should — you need to see the deformation you are correcting.</li>
+<li><strong>Use Smooth before you use the brush.</strong> A great deal of pinching is just a hard weight boundary, and smoothing the group is faster and better than hand-feathering it.</li>
+<li><strong>Re-pose and check again.</strong> Fixing an elbow often moves the problem to the forearm.</li>
+</ol>
+<p>The brush is the last tool you reach for, not the first.</p>
+<hr>
+<h2>🎮 If It Is Going Into An Engine</h2>
+<p>Engines limit how many bones can influence a single vertex, and Blender does not — so a mesh that deforms perfectly in Blender can arrive <a href="/blog/blender-and-unreal-the-happy-couple">in Unreal</a> or Unity subtly wrong.</p>
+<p>The standard move is <strong>Weights ‣ Limit Total</strong> with the limit set to 4, followed by <strong>Normalize All</strong> to repair the sums that trimming just broke. Run it before export, and re-check the worst poses afterwards.</p>
+<p>Worth being accurate about the number, though, because it is repeated as law and it is not. Four is a long-standing convention rather than a universal hard limit: Unity exposes it as a project-level Skin Weights setting with several options, and Unreal has historically supported up to eight. Blender's own FBX exporter defaults to limiting influences but can be set otherwise. Four is a safe default and a bad assumption — check what your target actually uses.</p>
+<hr>
+<h2>✅ The Checklist</h2>
+<ol>
+<li><strong>Scale applied</strong> on mesh and armature, before parenting.</li>
+<li><strong>Mesh clean</strong> — merged by distance, no non-manifold geometry, no interior faces.</li>
+<li><strong>Deform ticked</strong> on every bone that should move the mesh.</li>
+<li><strong>Auto Normalize on</strong> while painting, <strong>Normalize All</strong> when finished.</li>
+<li><strong>Edge loops at every joint that bends.</strong></li>
+<li><strong>Automatic weights first,</strong> then pose, then correct.</li>
+<li><strong>Smooth before brushing.</strong></li>
+<li><strong>Limit Total</strong> to your engine's real number, then normalise again.</li>
+</ol>
+<p>Items 1, 2, 3 and 5 are not painting. Do them first and a surprising amount of the painting stops being necessary.</p>
+<hr>
+<h2>🎯 The Underlying Idea</h2>
+<p>Weight painting has a bad reputation because it is usually the stage where every earlier shortcut becomes visible at once. Unapplied scale, a messy bind, missing loops at the elbow — none of them hurt while you were modelling. They all arrive together the moment the character moves.</p>
+<p>Which is why the fix is so often upstream of the brush. The rig is not refusing to work. It is reporting, accurately, on the mesh it was given.</p>
+<hr>
+<p><strong>Read next:</strong> <a href="/blog/quads-vs-triangles-blender">Quads vs Triangles in Blender: What Actually Matters</a> — the topology half of this, and why joints are the one place the rule is real.</p>
+<p><em>Rig fighting you? <a href="https://www.blendertutoring.com/#packages">Book a free intro call →</a> and bring the file — deformation problems are much faster to diagnose with the mesh in front of us.</em></p></div><nav aria-label="More articles" class="mt-16 pt-10 border-t border-white/10"><h2 class="text-xs font-semibold tracking-widest uppercase text-orange-400 mb-5">Read next</h2><ul class="space-y-4"><li><a class="group flex flex-col gap-1 rounded-lg -mx-3 px-3 py-2 transition hover:bg-white/5" href="/blog/blender-materials-look-like-plastic" data-discover="true"><span class="font-semibold text-white group-hover:text-orange-400 transition">Why Your Blender Materials Look Like Plastic</span><span class="text-sm text-gray-400 line-clamp-2">Four fixable causes, starting with a colour space checkbox that quietly ruins every data map — plus what changed in the Principled BSDF in Blender 4.0.</span></a></li><li><a class="group flex flex-col gap-1 rounded-lg -mx-3 px-3 py-2 transition hover:bg-white/5" href="/blog/game-art-portfolio-what-studios-want" data-discover="true"><span class="font-semibold text-white group-hover:text-orange-400 transition">What a Game Art Portfolio Actually Needs in 2026</span><span class="text-sm text-gray-400 line-clamp-2">Job postings describe the role in detail, for free. The gap between what they ask for and what most junior portfolios show — and how to close it.</span></a></li><li><a class="group flex flex-col gap-1 rounded-lg -mx-3 px-3 py-2 transition hover:bg-white/5" href="/blog/quads-vs-triangles-blender" data-discover="true"><span class="font-semibold text-white group-hover:text-orange-400 transition">Quads vs Triangles in Blender: What Actually Matters</span><span class="text-sm text-gray-400 line-clamp-2">Your engine triangulates everything on export, so the never-use-triangles rule misses the point. Where quads genuinely matter, and why n-gons are worse.</span></a></li></ul></nav><div class="mt-16 border border-orange-400/20 rounded-xl p-8 bg-orange-400/5"><p class="text-orange-400 text-xs font-semibold tracking-widest uppercase mb-3">Newsletter</p><h3 class="text-2xl font-bold text-white mb-2">Get more tips like this</h3><p class="text-gray-400 text-sm mb-6">Short, practical Blender guides for beginners — straight to your inbox. No spam. Unsubscribe any time.</p><form class="flex gap-3 flex-wrap"><input placeholder="your@email.com" class="flex-1 min-w-[200px] bg-black border rounded-lg px-4 py-2.5 text-white text-sm outline-none transition-colors
+              border-white/10 focus:border-orange-400" type="email" value=""><button type="submit" class="bg-orange-400 hover:bg-orange-300 text-black font-bold text-sm px-6 py-2.5 rounded-lg transition-colors whitespace-nowrap">Subscribe</button></form></div></div><footer class="relative z-20 bg-transparent text-white pt-24 pb-10"><div class="max-w-4xl mx-auto text-center px-6"><div class="mb-32" style="opacity: 0; transform: translateY(20px);"><h2 class="text-4xl md:text-5xl font-bold mb-6">Ready to <span class="text-orange-500">create</span>?</h2><div class="text-gray-400 text-sm md:text-base mb-10 max-w-lg mx-auto space-y-4 leading-relaxed"><p>Book a free 15-minute intro call and take the first step toward building something that’s truly yours. We’ll talk about your goals, your interests, and the kind of projects you’ve always wanted to bring to life—and map out a clear path forward together.</p><p>During the call, you’ll meet your mentor, ask questions, and get a feel for how the process works.</p><p>After the intro call, you’ll continue working together step by step to create your own project from start to finish—something real you can show, share, and be proud of.</p><p class="text-gray-300">Let’s turn your ideas into something tangible.</p></div><button class="text-black font-bold rounded-lg inline-flex items-center gap-2" style="background-color: rgb(243, 125, 22); padding: 8px 32px;"><a href="https://calendly.com/blendertutoring-info/" class="flex items-center" target="_blank" rel="noreferrer">Book a free call <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right" aria-hidden="true"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg></a></button></div></div><div class="max-w-4xl mx-auto px-6 text-center mb-20"><h2 class="text-orange-500 uppercase tracking-[0.3em] text-[10px] font-bold mb-3">Contact</h2><p class="text-gray-400 text-sm mb-5 max-w-md mx-auto leading-relaxed">Not ready to book? Ask anything about the packages, your project, or whether tutoring is the right fit.</p><a href="mailto:info@blendertutoring.com" class="inline-flex items-center gap-2 text-white hover:text-orange-400 transition-colors font-medium"><svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail text-orange-500" aria-hidden="true"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path><rect x="2" y="4" width="20" height="16" rx="2"></rect></svg>info@blendertutoring.com</a></div><div class="border-t border-white/10 pt-12 px-6 md:px-32 flex flex-col md:flex-row justify-between items-center gap-4 text-[12px] text-gray-500"><p>© 2026 Blender Tutor. All rights reserved.</p><div class="flex gap-6"><a class="hover:text-white transition-colors" href="/blog" data-discover="true">Blog</a><a href="/blender-theme-maker/" class="hover:text-white transition-colors">Theme Maker</a><a class="hover:text-white transition-colors" href="/radar" data-discover="true">The Radar</a><a class="hover:text-white transition-colors" href="/privacy" data-discover="true">Privacy</a><a class="hover:text-white transition-colors" href="/terms" data-discover="true">Terms</a></div></div></footer></div><div class="fixed bottom-5 right-5 z-40 print:hidden"><button type="button" aria-label="Share with a friend" class="group flex items-center gap-2 rounded-full border border-white/15 bg-[#0f1011]/90 backdrop-blur-md px-4 py-3 text-white shadow-lg transition-all hover:border-orange-500/60 hover:text-orange-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"><svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-share2 lucide-share-2 shrink-0" aria-hidden="true"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"></line><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"></line></svg><span class="hidden sm:inline text-[13px] font-medium whitespace-nowrap">Share with a friend</span></button></div></div>
+
+</body></html>

@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" width="1200" height="700" role="img" aria-label="Left: three deformation symptoms and their usual causes — a pinched joint from one bone holding too much influence, geometry left behind from vertices with no weight at all, and a candy-wrapper collapse from a single bone taking the whole twist. Right: five things to check before painting a stroke — apply scale, clean the mesh of non-manifold geometry and doubles, confirm the Deform flag on every deforming bone, keep weights normalised, and add edge loops at the joint.">
+  <rect width="1200" height="700" fill="#0f1011"/>
+
+  <defs>
+    <style>
+      .hd  { font-family:system-ui,sans-serif; font-size:15px; font-weight:700; letter-spacing:2px; fill:#f37d16; }
+      .sy  { fill:#e8e6e3; font-family:system-ui,sans-serif; font-size:17px; font-weight:700; }
+      .ca  { fill:#868c92; font-family:system-ui,sans-serif; font-size:13.5px; }
+      .it  { fill:#d6dade; font-family:system-ui,sans-serif; font-size:16px; font-weight:600; }
+      .sub { fill:#7d848a; font-family:system-ui,sans-serif; font-size:13px; }
+      .num { fill:#f37d16; font-family:system-ui,sans-serif; font-size:15px; font-weight:700; }
+      .limb{ fill:#24282b; stroke:#6b7279; stroke-width:2; }
+      .bone{ stroke:#4a5157; stroke-width:2; stroke-dasharray:5 4; fill:none; }
+    </style>
+  </defs>
+
+  <text class="hd" x="60" y="48">THE THREE SYMPTOMS</text>
+
+  <!-- ── 1. PINCH ── -->
+  <g transform="translate(70,96)">
+    <polygon class="limb" points="0,18 70,18 104,46 170,72 156,98 98,54 70,54 0,54"/>
+    <path class="bone" d="M10 36 L86 36 L162 85"/>
+    <path d="M103 12 L103 32" stroke="#ff7b72" stroke-width="2.5"/>
+    <path d="M99 32 L103 41 L107 32 z" fill="#ff7b72"/>
+    <path d="M99 88 L99 68" stroke="#ff7b72" stroke-width="2.5"/>
+    <path d="M95 68 L99 59 L103 68 z" fill="#ff7b72"/>
+  </g>
+  <text class="sy" x="276" y="136">It pinches at the joint</text>
+  <text class="ca" x="276" y="162">One bone is holding influence it should be</text>
+  <text class="ca" x="276" y="184">sharing, and the weights do not sum to 1.</text>
+
+  <!-- ── 2. LEFT BEHIND ── -->
+  <g transform="translate(70,272)">
+    <polygon class="limb" points="0,20 68,20 104,36 170,70 158,94 94,54 68,54 0,54"/>
+    <path class="bone" d="M10 37 L84 37 L164 82"/>
+    <line x1="96" y1="40" x2="124" y2="12" stroke="#ff7b72" stroke-width="1.4" stroke-dasharray="3 3"/>
+    <line x1="100" y1="48" x2="136" y2="22" stroke="#ff7b72" stroke-width="1.4" stroke-dasharray="3 3"/>
+    <line x1="104" y1="52" x2="146" y2="34" stroke="#ff7b72" stroke-width="1.4" stroke-dasharray="3 3"/>
+    <circle cx="124" cy="12" r="4" fill="#ff7b72"/>
+    <circle cx="136" cy="22" r="4" fill="#ff7b72"/>
+    <circle cx="146" cy="34" r="4" fill="#ff7b72"/>
+  </g>
+  <text class="sy" x="276" y="312">Part of it stays behind</text>
+  <text class="ca" x="276" y="338">Those vertices have no weight at all, or they</text>
+  <text class="ca" x="276" y="360">are weighted to a bone with Deform switched off.</text>
+
+  <!-- ── 3. CANDY WRAP ── -->
+  <g transform="translate(70,448)">
+    <polygon class="limb" points="0,16 84,38 84,48 0,58"/>
+    <polygon class="limb" points="170,16 86,38 86,48 170,58"/>
+    <circle cx="85" cy="43" r="5.5" fill="none" stroke="#ff7b72" stroke-width="2.5"/>
+    <path class="bone" d="M10 37 L160 37"/>
+  </g>
+  <text class="sy" x="276" y="488">It collapses when it twists</text>
+  <text class="ca" x="276" y="514">A single bone is absorbing the whole rotation.</text>
+  <text class="ca" x="276" y="536">This one is a rigging problem, not a painting one.</text>
+
+  <line x1="640" y1="70" x2="640" y2="630" stroke="#272a2d" stroke-width="2"/>
+
+  <!-- ── RIGHT: the order ── -->
+  <text class="hd" x="690" y="48">CHECK BEFORE YOU PAINT A STROKE</text>
+
+  <g>
+    <circle cx="706" cy="105" r="15" fill="none" stroke="#f37d16" stroke-width="2"/>
+    <text class="num" x="701" y="110">1</text>
+    <text class="it" x="740" y="100">Apply the scale</text>
+    <text class="sub" x="740" y="124">Bones read mesh data, not object scale.</text>
+
+    <circle cx="706" cy="209" r="15" fill="none" stroke="#f37d16" stroke-width="2"/>
+    <text class="num" x="701" y="214">2</text>
+    <text class="it" x="740" y="204">Clean the mesh</text>
+    <text class="sub" x="740" y="228">Doubles, holes and interior faces break the solver.</text>
+
+    <circle cx="706" cy="313" r="15" fill="none" stroke="#f37d16" stroke-width="2"/>
+    <text class="num" x="701" y="318">3</text>
+    <text class="it" x="740" y="308">Check the Deform flag</text>
+    <text class="sub" x="740" y="332">Switched off, a bone moves nothing. Weights included.</text>
+
+    <circle cx="706" cy="417" r="15" fill="none" stroke="#f37d16" stroke-width="2"/>
+    <text class="num" x="701" y="422">4</text>
+    <text class="it" x="740" y="412">Keep weights normalised</text>
+    <text class="sub" x="740" y="436">Auto Normalize on, or Normalize All afterwards.</text>
+
+    <circle cx="706" cy="521" r="15" fill="none" stroke="#5ddb8b" stroke-width="2"/>
+    <text class="num" x="701" y="526" fill="#5ddb8b">5</text>
+    <text class="it" x="740" y="516" fill="#cfe9d8">Put loops at the joint</text>
+    <text class="sub" x="740" y="540" fill="#8fc9a6">Two or three, following the crease. This sets your ceiling.</text>
+  </g>
+
+  <text class="sub" x="690" y="596" fill="#6f767c">Four of the five are not painting. Do them first and most</text>
+  <text class="sub" x="690" y="616" fill="#6f767c">of the painting stops being necessary.</text>
+
+  <text x="600" y="672" fill="#55595e" font-family="system-ui,sans-serif" font-size="13" text-anchor="middle">Most weight-painting pain is a mesh problem wearing a costume — blendertutoring.com</text>
+</svg>
