@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" width="1200" height="700" role="img" aria-label="Three kinds of slow in Blender and their usual causes. Slow all the time is usually scene complexity, first fix the subdivision modifier viewport level. Freezes every few minutes is usually auto-save writing the file or undo memory, first fix the auto-save timer in preferences. Slow in only one mode is usually per-mode overlays and undo, first fix dropping the multiresolution level while working. Below, two widely repeated performance claims that have no measurement behind them.">
+  <rect width="1200" height="700" fill="#0f1011"/>
+
+  <defs>
+    <style>
+      .hd  { font-family:system-ui,sans-serif; font-size:15px; font-weight:700; letter-spacing:2px; fill:#f37d16; }
+      .ct  { font-family:system-ui,sans-serif; font-size:19px; font-weight:700; }
+      .lb  { fill:#6f767c; font-family:system-ui,sans-serif; font-size:11.5px; font-weight:700; letter-spacing:1.5px; }
+      .bd  { fill:#aeb4ba; font-family:system-ui,sans-serif; font-size:13.5px; }
+      .fx  { fill:#e8e6e3; font-family:system-ui,sans-serif; font-size:13.5px; font-weight:600; }
+      .card{ fill:#161718; stroke:#2c3033; stroke-width:2; }
+    </style>
+  </defs>
+
+  <text class="hd" x="60" y="48">THREE KINDS OF SLOW, THREE DIFFERENT CAUSES</text>
+
+  <!-- CARD 1 -->
+  <g>
+    <rect class="card" x="60" y="80" width="340" height="406" rx="14"/>
+    <rect x="60" y="80" width="340" height="5" rx="2.5" fill="#f37d16"/>
+    <text class="ct" x="88" y="128" style="fill:#f0b429">Slow all the time</text>
+
+    <text class="lb" x="88" y="170">WHAT IT FEELS LIKE</text>
+    <text class="bd" x="88" y="194">Orbiting stutters constantly.</text>
+    <text class="bd" x="88" y="214">It never felt fast in this file.</text>
+
+    <text class="lb" x="88" y="260">USUALLY</text>
+    <text class="bd" x="88" y="284">Scene complexity. Subdivision</text>
+    <text class="bd" x="88" y="304">levels, overlays, and being</text>
+    <text class="bd" x="88" y="324">parked in Rendered view.</text>
+
+    <text class="lb" x="88" y="370">FIRST FIX</text>
+    <text class="fx" x="88" y="394">Subdivision modifier:</text>
+    <text class="fx" x="88" y="414">Viewport 1, Render 3.</text>
+    <text class="bd" x="88" y="442" style="fill:#7d848a">Costs you nothing in the</text>
+    <text class="bd" x="88" y="460" style="fill:#7d848a">final render.</text>
+  </g>
+
+  <!-- CARD 2 -->
+  <g>
+    <rect class="card" x="430" y="80" width="340" height="406" rx="14"/>
+    <rect x="430" y="80" width="340" height="5" rx="2.5" fill="#5b9bd5"/>
+    <text class="ct" x="458" y="128" style="fill:#7fb8e8">Freezes, then fine</text>
+
+    <text class="lb" x="458" y="170">WHAT IT FEELS LIKE</text>
+    <text class="bd" x="458" y="194">Smooth, then locked solid for</text>
+    <text class="bd" x="458" y="214">several seconds. Then smooth.</text>
+
+    <text class="lb" x="458" y="260">USUALLY</text>
+    <text class="bd" x="458" y="284">Not your scene at all. Auto-save</text>
+    <text class="bd" x="458" y="304">writing the file, or undo history</text>
+    <text class="bd" x="458" y="324">filling up memory.</text>
+
+    <text class="lb" x="458" y="370">FIRST FIX</text>
+    <text class="fx" x="458" y="394">Preferences, Save &amp; Load,</text>
+    <text class="fx" x="458" y="414">raise the Auto Save timer.</text>
+    <text class="bd" x="458" y="442" style="fill:#7d848a">If it is rhythmic, this is</text>
+    <text class="bd" x="458" y="460" style="fill:#7d848a">almost always it.</text>
+  </g>
+
+  <!-- CARD 3 -->
+  <g>
+    <rect class="card" x="800" y="80" width="340" height="406" rx="14"/>
+    <rect x="800" y="80" width="340" height="5" rx="2.5" fill="#5ddb8b"/>
+    <text class="ct" x="828" y="128" style="fill:#5ddb8b">Slow in one mode</text>
+
+    <text class="lb" x="828" y="170">WHAT IT FEELS LIKE</text>
+    <text class="bd" x="828" y="194">Object Mode is fine. Edit or</text>
+    <text class="bd" x="828" y="214">Sculpt Mode crawls.</text>
+
+    <text class="lb" x="828" y="260">USUALLY</text>
+    <text class="bd" x="828" y="284">Per-mode cost, not the scene.</text>
+    <text class="bd" x="828" y="304">Edit Mode draws every vertex;</text>
+    <text class="bd" x="828" y="324">Sculpt undo is expensive.</text>
+
+    <text class="lb" x="828" y="370">FIRST FIX</text>
+    <text class="fx" x="828" y="394">Work at a lower Multires</text>
+    <text class="fx" x="828" y="414">level, then step back up.</text>
+    <text class="bd" x="828" y="442" style="fill:#7d848a">Detail you cannot see is</text>
+    <text class="bd" x="828" y="460" style="fill:#7d848a">detail you are paying for.</text>
+  </g>
+
+  <!-- caveat band -->
+  <rect x="60" y="518" width="1080" height="112" rx="13" fill="#231314" stroke="#8a3034" stroke-width="2"/>
+  <text class="lb" x="88" y="552" style="fill:#ff7b72">NUMBERS GOING AROUND THAT NOBODY HAS MEASURED</text>
+  <text class="bd" x="88" y="582">Turning off overlays doubles your FPS.&#8195;&#8195;32 undo steps can eat 50 GB of RAM.</text>
+  <text class="bd" x="88" y="606" style="fill:#7d848a">Overlays and undo genuinely cost performance. Both figures trace back to single blog posts with no benchmark behind them.</text>
+
+  <text x="600" y="672" fill="#55595e" font-family="system-ui,sans-serif" font-size="13" text-anchor="middle">Work out which kind of slow you have before changing settings &#8212; blendertutoring.com</text>
+</svg>
