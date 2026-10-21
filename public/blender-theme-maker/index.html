@@ -421,13 +421,17 @@ FIELDS.forEach(function(f){
   el.innerHTML='<input type="color" id="c_'+key+'"><label for="c_'+key+'">'+f[1]+'</label><input class="hex mono" id="h_'+key+'" maxlength="7">';
   swHost.appendChild(el);
   var cp=el.querySelector('#c_'+key), hx=el.querySelector('#h_'+key);
-  cp.addEventListener('input',function(){ P[key]=cp.value; hx.value=cp.value; applyPreview(); });
-  hx.addEventListener('change',function(){ P[key]=clean(hx.value); cp.value=P[key]; hx.value=P[key]; applyPreview(); });
+  cp.addEventListener('input',function(){ P[key]=cp.value; hx.value=cp.value; currentPresetName='custom'; applyPreview(); });
+  hx.addEventListener('change',function(){ P[key]=clean(hx.value); cp.value=P[key]; hx.value=P[key]; currentPresetName='custom'; applyPreview(); });
 });
+// Which preset the exported theme came from. Reset to 'custom' the moment a
+// colour is edited by hand, so a tweaked Gruvbox is not reported as Gruvbox —
+// the point of the number is to show which presets people actually keep.
+var currentPresetName='custom';
 var presetHost=document.getElementById('presets');
 Object.keys(PRESETS).forEach(function(name){
   var b=document.createElement('button'); b.className='preset'; b.textContent=name;
-  b.addEventListener('click',function(){ loadPalette(PRESETS[name]); });
+  b.addEventListener('click',function(){ currentPresetName=name; loadPalette(PRESETS[name]); });
   presetHost.appendChild(b);
 });
 var roundEl=document.getElementById('round'), roundVal=document.getElementById('roundval'), vpSingle=document.getElementById('vpsingle');
@@ -537,6 +541,12 @@ document.getElementById('export').addEventListener('click',function(){
   var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=fname+'.xml';
   document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },0);
   toast('Downloaded '+fname+'.xml');
+
+  // A pageview only says somebody opened the tool. An export says they got
+  // far enough to want the result, which is the number worth knowing when
+  // deciding whether promoting this thing was worth the effort.
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({ event: 'theme_export', preset: currentPresetName || 'custom' });
 });
 
 // ── Import an existing theme .xml ───────────────────────────
