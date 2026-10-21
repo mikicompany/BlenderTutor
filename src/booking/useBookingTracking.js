@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { trackBookingClick } from "../lib/tracking"
+import { trackBookingClick, trackPackagesCtaClick } from "../lib/tracking"
 
 // One delegated listener on the document rather than a handler on each of the
 // eight booking links spread across the navbar, hero, tutor card, pricing
@@ -11,14 +11,22 @@ export function useBookingTracking() {
     const onClick = (event) => {
       // closest() walks up from whatever was actually clicked, so a click on
       // the arrow icon inside the button still resolves to the link.
-      const anchor = event.target.closest?.('a[href*="calendly.com"]')
+      //
+      // The second selector matches the article CTAs, which are written as
+      // absolute URLs. Matching the absolute form on purpose: the navbar's
+      // "Packages" item is a bare "#packages", and counting plain navigation
+      // as a call-to-action click would make the number meaningless.
+      const anchor = event.target.closest?.(
+        'a[href*="calendly.com"], a[href*="blendertutoring.com/#packages"]'
+      )
       if (!anchor) return
 
       // Middle-click and ctrl/cmd-click open the booking page too, so they
       // count. Right-click does not, and is excluded.
       if (event.type === "auxclick" && event.button !== 1) return
 
-      trackBookingClick(anchor)
+      if (anchor.href.includes("calendly.com")) trackBookingClick(anchor)
+      else trackPackagesCtaClick(anchor)
       // Deliberately no preventDefault: the navigation is the point, and the
       // beacon is fire-and-forget.
     }

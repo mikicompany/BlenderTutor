@@ -129,6 +129,26 @@ export function trackBookingClick(anchor) {
   })
 }
 
+// The call-to-action at the foot of every article points at the pricing
+// section, not at Calendly, so trackBookingClick never saw it. That left the
+// one question the blog exists to answer — does any of this reading turn into
+// an enquiry — with no data behind it at all.
+//
+// Deliberately a separate event rather than folding into book_call_click: a
+// reader moving from an article to the pricing section has not asked for a
+// call yet, and merging the two would inflate the booking number with
+// something softer.
+//
+// No webhook here either. Booking and payment clicks are worth an email
+// because somebody may be waiting; this is a counting metric, and mailing one
+// per click would bury the notifications that matter.
+export function trackPackagesCtaClick(anchor) {
+  const detail = describe(anchor)
+
+  window.dataLayer = window.dataLayer || []
+  window.dataLayer.push({ event: "packages_cta_click", ...detail })
+}
+
 // Someone reaching for a payment button is the most consequential click on
 // the site, and unlike a booking there is no Calendly to report it. If the
 // payment never lands, the gap between this and the money arriving is the
