@@ -82,13 +82,13 @@
     <text class="sub" x="740" y="436">Auto Normalize on, or Normalize All afterwards.</text>
 
     <circle cx="706" cy="521" r="15" fill="none" stroke="#5ddb8b" stroke-width="2"/>
-    <text class="num" x="701" y="526" fill="#5ddb8b">5</text>
-    <text class="it" x="740" y="516" fill="#cfe9d8">Put loops at the joint</text>
-    <text class="sub" x="740" y="540" fill="#8fc9a6">Two or three, following the crease. This sets your ceiling.</text>
+    <text class="num" x="701" y="526" style="fill:#5ddb8b">5</text>
+    <text class="it" x="740" y="516" style="fill:#cfe9d8">Put loops at the joint</text>
+    <text class="sub" x="740" y="540" style="fill:#8fc9a6">Two or three, following the crease. This sets your ceiling.</text>
   </g>
 
-  <text class="sub" x="690" y="596" fill="#6f767c">Four of the five are not painting. Do them first and most</text>
-  <text class="sub" x="690" y="616" fill="#6f767c">of the painting stops being necessary.</text>
+  <text class="sub" x="690" y="596" style="fill:#6f767c">Four of the five are not painting. Do them first and most</text>
+  <text class="sub" x="690" y="616" style="fill:#6f767c">of the painting stops being necessary.</text>
 
   <text x="600" y="672" fill="#55595e" font-family="system-ui,sans-serif" font-size="13" text-anchor="middle">Most weight-painting pain is a mesh problem wearing a costume — blendertutoring.com</text>
 </svg>
