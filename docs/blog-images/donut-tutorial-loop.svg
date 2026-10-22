@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" width="1200" height="700" role="img" aria-label="Left, in red: tutorial hell, a closed dashed circle running watch, follow along, finish it, with no work of your own, where you learn the clicks rather than the thinking. Right, in green: the build loop as five forward steps — pick something small and yours, attempt it and get stuck, look up exactly one thing, finish it ugly, pick the next one. Getting stuck is the lesson. Below: a finished bad model teaches more than a beautiful unfinished one.">
+  <rect width="1200" height="700" fill="#0f1011"/>
+  <defs><style>
+    .hd  { font-family:system-ui,sans-serif; font-size:15px; font-weight:700; letter-spacing:2px; }
+    .ti  { font-family:system-ui,sans-serif; font-size:19px; font-weight:700; }
+    .it  { font-family:system-ui,sans-serif; font-size:16px; font-weight:600; }
+    .bd  { font-family:system-ui,sans-serif; font-size:13.5px; }
+    .sm  { font-family:system-ui,sans-serif; font-size:12px; font-weight:700; letter-spacing:1.4px; }
+    .key { font-family:system-ui,sans-serif; font-size:17px; font-weight:700; }
+    .cap { font-family:system-ui,sans-serif; font-size:13px; }
+  </style></defs>
+  <text class="hd" x="60" y="48" fill="#f37d16">TWO LOOPS. ONLY ONE GOES ANYWHERE</text>
+  <rect x="60" y="86" width="500" height="420" rx="13" fill="#231314" stroke="#8a3034" stroke-width="2"/>
+  <text class="sm" x="92" y="128" fill="#ff7b72">TUTORIAL HELL</text>
+  <circle cx="310" cy="300" r="112" fill="none" stroke="#8a3034" stroke-width="2.5" stroke-dasharray="7 6"/>
+  <circle cx="310" cy="188" r="9" fill="#ff7b72"/>
+  <text class="it" x="310.0" y="166.0" fill="#e8c4c2" text-anchor="middle">Watch</text>
+  <circle cx="407" cy="356" r="9" fill="#ff7b72"/>
+  <text class="it" x="406.99484522385717" y="390.0" fill="#e8c4c2" text-anchor="middle">Follow along</text>
+  <circle cx="213" cy="356" r="9" fill="#ff7b72"/>
+  <text class="it" x="213.00515477614286" y="390.0" fill="#e8c4c2" text-anchor="middle">Finish it</text>
+  <text class="bd" x="310" y="306" fill="#8a6a6a" text-anchor="middle">no work</text>
+  <text class="bd" x="310" y="328" fill="#8a6a6a" text-anchor="middle">of your own</text>
+  <text class="bd" x="92" y="470" fill="#b08c8c">You learn the clicks, not the thinking.</text>
+  <rect x="610" y="86" width="530" height="420" rx="13" fill="#10211a" stroke="#2f7d4f" stroke-width="2"/>
+  <text class="sm" x="642" y="128" fill="#5ddb8b">THE BUILD LOOP</text>
+  <circle cx="676" cy="179" r="14" fill="none" stroke="#5ddb8b" stroke-width="2"/>
+  <text class="it" x="671" y="184" fill="#5ddb8b">1</text>
+  <text class="bd" x="706" y="184" fill="#cfe9d8">Pick something small and yours</text>
+  <line x1="676" y1="195" x2="676" y2="225" stroke="#2f7d4f" stroke-width="2"/>
+  <circle cx="676" cy="241" r="14" fill="none" stroke="#5ddb8b" stroke-width="2"/>
+  <text class="it" x="671" y="246" fill="#5ddb8b">2</text>
+  <text class="bd" x="706" y="246" fill="#cfe9d8">Attempt it, get stuck</text>
+  <line x1="676" y1="257" x2="676" y2="287" stroke="#2f7d4f" stroke-width="2"/>
+  <circle cx="676" cy="303" r="14" fill="none" stroke="#5ddb8b" stroke-width="2"/>
+  <text class="it" x="671" y="308" fill="#5ddb8b">3</text>
+  <text class="bd" x="706" y="308" fill="#cfe9d8">Look up exactly one thing</text>
+  <line x1="676" y1="319" x2="676" y2="349" stroke="#2f7d4f" stroke-width="2"/>
+  <circle cx="676" cy="365" r="14" fill="none" stroke="#5ddb8b" stroke-width="2"/>
+  <text class="it" x="671" y="370" fill="#5ddb8b">4</text>
+  <text class="bd" x="706" y="370" fill="#cfe9d8">Finish it, ugly</text>
+  <line x1="676" y1="381" x2="676" y2="411" stroke="#2f7d4f" stroke-width="2"/>
+  <circle cx="676" cy="427" r="14" fill="none" stroke="#5ddb8b" stroke-width="2"/>
+  <text class="it" x="671" y="432" fill="#5ddb8b">5</text>
+  <text class="bd" x="706" y="432" fill="#cfe9d8">Pick the next one</text>
+  <text class="bd" x="642" y="478" fill="#8fc9a6">Getting stuck is the lesson. Skipping it is why tutorials do not stick.</text>
+  <rect x="60" y="528" width="1080" height="96" rx="13" fill="#1b1e20" stroke="#3b4247" stroke-width="2"/>
+  <text class="sm" x="88" y="564" fill="#f0b429">FINISH UGLY</text>
+  <text class="bd" x="88" y="596" fill="#d6dade">A finished bad model teaches you more than a beautiful unfinished one, because only finishing forces you through the parts you would avoid.</text>
+  <text x="600" y="672" fill="#55595e" class="cap" text-anchor="middle">The difference is not effort. It is who chose the problem — blendertutoring.com</text>
+</svg>

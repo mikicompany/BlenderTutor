@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" width="1200" height="700" role="img" aria-label="A pipeline from Blender through an FBX or glTF handoff into Unreal. Mesh geometry, UV maps, image textures, armatures and applied modifiers travel fine. Shader node graphs, procedural materials, Blender lighting and unapplied transforms do not. Two common traps: Blender measures in metres while Unreal uses centimetres, and transforms must be applied before export.">
+  <rect width="1200" height="700" fill="#0f1011"/>
+  <defs><style>
+    .hd  { font-family:system-ui,sans-serif; font-size:15px; font-weight:700; letter-spacing:2px; }
+    .ti  { font-family:system-ui,sans-serif; font-size:19px; font-weight:700; }
+    .it  { font-family:system-ui,sans-serif; font-size:16px; font-weight:600; }
+    .bd  { font-family:system-ui,sans-serif; font-size:13.5px; }
+    .sm  { font-family:system-ui,sans-serif; font-size:12px; font-weight:700; letter-spacing:1.4px; }
+    .key { font-family:system-ui,sans-serif; font-size:17px; font-weight:700; }
+    .cap { font-family:system-ui,sans-serif; font-size:13px; }
+  </style></defs>
+  <text class="hd" x="60" y="48" fill="#f37d16">THE HANDOFF, AND WHAT SURVIVES IT</text>
+  <rect x="60" y="92" width="320" height="112" rx="13" fill="#161718" stroke="#2c3033" stroke-width="2"/>
+  <text class="ti" x="88" y="136" fill="#f37d16">BLENDER</text>
+  <text class="bd" x="88" y="168" fill="#aeb4ba">Author it: model, UV, bake</text>
+  <rect x="440" y="92" width="320" height="112" rx="13" fill="#161718" stroke="#2c3033" stroke-width="2"/>
+  <text class="ti" x="468" y="136" fill="#9aa0a6">.FBX  /  .GLTF</text>
+  <text class="bd" x="468" y="168" fill="#aeb4ba">The handoff</text>
+  <rect x="820" y="92" width="320" height="112" rx="13" fill="#161718" stroke="#2c3033" stroke-width="2"/>
+  <text class="ti" x="848" y="136" fill="#5b9bd5">UNREAL</text>
+  <text class="bd" x="848" y="168" fill="#aeb4ba">Make it real-time: light, build</text>
+  <line x1="392" y1="148" x2="426" y2="148" stroke="#f37d16" stroke-width="3"/>
+  <path d="M422 140 L436 148 L422 156 z" fill="#f37d16"/>
+  <line x1="772" y1="148" x2="806" y2="148" stroke="#f37d16" stroke-width="3"/>
+  <path d="M802 140 L816 148 L802 156 z" fill="#f37d16"/>
+  <rect x="60" y="240" width="540" height="250" rx="13" fill="#10211a" stroke="#2f7d4f" stroke-width="2"/>
+  <text class="sm" x="88" y="280" fill="#5ddb8b">TRAVELS FINE</text>
+  <text class="it" x="88" y="318" fill="#5ddb8b">✓</text>
+  <text class="bd" x="118" y="318" fill="#cfe9d8">Mesh geometry</text>
+  <text class="it" x="88" y="350" fill="#5ddb8b">✓</text>
+  <text class="bd" x="118" y="350" fill="#cfe9d8">UV maps</text>
+  <text class="it" x="88" y="382" fill="#5ddb8b">✓</text>
+  <text class="bd" x="118" y="382" fill="#cfe9d8">Image textures</text>
+  <text class="it" x="88" y="414" fill="#5ddb8b">✓</text>
+  <text class="bd" x="118" y="414" fill="#cfe9d8">Armatures and animation</text>
+  <text class="it" x="88" y="446" fill="#5ddb8b">✓</text>
+  <text class="bd" x="118" y="446" fill="#cfe9d8">Applied modifiers</text>
+  <rect x="640" y="240" width="500" height="250" rx="13" fill="#231314" stroke="#8a3034" stroke-width="2"/>
+  <text class="sm" x="668" y="280" fill="#ff7b72">DOES NOT</text>
+  <text class="it" x="668" y="318" fill="#ff7b72">✕</text>
+  <text class="bd" x="698" y="318" fill="#e8c4c2">Shader node graphs</text>
+  <text class="it" x="668" y="350" fill="#ff7b72">✕</text>
+  <text class="bd" x="698" y="350" fill="#e8c4c2">Procedural materials</text>
+  <text class="it" x="668" y="382" fill="#ff7b72">✕</text>
+  <text class="bd" x="698" y="382" fill="#e8c4c2">Blender lighting</text>
+  <text class="it" x="668" y="414" fill="#ff7b72">✕</text>
+  <text class="bd" x="698" y="414" fill="#e8c4c2">Unapplied transforms</text>
+  <text class="it" x="668" y="446" fill="#ff7b72">✕</text>
+  <text class="bd" x="698" y="446" fill="#e8c4c2">Anything you forgot to bake</text>
+  <rect x="60" y="518" width="1080" height="104" rx="13" fill="#1b1e20" stroke="#3b4247" stroke-width="2"/>
+  <text class="sm" x="88" y="556" fill="#f0b429">THE TWO THAT CATCH EVERYONE</text>
+  <text class="bd" x="88" y="588" fill="#d6dade">Blender thinks in metres. Unreal thinks in centimetres — which is why your model arrives microscopic or enormous.</text>
+  <text class="bd" x="88" y="610" fill="#868c92">Press Ctrl+A → All Transforms before you export. Unapplied scale and rotation cause a whole category of baffling problems.</text>
+  <text x="600" y="672" fill="#55595e" class="cap" text-anchor="middle">Image textures transfer. Node graphs do not — blendertutoring.com</text>
+</svg>

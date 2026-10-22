@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" width="1200" height="700" role="img" aria-label="EEVEE is a rasterizer that draws a frame like a game engine; Cycles is a path tracer that follows light rays. A comparison across speed, light behaviour, reflections, glass and noise. Most people block out and light in EEVEE, then switch to Cycles for the final frame.">
+  <rect width="1200" height="700" fill="#0f1011"/>
+  <defs><style>
+    .hd  { font-family:system-ui,sans-serif; font-size:15px; font-weight:700; letter-spacing:2px; }
+    .ti  { font-family:system-ui,sans-serif; font-size:19px; font-weight:700; }
+    .it  { font-family:system-ui,sans-serif; font-size:16px; font-weight:600; }
+    .bd  { font-family:system-ui,sans-serif; font-size:13.5px; }
+    .sm  { font-family:system-ui,sans-serif; font-size:12px; font-weight:700; letter-spacing:1.4px; }
+    .key { font-family:system-ui,sans-serif; font-size:17px; font-weight:700; }
+    .cap { font-family:system-ui,sans-serif; font-size:13px; }
+  </style></defs>
+  <text class="hd" x="60" y="48" fill="#f37d16">TWO ENGINES, TWO DIFFERENT JOBS</text>
+  <rect x="60" y="84" width="530" height="122" rx="13" fill="#10211a" stroke="#2f7d4f" stroke-width="2"/>
+  <text class="ti" x="92" y="128" fill="#5ddb8b">EEVEE</text>
+  <text class="bd" x="92" y="158" fill="#cfe9d8">A rasterizer — it draws the frame</text>
+  <text class="bd" x="92" y="182" fill="#cfe9d8">the way a game engine would.</text>
+  <rect x="610" y="84" width="530" height="122" rx="13" fill="#101a24" stroke="#3a6ea5" stroke-width="2"/>
+  <text class="ti" x="642" y="128" fill="#7fb8e8">Cycles</text>
+  <text class="bd" x="642" y="158" fill="#cfe0ef">A path tracer — it follows rays</text>
+  <text class="bd" x="642" y="182" fill="#cfe0ef">as light actually bounces.</text>
+  <text class="sm" x="60" y="240" fill="#6f767c">WHERE THEY DIVERGE</text>
+  <rect x="60" y="234" width="1080" height="46" rx="8" fill="#141516"/>
+  <text class="it" x="80" y="264" fill="#e8e6e3">Speed</text>
+  <text class="bd" x="330" y="264" fill="#8fc9a6">Seconds, often instant</text>
+  <text class="bd" x="730" y="264" fill="#8fb4d8">Minutes to hours a frame</text>
+  <text class="it" x="80" y="318" fill="#e8e6e3">Light</text>
+  <text class="bd" x="330" y="318" fill="#8fc9a6">Approximated</text>
+  <text class="bd" x="730" y="318" fill="#8fb4d8">Physically simulated</text>
+  <rect x="60" y="342" width="1080" height="46" rx="8" fill="#141516"/>
+  <text class="it" x="80" y="372" fill="#e8e6e3">Reflections</text>
+  <text class="bd" x="330" y="372" fill="#8fc9a6">Only what is already on screen</text>
+  <text class="bd" x="730" y="372" fill="#8fb4d8">Correct, including off-screen</text>
+  <text class="it" x="80" y="426" fill="#e8e6e3">Glass</text>
+  <text class="bd" x="330" y="426" fill="#8fc9a6">Needs setup, often fakey</text>
+  <text class="bd" x="730" y="426" fill="#8fb4d8">Accurate by default</text>
+  <rect x="60" y="450" width="1080" height="46" rx="8" fill="#141516"/>
+  <text class="it" x="80" y="480" fill="#e8e6e3">Noise</text>
+  <text class="bd" x="330" y="480" fill="#8fc9a6">None to speak of</text>
+  <text class="bd" x="730" y="480" fill="#8fb4d8">The thing you fight</text>
+  <rect x="60" y="540" width="1080" height="86" rx="13" fill="#1b1e20" stroke="#3b4247" stroke-width="2"/>
+  <text class="sm" x="88" y="576" fill="#f0b429">WHAT MOST PEOPLE ACTUALLY DO</text>
+  <text class="bd" x="88" y="606" fill="#d6dade">Block out, light and iterate in EEVEE because it is instant. Switch to Cycles for the final frame when the render has to be right.</text>
+  <text x="600" y="672" fill="#55595e" class="cap" text-anchor="middle">Not better and worse — fast and approximate, or slow and correct — blendertutoring.com</text>
+</svg>

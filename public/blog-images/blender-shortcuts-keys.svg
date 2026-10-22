@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" width="1200" height="700" role="img" aria-label="Blender keyboard shortcuts grouped into four sets. Transform: G move, R rotate, S scale, X delete. Modes and view: Tab edit mode, Z shading, N sidebar, T tools. Edit mode: E extrude, I inset, Control R loop cut, Control B bevel. Every day: Shift A add, Shift D duplicate, Alt D linked duplicate, Control A apply. Learn five at a time and use them until you stop thinking about them.">
+  <rect width="1200" height="700" fill="#0f1011"/>
+  <defs><style>
+    .hd  { font-family:system-ui,sans-serif; font-size:15px; font-weight:700; letter-spacing:2px; }
+    .ti  { font-family:system-ui,sans-serif; font-size:19px; font-weight:700; }
+    .it  { font-family:system-ui,sans-serif; font-size:16px; font-weight:600; }
+    .bd  { font-family:system-ui,sans-serif; font-size:13.5px; }
+    .sm  { font-family:system-ui,sans-serif; font-size:12px; font-weight:700; letter-spacing:1.4px; }
+    .key { font-family:system-ui,sans-serif; font-size:17px; font-weight:700; }
+    .cap { font-family:system-ui,sans-serif; font-size:13px; }
+  </style></defs>
+  <text class="hd" x="60" y="48" fill="#f37d16">THE ONES WORTH BURNING IN</text>
+  <text class="sm" x="60" y="122" fill="#f37d16">TRANSFORM</text>
+  <rect x="260" y="96" width="70" height="54" rx="9" fill="#1f2326" stroke="#f37d16" stroke-width="2"/>
+  <rect x="264" y="100" width="62" height="42" rx="6" fill="#282d31"/>
+  <text class="key" x="295.0" y="132" fill="#e8e6e3" text-anchor="middle">G</text>
+  <text class="bd" x="344" y="132" fill="#868c92">move</text>
+  <rect x="490" y="96" width="70" height="54" rx="9" fill="#1f2326" stroke="#f37d16" stroke-width="2"/>
+  <rect x="494" y="100" width="62" height="42" rx="6" fill="#282d31"/>
+  <text class="key" x="525.0" y="132" fill="#e8e6e3" text-anchor="middle">R</text>
+  <text class="bd" x="574" y="132" fill="#868c92">rotate</text>
+  <rect x="720" y="96" width="70" height="54" rx="9" fill="#1f2326" stroke="#f37d16" stroke-width="2"/>
+  <rect x="724" y="100" width="62" height="42" rx="6" fill="#282d31"/>
+  <text class="key" x="755.0" y="132" fill="#e8e6e3" text-anchor="middle">S</text>
+  <text class="bd" x="804" y="132" fill="#868c92">scale</text>
+  <rect x="950" y="96" width="70" height="54" rx="9" fill="#1f2326" stroke="#f37d16" stroke-width="2"/>
+  <rect x="954" y="100" width="62" height="42" rx="6" fill="#282d31"/>
+  <text class="key" x="985.0" y="132" fill="#e8e6e3" text-anchor="middle">X</text>
+  <text class="bd" x="1034" y="132" fill="#868c92">delete</text>
+  <text class="sm" x="60" y="246" fill="#5b9bd5">MODES &amp; VIEW</text>
+  <rect x="260" y="220" width="112" height="54" rx="9" fill="#1f2326" stroke="#5b9bd5" stroke-width="2"/>
+  <rect x="264" y="224" width="104" height="42" rx="6" fill="#282d31"/>
+  <text class="key" x="316.0" y="256" fill="#e8e6e3" text-anchor="middle">Tab</text>
+  <text class="bd" x="386" y="256" fill="#868c92">edit mode</text>
+  <rect x="490" y="220" width="70" height="54" rx="9" fill="#1f2326" stroke="#5b9bd5" stroke-width="2"/>
+  <rect x="494" y="224" width="62" height="42" rx="6" fill="#282d31"/>
+  <text class="key" x="525.0" y="256" fill="#e8e6e3" text-anchor="middle">Z</text>
+  <text class="bd" x="574" y="256" fill="#868c92">shading</text>
+  <rect x="720" y="220" width="70" height="54" rx="9" fill="#1f2326" stroke="#5b9bd5" stroke-width="2"/>
+  <rect x="724" y="224" width="62" height="42" rx="6" fill="#282d31"/>
+  <text class="key" x="755.0" y="256" fill="#e8e6e3" text-anchor="middle">N</text>
+  <text class="bd" x="804" y="256" fill="#868c92">sidebar</text>
+  <rect x="950" y="220" width="70" height="54" rx="9" fill="#1f2326" stroke="#5b9bd5" stroke-width="2"/>
+  <rect x="954" y="224" width="62" height="42" rx="6" fill="#282d31"/>
+  <text class="key" x="985.0" y="256" fill="#e8e6e3" text-anchor="middle">T</text>
+  <text class="bd" x="1034" y="256" fill="#868c92">tools</text>
+  <text class="sm" x="60" y="370" fill="#f0b429">EDIT MODE</text>
+  <rect x="260" y="344" width="70" height="54" rx="9" fill="#1f2326" stroke="#f0b429" stroke-width="2"/>
+  <rect x="264" y="348" width="62" height="42" rx="6" fill="#282d31"/>
+  <text class="key" x="295.0" y="380" fill="#e8e6e3" text-anchor="middle">E</text>
+  <text class="bd" x="344" y="380" fill="#868c92">extrude</text>
+  <rect x="490" y="344" width="70" height="54" rx="9" fill="#1f2326" stroke="#f0b429" stroke-width="2"/>
+  <rect x="494" y="348" width="62" height="42" rx="6" fill="#282d31"/>
+  <text class="key" x="525.0" y="380" fill="#e8e6e3" text-anchor="middle">I</text>
+  <text class="bd" x="574" y="380" fill="#868c92">inset</text>
+  <rect x="720" y="344" width="112" height="54" rx="9" fill="#1f2326" stroke="#f0b429" stroke-width="2"/>
+  <rect x="724" y="348" width="104" height="42" rx="6" fill="#282d31"/>
+  <text class="key" x="776.0" y="380" fill="#e8e6e3" text-anchor="middle">Ctrl+R</text>
+  <text class="bd" x="846" y="380" fill="#868c92">loop cut</text>
+  <rect x="950" y="344" width="112" height="54" rx="9" fill="#1f2326" stroke="#f0b429" stroke-width="2"/>
+  <rect x="954" y="348" width="104" height="42" rx="6" fill="#282d31"/>
+  <text class="key" x="1006.0" y="380" fill="#e8e6e3" text-anchor="middle">Ctrl+B</text>
+  <text class="bd" x="1076" y="380" fill="#868c92">bevel</text>
+  <text class="sm" x="60" y="494" fill="#5ddb8b">EVERY DAY</text>
+  <rect x="260" y="468" width="112" height="54" rx="9" fill="#1f2326" stroke="#5ddb8b" stroke-width="2"/>
+  <rect x="264" y="472" width="104" height="42" rx="6" fill="#282d31"/>
+  <text class="key" x="316.0" y="504" fill="#e8e6e3" text-anchor="middle">Shift+A</text>
+  <text class="bd" x="386" y="504" fill="#868c92">add</text>
+  <rect x="490" y="468" width="112" height="54" rx="9" fill="#1f2326" stroke="#5ddb8b" stroke-width="2"/>
+  <rect x="494" y="472" width="104" height="42" rx="6" fill="#282d31"/>
+  <text class="key" x="546.0" y="504" fill="#e8e6e3" text-anchor="middle">Shift+D</text>
+  <text class="bd" x="616" y="504" fill="#868c92">duplicate</text>
+  <rect x="720" y="468" width="112" height="54" rx="9" fill="#1f2326" stroke="#5ddb8b" stroke-width="2"/>
+  <rect x="724" y="472" width="104" height="42" rx="6" fill="#282d31"/>
+  <text class="key" x="776.0" y="504" fill="#e8e6e3" text-anchor="middle">Alt+D</text>
+  <text class="bd" x="846" y="504" fill="#868c92">linked dup</text>
+  <rect x="950" y="468" width="112" height="54" rx="9" fill="#1f2326" stroke="#5ddb8b" stroke-width="2"/>
+  <rect x="954" y="472" width="104" height="42" rx="6" fill="#282d31"/>
+  <text class="key" x="1006.0" y="504" fill="#e8e6e3" text-anchor="middle">Ctrl+A</text>
+  <text class="bd" x="1076" y="504" fill="#868c92">apply</text>
+  <rect x="60" y="596" width="1080" height="0" rx="13" fill="#0f1011" stroke="#0f1011" stroke-width="2"/>
+  <text class="bd" x="60" y="586" fill="#7d848a">Learn five at a time and use them until you stop thinking about them. A list of sixty memorised badly is worth less than six you never have to recall.</text>
+  <text x="600" y="672" fill="#55595e" class="cap" text-anchor="middle">Six you never have to recall beat sixty you memorised — blendertutoring.com</text>
+</svg>

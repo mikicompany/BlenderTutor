@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" width="1200" height="700" role="img" aria-label="A four-stop route through free Blender tutorials: start with the Donut by Blender Guru to prove you can finish something, then fundamentals with Grant Abbitt for gentle explanations of why rather than which key, then CG Cookie Basics for structure that fills the gaps a playlist of one-offs leaves, then pick a lane with Ryan King, Ducky 3D or Blender Bros for hard surface, motion or environments. The honest limitation is that free tutorials show how someone else solved their problem, and nobody is looking at your file.">
+  <rect width="1200" height="700" fill="#0f1011"/>
+  <defs><style>
+    .hd  { font-family:system-ui,sans-serif; font-size:15px; font-weight:700; letter-spacing:2px; }
+    .ti  { font-family:system-ui,sans-serif; font-size:19px; font-weight:700; }
+    .it  { font-family:system-ui,sans-serif; font-size:16px; font-weight:600; }
+    .bd  { font-family:system-ui,sans-serif; font-size:13.5px; }
+    .sm  { font-family:system-ui,sans-serif; font-size:12px; font-weight:700; letter-spacing:1.4px; }
+    .key { font-family:system-ui,sans-serif; font-size:17px; font-weight:700; }
+    .cap { font-family:system-ui,sans-serif; font-size:13px; }
+  </style></defs>
+  <text class="hd" x="60" y="48" fill="#f37d16">A ROUTE THROUGH THE FREE STUFF</text>
+  <rect x="60" y="110" width="250" height="300" rx="13" fill="#161718" stroke="#f37d16" stroke-width="2"/>
+  <circle cx="96" cy="152" r="18" fill="none" stroke="#f37d16" stroke-width="2"/>
+  <text class="it" x="90" y="158" fill="#f37d16">1</text>
+  <text class="ti" x="130" y="158" fill="#e8e6e3">The Donut</text>
+  <text class="it" x="84" y="210" fill="#f37d16">Blender Guru</text>
+  <text class="bd" x="84" y="282" fill="#868c92">Proves you can finish</text>
+  <text class="bd" x="84" y="304" fill="#868c92">something. Do not stop here.</text>
+  <line x1="312" y1="260" x2="333" y2="260" stroke="#3b4247" stroke-width="3"/>
+  <path d="M329 252 L343 260 L329 268 z" fill="#3b4247"/>
+  <rect x="345" y="110" width="250" height="300" rx="13" fill="#161718" stroke="#f0b429" stroke-width="2"/>
+  <circle cx="381" cy="152" r="18" fill="none" stroke="#f0b429" stroke-width="2"/>
+  <text class="it" x="375" y="158" fill="#f0b429">2</text>
+  <text class="ti" x="415" y="158" fill="#e8e6e3">Fundamentals</text>
+  <text class="it" x="369" y="210" fill="#f0b429">Grant Abbitt</text>
+  <text class="bd" x="369" y="282" fill="#868c92">Gentlest explanations</text>
+  <text class="bd" x="369" y="304" fill="#868c92">of why, not just which key.</text>
+  <line x1="597" y1="260" x2="618" y2="260" stroke="#3b4247" stroke-width="3"/>
+  <path d="M614 252 L628 260 L614 268 z" fill="#3b4247"/>
+  <rect x="630" y="110" width="250" height="300" rx="13" fill="#161718" stroke="#5b9bd5" stroke-width="2"/>
+  <circle cx="666" cy="152" r="18" fill="none" stroke="#5b9bd5" stroke-width="2"/>
+  <text class="it" x="660" y="158" fill="#5b9bd5">3</text>
+  <text class="ti" x="700" y="158" fill="#e8e6e3">Structure</text>
+  <text class="it" x="654" y="210" fill="#5b9bd5">CG Cookie Basics</text>
+  <text class="bd" x="654" y="282" fill="#868c92">Fills the gaps a playlist</text>
+  <text class="bd" x="654" y="304" fill="#868c92">of one-offs leaves behind.</text>
+  <line x1="882" y1="260" x2="903" y2="260" stroke="#3b4247" stroke-width="3"/>
+  <path d="M899 252 L913 260 L899 268 z" fill="#3b4247"/>
+  <rect x="915" y="110" width="250" height="300" rx="13" fill="#161718" stroke="#5ddb8b" stroke-width="2"/>
+  <circle cx="951" cy="152" r="18" fill="none" stroke="#5ddb8b" stroke-width="2"/>
+  <text class="it" x="945" y="158" fill="#5ddb8b">4</text>
+  <text class="ti" x="985" y="158" fill="#e8e6e3">Pick a lane</text>
+  <text class="it" x="939" y="210" fill="#5ddb8b">Ryan King · Ducky 3D</text>
+  <text class="it" x="939" y="232" fill="#5ddb8b">Blender Bros</text>
+  <text class="bd" x="939" y="282" fill="#868c92">Hard surface, motion,</text>
+  <text class="bd" x="939" y="304" fill="#868c92">or environments.</text>
+  <rect x="60" y="442" width="1080" height="96" rx="13" fill="#231314" stroke="#8a3034" stroke-width="2"/>
+  <text class="sm" x="88" y="478" fill="#ff7b72">THE HONEST LIMITATION</text>
+  <text class="bd" x="88" y="510" fill="#e8c4c2">Free tutorials show you how someone else solved their problem. Nobody there is looking at your file and telling you what you got wrong.</text>
+  <text class="bd" x="60" y="584" fill="#7d848a">Which is fine for a long time — and the reason progress stalls later than most people expect.</text>
+  <text x="600" y="672" fill="#55595e" class="cap" text-anchor="middle">A route, not a pile of links — blendertutoring.com</text>
+</svg>
