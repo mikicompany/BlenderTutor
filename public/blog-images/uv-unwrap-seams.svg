@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" width="1200" height="700" role="img" aria-label="Left: an isometric cube with three edges marked in orange as seams, described as where you cut, best hidden on a back edge or crease. Right: the same cube unwrapped into a flat net of six squares, where every face gets its own patch of texture and overlaps mean two faces fighting over the same pixels. Below: apply a checker texture to test, as even squares mean even texel density.">
+  <rect width="1200" height="700" fill="#0f1011"/>
+  <defs><style>
+    .hd  { font-family:system-ui,sans-serif; font-size:15px; font-weight:700; letter-spacing:2px; }
+    .ti  { font-family:system-ui,sans-serif; font-size:19px; font-weight:700; }
+    .it  { font-family:system-ui,sans-serif; font-size:16px; font-weight:600; }
+    .bd  { font-family:system-ui,sans-serif; font-size:13.5px; }
+    .sm  { font-family:system-ui,sans-serif; font-size:12px; font-weight:700; letter-spacing:1.4px; }
+    .key { font-family:system-ui,sans-serif; font-size:17px; font-weight:700; }
+    .cap { font-family:system-ui,sans-serif; font-size:13px; }
+  </style></defs>
+  <text class="hd" x="60" y="48" fill="#f37d16">A UV MAP IS THE MODEL, FLATTENED</text>
+  <polygon points="240,142 348,196 240,250 132,196" fill="#2b3034" stroke="#6b7279" stroke-width="2"/>
+  <polygon points="132,196 240,250 240,358 132,304" fill="#23282b" stroke="#6b7279" stroke-width="2"/>
+  <polygon points="240,250 348,196 348,304 240,358" fill="#1d2124" stroke="#6b7279" stroke-width="2"/>
+  <line x1="132" y1="196" x2="240" y2="250" stroke="#f37d16" stroke-width="4"/>
+  <line x1="240" y1="250" x2="240" y2="358" stroke="#f37d16" stroke-width="4"/>
+  <line x1="240" y1="142" x2="132" y2="196" stroke="#f37d16" stroke-width="4"/>
+  <text class="it" x="140" y="420" fill="#f0b429">Seams are where you cut.</text>
+  <text class="bd" x="140" y="448" fill="#868c92">Hide them where nobody looks —</text>
+  <text class="bd" x="140" y="470" fill="#868c92">a back edge, a crease, a join.</text>
+  <line x1="400" y1="250" x2="460" y2="250" stroke="#f37d16" stroke-width="3"/>
+  <path d="M456 242 L470 250 L456 258 z" fill="#f37d16"/>
+  <rect x="634" y="120" width="74" height="74" fill="#24282b" stroke="#f37d16" stroke-width="2"/>
+  <rect x="560" y="194" width="74" height="74" fill="#24282b" stroke="#f37d16" stroke-width="2"/>
+  <rect x="634" y="194" width="74" height="74" fill="#24282b" stroke="#f37d16" stroke-width="2"/>
+  <rect x="708" y="194" width="74" height="74" fill="#24282b" stroke="#f37d16" stroke-width="2"/>
+  <rect x="782" y="194" width="74" height="74" fill="#24282b" stroke="#f37d16" stroke-width="2"/>
+  <rect x="634" y="268" width="74" height="74" fill="#24282b" stroke="#f37d16" stroke-width="2"/>
+  <text class="it" x="560" y="420" fill="#5ddb8b">Unwrapped, it is a flat net.</text>
+  <text class="bd" x="560" y="448" fill="#868c92">Every face gets its own patch of the</text>
+  <text class="bd" x="560" y="470" fill="#868c92">texture. Overlaps mean two faces</text>
+  <text class="bd" x="560" y="492" fill="#868c92">fighting over the same pixels.</text>
+  <rect x="60" y="528" width="1080" height="96" rx="13" fill="#1b1e20" stroke="#3b4247" stroke-width="2"/>
+  <text class="sm" x="88" y="564" fill="#f0b429">THE TEST THAT TELLS YOU IT WORKED</text>
+  <text class="bd" x="88" y="596" fill="#d6dade">Apply a checker texture. Even squares everywhere means even texel density. Stretched or shrunken squares show you exactly where the problem is.</text>
+  <text x="600" y="672" fill="#55595e" class="cap" text-anchor="middle">Stretching is almost always a seam you did not cut — blendertutoring.com</text>
+</svg>

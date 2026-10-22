@@ -1486,6 +1486,8 @@ Blender and Unreal Engine are good at almost exactly opposite things, which is p
 
 And the entire pipeline, end to end, costs nothing to start.
 
+![What survives the Blender to Unreal handoff, and what does not](/blog-images/blender-unreal-handoff.svg)
+
 ---
 
 ## 💑 Why They Fit So Well
@@ -1597,6 +1599,8 @@ Here's the short version, then the details.
 
 > 💡 **The one-line answer:** EEVEE is fast and approximates light. Cycles is slow and simulates it. Beginners should work in EEVEE and render finals in Cycles until they have a reason not to.
 
+![EEVEE the rasterizer against Cycles the path tracer, compared](/blog-images/cycles-eevee-compare.svg)
+
 ---
 
 ## ⚖️ What Actually Separates Them
@@ -1682,6 +1686,8 @@ That's the kind of thing that's genuinely hard to diagnose from a tutorial, beca
 Modelling clicks eventually. Materials sort of click. Then you try to put an image texture on your model, it comes out smeared into unrecognisable streaks, and you discover UV unwrapping.
 
 This is the wall. More beginners stall here than anywhere else in Blender, and it's almost always because nobody explained what the process is actually *for*.
+
+![A cube with seams marked, and the same cube unwrapped into a flat net](/blog-images/uv-unwrap-seams.svg)
 
 ---
 
@@ -1869,6 +1875,8 @@ Congratulations — genuinely. Blender Guru's donut is where a huge share of all
 
 But now comes the question the tutorial doesn't answer: **what next?**
 
+![Tutorial hell as a closed loop, against the build loop that moves forward](/blog-images/donut-tutorial-loop.svg)
+
 ---
 
 ## 🍩 First, Give Yourself Credit
@@ -1975,6 +1983,8 @@ Everyone asks this before they start. The honest answer is: it depends on what y
 Blender is deep. You could spend a lifetime mastering every corner of it. But getting to a point where you're making things you're genuinely proud of? That's more achievable than most people think.
 
 Here's a realistic breakdown based on consistent practice — even just **30–60 minutes a day**.
+
+![A five-stage timeline for learning Blender, from week one to job-ready](/blog-images/blender-learning-timeline.svg)
 
 ---
 
@@ -2260,6 +2270,8 @@ If there's one thing that separates a slow Blender workflow from a fast one, it'
 
 Here are the shortcuts that matter most when you're starting out.
 
+![Blender keyboard shortcuts grouped as keycaps by what they do](/blog-images/blender-shortcuts-keys.svg)
+
 ---
 
 ## 🖱️ Viewport Navigation
@@ -2409,6 +2421,8 @@ Bookmark this page — it works as a cheat sheet you can pull up whenever you fo
 Blender has one of the best free learning ecosystems of any creative software. The problem isn't finding tutorials — it's knowing which ones are actually worth your time.
 
 Here's an honest breakdown of the best free resources, what they're good for, and what order to use them in.
+
+![A four-stop route through the best free Blender tutorials](/blog-images/free-tutorial-path.svg)
 
 ---
 

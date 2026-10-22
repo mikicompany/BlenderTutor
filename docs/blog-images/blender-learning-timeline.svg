@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" width="1200" height="700" role="img" aria-label="A timeline of learning Blender in five stages: week one is survival mode fighting the interface; one to three months things start clicking and shortcuts become muscle memory; three to six months a real workflow forms as modelling, UVs and texturing stop being separate mysteries; six to twelve months brings specialisation into a lane; one to two years reaches job-ready portfolio work if you have been finishing things. What moves you along it is hours finishing your own projects rather than hours watching.">
+  <rect width="1200" height="700" fill="#0f1011"/>
+  <defs><style>
+    .hd  { font-family:system-ui,sans-serif; font-size:15px; font-weight:700; letter-spacing:2px; }
+    .ti  { font-family:system-ui,sans-serif; font-size:19px; font-weight:700; }
+    .it  { font-family:system-ui,sans-serif; font-size:16px; font-weight:600; }
+    .bd  { font-family:system-ui,sans-serif; font-size:13.5px; }
+    .sm  { font-family:system-ui,sans-serif; font-size:12px; font-weight:700; letter-spacing:1.4px; }
+    .key { font-family:system-ui,sans-serif; font-size:17px; font-weight:700; }
+    .cap { font-family:system-ui,sans-serif; font-size:13px; }
+  </style></defs>
+  <text class="hd" x="60" y="48" fill="#f37d16">A HONEST TIMELINE, NOT A PROMISE</text>
+  <line x1="90" y1="330" x2="1140" y2="330" stroke="#2c3033" stroke-width="3"/>
+  <circle cx="140" cy="330" r="11" fill="#ff7b72"/>
+  <line x1="140" y1="304" x2="140" y2="282" stroke="#ff7b72" stroke-width="2"/>
+  <text class="it" x="140" y="172" fill="#ff7b72" text-anchor="middle">Week 1</text>
+  <text class="bd" x="140" y="196" fill="#e8e6e3" text-anchor="middle">Survival mode</text>
+  <text class="cap" x="140" y="222" fill="#868c92" text-anchor="middle">Fighting the interface.</text>
+  <text class="cap" x="140" y="242" fill="#868c92" text-anchor="middle">Everything takes ten</text>
+  <text class="cap" x="140" y="262" fill="#868c92" text-anchor="middle">times too long.</text>
+  <circle cx="368" cy="330" r="11" fill="#f0b429"/>
+  <line x1="368" y1="356" x2="368" y2="390" stroke="#f0b429" stroke-width="2"/>
+  <text class="it" x="368" y="418" fill="#f0b429" text-anchor="middle">1–3 months</text>
+  <text class="bd" x="368" y="442" fill="#e8e6e3" text-anchor="middle">It starts clicking</text>
+  <text class="cap" x="368" y="468" fill="#868c92" text-anchor="middle">Shortcuts become</text>
+  <text class="cap" x="368" y="488" fill="#868c92" text-anchor="middle">muscle memory. You</text>
+  <text class="cap" x="368" y="508" fill="#868c92" text-anchor="middle">finish small things.</text>
+  <circle cx="596" cy="330" r="11" fill="#f37d16"/>
+  <line x1="596" y1="304" x2="596" y2="282" stroke="#f37d16" stroke-width="2"/>
+  <text class="it" x="596" y="172" fill="#f37d16" text-anchor="middle">3–6 months</text>
+  <text class="bd" x="596" y="196" fill="#e8e6e3" text-anchor="middle">A real workflow</text>
+  <text class="cap" x="596" y="222" fill="#868c92" text-anchor="middle">Modelling, UVs and</text>
+  <text class="cap" x="596" y="242" fill="#868c92" text-anchor="middle">texturing stop being</text>
+  <text class="cap" x="596" y="262" fill="#868c92" text-anchor="middle">separate mysteries.</text>
+  <circle cx="824" cy="330" r="11" fill="#5b9bd5"/>
+  <line x1="824" y1="356" x2="824" y2="390" stroke="#5b9bd5" stroke-width="2"/>
+  <text class="it" x="824" y="418" fill="#5b9bd5" text-anchor="middle">6–12 months</text>
+  <text class="bd" x="824" y="442" fill="#e8e6e3" text-anchor="middle">Specialisation</text>
+  <text class="cap" x="824" y="468" fill="#868c92" text-anchor="middle">You pick a lane —</text>
+  <text class="cap" x="824" y="488" fill="#868c92" text-anchor="middle">environments, characters,</text>
+  <text class="cap" x="824" y="508" fill="#868c92" text-anchor="middle">motion.</text>
+  <circle cx="1052" cy="330" r="11" fill="#5ddb8b"/>
+  <line x1="1052" y1="304" x2="1052" y2="282" stroke="#5ddb8b" stroke-width="2"/>
+  <text class="it" x="1052" y="172" fill="#5ddb8b" text-anchor="middle">1–2 years</text>
+  <text class="bd" x="1052" y="196" fill="#e8e6e3" text-anchor="middle">Job-ready</text>
+  <text class="cap" x="1052" y="222" fill="#868c92" text-anchor="middle">Portfolio-grade work,</text>
+  <text class="cap" x="1052" y="242" fill="#868c92" text-anchor="middle">if you have been</text>
+  <text class="cap" x="1052" y="262" fill="#868c92" text-anchor="middle">finishing things.</text>
+  <rect x="60" y="540" width="1080" height="96" rx="13" fill="#1b1e20" stroke="#3b4247" stroke-width="2"/>
+  <text class="sm" x="88" y="576" fill="#f0b429">WHAT ACTUALLY MOVES YOU ALONG IT</text>
+  <text class="bd" x="88" y="608" fill="#d6dade">Hours finishing your own projects. Not hours watching. Someone doing four focused hours a week will pass someone watching twenty.</text>
+  <text x="600" y="672" fill="#55595e" class="cap" text-anchor="middle">The range is wide because the variable is you, not Blender — blendertutoring.com</text>
+</svg>
