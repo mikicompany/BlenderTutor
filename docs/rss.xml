@@ -5,8 +5,15 @@
     <link>https://www.blendertutoring.com/blog</link>
     <description>Practical Blender guides for beginners and game artists.</description>
     <language>en</language>
-    <lastBuildDate>Wed, 21 Oct 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 22 Oct 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://www.blendertutoring.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Blender FBX Export: Fixing Wrong Scale and Rotation</title>
+      <link>https://www.blendertutoring.com/blog/blender-fbx-export-scale-rotation</link>
+      <guid isPermaLink="true">https://www.blendertutoring.com/blog/blender-fbx-export-scale-rotation</guid>
+      <pubDate>Thu, 22 Oct 2026 00:00:00 GMT</pubDate>
+      <description>Your model lands a hundred times too big or lying on its side. Why every guide gives different settings, and the two-minute test that settles it.</description>
+    </item>
     <item>
       <title>Blender Running Slow? Viewport Lag, Freezes and Fixes</title>
       <link>https://www.blendertutoring.com/blog/blender-running-slow</link>

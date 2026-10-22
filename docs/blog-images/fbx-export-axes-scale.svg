@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" width="1200" height="700" role="img" aria-label="Left: a table of up and forward axes — Blender is Z up and minus Y forward, Unity is Y up and Z forward, Unreal is Z up and X forward, so Blender and Unreal agree on up but nothing agrees on forward. Right: the FBX exporter Apply Scalings options — All Local, the default, bakes unit scaling into every object so each arrives with a scale of 100, while FBX Units Scale and FBX All move that factor into the file header. A warning that the Apply Transform checkbox is experimental and has been reported to break deep hierarchies and skinning. Finally, the test that settles it: export a one-metre reference cube alongside everything else and measure it in the engine.">
+  <rect width="1200" height="700" fill="#0f1011"/>
+  <defs><style>
+    .hd  { font-family:system-ui,sans-serif; font-size:15px; font-weight:700; letter-spacing:2px; }
+    .ti  { font-family:system-ui,sans-serif; font-size:18px; font-weight:700; }
+    .it  { font-family:system-ui,sans-serif; font-size:16px; font-weight:600; }
+    .bd  { font-family:system-ui,sans-serif; font-size:13.5px; }
+    .sm  { font-family:system-ui,sans-serif; font-size:12px; font-weight:700; letter-spacing:1.4px; }
+    .ax  { font-family:system-ui,sans-serif; font-size:14px; font-weight:700; }
+    .cap { font-family:system-ui,sans-serif; font-size:13px; }
+  </style></defs>
+  <text class="hd" x="60" y="48" fill="#f37d16">TWO PROGRAMS, TWO SETS OF ASSUMPTIONS</text>
+  <rect x="60" y="84" width="520" height="300" rx="13" fill="#161718" stroke="#2c3033" stroke-width="2"/>
+  <text class="sm" x="88" y="122" fill="#f0b429">WHICH WAY IS UP</text>
+  <text class="bd" x="96" y="164" fill="#aeb4ba"></text>
+  <text class="sm" x="250" y="164" fill="#6f767c">UP</text>
+  <text class="sm" x="390" y="164" fill="#6f767c">FORWARD</text>
+  <rect x="88" y="186" width="464" height="36" rx="7" fill="#141516"/>
+  <text class="it" x="104" y="210" fill="#f37d16">Blender</text>
+  <text class="ax" x="250" y="210" fill="#e8e6e3">Z</text>
+  <text class="ax" x="390" y="210" fill="#e8e6e3">−Y</text>
+  <text class="it" x="104" y="256" fill="#5b9bd5">Unity</text>
+  <text class="ax" x="250" y="256" fill="#e8e6e3">Y</text>
+  <text class="ax" x="390" y="256" fill="#e8e6e3">Z</text>
+  <rect x="88" y="278" width="464" height="36" rx="7" fill="#141516"/>
+  <text class="it" x="104" y="302" fill="#5ddb8b">Unreal</text>
+  <text class="ax" x="250" y="302" fill="#e8e6e3">Z</text>
+  <text class="ax" x="390" y="302" fill="#e8e6e3">X</text>
+  <text class="bd" x="88" y="362" fill="#868c92">Blender and Unreal agree on up. Nothing agrees on forward.</text>
+  <rect x="620" y="84" width="520" height="300" rx="13" fill="#161718" stroke="#2c3033" stroke-width="2"/>
+  <text class="sm" x="648" y="122" fill="#f0b429">FBX EXPORT · APPLY SCALINGS</text>
+  <circle cx="662" cy="161" r="6" fill="#ff7b72"/>
+  <text class="it" x="682" y="166" fill="#ff7b72">All Local</text>
+  <text class="cap" x="773" y="166" fill="#6f767c">the default</text>
+  <text class="bd" x="682" y="190" fill="#868c92">Bakes unit scaling into every object, so each</text>
+  <text class="bd" x="682" y="210" fill="#868c92">arrives carrying a scale of 100.</text>
+  <circle cx="662" cy="243" r="6" fill="#5ddb8b"/>
+  <text class="it" x="682" y="248" fill="#5ddb8b">FBX Units Scale</text>
+  <text class="bd" x="682" y="272" fill="#868c92">Moves that factor into the file header</text>
+  <text class="bd" x="682" y="292" fill="#868c92">instead of onto your objects.</text>
+  <circle cx="662" cy="325" r="6" fill="#f0b429"/>
+  <text class="it" x="682" y="330" fill="#f0b429">FBX All</text>
+  <text class="bd" x="682" y="354" fill="#868c92">The other common recommendation. Guides</text>
+  <text class="bd" x="682" y="374" fill="#868c92">disagree about which of these two to use.</text>
+  <rect x="60" y="408" width="1080" height="96" rx="13" fill="#231314" stroke="#8a3034" stroke-width="2"/>
+  <text class="sm" x="88" y="444" fill="#ff7b72">THE CHECKBOX THAT LOOKS LIKE THE ANSWER</text>
+  <text class="bd" x="88" y="476" fill="#e8c4c2">Apply Transform is marked experimental. Reports have it breaking hierarchies deeper than one level and breaking skinning on rigged meshes.</text>
+  <rect x="60" y="524" width="1080" height="108" rx="13" fill="#10211a" stroke="#2f7d4f" stroke-width="2"/>
+  <text class="sm" x="88" y="560" fill="#5ddb8b">THE ONLY THING THAT SETTLES IT</text>
+  <rect x="92" y="578" width="34" height="34" rx="4" fill="#1b2d22" stroke="#5ddb8b" stroke-width="2"/>
+  <text class="cap" x="109" y="601" fill="#5ddb8b" text-anchor="middle">1m</text>
+  <text class="bd" x="144" y="592" fill="#cfe9d8">Put a one-metre cube in the scene and export it with everything else. Measure it in the engine.</text>
+  <text class="bd" x="144" y="614" fill="#8fc9a6">Advice conflicts because it is version- and engine-specific. The cube is not.</text>
+  <text x="600" y="672" fill="#55595e" class="cap" text-anchor="middle">Nothing is broken. Two programs simply disagree about units and which way is up &#8212; blendertutoring.com</text>
+</svg>
