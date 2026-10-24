@@ -844,6 +844,10 @@ Two more from the same menu worth knowing:
 
 ---
 
+![The same cylinder bent by the same angle, with one loop through the bend and with twenty-four](/blog-images/joint-edge-loops-real.jpg)
+
+Same cylinder, same bend, same angle. The only difference is how much geometry there is to bend with, and it decides everything — no weight map rescues a surface that has nowhere to fold.
+
 ## 🧱 Put Loops At The Joint
 
 A joint with one edge loop through it cannot bend well. There is nothing to distribute the rotation across, so the surface has to crease, and no weight map rescues geometry that has nowhere to go.
@@ -1928,6 +1932,10 @@ Only do this when you are confident you will not need the symmetry again. After 
 
 ---
 
+![One half of a model, and the same half with a Mirror modifier rebuilding the other side](/blog-images/mirror-modifier-half-real.jpg)
+
+That is the whole idea in one picture. Everything past the centre line was deleted; the modifier puts it back live, so every change you make to the half you kept lands on both sides at once.
+
 ## The Three Settings That Actually Matter
 
 Most of the Mirror Modifier panel can be left alone. These three earn their place.
@@ -2126,6 +2134,10 @@ EEVEE is a **rasterizer**, closer to how a video game draws a frame. It approxim
 | Best at | Stylized work, animation, iteration | Photoreal stills, product, archviz |
 
 ---
+
+![A chrome sphere rendered in Cycles and in EEVEE, with an off-screen panel reflected only by Cycles](/blog-images/cycles-eevee-reflection-real.jpg)
+
+That is the difference made concrete. The bright panel sits just outside the camera frame. Cycles reflects it because it follows rays into the whole scene; EEVEE's reflections can only use what is already on screen, so it is not there. Nothing is misconfigured — it is the approximation working as designed.
 
 ## 🟢 When EEVEE Is the Right Choice
 
