@@ -94,6 +94,22 @@ Four steps, and you have touched all three ideas with nothing memorised. That is
 
 ---
 
+## 🖼️ What A Real Setup Actually Looks Like
+
+![Four procedural lattice cones in the Blender viewport, with a four-node geometry nodes tree below them and a modifier stack beside them](/blog-images/geometry-nodes-real-tree.jpg)
+
+This is worth a moment, because it makes a point better than another paragraph would.
+
+**The node tree at the bottom is four nodes.** A Cone, a Triangulate, a Set Shade Smooth, and the Group Output. That is all of it. Every bit of the lattice detail you can see comes from what is stacked *after* the node tree — a Wireframe modifier, a Subdivision, and a Twist — not from anything clever in the nodes themselves.
+
+That is a completely normal way to work, and worth saying out loud because it is not what the tutorials imply. Geometry nodes does not have to do everything. It is one block in a modifier stack, and it is often the smallest block.
+
+The other thing to notice is in the status bar: **1.3 million vertices and 2.6 million triangles**, out of four nodes and three modifiers. Procedural does not mean free. It is remarkably easy to describe something that costs nothing to type and a great deal to evaluate, which is [the viewport performance problem](/blog/blender-running-slow) arriving through a different door.
+
+(That shot is from an older Blender, and the nodes in it work the same way today — it is the socket shapes and Capture Attribute that have moved, not Cone and Triangulate.)
+
+---
+
 ## ⚠️ One Honest Warning About Tutorials Here
 
 Geometry nodes has moved faster than almost any other part of Blender, and written guides date badly. Socket shapes changed. Capture Attribute changed. Node names have shifted across releases.

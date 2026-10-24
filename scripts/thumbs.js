@@ -61,6 +61,10 @@ if (!todo.length) {
     const { w, h } = await page.evaluate(
       (u) =>
         new Promise((res, rej) => {
+          // This callback is serialised and run inside the page, so the
+          // browser globals are the right ones here even though the rest of
+          // the file is Node.
+          // eslint-disable-next-line no-undef
           const i = new Image()
           i.onload = () => res({ w: i.naturalWidth, h: i.naturalHeight })
           i.onerror = () => rej(new Error("decode failed"))
