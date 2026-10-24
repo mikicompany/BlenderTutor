@@ -220,7 +220,7 @@ So the useful habit is not memorising a setup. It is knowing which parts are loa
     title: "Blender Geometry Nodes: The Three Ideas That Make It Click",
     description: "Fields, domains and the spreadsheet \u2014 the three ideas tutorials skip while teaching recipes. Plus the socket shapes that changed in 2025.",
     date: "2026-10-22",
-    thumbnail: "/blog-images/geometry-nodes-fields-domains.jpg",
+    thumbnail: "/blog-images/geometry-nodes-real-tree.jpg",
     content: `
 You follow a geometry nodes tutorial. You wire up exactly what the video wires up. The scattered rocks appear, the result looks right, and you close Blender knowing precisely as much as you did before.
 
@@ -628,7 +628,7 @@ And note that none of this is about your final render being slow — [that is a 
     title: "Blender Shading Artifacts: Why Your Model Has Black Patches",
     description: "Black faces, smudged curves, a grey band down a bevel \u2014 six causes that look alike, in the order worth checking. Plus what Blender 4.1 changed.",
     date: "2026-10-19",
-    thumbnail: "/blog-images/shading-artifact-ladder.jpg",
+    thumbnail: "/blog-images/smooth-shading-cap-real.jpg",
     content: `
 You hit Shade Smooth and your clean model develops dark smudges across the curves. Or one face renders solid black. Or a bevel you were pleased with grows a grey band down its length.
 
@@ -771,7 +771,7 @@ Once you see the problem that way, the six fixes stop being a list to memorise a
     title: "Weight Painting in Blender: Why Your Rig Deforms Badly",
     description: "Most weight-painting pain is not a painting problem. The mesh, the scale and the normalisation to fix first \u2014 plus why the candy-wrapper needs a bone.",
     date: "2026-10-19",
-    thumbnail: "/blog-images/rig-deformation-symptoms.jpg",
+    thumbnail: "/blog-images/joint-edge-loops-real.jpg",
     content: `
 Your character bends at the elbow and something goes wrong. The surface pinches to a point. A patch of shoulder stays floating where it was. The forearm rotates and collapses in on itself like a twisted sweet wrapper.
 
@@ -930,7 +930,7 @@ Which is why the fix is so often upstream of the brush. The rig is not refusing 
     title: "Why Your Blender Materials Look Like Plastic",
     description: "Four fixable causes, starting with a colour space checkbox that quietly ruins every data map \u2014 plus what changed in the Principled BSDF in Blender 4.0.",
     date: "2026-10-18",
-    thumbnail: "/blog-images/pbr-colorspace-values.jpg",
+    thumbnail: "/blog-images/roughness-uniform-vs-varied-real.jpg",
     content: `
 Everything you render looks like it was injection-moulded. The wood looks like plastic pretending to be wood, the metal looks like plastic painted silver, and the stone looks like a toy.
 
@@ -1271,7 +1271,7 @@ Topology is not a tidiness contest. It is a set of decisions about what the mesh
     title: "Why Your Blender Render Looks Flat",
     description: "Flat renders are a lighting problem, not a modelling one. The greyscale test, the four usual causes, and a three-point setup that reliably works.",
     date: "2026-10-17",
-    thumbnail: "/blog-images/blender-three-point-lighting.jpg",
+    thumbnail: "/blog-images/lighting-flat-vs-threepoint-real.jpg",
     content: `
 You modelled it carefully. The topology is clean, the textures are fine, and the render still looks like a product photo taken in a supermarket aisle. Everything is visible. Nothing has any form.
 
@@ -1392,7 +1392,7 @@ If your portfolio pieces look flat, the model is probably not the problem. [Whic
     title: "Why Your Blender Render Is Noisy \u2014 and How to Fix It",
     description: "Noise is four different problems, not one. How to tell grain from fireflies from caustics, what fixes each, and why raising the sample count comes last.",
     date: "2026-10-17",
-    thumbnail: "/blog-images/blender-render-noise-types.jpg",
+    thumbnail: "/blog-images/cycles-noise-samples-real.jpg",
     content: `
 Your render looks like a sandstorm. The first advice you will find is "turn up the samples", so you set it to 4096, go to bed, and wake up to a render that is still grainy and took nine hours.
 
@@ -1859,7 +1859,7 @@ If you are early enough that modelling itself is still hard, this is a distracti
     title: "Mastering the Mirror Modifier in Blender",
     description: "Model half, get the whole thing. How the Mirror Modifier works, the three settings that matter, and the mistakes that make it misbehave.",
     date: "2026-10-01",
-    thumbnail: "/blog-images/mirror-modifier-diagram.jpg",
+    thumbnail: "/blog-images/mirror-modifier-half-real.jpg",
     content: `
 If you have ever tried to model a character's face, a car, or a butterfly by hand, you already know the pain: build one wing, then build the exact same wing again on the other side — perfectly. One misplaced vertex and the whole thing looks lopsided.
 
@@ -2105,7 +2105,7 @@ But knowing that Unreal is waiting changes how you learn Blender. You start cari
     title: "Cycles vs EEVEE: Which Blender Render Engine Should You Use?",
     description: "Blender ships with two render engines and never explains which to pick. Here's the honest answer, and when each one is the right call.",
     date: "2026-08-15",
-    thumbnail: "/blog-images/cycles-vs-eevee.jpg",
+    thumbnail: "/blog-images/cycles-eevee-reflection-real.jpg",
     content: `
 Blender ships with two render engines, offers no guidance on which to use, and quietly defaults you into one of them. So you render something, it looks wrong, and you have no idea whether you chose badly or did something wrong.
 
