@@ -8,6 +8,13 @@
     <lastBuildDate>Sat, 24 Oct 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://www.blendertutoring.com/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>Your AI-Generated Mesh Looks Fine. That Is the Problem.</title>
+      <link>https://www.blendertutoring.com/blog/ai-generated-mesh-topology-cost</link>
+      <guid isPermaLink="true">https://www.blendertutoring.com/blog/ai-generated-mesh-topology-cost</guid>
+      <pubDate>Sat, 24 Oct 2026 00:00:00 GMT</pubDate>
+      <description>I rendered a generated mesh beside a clean one and could not tell them apart. The costs are real and none of them show up in the render.</description>
+    </item>
+    <item>
       <title>Blender MCP in 2026: What the Setup Guides Leave Out</title>
       <link>https://www.blendertutoring.com/blog/blender-mcp-what-setup-guides-leave-out</link>
       <guid isPermaLink="true">https://www.blendertutoring.com/blog/blender-mcp-what-setup-guides-leave-out</guid>
