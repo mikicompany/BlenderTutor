@@ -34,7 +34,11 @@ const BlogList = () => {
           >
             {post.thumbnail && (
               <img
-                src={post.thumbnail}
+                // The card is 128x96; post.thumbnail is the 2400px social
+                // image. scripts/thumbs.js writes a card-sized copy beside
+                // each one, which is what belongs here — og:image still uses
+                // the full-size original.
+                src={post.thumbnail.replace(/\.(jpg|jpeg|png)$/i, "-thumb.jpg")}
                 alt=""
                 width="128"
                 height="96"
