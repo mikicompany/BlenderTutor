@@ -208,7 +208,7 @@ export function resolveItem(key) {
   return { id, ...ITEMS[id] }
 }
 
-// ?name=Stefan puts "Prepared for Stefan" on the page, so a link sent to one
+// ?name=Alex puts "Prepared for Alex" on the page, so a link sent to one
 // person reads as though it was meant for them.
 //
 // Letters, spaces, hyphens and apostrophes only. React escapes what it
