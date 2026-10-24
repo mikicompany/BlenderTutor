@@ -297,12 +297,14 @@ const BookingCalendar = ({ item, prefillName, alreadyPaid, onBooked }) => {
           <span className="block text-[12px] text-gray-400 mb-1.5">
             Your name
           </span>
+          {/* The placeholder renders on a public page, so it stays generic —
+              never a real student's name. */}
           <input
             type="text"
             value={form.name}
             onChange={(e) => setForm({ ...form, name: e.target.value })}
             className="w-full bg-white/[0.06] border border-white/10 rounded-lg px-3 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-orange-500/60 transition-colors"
-            placeholder="Stefan Roos"
+            placeholder="First and last name"
           />
         </label>
 

@@ -38,7 +38,7 @@ import { trackPaymentClick } from "../lib/tracking"
 //
 // It takes two optional query parameters:
 //   ?item=session|prop   which package is being paid for (default: session)
-//   ?name=Stefan         puts "Prepared for Stefan" at the top
+//   ?name=Alex           puts "Prepared for Alex" at the top
 //
 // Neither is required, so the bare /pay URL is always valid.
 
