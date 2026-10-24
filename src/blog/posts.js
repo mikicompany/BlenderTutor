@@ -675,6 +675,10 @@ The change was not universally loved when it landed, and the forum threads about
 
 ---
 
+![A cylinder with Shade Smooth alone, beside the same cylinder with normals split by angle](/blog-images/smooth-shading-cap-real.jpg)
+
+A plain cylinder makes the point fastest. On the left, Shade Smooth is averaging the flat cap into the curved side, so the rim vanishes and the whole thing reads as a blob. On the right the normals split at that edge and the cylinder looks like a cylinder again.
+
 ## 👻 The Mesh May Be Carrying Someone Else's Normals
 
 If the face orientation is correct and the smoothing is set up properly and it *still* looks wrong, the mesh may have custom split normals baked into it.
@@ -965,6 +969,10 @@ Two rules of thumb worth knowing, both commonly quoted and both approximate:
 But the ranges matter far less than the variation. A roughness map with genuine detail in it will do more for realism than any amount of fine-tuning a single slider — and more, usually, than your colour map.
 
 ---
+
+![One uniform roughness value beside roughness driven by a noise texture](/blog-images/roughness-uniform-vs-varied-real.jpg)
+
+Both of those are the same mesh with the same base colour under the same lights. The only difference is that the right-hand one varies its roughness across the surface instead of holding one number, which is most of the distance between plastic and a believable surface.
 
 ## ⚙️ Metallic Is Not A Slider
 
@@ -1283,6 +1291,10 @@ This is also the single best test for a fill light that has got out of hand. Tur
 
 ---
 
+![The same mesh under one large frontal light, then under a key, fill and rim setup](/blog-images/lighting-flat-vs-threepoint-real.jpg)
+
+Same mesh, same material, same camera. Only the lights moved. The left-hand render is lit perfectly adequately and still reads as a sticker, because nothing in it casts a shadow that describes the form.
+
 ## ☀️ Cause 1: One HDRI Doing Everything
 
 The most common setup in beginner scenes is a single HDRI and nothing else. It is also the most common reason a render looks flat.
@@ -1400,6 +1412,10 @@ Work out which one you have first.
 Everything below is just those four in detail.
 
 ---
+
+![Cycles render at 6 samples beside the same scene at 400 samples, showing grain clearing](/blog-images/cycles-noise-samples-real.jpg)
+
+That is the same scene twice, rendered here in Cycles with denoising switched off so the raw grain is visible. Sample count is the only thing that changed.
 
 ## 🧹 Grain Everywhere: Denoise First
 
