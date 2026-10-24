@@ -365,7 +365,7 @@ Be aware it is easy to build something that brings your machine to its knees, to
     title: "Blender FBX Export: Fixing Wrong Scale and Rotation",
     description: "Your model lands a hundred times too big or lying on its side. Why every guide gives different settings, and the two-minute test that settles it.",
     date: "2026-10-22",
-    thumbnail: "/blog-images/fbx-export-axes-scale.jpg",
+    thumbnail: "/blog-images/fbx-axis-orientation-real.jpg",
     content: `
 You export a model that looks perfect in Blender. You drag the FBX into Unity or Unreal and it arrives a hundred times too big, or lying on its side, or both.
 
@@ -388,6 +388,10 @@ Nothing is broken when your model arrives wrong. Two pieces of software simply d
 Every export setting you are about to meet exists to resolve one of those two disagreements. Once you see them that way the options stop being arbitrary.
 
 ---
+
+![The same model arriving face-down and upright, each beside a one-metre reference cube](/blog-images/fbx-axis-orientation-real.jpg)
+
+That is the rotation half of it, with nothing misconfigured on either side. The blue block is the one-metre reference cube from further down this article, exported alongside the asset.
 
 ## 📏 The Hundred-Times Problem
 
@@ -494,7 +498,7 @@ Understand that, and the next time an asset arrives sideways you will know which
     title: "Blender Running Slow? Viewport Lag, Freezes and Fixes",
     description: "Blender is slow describes three different problems with three different causes. Work out which one you have before you change a single setting.",
     date: "2026-10-21",
-    thumbnail: "/blog-images/blender-slow-three-kinds.jpg",
+    thumbnail: "/blog-images/subdivision-viewport-levels-real.jpg",
     content: `
 Blender has started dragging. You search for a fix and get the same list everyone gets: turn on Simplify, lower your subdivisions, buy more RAM.
 
@@ -535,6 +539,10 @@ Every overlay is extra drawing — wireframes, vertex display, statistics, and [
 This genuinely helps in dense scenes. How much, I will come back to.
 
 ---
+
+![The same mesh at subdivision viewport level 1 and level 3, rendered identically, with wireframes showing 1,968 against 31,488 faces](/blog-images/subdivision-viewport-levels-real.jpg)
+
+That is the first fix made concrete. Sixteen times the geometry, no visible difference in the render, and every bit of that difference redrawn each time you orbit.
 
 ## ⏸️ Kind Two: It Freezes, Then It Is Fine
 
