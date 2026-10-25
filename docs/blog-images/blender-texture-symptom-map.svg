@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 680" width="1200" height="680" role="img" aria-label="A symptom map for textures that do not show in Blender. A bright magenta surface means Blender cannot find the image file; fix with File, External Data, Find Missing Files. Grey and untextured everywhere means the viewport is in Solid shading; press Z and choose Material Preview. One flat colour over the whole mesh means there is no UV map or the UVs are collapsed; in Edit Mode press U and choose Smart UV Project. Looking right until you render means the image texture node is not linked to Base Color; check the link in the Shading workspace. A texture that is present but stretched means unapplied object scale or uneven UV scale; apply scale with Control A and re-unwrap. Four of the five are a single click; only the UV one takes real time.">
+  <rect width="1200" height="680" fill="#0f1011"/>
+
+  <defs>
+    <style>
+      .hd { font-family:system-ui,sans-serif; font-size:15px; font-weight:700; letter-spacing:2px; fill:#f37d16; }
+      .col{ font-family:system-ui,sans-serif; font-size:11.5px; font-weight:700; letter-spacing:1.5px; fill:#6f767c; }
+      .see{ font-family:system-ui,sans-serif; font-size:14.5px; font-weight:700; fill:#e8e6e3; }
+      .bd { font-family:system-ui,sans-serif; font-size:14px; fill:#aeb4ba; }
+      .fx { font-family:system-ui,sans-serif; font-size:13.5px; font-weight:600; fill:#f0b429; }
+      .ft { font-family:system-ui,sans-serif; font-size:13px; fill:#6f767c; }
+      .row{ fill:#161718; stroke:#2c3033; stroke-width:2; }
+    </style>
+  </defs>
+
+  <text class="hd" x="60" y="50">WHAT YOU SEE — AND WHAT IS ACTUALLY WRONG</text>
+
+  <text class="col" x="104" y="96">WHAT YOU SEE</text>
+  <text class="col" x="520" y="96">THE CAUSE</text>
+  <text class="col" x="880" y="96">FIRST FIX</text>
+
+  <!-- 1. magenta -->
+  <g>
+    <rect class="row" x="60" y="112" width="1080" height="84" rx="12"/>
+    <rect x="76" y="144" width="16" height="16" rx="4" fill="#e879f9"/>
+    <text class="see" x="104" y="150">Surface is bright magenta</text>
+    <text class="bd"  x="104" y="174">The colour Blender uses for an image it cannot load</text>
+    <text class="bd"  x="520" y="150">Blender cannot find the image file</text>
+    <text class="bd"  x="520" y="174">It was moved, renamed, or never packed</text>
+    <text class="fx"  x="880" y="150">External Data</text>
+    <text class="fx"  x="880" y="174">Find Missing Files</text>
+  </g>
+
+  <!-- 2. solid shading -->
+  <g>
+    <rect class="row" x="60" y="208" width="1080" height="84" rx="12"/>
+    <rect x="76" y="240" width="16" height="16" rx="4" fill="#9ca3af"/>
+    <text class="see" x="104" y="246">Grey and untextured, everywhere</text>
+    <text class="bd"  x="104" y="270">Every object in the file looks the same</text>
+    <text class="bd"  x="520" y="246">The viewport is in Solid shading</text>
+    <text class="bd"  x="520" y="270">Nothing is wrong with the material at all</text>
+    <text class="fx"  x="880" y="246">Press Z</text>
+    <text class="fx"  x="880" y="270">Material Preview</text>
+  </g>
+
+  <!-- 3. UVs -->
+  <g>
+    <rect class="row" x="60" y="304" width="1080" height="84" rx="12"/>
+    <rect x="76" y="336" width="16" height="16" rx="4" fill="#6ee7b7"/>
+    <text class="see" x="104" y="342">One flat colour over the whole mesh</text>
+    <text class="bd"  x="104" y="366">Looks untextured, but the texture is loaded</text>
+    <text class="bd"  x="520" y="342">No UV map, or UVs collapsed</text>
+    <text class="bd"  x="520" y="366">The mesh samples a single texel</text>
+    <text class="fx"  x="880" y="342">Edit Mode, U</text>
+    <text class="fx"  x="880" y="366">Smart UV Project</text>
+  </g>
+
+  <!-- 4. viewport vs render -->
+  <g>
+    <rect class="row" x="60" y="400" width="1080" height="84" rx="12"/>
+    <rect x="76" y="432" width="16" height="16" rx="4" fill="#f0b429"/>
+    <text class="see" x="104" y="438">Looks right until you render</text>
+    <text class="bd"  x="104" y="462">Fine in the viewport, gone in the F12 result</text>
+    <text class="bd"  x="520" y="438">Node not linked to Base Color</text>
+    <text class="bd"  x="520" y="462">Added, positioned, never connected</text>
+    <text class="fx"  x="880" y="438">Shading workspace</text>
+    <text class="fx"  x="880" y="462">Follow the noodle</text>
+  </g>
+
+  <!-- 5. scale -->
+  <g>
+    <rect class="row" x="60" y="496" width="1080" height="84" rx="12"/>
+    <rect x="76" y="528" width="16" height="16" rx="4" fill="#60a5fa"/>
+    <text class="see" x="104" y="534">Present, but stretched or tiled wrong</text>
+    <text class="bd"  x="104" y="558">The texture is clearly there and clearly off</text>
+    <text class="bd"  x="520" y="534">Unapplied object scale, or UV scale</text>
+    <text class="bd"  x="520" y="558">The mesh was scaled in Object Mode</text>
+    <text class="fx"  x="880" y="534">Ctrl+A, Scale</text>
+    <text class="fx"  x="880" y="558">Then re-unwrap</text>
+  </g>
+
+  <text class="ft" x="60" y="624">Work down the list in order. Four of the five are a single click — only the UV one costs you real time.</text>
+</svg>

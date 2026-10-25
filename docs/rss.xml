@@ -5,8 +5,15 @@
     <link>https://www.blendertutoring.com/blog</link>
     <description>Practical Blender guides for beginners and game artists.</description>
     <language>en</language>
-    <lastBuildDate>Sat, 24 Oct 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 25 Oct 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://www.blendertutoring.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Blender Texture Not Showing: Magenta, Grey, or Nothing at All</title>
+      <link>https://www.blendertutoring.com/blog/blender-texture-not-showing</link>
+      <guid isPermaLink="true">https://www.blendertutoring.com/blog/blender-texture-not-showing</guid>
+      <pubDate>Sun, 25 Oct 2026 00:00:00 GMT</pubDate>
+      <description>Five different problems all look like a missing texture. Magenta means one thing, flat grey another, one solid colour a third. Read the symptom first.</description>
+    </item>
     <item>
       <title>Your AI-Generated Mesh Looks Fine. That Is the Problem.</title>
       <link>https://www.blendertutoring.com/blog/ai-generated-mesh-topology-cost</link>
