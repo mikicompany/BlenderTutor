@@ -1,28 +1,30 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Box, Gamepad2, Film, Zap } from "lucide-react"; // npm install lucide-react
+import { Box, Swords, Bone, Gauge } from "lucide-react"; // npm install lucide-react
 
 const About = () => {
+  // Icons name the craft, not the console: a prop, a mesh cube, an armature
+  // bone, a perf gauge — each one is the thing the lesson is actually about.
   const specializations = [
     {
       title: "Game Assets",
       desc: "Characters, props & environment art",
-      icon: <Gamepad2 size={20} />,
+      icon: <Swords size={18} />,
     },
     {
       title: "3D Modeling",
       desc: "Low-poly to high-poly workflows",
-      icon: <Box size={20} />,
+      icon: <Box size={18} />,
     },
     {
       title: "Animation",
       desc: "Game-ready rigging & motion",
-      icon: <Film size={20} />,
+      icon: <Bone size={18} />,
     },
     {
       title: "Real-Time",
       desc: "EEVEE, baking & optimization",
-      icon: <Zap size={20} />,
+      icon: <Gauge size={18} />,
     },
   ];
 
@@ -78,8 +80,9 @@ const About = () => {
           </p>
 
           {/* Software Badges */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-6"
-          style={{ backgroundColor: "1A1D23" }}>
+          {/* Badges sit on the page background; the old inline backgroundColor
+              here was "1A1D23" with no leading #, so it never applied. */}
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-6">
             {software.map((tech, i) => (
               <a
                 key={tech.name}
@@ -101,7 +104,9 @@ const About = () => {
         </motion.div>
 
         {/* RIGHT GRID */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* Two up at every width — stacked single-column, four cards ate four
+            phone screens for one line of text each. */}
+        <div className="grid grid-cols-2 gap-3 sm:gap-4">
           {specializations.map((item, i) => (
             <motion.div
               key={i}
@@ -110,13 +115,15 @@ const About = () => {
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
               whileHover={{ scale: 1.02 }}
-              className="group relative p-6 rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-md transition-all duration-300 hover:border-orange-500/50 hover:shadow-[0_0_20px_rgba(249,115,22,0.1)]"
+              className="group relative p-4 sm:p-5 rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-md transition-all duration-300 hover:border-orange-500/50 hover:shadow-[0_0_20px_rgba(249,115,22,0.1)]"
             >
-              <div className="text-orange-500 mb-4 group-hover:scale-110 transition-transform duration-300">
+              <div className="w-9 h-9 mb-3 rounded-lg grid place-items-center text-orange-500 bg-orange-500/10 border border-orange-500/20 group-hover:scale-110 group-hover:bg-orange-500/15 transition-all duration-300">
                 {item.icon}
               </div>
-              <h4 className="text-lg font-bold mb-1">{item.title}</h4>
-              <p className="text-gray-500 text-xs leading-relaxed">
+              <h4 className="text-[15px] sm:text-base font-bold leading-snug mb-1">
+                {item.title}
+              </h4>
+              <p className="text-gray-500 text-[11px] sm:text-xs leading-relaxed">
                 {item.desc}
               </p>
             </motion.div>
