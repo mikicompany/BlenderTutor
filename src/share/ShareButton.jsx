@@ -44,15 +44,25 @@ const ShareButton = () => {
         aria-label={label}
         className="group flex items-center gap-2 rounded-full border border-white/15 bg-[#0f1011]/90 backdrop-blur-md px-4 py-3 text-white shadow-lg transition-all hover:border-orange-500/60 hover:text-orange-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
       >
+        {/* The Blender mark makes the pill read as "pass this Blender site
+            on" rather than as a generic share widget bolted to any page.
+            Decorative — the button's aria-label already carries the meaning,
+            so an alt here would only repeat it to a screen reader. */}
+        <img
+          src="/blender.svg"
+          alt=""
+          aria-hidden="true"
+          className="w-[18px] h-[18px] shrink-0"
+        />
+        {/* Hidden on small screens so the button stays clear of content. */}
+        <span className="hidden sm:inline text-[13px] font-medium whitespace-nowrap">
+          {label}
+        </span>
         {state === SHARE_COPIED ? (
           <Check size={17} className="text-orange-500 shrink-0" />
         ) : (
           <Share2 size={17} className="shrink-0" />
         )}
-        {/* Hidden on small screens so the button stays clear of content. */}
-        <span className="hidden sm:inline text-[13px] font-medium whitespace-nowrap">
-          {label}
-        </span>
       </button>
     </div>
   );
