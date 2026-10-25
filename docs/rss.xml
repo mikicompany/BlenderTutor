@@ -8,6 +8,13 @@
     <lastBuildDate>Sun, 25 Oct 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://www.blendertutoring.com/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>Blender 5 Features: What Actually Changed Across 5.0, 5.1 and 5.2</title>
+      <link>https://www.blendertutoring.com/blog/blender-5-features</link>
+      <guid isPermaLink="true">https://www.blendertutoring.com/blog/blender-5-features</guid>
+      <pubDate>Sun, 25 Oct 2026 00:00:00 GMT</pubDate>
+      <description>ACES and HDR colour, bundles and closures in Geometry Nodes, node-based hair and cloth, and the Cycles speedups — the whole 5.x line, sorted by whether you will notice it.</description>
+    </item>
+    <item>
       <title>Blender for Beginners: The Order to Learn It In</title>
       <link>https://www.blendertutoring.com/blog/blender-for-beginners</link>
       <guid isPermaLink="true">https://www.blendertutoring.com/blog/blender-for-beginners</guid>
