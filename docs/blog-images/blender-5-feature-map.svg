@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 660" width="1200" height="660" role="img" aria-label="The Blender 5 line at a glance. Blender 5.0 released 18 November 2025 brought full ACES support and HDR colour, bundles and closures in Geometry Nodes, volume grids and signed distance field nodes, and a redesigned node editor. Blender 5.1 released 17 March 2026 brought the Raycast node for both Cycles and EEVEE, Cycles roughly 5 to 20 percent faster on CPU, modelling fills up to 5 times faster, and Grease Pencil fills that handle holes. Blender 5.2 LTS released 14 July 2026 brought node-based hair and cloth on a new XPBD solver which is still experimental, remotely hosted asset libraries, a Cycles texture cache, and a Bevel node. 5.2 is supported until July 2028.">
+  <rect width="1200" height="660" fill="#0f1011"/>
+
+  <defs>
+    <style>
+      .hd  { font-family:system-ui,sans-serif; font-size:15px; font-weight:700; letter-spacing:2px; fill:#f37d16; }
+      .ver { font-family:system-ui,sans-serif; font-size:26px; font-weight:800; }
+      .dt  { font-family:system-ui,sans-serif; font-size:11.5px; font-weight:700; letter-spacing:1.4px; fill:#6f767c; }
+      .lb  { font-family:system-ui,sans-serif; font-size:11px; font-weight:700; letter-spacing:1.4px; fill:#6f767c; }
+      .it  { font-family:system-ui,sans-serif; font-size:14px; font-weight:600; fill:#e8e6e3; }
+      .sub { font-family:system-ui,sans-serif; font-size:12.5px; fill:#8b9197; }
+      .ft  { font-family:system-ui,sans-serif; font-size:13px; fill:#6f767c; }
+      .card{ fill:#161718; stroke:#2c3033; stroke-width:2; }
+      .tag { font-family:system-ui,sans-serif; font-size:10.5px; font-weight:700; letter-spacing:1px; }
+    </style>
+  </defs>
+
+  <text class="hd" x="60" y="48">THE BLENDER 5 LINE, AND WHAT EACH RELEASE ACTUALLY ADDED</text>
+
+  <!-- 5.0 -->
+  <g>
+    <rect class="card" x="60" y="80" width="340" height="476" rx="14"/>
+    <rect x="60" y="80" width="340" height="5" rx="2.5" fill="#f37d16"/>
+    <text class="ver" x="88" y="130" style="fill:#f0b429">5.0</text>
+    <text class="dt"  x="88" y="156">18 NOVEMBER 2025</text>
+
+    <text class="lb" x="88" y="200">THE BIG ONE</text>
+    <text class="it" x="88" y="224">ACES and HDR colour</text>
+    <text class="sub" x="88" y="246">Full ACES pipelines, Rec.2100</text>
+    <text class="sub" x="88" y="265">displays, an AgX HDR view</text>
+
+    <text class="lb" x="88" y="306">GEOMETRY NODES</text>
+    <text class="it" x="88" y="330">Bundles and closures</text>
+    <text class="sub" x="88" y="352">Pass many values down one</text>
+    <text class="sub" x="88" y="371">link; inject nodes into groups</text>
+
+    <text class="it" x="88" y="408">Volume grids and SDF</text>
+    <text class="sub" x="88" y="430">27 new nodes on a new grid</text>
+    <text class="sub" x="88" y="449">data type</text>
+
+    <text class="lb" x="88" y="490">INTERFACE</text>
+    <text class="it" x="88" y="514">Node editor redesign</text>
+    <text class="sub" x="88" y="536">Flatter nodes, breadcrumbs</text>
+  </g>
+
+  <!-- 5.1 -->
+  <g>
+    <rect class="card" x="430" y="80" width="340" height="476" rx="14"/>
+    <rect x="430" y="80" width="340" height="5" rx="2.5" fill="#f37d16"/>
+    <text class="ver" x="458" y="130" style="fill:#f0b429">5.1</text>
+    <text class="dt"  x="458" y="156">17 MARCH 2026</text>
+
+    <text class="lb" x="458" y="200">SHADING</text>
+    <text class="it" x="458" y="224">Raycast node</text>
+    <text class="sub" x="458" y="246">Works in Cycles and EEVEE</text>
+    <text class="sub" x="458" y="265">shaders alike</text>
+
+    <text class="lb" x="458" y="306">SPEED</text>
+    <text class="it" x="458" y="330">Cycles 5&#8211;20% faster</text>
+    <text class="sub" x="458" y="352">On CPU; 5&#8211;10% on GPU. AMD</text>
+    <text class="sub" x="458" y="371">hardware ray tracing by default</text>
+
+    <text class="it" x="458" y="408">Fills up to 5x faster</text>
+    <text class="sub" x="458" y="430">Most visible on n-gons with</text>
+    <text class="sub" x="458" y="449">a lot of sides</text>
+
+    <text class="lb" x="458" y="490">GREASE PENCIL</text>
+    <text class="it" x="458" y="514">Fills that handle holes</text>
+    <text class="sub" x="458" y="536">Plus Graph Editor smoothing</text>
+  </g>
+
+  <!-- 5.2 -->
+  <g>
+    <rect class="card" x="800" y="80" width="340" height="476" rx="14"/>
+    <rect x="800" y="80" width="340" height="5" rx="2.5" fill="#f37d16"/>
+    <text class="ver" x="828" y="130" style="fill:#f0b429">5.2</text>
+    <rect x="884" y="110" width="40" height="19" rx="9.5" fill="#f37d16"/>
+    <text class="tag" x="893" y="124" style="fill:#0f1011">LTS</text>
+    <text class="dt"  x="828" y="156">14 JULY 2026</text>
+
+    <text class="lb" x="828" y="200">PHYSICS</text>
+    <text class="it" x="828" y="224">Node-based hair and cloth</text>
+    <text class="sub" x="828" y="246">One XPBD solver for hair, cloth</text>
+    <text class="sub" x="828" y="265">and particles &#8212; experimental</text>
+
+    <text class="lb" x="828" y="306">PIPELINE</text>
+    <text class="it" x="828" y="330">Remote asset libraries</text>
+    <text class="sub" x="828" y="352">Host a library elsewhere and</text>
+    <text class="sub" x="828" y="371">see it in the asset browser</text>
+
+    <text class="it" x="828" y="408">Cycles texture cache</text>
+    <text class="sub" x="828" y="430">Scenes with more texture data</text>
+    <text class="sub" x="828" y="449">than you have memory</text>
+
+    <text class="lb" x="828" y="490">GEOMETRY NODES</text>
+    <text class="it" x="828" y="514">Bevel node</text>
+    <text class="sub" x="828" y="536">Among further node additions</text>
+  </g>
+
+  <text class="ft" x="60" y="604">5.2 is the LTS: bug fixes until July 2028. 5.0 and 5.1 are already past their support windows.</text>
+</svg>
