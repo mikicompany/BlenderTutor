@@ -9,6 +9,18 @@ afterwards without redoing the work.
 
 This is a working prototype of that.
 
+![One sculpt, two layers, four strength settings](demo-layer-stack.png)
+
+Those four panels are not illustrations of the idea. The vertex positions in
+each come out of `core.composite()` — the same function the add-on calls to
+draw the mesh — with nothing between it and the render but the strength
+values being passed in. Same 40,962-vertex mesh throughout; nothing was
+re-sculpted between frames.
+
+![The sidebar open beside a sculpt](demo-in-context.png)
+
+![Six panel states](demo-panel-states.png)
+
 ![The panel, with notes on the interface decisions](panel-mockup.png)
 
 ---
