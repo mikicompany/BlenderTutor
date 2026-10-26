@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Python bytecode from the Blender add-on in tools/
+__pycache__/
+*.pyc

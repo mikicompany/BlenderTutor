@@ -1,0 +1,18 @@
+schema_version = "1.0.0"
+
+id = "sculpt_layers"
+version = "0.1.0"
+name = "Sculpt Layers"
+tagline = "Non-destructive sculpt layers with per-layer strength"
+maintainer = "Blender Tutoring <info@blendertutoring.com>"
+type = "add-on"
+
+website = "https://www.blendertutoring.com"
+tags = ["Sculpt", "Modeling"]
+
+blender_version_min = "4.2.0"
+license = ["SPDX:GPL-3.0-or-later"]
+
+# Reads and writes mesh vertex positions only; no network, no file access
+# beyond the .blend itself.
+[permissions]
