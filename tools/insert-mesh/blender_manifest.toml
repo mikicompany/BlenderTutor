@@ -1,0 +1,18 @@
+schema_version = "1.0.0"
+
+id = "insert_mesh"
+version = "0.1.0"
+name = "Insert Mesh + Live Boolean"
+tagline = "Stamp library parts onto a surface and boolean them live"
+maintainer = "Blender Tutoring <info@blendertutoring.com>"
+type = "add-on"
+
+website = "https://www.blendertutoring.com"
+tags = ["Modeling", "Mesh"]
+
+blender_version_min = "4.2.0"
+license = ["SPDX:GPL-3.0-or-later"]
+
+# Reads and writes mesh geometry and modifiers only; no network, no file
+# access beyond the .blend itself.
+[permissions]
