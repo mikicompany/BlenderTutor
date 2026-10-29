@@ -360,7 +360,7 @@ const Pay = () => {
 
             {/* Transfers are details rather than buttons — there is nothing
                 to click, the payer copies these into their own banking app.
-                They carry no fee, which on the $399 package is about $16 that
+                They carry no fee, which on the $349 package is about $14 that
                 stays with you. */}
             {!justPaid &&
               transfers.map((transfer) => (
@@ -487,7 +487,7 @@ const Pay = () => {
         </div>
 
         <p className="text-[11.5px] text-gray-500 leading-relaxed mt-12 pt-8 border-t border-white/10">
-          Reschedule or cancel free of charge up to 24 hours before a session —
+          Reschedule or cancel free of charge up to 48 hours before a session —
           the full terms are in the{" "}
           <Link
             to="/terms"

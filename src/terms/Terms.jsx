@@ -30,7 +30,7 @@ const sections = [
   {
     title: "4. Cancellations and rescheduling",
     body: `Life happens — you can reschedule or cancel a session free of charge
-    up to 24 hours before its start time. Sessions cancelled with less than 24
+    up to 48 hours before its start time. Sessions cancelled with less than 48
     hours' notice, or missed without notice, may be counted as used. If we need
     to cancel a session, we will offer you a replacement time or a refund for
     that session.`,
