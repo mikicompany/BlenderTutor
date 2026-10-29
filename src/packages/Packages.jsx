@@ -29,6 +29,12 @@ const packages = [
     name: "Portfolio Prop",
     price: "349",
     unit: "USD for 8 sessions",
+    // The bundle is cheaper than buying the hours singly, but that is invisible
+    // unless someone does the arithmetic — so the saving is stated outright.
+    // compareAt is the à-la-carte total (8 x $49); the badge is the headline.
+    badge: "Save $43",
+    compareAt: "392",
+    compareNote: "bought as 8 single sessions",
     description: "Take one prop from blockout to portfolio-ready.",
     outcome: "You finish with a game-ready prop in your portfolio.",
     features: [
@@ -147,6 +153,14 @@ const Packages = () => {
                     <span className="text-gray-500 text-[11px] ml-1.5">
                       {pkg.unit}
                     </span>
+                    {/* The à-la-carte total, struck through, so the saving in
+                        the badge is substantiated rather than just asserted. */}
+                    {pkg.compareAt && (
+                      <span className="block text-[11px] text-gray-500 mt-1.5">
+                        <span className="line-through">${pkg.compareAt}</span>{" "}
+                        {pkg.compareNote}
+                      </span>
+                    )}
                     {/* Secondary and explicitly approximate: the USD figure
                         above is the one that gets charged. */}
                     {converted(pkg.price) && (
