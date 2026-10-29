@@ -42,8 +42,12 @@ const packages = [
   },
   {
     name: "Portfolio Scene",
-    // Priced on the call rather than listed — a four-figure number on a card
-    // asks for a decision before there has been any conversation.
+    // Quote-on-call, anchored at $640 USD (16 sessions, ~$40/hr — the next
+    // step down the per-hour ladder from the $349 Prop's ~$44, and $58 under
+    // buying two Props). Kept off the card on purpose: the flagship tier
+    // converts better after a conversation than as a cold number, and the
+    // commitment note below reads as a discussion rather than a disclaimer.
+    // $640 is the firm quote, not a starting point to negotiate up from.
     price: null,
     priceNote: "Priced in USD on your free call",
     unit: "16 sessions",
