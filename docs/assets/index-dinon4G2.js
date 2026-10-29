@@ -3372,11 +3372,23 @@ You can follow 50 tutorials perfectly and still be building bad habits — topol
     can differ from the figure shown here. Paid packages and session prices are
     presented before you commit to them. Payment is due before or at the time
     of the session unless we agree otherwise in writing. Prices may change, but
-    changes never apply retroactively to sessions you have already paid for.`},{title:"4. Cancellations and rescheduling",body:`Life happens — you can reschedule or cancel a session free of charge
-    up to 48 hours before its start time. Sessions cancelled with less than 48
-    hours' notice, or missed without notice, may be counted as used. If we need
-    to cancel a session, we will offer you a replacement time or a refund for
-    that session.`},{title:"5. Your work stays yours",body:`Everything you create during the mentorship — models, scenes,
+    changes never apply retroactively to sessions you have already paid for.`},{title:"4. Cancellations, rescheduling and no-shows",body:`Your session time is reserved for you alone, so a missed session is
+    time that cannot be offered to anyone else. This policy is here to keep that
+    fair on both sides — it applies to paid sessions, whether booked singly or
+    as part of a package.`,points:[{label:"48 hours' notice or more",text:`Reschedule or cancel free of charge, no questions asked. Use the
+        link in your booking confirmation email, or simply reply to it, and
+        we'll find a new time.`},{label:"Less than 48 hours' notice, or a no-show",text:`The session may be counted as used — its fee forfeited, or one
+        session deducted from a package. As a goodwill, your first late
+        cancellation or no-show is waived; the policy applies after that.`},{label:"Arriving late",text:`We hold your slot and wait up to 15 minutes from the start time.
+        Message us if you're held up and we'll make the most of the time we
+        have; sessions still end at the scheduled time so the next booking is
+        not affected.`},{label:"The free intro call",text:`No charge and no penalty for missing it. If an intro call is
+        missed twice without notice, we'll ask you to book paid time before
+        reserving another free slot.`},{label:"If we cancel, or are more than 10 minutes late",text:`That session is free — or credited back to your package — and
+        we'll reschedule at a time that suits you. The policy runs both ways.`},{label:"Emergencies and technical problems",text:`Genuine emergencies, illness, and real connection or software
+        failures (yours or ours) are handled case by case and in good faith.
+        Tell us what happened and we'll sort it out fairly — this policy exists
+        to respect everyone's time, not to penalise bad luck.`}]},{title:"5. Your work stays yours",body:`Everything you create during the mentorship — models, scenes,
     materials, renders, and project files — belongs entirely to you. We claim
     no rights over your work. With your permission, we may showcase excerpts of
     student projects on the Site; we will always ask first.`},{title:"6. Our materials",body:`Lesson plans, exercises, and learning materials we share with you
@@ -3394,7 +3406,7 @@ You can follow 50 tutorials perfectly and still be building bad habits — topol
     at the top of this page always reflects the current version, and continued
     use of the Site after a change means you accept the updated terms.`},{title:"11. Questions",body:`If anything here is unclear, reach out — the easiest way is to book
     a free intro call from the home page and ask us directly, or reply to any
-    email we've exchanged with you.`}],Nz=()=>b.jsxs("div",{className:"relative w-full min-h-screen bg-black",children:[b.jsxs(va,{children:[b.jsx("title",{children:"Terms of Service — Blender Tutoring"}),b.jsx("meta",{name:"description",content:"The terms of service for Blender Tutoring's mentoring sessions and website."}),b.jsx("link",{rel:"canonical",href:"https://www.blendertutoring.com/terms"}),b.jsx("meta",{property:"og:type",content:"website"}),b.jsx("meta",{property:"og:site_name",content:"Blender Tutoring"}),b.jsx("meta",{property:"og:title",content:"Terms of Service — Blender Tutoring"}),b.jsx("meta",{property:"og:url",content:"https://www.blendertutoring.com/terms"}),b.jsx("meta",{property:"og:image",content:"https://www.blendertutoring.com/og-image.jpg"}),b.jsx("meta",{property:"og:image:width",content:"1200"}),b.jsx("meta",{property:"og:image:height",content:"630"}),b.jsx("meta",{name:"twitter:card",content:"summary_large_image"}),b.jsx("meta",{name:"twitter:image",content:"https://www.blendertutoring.com/og-image.jpg"})]}),b.jsx(zr,{}),b.jsxs("div",{className:"max-w-3xl mx-auto px-6 py-24 text-white",children:[b.jsx("h1",{className:"text-4xl font-bold mb-3",children:"Terms of Service"}),b.jsx("p",{className:"text-sm text-gray-500 mb-12",children:"Last updated: July 23, 2026"}),Dz.map(e=>b.jsxs("section",{className:"mb-10",children:[b.jsx("h2",{className:"text-xl font-semibold mb-3 text-orange-400",children:e.title}),b.jsx("p",{className:"text-gray-300 leading-relaxed",children:e.body})]},e.title))]}),b.jsx(ps,{})]}),Rz=[{title:"1. The short version",body:`We collect as little as we reasonably can. There are no ads on this
+    email we've exchanged with you.`}],Nz=()=>b.jsxs("div",{className:"relative w-full min-h-screen bg-black",children:[b.jsxs(va,{children:[b.jsx("title",{children:"Terms of Service — Blender Tutoring"}),b.jsx("meta",{name:"description",content:"The terms of service for Blender Tutoring's mentoring sessions and website."}),b.jsx("link",{rel:"canonical",href:"https://www.blendertutoring.com/terms"}),b.jsx("meta",{property:"og:type",content:"website"}),b.jsx("meta",{property:"og:site_name",content:"Blender Tutoring"}),b.jsx("meta",{property:"og:title",content:"Terms of Service — Blender Tutoring"}),b.jsx("meta",{property:"og:url",content:"https://www.blendertutoring.com/terms"}),b.jsx("meta",{property:"og:image",content:"https://www.blendertutoring.com/og-image.jpg"}),b.jsx("meta",{property:"og:image:width",content:"1200"}),b.jsx("meta",{property:"og:image:height",content:"630"}),b.jsx("meta",{name:"twitter:card",content:"summary_large_image"}),b.jsx("meta",{name:"twitter:image",content:"https://www.blendertutoring.com/og-image.jpg"})]}),b.jsx(zr,{}),b.jsxs("div",{className:"max-w-3xl mx-auto px-6 py-24 text-white",children:[b.jsx("h1",{className:"text-4xl font-bold mb-3",children:"Terms of Service"}),b.jsx("p",{className:"text-sm text-gray-500 mb-12",children:"Last updated: October 29, 2026"}),Dz.map(e=>b.jsxs("section",{className:"mb-10",children:[b.jsx("h2",{className:"text-xl font-semibold mb-3 text-orange-400",children:e.title}),b.jsx("p",{className:"text-gray-300 leading-relaxed",children:e.body}),e.points&&b.jsx("ul",{className:"mt-4 space-y-3",children:e.points.map(n=>b.jsxs("li",{className:"text-gray-300 leading-relaxed",children:[b.jsx("strong",{className:"font-semibold text-white",children:n.label})," — ",n.text]},n.label))})]},e.title))]}),b.jsx(ps,{})]}),Rz=[{title:"1. The short version",body:`We collect as little as we reasonably can. There are no ads on this
     site and we never sell your information. We do use Google Tag Manager to
     measure how the site is used, described below. Beyond that, the only
     personal information we receive is what you choose to give us — when you

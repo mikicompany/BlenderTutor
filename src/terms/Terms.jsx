@@ -28,12 +28,50 @@ const sections = [
     changes never apply retroactively to sessions you have already paid for.`,
   },
   {
-    title: "4. Cancellations and rescheduling",
-    body: `Life happens — you can reschedule or cancel a session free of charge
-    up to 48 hours before its start time. Sessions cancelled with less than 48
-    hours' notice, or missed without notice, may be counted as used. If we need
-    to cancel a session, we will offer you a replacement time or a refund for
-    that session.`,
+    title: "4. Cancellations, rescheduling and no-shows",
+    body: `Your session time is reserved for you alone, so a missed session is
+    time that cannot be offered to anyone else. This policy is here to keep that
+    fair on both sides — it applies to paid sessions, whether booked singly or
+    as part of a package.`,
+    points: [
+      {
+        label: "48 hours' notice or more",
+        text: `Reschedule or cancel free of charge, no questions asked. Use the
+        link in your booking confirmation email, or simply reply to it, and
+        we'll find a new time.`,
+      },
+      {
+        label: "Less than 48 hours' notice, or a no-show",
+        text: `The session may be counted as used — its fee forfeited, or one
+        session deducted from a package. As a goodwill, your first late
+        cancellation or no-show is waived; the policy applies after that.`,
+      },
+      {
+        label: "Arriving late",
+        text: `We hold your slot and wait up to 15 minutes from the start time.
+        Message us if you're held up and we'll make the most of the time we
+        have; sessions still end at the scheduled time so the next booking is
+        not affected.`,
+      },
+      {
+        label: "The free intro call",
+        text: `No charge and no penalty for missing it. If an intro call is
+        missed twice without notice, we'll ask you to book paid time before
+        reserving another free slot.`,
+      },
+      {
+        label: "If we cancel, or are more than 10 minutes late",
+        text: `That session is free — or credited back to your package — and
+        we'll reschedule at a time that suits you. The policy runs both ways.`,
+      },
+      {
+        label: "Emergencies and technical problems",
+        text: `Genuine emergencies, illness, and real connection or software
+        failures (yours or ours) are handled case by case and in good faith.
+        Tell us what happened and we'll sort it out fairly — this policy exists
+        to respect everyone's time, not to penalise bad luck.`,
+      },
+    ],
   },
   {
     title: "5. Your work stays yours",
@@ -121,7 +159,7 @@ const Terms = () => {
 
       <div className="max-w-3xl mx-auto px-6 py-24 text-white">
         <h1 className="text-4xl font-bold mb-3">Terms of Service</h1>
-        <p className="text-sm text-gray-500 mb-12">Last updated: July 23, 2026</p>
+        <p className="text-sm text-gray-500 mb-12">Last updated: October 29, 2026</p>
 
         {sections.map((s) => (
           <section key={s.title} className="mb-10">
@@ -129,6 +167,23 @@ const Terms = () => {
               {s.title}
             </h2>
             <p className="text-gray-300 leading-relaxed">{s.body}</p>
+            {/* A section can carry labelled sub-points (clause 4, the
+                cancellation policy). They render as a definition-style list:
+                a bold lead, then the rule. Sections without `points` are
+                unchanged. */}
+            {s.points && (
+              <ul className="mt-4 space-y-3">
+                {s.points.map((p) => (
+                  <li key={p.label} className="text-gray-300 leading-relaxed">
+                    <strong className="font-semibold text-white">
+                      {p.label}
+                    </strong>
+                    {" — "}
+                    {p.text}
+                  </li>
+                ))}
+              </ul>
+            )}
           </section>
         ))}
       </div>
