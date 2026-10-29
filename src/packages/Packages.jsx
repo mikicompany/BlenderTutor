@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Check, Target } from "lucide-react"; // npm install lucide-react
+import { Check, Target, Gift } from "lucide-react"; // npm install lucide-react
 import { BOOKING_URL } from "../lib/links";
 import { CURRENCIES, loadRates, formatConverted } from "../lib/currency";
 
@@ -76,6 +76,13 @@ const packages = [
     badge: "Full portfolio piece",
   },
 ];
+
+// The referral credit, in USD, for both the existing student and the friend
+// they send. One number so it is easy to change. Kept below the price of a
+// single session on purpose, and it is worded to trigger on the friend's
+// first paid booking — so it is funded by new revenue rather than discounting
+// a session the referrer would have bought anyway.
+const REFERRAL_CREDIT = 20;
 
 const Packages = () => {
   const [rates, setRates] = useState(null)
@@ -227,6 +234,38 @@ const Packages = () => {
               </a>
             </motion.div>
           ))}
+        </div>
+
+        {/* Referral — the one discount worth running for a 1:1 service: it
+            rewards an existing student for bringing a new one, so it is paid
+            for by new custom rather than by softening the list price. No code
+            field (that only invites coupon-hunting); it is claimed by a word
+            on the call or a short email, which suits the manual checkout. */}
+        <div className="mt-10 max-w-2xl mx-auto rounded-xl border border-orange-500/20 bg-orange-500/[0.05] p-5 flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+          <div className="w-10 h-10 shrink-0 rounded-lg grid place-items-center bg-orange-500/10 border border-orange-500/20 text-orange-500">
+            <Gift size={18} />
+          </div>
+          <div className="flex-1">
+            <h4 className="text-sm font-bold mb-1">
+              Already a student? Refer a friend.
+            </h4>
+            <p className="text-gray-400 text-[13px] leading-relaxed">
+              When someone you send books their first session, you both get{" "}
+              <span className="text-orange-400 font-semibold">
+                ${REFERRAL_CREDIT} off
+              </span>{" "}
+              your next one. Mention your name when you book, or{" "}
+              <a
+                href={`mailto:info@blendertutoring.com?subject=${encodeURIComponent(
+                  "Referral"
+                )}`}
+                className="text-orange-400 hover:text-orange-300 underline underline-offset-2"
+              >
+                email us
+              </a>
+              .
+            </p>
+          </div>
         </div>
 
         {/* "$" alone reads as the reader's own dollar. Students book from
