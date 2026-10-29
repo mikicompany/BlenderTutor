@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Helmet } from "react-helmet-async"
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import {
   Check,
   ShieldCheck,
@@ -25,6 +25,7 @@ import {
   transfersToShow,
 } from "../lib/payments"
 import { HOST_TIMEZONE } from "../lib/availability"
+import { BOOKING_URL } from "../lib/links"
 import { CURRENCIES, loadRates, formatConverted } from "../lib/currency"
 import { trackPaymentClick } from "../lib/tracking"
 
@@ -41,6 +42,16 @@ import { trackPaymentClick } from "../lib/tracking"
 //   ?name=Alex           puts "Prepared for Alex" at the top
 //
 // Neither is required, so the bare /pay URL is always valid.
+
+// The payable packages offered in the picker, in order. These are the ids
+// that exist in ITEMS (lib/payments.js); the price and details come from
+// there, so this list only decides which are offered and what to call them
+// in the picker. The 16-session Portfolio Scene is deliberately absent — it
+// is quote-on-call, so it points to the free intro call instead of a price.
+const CHOICES = [
+  { id: "session", short: "Single session" },
+  { id: "prop", short: "Portfolio Prop" },
+]
 
 // Keyed by provider id. A provider with no entry here still renders — it
 // just gets the generic wallet — so adding one to lib/payments.js never
@@ -95,8 +106,19 @@ const PayFooter = () => (
 
 const Pay = () => {
   const { search } = useLocation()
+  const navigate = useNavigate()
   const params = new URLSearchParams(search)
   const item = resolveItem(params.get("item"))
+
+  // Switching package updates ?item= rather than local state, so the URL stays
+  // the single source of truth — a picked package is shareable and survives a
+  // refresh, and any ?name= already on the link is kept. replace: true so the
+  // back button doesn't step through every package the visitor tried.
+  const selectItem = (id) => {
+    const next = new URLSearchParams(search)
+    next.set("item", id)
+    navigate(`?${next.toString()}`, { replace: true })
+  }
   const name = resolveName(params.get("name"))
   const methods = methodsFor(item)
   const transfers = transfersToShow()
@@ -202,6 +224,64 @@ const Pay = () => {
           <p className="text-gray-400 text-sm mb-10">
             Pick a time, then pay. Takes about two minutes.
           </p>
+        )}
+
+        {/* PACKAGE PICKER — the page still honours a ?item= link sent to one
+            person, but someone landing on bare /pay can now choose a package
+            here instead of only ever seeing the default single session. */}
+        {!justPaid && (
+          <div className="mb-8">
+            <p className="text-[11px] uppercase tracking-[0.2em] text-gray-500 font-bold mb-3">
+              Choose your package
+            </p>
+            <div className="grid grid-cols-2 gap-3">
+              {CHOICES.map((choice) => {
+                const opt = resolveItem(choice.id)
+                const active = opt.id === item.id
+                return (
+                  <button
+                    key={choice.id}
+                    type="button"
+                    onClick={() => selectItem(choice.id)}
+                    aria-pressed={active}
+                    className={`text-left rounded-xl border p-4 transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 ${
+                      active
+                        ? "border-orange-500/60 bg-orange-500/[0.08]"
+                        : "border-white/10 bg-white/[0.03] hover:border-white/25"
+                    }`}
+                  >
+                    <span className="block text-sm font-bold">
+                      {choice.short}
+                    </span>
+                    <span
+                      className={`block text-lg font-bold mt-0.5 ${
+                        active ? "text-orange-500" : "text-gray-300"
+                      }`}
+                    >
+                      ${opt.amount}
+                      <span className="text-gray-500 text-[11px] font-normal ml-1">
+                        USD
+                      </span>
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
+            <p className="text-[12px] text-gray-500 mt-3 leading-relaxed">
+              Looking for the 16-session{" "}
+              <span className="text-gray-400">Portfolio Scene</span>? It&apos;s
+              arranged on your{" "}
+              <a
+                href={BOOKING_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="text-orange-400 hover:text-orange-300 underline underline-offset-2"
+              >
+                free intro call
+              </a>
+              .
+            </p>
+          </div>
         )}
 
         {/* WHAT IS BEING PAID FOR — stated before the amount, so nobody is
