@@ -32,7 +32,7 @@ export const ITEMS = {
   },
   prop: {
     name: "Portfolio Prop — 8 sessions",
-    amount: 399,
+    amount: 349,
     summary:
       "Eight sessions that take one prop from blockout to portfolio-ready.",
     includes: [
@@ -164,7 +164,7 @@ export const PROVIDERS = [
 // nothing to click — the payer types these into their own banking app.
 //
 // These cost nothing in fees, which is what makes them worth the extra step:
-// on the $399 package a card takes roughly $16, and a transfer takes none.
+// on the $349 package a card takes roughly $14, and a transfer takes none.
 //
 // Set `enabled: true` and fill in the fields that apply. Blank fields are
 // not rendered, and an entry with no filled fields is skipped entirely, so a

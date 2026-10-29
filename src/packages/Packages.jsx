@@ -27,7 +27,7 @@ const packages = [
   },
   {
     name: "Portfolio Prop",
-    price: "399",
+    price: "349",
     unit: "USD for 8 sessions",
     description: "Take one prop from blockout to portfolio-ready.",
     outcome: "You finish with a game-ready prop in your portfolio.",
