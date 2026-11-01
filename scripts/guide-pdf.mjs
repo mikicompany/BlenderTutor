@@ -29,7 +29,7 @@ if (!post) {
 // inside the thing they link to.
 const body = post.content
   .split('\n')
-  .filter(line => !line.includes('(/blender-beginners-guide.pdf)'))
+  .filter(line => !/\(#get-the-guide\)|\(\/blender-beginners-guide\.pdf\)/.test(line))
   .join('\n')
 
 let article = renderToStaticMarkup(

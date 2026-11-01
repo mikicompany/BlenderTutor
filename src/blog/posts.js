@@ -164,6 +164,11 @@ Most "what's new" coverage is written for generalists. Narrowing it to this site
     description: "A complete starting guide — which version to install, the keys that matter on day one, what to build after the donut, and a 30-day plan that fits around a job. Free PDF included.",
     date: "2026-10-25",
     thumbnail: "/blog-images/blender-beginners-lighting.jpg",
+    // The PDF is a lead magnet: the in-article "download" links point at an
+    // email gate (#get-the-guide) rendered by BlogPost, which subscribes the
+    // reader and then reveals this file. `tag` marks where the signup came
+    // from in Mailchimp.
+    leadMagnet: { file: "/blender-beginners-guide.pdf", tag: "guide" },
     content: `
 There is no shortage of Blender tutorials. That is the problem.
 
@@ -171,7 +176,7 @@ A beginner's real difficulty is not finding instruction, it is **sequencing** it
 
 This is the order I teach it in. It assumes you have never opened Blender, and it assumes you have a job, so it is built around a few hours a week rather than a bootcamp.
 
-**[Download this guide as a PDF →](/blender-beginners-guide.pdf)** — the whole thing, formatted to print, including the 30-day plan and the troubleshooting table. No email required.
+**[Download this guide as a PDF →](#get-the-guide)** — the whole thing, formatted to print, including the 30-day plan and the troubleshooting table. Free — straight to your inbox.
 
 ---
 
@@ -339,7 +344,7 @@ Install the LTS. Do the donut once. Immediately make something it did not cover.
 
 Everything else is detail, and the detail is much easier to pick up once something you made is sitting on your screen.
 
-**[Download the PDF version →](/blender-beginners-guide.pdf)** — the plan, the key tables and the troubleshooting index, in something you can keep open on a second screen or print.
+**[Download the PDF version →](#get-the-guide)** — the plan, the key tables and the troubleshooting index, in something you can keep open on a second screen or print.
 
 ---
 
