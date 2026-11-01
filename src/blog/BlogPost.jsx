@@ -65,6 +65,109 @@ const Subscribe = () => {
   )
 }
 
+// A gated download: the reader gets the PDF in exchange for an email, which
+// joins the newsletter (double opt-in, same as the plain Subscribe box). The
+// in-article "download" links point at this box's id, so the one on the page
+// is the only way to the file — that is the whole point of a lead magnet.
+//
+// The guide is revealed on a successful subscribe. A transient failure should
+// not hold a free resource hostage, so after an error the download is offered
+// anyway with a quiet note; the goal is the list, not a wall.
+const LeadMagnet = ({ file, tag = "guide" }) => {
+  const [email, setEmail] = useState("")
+  const [status, setStatus] = useState("idle") // idle | loading | success | error
+  const [msg, setMsg] = useState("")
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    if (!isValidEmail(email)) {
+      setStatus("error")
+      setMsg("Please enter a valid email address.")
+      return
+    }
+    setStatus("loading")
+    const result = await subscribeToNewsletter(email, { tags: tag })
+    if (result.ok) {
+      setStatus("success")
+    } else {
+      setStatus("error")
+      setMsg(result.message || "Something went wrong — but your guide is below.")
+    }
+  }
+
+  const DownloadButton = () => (
+    <a
+      href={file}
+      download
+      className="inline-flex items-center gap-2 bg-orange-400 hover:bg-orange-300 text-black font-bold text-sm px-6 py-3 rounded-lg transition-colors"
+    >
+      Download the PDF →
+    </a>
+  )
+
+  return (
+    <div
+      id="get-the-guide"
+      className="scroll-mt-24 mt-16 border border-orange-400/25 rounded-xl p-8 bg-orange-400/[0.06]"
+    >
+      <p className="text-orange-400 text-xs font-semibold tracking-widest uppercase mb-3">
+        Free PDF
+      </p>
+      <h3 className="text-2xl font-bold text-white mb-2">
+        Get the Beginner&rsquo;s Guide
+      </h3>
+      <p className="text-gray-400 text-sm mb-6">
+        The whole guide — the 30-day plan, the key-shortcut tables and the
+        troubleshooting index — formatted to print or keep on a second screen.
+        Enter your email and it&rsquo;s yours, along with the occasional short
+        Blender tip. No spam, unsubscribe any time.
+      </p>
+
+      {status === "success" ? (
+        <div>
+          <div className="bg-green-500/10 border border-green-500/25 rounded-lg px-4 py-3 text-green-400 text-sm mb-4">
+            ✓ You&rsquo;re in — your guide is ready. Check your inbox to confirm
+            your subscription for future tips.
+          </div>
+          <DownloadButton />
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit} className="flex gap-3 flex-wrap">
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value)
+              if (status === "error") setStatus("idle")
+            }}
+            placeholder="your@email.com"
+            className={`flex-1 min-w-[200px] bg-black border rounded-lg px-4 py-2.5 text-white text-sm outline-none transition-colors ${
+              status === "error"
+                ? "border-red-500"
+                : "border-white/10 focus:border-orange-400"
+            }`}
+          />
+          <button
+            type="submit"
+            disabled={status === "loading"}
+            className="bg-orange-400 hover:bg-orange-300 disabled:opacity-60 text-black font-bold text-sm px-6 py-2.5 rounded-lg transition-colors whitespace-nowrap"
+          >
+            {status === "loading" ? "Sending…" : "Email me the guide"}
+          </button>
+        </form>
+      )}
+
+      {status === "error" && (
+        <div className="mt-3">
+          <p className="text-red-400 text-xs mb-3">{msg}</p>
+          {/* A failed signup should not withhold the promised guide. */}
+          <DownloadButton />
+        </div>
+      )}
+    </div>
+  )
+}
+
 // Picks the next few posts in order, wrapping around. Deterministic, so the
 // link graph is stable between builds, and because every post is somebody's
 // neighbour it guarantees each one is both linked from and linking to others
@@ -182,8 +285,14 @@ const BlogPost = () => {
         <div className="prose prose-invert prose-orange max-w-none prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:text-orange-400 prose-blockquote:border-orange-400 prose-blockquote:bg-orange-400/5 prose-blockquote:rounded-r-lg prose-blockquote:py-1 prose-table:text-sm prose-td:border-white/10 prose-th:border-white/10 prose-hr:border-white/10">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
         </div>
+        {/* The lead-magnet box doubles as the newsletter signup for posts
+            that have a downloadable, so those posts show it in place of the
+            generic Subscribe rather than two competing asks. */}
+        {post.leadMagnet && (
+          <LeadMagnet file={post.leadMagnet.file} tag={post.leadMagnet.tag} />
+        )}
         <RelatedPosts post={post} />
-        <Subscribe />
+        {!post.leadMagnet && <Subscribe />}
       </div>
       <Footer />
     </div>
