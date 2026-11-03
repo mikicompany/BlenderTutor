@@ -1,5 +1,238 @@
 export const posts = [
   {
+    slug: "blender-to-unity-export",
+    title: "Blender to Unity: Export Without the Scale and Rotation Mess",
+    description: "Models landing in Unity sideways or 100x too small? The Blender export and Unity import settings that make assets come in upright and correctly scaled, every time.",
+    date: "2026-11-03",
+    thumbnail: "/blog-images/blender-unity-pipeline.jpg",
+    content: `
+You export a model from Blender, drag it into Unity, and it arrives lying on its back, a hundred times too small, with no materials. Nothing is broken — Blender and Unity just disagree about three things, and if you settle all three once, every asset after it comes in clean.
+
+Here is what to set, on both ends.
+
+![The Blender export settings and the Unity import settings that make an asset land upright and correctly scaled](/blog-images/blender-unity-pipeline.svg)
+
+---
+
+## 🧭 Problem One: It Lands On Its Back
+
+Blender treats **Z as up**. Unity treats **Y as up**. So a model that stands upright in Blender arrives in Unity rotated 90° onto its back — or, worse, it *looks* upright but carries a hidden −90° rotation on its transform that fights you the moment you parent or animate it.
+
+**The clean fix is in the FBX exporter, not in hacks.** When you export, open the **Transform** section and set:
+
+- **Forward: −Z Forward**
+- **Up: Y Up**
+- **Apply Transform: on**
+
+Those are Unity's conventions. With them set, the asset lands upright *and* with a clean, zeroed rotation on its transform — which is the part most "rotate it −90, apply, rotate it back" tricks get wrong. Apply Transform bakes the axis conversion into the mesh data so Unity does not have to guess.
+
+Before you export at all, **apply your rotations in Blender** — select the object and **Ctrl A ▸ Rotation**. An object carrying an unapplied rotation is the single most common reason things arrive crooked, and it is the same discipline that keeps [FBX exports from arriving wrong in general](/blog/blender-fbx-export-scale-rotation).
+
+---
+
+## 📏 Problem Two: It Is Tiny (Or Enormous)
+
+This one has two layers, which is why it is confusing.
+
+**Layer one — Blender.** If your object has an unapplied scale (you resized it in Object Mode and never committed it), the FBX carries that scale as a transform rather than as real size. Apply it: **Ctrl A ▸ Scale**. Now the mesh's actual dimensions live in the geometry.
+
+**Layer two — the unit mismatch.** Blender works in metres and writes that into the FBX. Unity's FBX importer then applies its own **Scale Factor** and a **Convert Units** option, and the interaction between the two is what makes a 2-metre character turn up at 2cm or 200m.
+
+The reliable recipe: **model to real-world scale in Blender** (a character around 1.8 Blender units tall), **apply scale before export**, leave the exporter's scale at **1.0**, and in Unity's import settings tick **Convert Units** and leave Scale Factor at **1**. Set it once, and every asset built to real scale comes in right. Guessing a Scale Factor per-model is how you end up with a scene where nothing matches anything.
+
+---
+
+## 🎨 Problem Three: The Materials Are Gone
+
+They are not gone, exactly — they just do not survive the trip in any useful form, and expecting them to is the mistake.
+
+Unity does not run Blender's shader nodes. An FBX can carry basic material *slots* and a base colour, but your careful Principled BSDF setup, your node tree, your procedural textures — none of it crosses. **Plan to rebuild materials in Unity.**
+
+What actually transfers cleanly is **textures as image files**. So the workflow that works:
+
+1. In Blender, make sure every surface is a separate **material slot** with a sensible name — those names come across and become your Unity material names.
+2. Export your **texture maps as files** (base colour, roughness, metallic, and your [baked normal map](/blog/blender-normal-map-baking)).
+3. In Unity, create materials with the Standard or URP shader and plug those maps in.
+
+One genuinely good piece of news: **Unity uses the OpenGL normal-map convention, and so does Blender.** So unlike the trip to Unreal, your baked normal map needs **no green-channel flip** — it just works. That single compatibility is why a lot of people find the Blender-to-Unity texture path smoother than they expected.
+
+---
+
+## 🗂️ .blend Or FBX?
+
+Unity *can* import a **.blend** file directly — drop it in your Assets folder and, if Blender is installed on the machine, Unity converts it behind the scenes. It is convenient for a solo prototype where the file changes constantly.
+
+For anything real, **export FBX.** The direct-.blend path breaks the moment a teammate without Blender opens the project, or Blender updates and the converter lags, or you need precise control over what exports. FBX is explicit, portable, and does not depend on a Blender install existing wherever the project is opened. Convenience now, a broken import later — the trade is rarely worth it past a prototype.
+
+---
+
+## ✅ The Settings, In One Place
+
+**In Blender, before export:**
+
+- Apply rotation and scale (**Ctrl A**), on every object going across.
+- Name your material slots — those names become Unity's.
+- Model to real-world scale.
+
+**In the FBX exporter (Transform panel):**
+
+- Forward **−Z Forward**, Up **Y Up**, **Apply Transform** on.
+- Scale **1.0**.
+- Limit to **Selected Objects** so you export the asset and not the whole scene.
+
+**In Unity's model import settings:**
+
+- **Convert Units** on, Scale Factor **1**.
+- Rebuild materials with the Standard/URP shader.
+- Plug in your exported textures; the normal map needs **no** green flip.
+
+---
+
+## 🎯 Why It Is Worth Settling Once
+
+Every one of these three problems is a *convention mismatch*, not a bug — two programs that each made a reasonable choice and chose differently. Up-axis, units, materials. You cannot argue either side out of its choice, but you can configure the handoff so the translation happens automatically, once, and then stops costing you anything.
+
+That is what separates a pipeline from a pile of exports. A pipeline is a set of decisions you made once so you never have to think about them again — and the Blender-to-Unity handoff is one of the most worthwhile to nail down, because you will cross it on every single asset you make.
+
+It is the same relationship Blender has with [Unreal Engine](/blog/blender-and-unreal-the-happy-couple), just with Unity's conventions in the other two columns. Author in Blender, assemble in the engine. Neither tries to be the other, and that is exactly why the pairing works.
+
+---
+
+**Read next:** [Blender Normal Map Baking: Why Yours Comes Out Wrong](/blog/blender-normal-map-baking) — the textures that *do* cross to Unity are only as good as the bake that made them.
+
+*Setting up a Blender-to-Unity pipeline for a real project? [Book a free intro call →](https://www.blendertutoring.com/#packages). Getting the export and import settings right once, together, saves the week of "why is everything sideways" that most people spend learning it the hard way.*
+`,
+  },
+
+  {
+    slug: "blender-normal-map-baking",
+    title: "Blender Normal Map Baking: Why Yours Comes Out Wrong",
+    description: "Baked a normal map that came out purple, streaky, or inverted? The five things that break a Blender bake — each with the symptom that gives it away.",
+    date: "2026-11-03",
+    thumbnail: "/blog-images/blender-normal-map-bake.jpg",
+    content: `
+Baking a normal map is the trick that makes game art possible: you sculpt a million triangles of detail, then project it onto a low-poly cage of a few thousand that an engine can actually run. Done right, the low-poly looks almost identical to the sculpt. Done wrong, you get a purple smear, skewed streaks, or dents where the bumps should be.
+
+Here is the thing working, then everything that stops it working.
+
+![A high-poly panel, the low-poly cage it bakes onto, and the low-poly with the baked normal map — nearly indistinguishable from the sculpt](/blog-images/blender-normal-map-bake.jpg)
+
+That third panel is a few thousand triangles. It only *looks* like the first one because the surface detail is being faked by a texture — the normal map — that tells the renderer which way the surface points at every pixel, without any of the geometry actually being there.
+
+---
+
+## 🔧 What Baking Actually Does
+
+A normal map is an image where the red, green and blue of each pixel encode a *direction* rather than a colour. When the renderer shades your low-poly surface, it reads that direction and lights the pixel as if the surface faced that way — so a flat polygon can look dented, bolted, scratched or panelled.
+
+**Baking** is the step that produces that image. Blender fires rays from the low-poly surface outward, finds the high-poly surface they hit, measures which way *it* faces, and writes that direction into the texture at the matching UV coordinate. Two meshes go in — your detailed one and your game-ready one — and one image comes out.
+
+Almost every baking problem is one of three things: the rays missing or mis-hitting, the image being interpreted wrong, or the two meshes disagreeing about what "flat" means. Here is the map.
+
+![A symptom map for normal bakes: purple surface, washed-out detail, skewed streaks, visible seams, and inverted bumps, each with its cause and fix](/blog-images/normal-map-symptoms.svg)
+
+---
+
+## 🟣 The Surface Is Flat Purple
+
+Flat lavender-purple, no detail at all, is a normal map that is loaded but **not being read as a normal map**.
+
+The single most common cause: the image is set to **sRGB** colour space. A normal map is data, not a picture — its "colours" are coordinates — so colour management must not touch it. Set the Image Texture node's colour space to **Non-Color**. This is the same class of mistake that makes [materials look like plastic](/blog/blender-materials-look-like-plastic): colour space quietly corrupting a map that was never meant to be seen.
+
+The other cause: the Normal Map node is missing. An image texture plugged straight into the Principled BSDF's Normal input does nothing useful — the pixels have to pass through a **Normal Map** node first, which converts those stored directions into the shading the BSDF expects. Image Texture → Normal Map → Normal. In that order, always.
+
+---
+
+## 🫥 The Detail Is There But Washed Out
+
+Faint, flat, like the bake took but someone turned it down. Two usual suspects:
+
+**Strength.** The Normal Map node has a **Strength** value. At 1.0 it is accurate; below that it fades. If someone set it to 0.2 to "tone it down," that is your washout. Put it back to 1.0 — a normal map is measured, not seasoned.
+
+**Colour space, again, the other way.** If the map reads correctly but looks weak, confirm it is genuinely Non-Color and that you did not accidentally bake into an 8-bit image when the detail needed more range. For most game work 8-bit is fine; the washout is almost always strength or colour space, not bit depth.
+
+---
+
+## 💥 Skewed Streaks And Exploded Artifacts
+
+Long smears pulling off the edges, or detail that looks melted sideways. This is the **ray distance** — the single most fiddly setting in baking.
+
+The rays travel a fixed distance looking for the high-poly surface. Too short and they fall short of the detail, leaving holes. Too long and a ray fired near one edge punches through and hits the high-poly on the *other* side of the model, writing that far surface's direction into the wrong place — which reads as a skewed streak.
+
+Two ways to fix it:
+
+- **Tune the Extrusion and Max Ray Distance** under the bake settings until the smears vanish. On a simple object this is quick trial and error.
+- **Use a cage.** A cage is an inflated copy of your low-poly that defines exactly how far the rays go, per-vertex. On anything with varying thickness — a character, a prop with both thick and thin parts — a cage is the difference between a clean bake and an afternoon of fighting ray distance. It is worth learning early.
+
+---
+
+## 🧵 Visible Seams Along The UV Edges
+
+Hard lines exactly where your UV islands split. The bake is fine; the problem is at the edges of the islands.
+
+**Add bake margin.** The bake can bleed a few pixels of colour past each island's edge, so that when the texture is filtered and mip-mapped at distance, the background colour does not creep in. Set the **Margin** to 8–16 pixels. Zero margin guarantees seams.
+
+**Match your hard edges to your UV seams.** Every hard edge (a sharp 90° corner you have marked sharp, or a face with split normals) should sit on a UV seam, and every UV seam should ideally be a hard edge. When a hard edge runs through the *middle* of a UV island, the bake has to store an abrupt direction change in the texture, and that is where seams and gradients show up. This is the same discipline that keeps [UV unwrapping](/blog/uv-unwrapping-blender-beginners) from becoming guesswork.
+
+---
+
+## 🔃 The Bumps Are Dents (And Dents Are Bumps)
+
+Everything looks baked correctly, but the lighting is *inside out* — raised bolts read as holes, panel grooves read as ridges. This one catches everybody exactly once.
+
+It is the **green channel**. There are two conventions for which way "up" points in a normal map:
+
+- **OpenGL** (+Y): used by Blender, Unity, Godot, Toolbag.
+- **DirectX** (−Y): used by Unreal Engine, 3ds Max, Substance's DirectX export.
+
+Blender bakes **OpenGL**. If you take that map into Unreal — which expects DirectX — every surface's vertical direction is flipped, and the shading inverts. The fix is to **flip the green channel**: either tick "Flip Green" on Unreal's texture import, or invert the G channel in the compositor before export.
+
+So the rule when your bake looks inverted: you have not baked it wrong, you have handed an OpenGL map to a DirectX engine. It is the same tax as [scale and rotation on FBX export](/blog/blender-fbx-export-scale-rotation) — a convention mismatch between two programs, not a mistake in Blender.
+
+---
+
+## 🧊 The Low-Poly's Own Shading Shows Through
+
+Faceted, blocky shading bleeding through the detail, especially on curved surfaces. The low-poly and the bake disagree about the base surface.
+
+A tangent-space normal map is stored *relative to the low-poly's own smooth shading*. So the low-poly must be set to **Shade Smooth** when you bake and when you render — if you bake smooth and render flat, or change the smoothing after baking, the map is now relative to a surface that no longer exists, and the facets reappear.
+
+For hard-surface models, the clean approach is **shade smooth plus a Weighted Normal modifier**, or split normals on your genuine hard edges — so the low-poly's shading is already close to the high-poly's, and the normal map only has to store the difference. A map that only stores the difference is a map with fewer artifacts.
+
+---
+
+## 🧰 The Thirty-Second Checklist
+
+Before you bake, and when a bake goes wrong, in order:
+
+1. **Low-poly is Shade Smooth**, with hard edges on UV seams only.
+2. **UVs are unwrapped** with a little space between islands.
+3. **A new image** is created and assigned, set to **Non-Color**.
+4. **Low-poly selected, high-poly also selected, low-poly active** — the active object is what gets baked *to*.
+5. **Selected to Active** is ticked, with a sane **Ray Distance** or a cage.
+6. **Margin** at 8–16 px.
+7. After baking: Image Texture (Non-Color) → **Normal Map** node → BSDF Normal, strength 1.0.
+8. Going to Unreal? **Flip the green channel.**
+
+---
+
+## 🎯 Why It Goes Wrong So Often
+
+Baking sits at the intersection of four things that each have their own conventions — UVs, colour space, shading, and engine handedness — and it only looks right when all four agree. Miss one and you do not get an error; you get a plausible-looking texture that is subtly wrong, and "subtly wrong" is the hardest kind of problem to diagnose because nothing tells you which of the four it is.
+
+So you read the symptom. Purple means colour space. Streaks mean ray distance. Seams mean margins and hard edges. Inverted means green channel. The surface on your screen has already told you which of the four to go and check — the same lesson as [a texture that will not show at all](/blog/blender-texture-not-showing), one step further down the pipeline.
+
+Get it right and you have the core move of all game art: the detail of a sculpt, at the cost of a few thousand triangles. That trade is most of what makes a real-time scene possible.
+
+---
+
+**Read next:** [Quads vs Triangles in Blender: What Actually Matters](/blog/quads-vs-triangles-blender) — because the low-poly you bake onto is only as good as its topology, and this is where that starts.
+
+*Baking a specific asset and it will not come clean? [Book a free intro call →](https://www.blendertutoring.com/#packages) and bring both meshes. Ninety per cent of bad bakes are one of the five above, and they are far faster to spot with someone looking at your ray distance and your node tree with you.*
+`,
+  },
+
+  {
     slug: "blender-5-features",
     title: "Blender 5 Features: What Actually Changed Across 5.0, 5.1 and 5.2",
     description: "ACES and HDR colour, bundles and closures in Geometry Nodes, node-based hair and cloth, and the Cycles speedups — the whole 5.x line, sorted by whether you will notice it.",
