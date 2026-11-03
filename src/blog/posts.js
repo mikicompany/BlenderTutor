@@ -2872,8 +2872,8 @@ That's a five-minute conversation and a months-long frustration, depending on wh
   },
   {
     slug: "life-beyond-the-donut",
-    title: "What to Make After the Blender Donut Tutorial",
-    description: "Finished Blender's famous donut tutorial? Here's how to escape tutorial hell and start making work that's actually yours.",
+    title: "What to Do After the Blender Donut: Escape Tutorial Hell",
+    description: "Finished the Blender donut and stuck on what's next? How to escape tutorial hell and start building work that's actually yours — with projects to try.",
     date: "2026-07-24",
     thumbnail: "/blog-images/life-beyond-the-donut.jpg",
     content: `
@@ -2981,8 +2981,8 @@ That feedback gap is exactly why we do one-on-one mentoring: you build **your ow
   },
   {
     slug: "how-long-to-learn-blender",
-    title: "How Long Does It Take to Learn Blender From Scratch?",
-    description: "Wondering how long it takes to learn Blender? Here's an honest, experience-based breakdown — no hype, no shortcuts.",
+    title: "How Long Does It Take to Learn Blender? Honest Timeline",
+    description: "How long does it take to learn Blender? A senior artist's honest breakdown — what you can do in a week, a month, and a year. No hype, no shortcuts.",
     date: "2026-06-09",
     thumbnail: "/blog-images/f2.jpg",
     content: `
