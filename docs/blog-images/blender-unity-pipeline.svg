@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 700" width="1200" height="700" role="img" aria-label="The Blender to Unity handoff. Three conventions differ: up-axis (Blender is Z-up, Unity is Y-up), units (Blender metres, Unity applies its own scale), and materials (Blender shader nodes do not cross). On the Blender and FBX export side: apply rotation and scale with Control A, name material slots, model to real-world scale, and in the FBX Transform panel set Forward to minus Z, Up to Y, Apply Transform on, scale 1.0, selected objects only. On the Unity import side: tick Convert Units with scale factor 1, rebuild materials with the Standard or URP shader, and plug in exported textures — the normal map needs no green flip because Unity and Blender share the OpenGL convention.">
+  <rect width="1200" height="700" fill="#0f1011"/>
+  <defs>
+    <style>
+      .hd  { font-family:system-ui,sans-serif; font-size:15px; font-weight:700; letter-spacing:2px; fill:#f37d16; }
+      .mis { font-family:system-ui,sans-serif; font-size:12.5px; font-weight:700; fill:#e8e6e3; }
+      .misb{ font-family:system-ui,sans-serif; font-size:12px; fill:#8b9197; }
+      .pan { fill:#161718; stroke:#2c3033; stroke-width:2; }
+      .ph  { font-family:system-ui,sans-serif; font-size:14px; font-weight:800; letter-spacing:1.4px; fill:#f0b429; }
+      .it  { font-family:system-ui,sans-serif; font-size:13.5px; font-weight:600; fill:#e8e6e3; }
+      .sub { font-family:system-ui,sans-serif; font-size:12px; fill:#8b9197; }
+      .chip{ fill:#20211f; stroke:#343a2a; stroke-width:1.5; }
+      .ft  { font-family:system-ui,sans-serif; font-size:12.5px; fill:#6f767c; }
+    </style>
+  </defs>
+
+  <text class="hd" x="60" y="48">THE BLENDER → UNITY HANDOFF</text>
+
+  <!-- three mismatches band -->
+  <g>
+    <rect class="chip" x="60" y="70" width="345" height="70" rx="10"/>
+    <text class="mis"  x="80" y="100">↕ Up-axis</text>
+    <text class="misb" x="80" y="122">Blender Z-up · Unity Y-up</text>
+
+    <rect class="chip" x="428" y="70" width="345" height="70" rx="10"/>
+    <text class="mis"  x="448" y="100">📏 Units</text>
+    <text class="misb" x="448" y="122">Blender metres · Unity re-scales</text>
+
+    <rect class="chip" x="796" y="70" width="344" height="70" rx="10"/>
+    <text class="mis"  x="816" y="100">🎨 Materials</text>
+    <text class="misb" x="816" y="122">Shader nodes don't cross</text>
+  </g>
+
+  <!-- left panel: Blender / FBX export -->
+  <g>
+    <rect class="pan" x="60" y="166" width="500" height="470" rx="14"/>
+    <rect x="60" y="166" width="500" height="5" rx="2.5" fill="#ea7600"/>
+    <text class="ph" x="88" y="206">IN BLENDER — BEFORE EXPORT</text>
+
+    <text class="it"  x="88" y="246">Apply rotation &amp; scale</text>
+    <text class="sub" x="88" y="268">Ctrl A ▸ Rotation, then Scale — on every object</text>
+
+    <text class="it"  x="88" y="306">Model to real-world scale</text>
+    <text class="sub" x="88" y="328">A character ≈ 1.8 Blender units tall</text>
+
+    <text class="it"  x="88" y="366">Name your material slots</text>
+    <text class="sub" x="88" y="388">Those names become Unity's material names</text>
+
+    <text class="ph" x="88" y="436">FBX EXPORT — TRANSFORM PANEL</text>
+    <text class="it"  x="88" y="474">Forward −Z · Up Y</text>
+    <text class="sub" x="88" y="496">Unity's axes — lands upright, rotation zeroed</text>
+
+    <text class="it"  x="88" y="534">Apply Transform: on</text>
+    <text class="sub" x="88" y="556">Bakes the axis conversion into the mesh</text>
+
+    <text class="it"  x="88" y="594">Scale 1.0 · Selected Objects</text>
+    <text class="sub" x="88" y="616">Export the asset, not the whole scene</text>
+  </g>
+
+  <!-- arrow -->
+  <g>
+    <path d="M576 400 L624 400" stroke="#f37d16" stroke-width="3" fill="none"/>
+    <path d="M620 392 L636 400 L620 408 Z" fill="#f37d16"/>
+    <text x="606" y="384" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="#6f767c">FBX</text>
+  </g>
+
+  <!-- right panel: Unity import -->
+  <g>
+    <rect class="pan" x="652" y="166" width="488" height="470" rx="14"/>
+    <rect x="652" y="166" width="488" height="5" rx="2.5" fill="#ea7600"/>
+    <text class="ph" x="680" y="206">IN UNITY — MODEL IMPORT</text>
+
+    <text class="it"  x="680" y="246">Convert Units: on</text>
+    <text class="sub" x="680" y="268">Scale Factor 1 — set once, every asset fits</text>
+
+    <text class="it"  x="680" y="306">Rebuild materials</text>
+    <text class="sub" x="680" y="328">Standard or URP shader; slots arrive named</text>
+
+    <text class="it"  x="680" y="366">Plug in exported textures</text>
+    <text class="sub" x="680" y="388">Base colour, roughness, metallic, normal</text>
+
+    <text class="it"  x="680" y="426">Normal map: NO green flip</text>
+    <text class="sub" x="680" y="448">Unity and Blender share the OpenGL convention</text>
+
+    <rect class="chip" x="680" y="486" width="432" height="118" rx="10"/>
+    <text class="ph" x="700" y="520" style="fill:#7ad17a">THE RESULT</text>
+    <text class="sub" x="700" y="548" style="fill:#aeb4ba">Upright. Correctly scaled. Materials rebuilt once.</text>
+    <text class="sub" x="700" y="570" style="fill:#aeb4ba">Then every asset after it crosses the same way —</text>
+    <text class="sub" x="700" y="590" style="fill:#aeb4ba">which is what makes it a pipeline, not a fight.</text>
+  </g>
+
+  <text class="ft" x="60" y="676">Each problem is a convention mismatch, not a bug. Configure the handoff once and the translation stops costing you anything.</text>
+</svg>
