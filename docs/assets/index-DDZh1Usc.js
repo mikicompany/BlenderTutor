@@ -2690,7 +2690,7 @@ That's a five-minute conversation and a months-long frustration, depending on wh
 **Read next:** [Cycles vs EEVEE](/blog/cycles-vs-eevee) — once your textures sit properly, the render engine decides how they actually look.
 
 *Stuck on your own model rather than a tutorial's? [Book a free intro call →](https://blendertutoring.com/#packages)*
-    `},{slug:"life-beyond-the-donut",title:"What to Make After the Blender Donut Tutorial",description:"Finished Blender's famous donut tutorial? Here's how to escape tutorial hell and start making work that's actually yours.",date:"2026-07-24",thumbnail:"/blog-images/life-beyond-the-donut.jpg",content:`
+    `},{slug:"life-beyond-the-donut",title:"What to Do After the Blender Donut: Escape Tutorial Hell",description:"Finished the Blender donut and stuck on what's next? How to escape tutorial hell and start building work that's actually yours — with projects to try.",date:"2026-07-24",thumbnail:"/blog-images/life-beyond-the-donut.jpg",content:`
 If you're reading this, chances are there's a render of a pink-frosted donut somewhere on your hard drive. Maybe with sprinkles that took an entire evening to get right.
 
 Congratulations — genuinely. Blender Guru's donut is where a huge share of all Blender artists start, and finishing it puts you ahead of everyone who gave up at "how do I rotate the camera."
@@ -2791,7 +2791,7 @@ That feedback gap is exactly why we do one-on-one mentoring: you build **your ow
 **Read next:** two walls most people hit right after the donut — [UV Unwrapping, Without the Panic](/blog/uv-unwrapping-blender-beginners) and [Cycles vs EEVEE](/blog/cycles-vs-eevee). And if you're wondering how long all this takes, [here's an honest breakdown](/blog/how-long-to-learn-blender).
 
 *Finished your donut and want a clear path to work you're proud of? [Book a free intro call →](https://blendertutoring.com/#packages)*
-    `},{slug:"how-long-to-learn-blender",title:"How Long Does It Take to Learn Blender From Scratch?",description:"Wondering how long it takes to learn Blender? Here's an honest, experience-based breakdown — no hype, no shortcuts.",date:"2026-06-09",thumbnail:"/blog-images/f2.jpg",content:`
+    `},{slug:"how-long-to-learn-blender",title:"How Long Does It Take to Learn Blender? Honest Timeline",description:"How long does it take to learn Blender? A senior artist's honest breakdown — what you can do in a week, a month, and a year. No hype, no shortcuts.",date:"2026-06-09",thumbnail:"/blog-images/f2.jpg",content:`
 Everyone asks this before they start. The honest answer is: it depends on what you mean by "learn."
 
 Blender is deep. You could spend a lifetime mastering every corner of it. But getting to a point where you're making things you're genuinely proud of? That's more achievable than most people think.
