@@ -5,8 +5,22 @@
     <link>https://www.blendertutoring.com/blog</link>
     <description>Practical Blender guides for beginners and game artists.</description>
     <language>en</language>
-    <lastBuildDate>Tue, 03 Nov 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 04 Nov 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://www.blendertutoring.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Retopology in Blender: Turning a Sculpt Into a Usable Mesh</title>
+      <link>https://www.blendertutoring.com/blog/blender-retopology</link>
+      <guid isPermaLink="true">https://www.blendertutoring.com/blog/blender-retopology</guid>
+      <pubDate>Wed, 04 Nov 2026 00:00:00 GMT</pubDate>
+      <description>A sculpt looks finished but can't be rigged, UV'd or textured. Retopology rebuilds it as clean quads — what it is, when you need it, and how to do it in Blender.</description>
+    </item>
+    <item>
+      <title>Texel Density in Blender: Why Your Textures Look Uneven</title>
+      <link>https://www.blendertutoring.com/blog/texel-density-blender</link>
+      <guid isPermaLink="true">https://www.blendertutoring.com/blog/texel-density-blender</guid>
+      <pubDate>Wed, 04 Nov 2026 00:00:00 GMT</pubDate>
+      <description>One asset crisp, the next blurry? That's texel density — texture pixels per unit of surface. What it is, the standard values, and how to keep it even in Blender.</description>
+    </item>
     <item>
       <title>Blender to Unity: Export Without the Scale and Rotation Mess</title>
       <link>https://www.blendertutoring.com/blog/blender-to-unity-export</link>
