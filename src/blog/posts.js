@@ -1,5 +1,229 @@
 export const posts = [
   {
+    slug: "blender-retopology",
+    title: "Retopology in Blender: Turning a Sculpt Into a Usable Mesh",
+    description: "A sculpt looks finished but can't be rigged, UV'd or textured. Retopology rebuilds it as clean quads — what it is, when you need it, and how to do it in Blender.",
+    date: "2026-11-04",
+    thumbnail: "/blog-images/blender-retopology.jpg",
+    content: `
+A sculpt looks finished. It is often almost unusable.
+
+Under the surface it is millions of chaotic triangles with no direction — a mesh you cannot rig, cannot UV cleanly, cannot animate, and cannot afford to put in a real-time scene. **Retopology** is the step that fixes that: rebuilding the same shape as a clean, low-poly mesh of quads that follow the form.
+
+Here is what that actually means.
+
+![The same monkey form as a 15,744-triangle sculpt and as a clean 500-quad retopologised mesh](/blog-images/blender-retopology.jpg)
+
+Identical silhouette. The left one looks done and is a nightmare downstream; the right one is the same shape rebuilt as quads you can work with. That is the whole job.
+
+---
+
+## 🧩 Why A Sculpt Can't Just Be Used
+
+When you sculpt, Blender is giving you resolution, not structure. Every brush stroke adds triangles wherever it needs them, with no regard for edge flow — the orderly loops of geometry that tools like rigging, UV unwrapping and subdivision all depend on.
+
+The result is a mesh that is:
+
+- **Too heavy.** Millions of triangles no engine will run and no viewport enjoys.
+- **Impossible to edit.** No loops to select, slide or cut — the same problem as any [generated or scanned mesh with no topology](/blog/ai-generated-mesh-topology-cost).
+- **Bad at deforming.** With no loops running around a joint, there is nothing for a rig to bend cleanly, which is exactly how [a character ends up deforming badly](/blog/blender-rig-deforms-badly).
+- **Miserable to UV.** Triangle soup unwraps into fragmented islands with uneven texel density.
+
+Retopology trades the sculpt's resolution for structure. You keep the shape; you replace the mesh.
+
+---
+
+## 🤔 When You Actually Need It
+
+Not everything gets retopologised — doing it to a rock nobody looks at is wasted hours. The honest test is what the asset's future holds:
+
+**Retopologise when the asset will:**
+
+- **Deform** — anything rigged or animated needs loops to bend along.
+- **Be hand-textured** — clean UVs need clean topology under them.
+- **Go into a real-time engine** with a polygon budget.
+- **Be edited again** — you will want loops to work with.
+
+**Leave it alone when** it is a static prop, never deforms, is not going into an engine on a budget, and the poly count is irrelevant. A background rock generated or sculpted and never touched again is genuinely fine as it is. This is the same proportionality that governs [quads versus triangles](/blog/quads-vs-triangles-blender): topology matters most where the surface moves, and barely at all where it does not.
+
+---
+
+## 🛠️ How It's Done In Blender
+
+There are three routes, from most control to least.
+
+### 1. By hand, with Poly Build and Shrinkwrap (free, built in)
+
+The traditional way, and the one that teaches you the most. The trick is two modifiers on a fresh mesh:
+
+- A **Shrinkwrap** modifier, targeting your sculpt, so every vertex you place snaps onto the sculpt's surface.
+- **Surface Snapping** on, so the new geometry hugs the form as you draw it.
+
+Then you use the **Poly Build** tool to click quads into existence directly on the surface, following the form. It is slow and deliberate, and it gives you total control over where every loop goes — which, for a face or a hero character, is control you want.
+
+### 2. With an add-on (faster, still manual)
+
+**RetopoFlow** (a dedicated retopology toolkit) and **Quad Remesher** (auto, paid) exist because hand-retopo is time-consuming. RetopoFlow keeps the manual control but makes it far quicker; Quad Remesher produces usable automatic quad topology in one click. For production work, most people reach for one of these.
+
+### 3. QuadriFlow Remesh (one click, built in, free)
+
+Blender ships an automatic quad retopologiser: **Object ▸ Quad Remesh** (QuadriFlow). You give it a target face count and it rebuilds the mesh in quads. It is genuinely useful for props and hard-surface shapes. It is *not* smart about where loops need to go for deformation, so for a face, hands, or anything that bends, it is a starting point at best — you still place the important loops yourself.
+
+---
+
+## 🌀 Where The Loops Go
+
+This is the skill, and it is worth stating simply: **edge loops should follow the form and follow the deformation.**
+
+On a face, loops run around the eyes and around the mouth, because that is how a real face creases when it moves. On a limb, loops run *around* the joint — three or so at an elbow or knee — so the surface has somewhere to fold. On a hard-surface panel, loops hold the hard corners sharp.
+
+A good retopo is not the one with the most polygons. It is the one where the polygons are in the right places and absent everywhere else. Flat areas want almost nothing; areas that bend or hold detail want loops.
+
+---
+
+## 🔗 Retopo Then Bake
+
+Here is how the whole pipeline fits together, because retopology is rarely the end of it.
+
+You sculpt the detail. You retopologise to get a clean, light mesh. Then you **bake the sculpt's detail onto that clean mesh as a normal map** — so the low-poly keeps all the surface richness of the sculpt without any of the geometry. Retopology and [normal-map baking](/blog/blender-normal-map-baking) are two halves of one move: the retopo gives you a mesh an engine can run, and the bake gives it back the detail you rebuilt it away from.
+
+Skip the retopo and the bake has nothing clean to project onto. They go together.
+
+---
+
+## ⚠️ The Mistakes That Waste The Effort
+
+**Making the retopo too dense.** It is meant to be *low*-poly. If your "retopologised" mesh is still 200k triangles, you have rebuilt the problem. Aim for the lowest count that holds the silhouette and the loops you need.
+
+**Triangles and poles in deforming areas.** A stray triangle on a flat panel is harmless; one on a cheek or a knuckle pinches when it moves. Keep the deforming zones clean quads.
+
+**Ignoring the silhouette.** The retopo must sit *on* the sculpt. If it drifts off the surface, you lose the shape you sculpted — Shrinkwrap exists precisely to stop this, so use it.
+
+**Retopologising too early.** Finish the sculpt first. Retopo over a form you are still changing and you will just do it twice.
+
+---
+
+## 🎯 The Underlying Idea
+
+Sculpting and retopology answer two different questions. Sculpting asks *what does it look like*. Retopology asks *how is it built*. A sculpt can be beautiful and still be built wrong for everything that comes after it — and "built wrong" is invisible in a render, right up until you try to rig it, texture it, or load it into an engine.
+
+So retopology is the moment a sculpt stops being a nice image and becomes an asset. It is unglamorous, it is most of the gap between hobby work and production work, and it is one of the clearest skills a [portfolio can show a studio](/blog/game-art-portfolio-what-studios-want): clean topology says you understand that the mesh has to live a life after the pretty render.
+
+---
+
+**Read next:** [Blender Normal Map Baking: Why Yours Comes Out Wrong](/blog/blender-normal-map-baking) — the step straight after retopo, where the sculpt's detail gets projected back onto your clean mesh.
+
+*Staring at a sculpt and not sure where the loops should go? [Book a free intro call →](https://www.blendertutoring.com/#packages) and bring it. Edge flow is one of those things that takes ten minutes to grasp with someone drawing it on your own model, and a long time to guess at alone.*
+`,
+  },
+
+  {
+    slug: "texel-density-blender",
+    title: "Texel Density in Blender: Why Your Textures Look Uneven",
+    description: "One asset crisp, the next blurry? That's texel density — texture pixels per unit of surface. What it is, the standard values, and how to keep it even in Blender.",
+    date: "2026-11-04",
+    thumbnail: "/blog-images/blender-texel-density.jpg",
+    content: `
+Two assets in the same scene. One looks crisp; the one next to it looks soft and low-resolution. Both have perfectly good textures. The difference is **texel density** — and once you can see it, you cannot unsee it.
+
+![Three boxes with one checker texture, shown with inconsistent and then consistent texel density](/blog-images/blender-texel-density.jpg)
+
+Texel density is the one thing separating a scene that reads as professional from one that reads as "a beginner made this," and it is almost never about the textures themselves.
+
+---
+
+## 🧮 What It Actually Is
+
+Texel density is **texture pixels per unit of surface** — how many texels (texture pixels) land on each centimetre or metre of your model. It is measured in something like **px/cm** or **px/m**.
+
+When it is consistent across your assets, every surface gets the same share of texture resolution, so everything is equally sharp. When it is not, some surfaces are crammed with pixels and others are starved — and the starved ones look blurry no matter how good the texture is.
+
+Look again at the image. Both rows use the exact same checker. In the top row every box fills a full UV square, so they all have the *same number* of checks — which means the big box's checks are huge and the small box's are tiny. In the bottom row the checks are the *same real-world size* on every box. That second one is consistent texel density, and it is the one that looks right.
+
+**The rule you can hold onto: watch the square size, not the square count.** Same size everywhere means even density.
+
+---
+
+## 😬 Why It Matters More Than It Sounds
+
+**Mismatched sharpness reads as amateur.** A crisp crate sitting next to a blurry wall is the single most common tell of inexperienced environment art. Nobody can name what is wrong, but everyone feels it.
+
+**It wastes your texture budget.** Resolution spent over-detailing a surface nobody gets close to is resolution stolen from a hero surface that needed it. Even density is also *efficient* density.
+
+**Engines and teams expect it.** On any real project, texel density is a standard everyone on the team hits, so that assets built by different people cut together seamlessly. Ignoring it is fine alone; it does not survive contact with a pipeline.
+
+---
+
+## 👁️ How To See It: The Checker
+
+You do not eyeball texel density on your final textures — you check it with a **checker or UV grid texture**, exactly like the image above.
+
+Assign a checker material to everything, and look at the squares across all your surfaces:
+
+- **Same size everywhere** → even density. Good.
+- **Squares stretched into rectangles** → the UVs are distorted; the unwrap needs fixing.
+- **Squares much bigger on one object than another** → inconsistent density; scale the UVs.
+
+It is the fastest diagnostic in texturing, and it catches distortion and density problems in the same glance. Keep a checker material in your startup file.
+
+---
+
+## 📐 Setting It In Blender
+
+**The concept:** an object's texel density is set by how big its UV islands are *relative to its real-world size*. A bigger object needs proportionally bigger UVs to hold the same density. The classic mistake — the top row of the image — is unwrapping every object to fill the 0–1 UV space regardless of how big it is.
+
+**Without an add-on:** assign the checker, then scale each object's UV islands up or down until the squares match across everything. Slow, but it builds the instinct, and it is the same island-scaling muscle that [UV unwrapping](/blog/uv-unwrapping-blender-beginners) already trains.
+
+**With an add-on:** **TexTools** (free) is the standard. It reads out an object's texel density as a number and sets it to a target with one click, so you can make every asset in a scene exactly, say, 10.24 px/cm instead of matching by eye. For any serious environment work it is worth installing on day one.
+
+---
+
+## 🔢 The Standard Numbers
+
+Density targets depend on how close the player gets and how important the asset is. Common game values, for a 1024px texture:
+
+- **Hero / first-person assets:** high density — often **10.24 px/cm** (a 1024px texture covering 1 metre), sometimes more.
+- **Standard environment assets:** **5.12 px/cm** is a very common middle ground.
+- **Background / distant assets:** **2.56 px/cm** or lower — nobody gets close, so the resolution would be wasted.
+
+The exact numbers vary by studio and project; what matters is that you **pick a value and hold everything in a given tier to it**, so assets in the same space match. Consistency beats any particular number.
+
+---
+
+## 🧱 It Rests On The Layers Below
+
+Texel density is the top of a stack, and it is only as good as what holds it up.
+
+You cannot set even density on an unwrap that is distorted, and you cannot unwrap cleanly on [triangle-soup topology](/blog/blender-retopology). So the real order is: clean topology, then a clean unwrap, then even texel density on top. Skip a layer and the one above it wobbles. This is why texel density problems so often turn out to be UV problems, which turn out to be topology problems — the symptom is at the top, the cause is usually further down.
+
+---
+
+## 🧰 The Thirty-Second Check
+
+1. **Assign a checker material** to every object in the scene.
+2. **Look at the square size.** Same across everything? Density is even.
+3. **Spot the outliers** — an object with much bigger or smaller squares is the one dragging your scene's consistency down.
+4. **Scale its UVs** (or set a target with TexTools) until it matches.
+
+That is the entire workflow. It takes a minute and it is the difference between a scene that hangs together and one that quietly looks off.
+
+---
+
+## 🎯 The Underlying Idea
+
+Texel density is invisible until you compare two things — and that is exactly why it matters. A single asset in isolation always looks fine. The problem only appears in a *scene*, where one surface's sharpness sits next to another's, and the mismatch is what the eye catches even when the viewer cannot say why.
+
+So it is a discipline of consistency rather than quality. You are not making any one thing better; you are making everything *agree*. And consistency, across a whole scene built from many separate pieces, is most of what "looks professional" actually means — which is also why clean, even texel density is one of the quietest but clearest signals a [portfolio sends a studio](/blog/game-art-portfolio-what-studios-want).
+
+---
+
+**Read next:** [UV Unwrapping in Blender, Without the Panic](/blog/uv-unwrapping-blender-beginners) — texel density is set on the UVs, so this is the layer directly underneath it.
+
+*Building a scene where the pieces do not quite sit together and you cannot say why? [Book a free intro call →](https://www.blendertutoring.com/#packages). Texel density is one of those things that is obvious the moment someone points at the checker on your screen, and invisible until they do.*
+`,
+  },
+
+  {
     slug: "blender-to-unity-export",
     title: "Blender to Unity: Export Without the Scale and Rotation Mess",
     description: "Models landing in Unity sideways or 100x too small? The Blender export and Unity import settings that make assets come in upright and correctly scaled, every time.",
