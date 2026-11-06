@@ -8,18 +8,11 @@
     <lastBuildDate>Fri, 06 Nov 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://www.blendertutoring.com/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
-      <title>Maya Workflow Kit: Make Blender Work Like Maya</title>
-      <link>https://www.blendertutoring.com/blog/maya-workflow-kit-blender</link>
-      <guid isPermaLink="true">https://www.blendertutoring.com/blog/maya-workflow-kit-blender</guid>
+      <title>Blender for Maya Users: Look and Feel Like Maya</title>
+      <link>https://www.blendertutoring.com/blog/blender-for-maya-users</link>
+      <guid isPermaLink="true">https://www.blendertutoring.com/blog/blender-for-maya-users</guid>
       <pubDate>Fri, 06 Nov 2026 00:00:00 GMT</pubDate>
-      <description>A free Blender extension rebuilds Maya's whole workflow — hotbox, marking menus, Channel Box, shelves — with a one-click switch back to plain Blender.</description>
-    </item>
-    <item>
-      <title>Make Blender Look (and Feel) Like Maya</title>
-      <link>https://www.blendertutoring.com/blog/blender-maya-theme</link>
-      <guid isPermaLink="true">https://www.blendertutoring.com/blog/blender-maya-theme</guid>
-      <pubDate>Fri, 06 Nov 2026 00:00:00 GMT</pubDate>
-      <description>A free theme makes Blender look just like Maya — blue-grey viewport and all. Here's how to install it, and the keymap that makes it actually feel like Maya.</description>
+      <description>Two free, open-source tools get Blender most of the way to Maya — a faithful theme for the look and a kit that rebuilds the whole workflow. Here's both.</description>
     </item>
     <item>
       <title>Blender Booleans Wreck Your Topology</title>

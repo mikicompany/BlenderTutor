@@ -32,7 +32,16 @@ export default defineConfig({
       // privately. The plugin scans docs/ for .html files, and prerender.js
       // writes docs/pay.html — so from the second build onward it would be
       // picked up automatically without this.
-      exclude: ['/404', '/googlea46d0184849e086f', '/pay'],
+      // The two old Maya posts were merged into /blog/blender-for-maya-users.
+      // Their URLs now serve redirect stubs (public/blog/...), which must stay
+      // out of the sitemap.
+      exclude: [
+        '/404',
+        '/googlea46d0184849e086f',
+        '/pay',
+        '/blog/blender-maya-theme',
+        '/blog/maya-workflow-kit-blender',
+      ],
       priority: {
         '/': 1.0,
         '/blog': 0.8,
