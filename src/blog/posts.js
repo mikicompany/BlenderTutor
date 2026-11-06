@@ -1,5 +1,85 @@
 export const posts = [
   {
+    slug: "blender-maya-theme",
+    title: "Make Blender Look (and Feel) Like Maya",
+    description: "A free theme makes Blender look just like Maya — blue-grey viewport and all. Here's how to install it, and the keymap that makes it actually feel like Maya.",
+    date: "2026-11-06",
+    thumbnail: "/blog-images/blender-maya-theme.jpg",
+    content: `
+You spent years in Maya. The muscle memory, the blue-grey viewport, the way a selected object glows green — it is all wired into your hands and your eyes. Then you open Blender and everything is the wrong colour, the wrong shape, and nothing is where you left it. The good news: there is a free, surprisingly faithful **Maya theme** that makes Blender *look* like home in about thirty seconds. The honest news, which almost nobody tells you: a theme is paint, not ergonomics, and the part that actually trips up Maya users is not the colour.
+
+![The same Blender window shown twice — default dark theme on the left, the Maya theme on the right with its blue-grey viewport, green active outline and orange vertices](/blog-images/blender-maya-theme.jpg)
+
+Both windows above are the same Blender. The only difference is the theme. The right-hand one is wearing the real Maya extension, and every colour in it — the blue-grey viewport gradient, the green active outline, the orange vertices, the cyan edges — was pulled straight out of the theme's own file. It is a genuinely accurate reproduction. One reviewer who has used Maya for over a decade called it "very accurate," and that matches what I see.
+
+---
+
+## 🎨 What The Maya Theme Actually Is
+
+It is a **community theme**, and for a long time it was not even a download — it shipped inside Blender as a built-in preset, right up to version 4.1. When Blender moved themes out to its [extensions platform](https://extensions.blender.org/themes/theme-maya/), this one went with it. Today it lives there as a free extension:
+
+- **Version 2.0.0**, updated for **Blender 5.0 and newer**.
+- Around **30,000 downloads**, a 5.7 KB file, released under the GPL — the same licence as Blender itself.
+- Officially **no longer maintained** — the page openly asks for new maintainers. That sounds alarming but matters less than you would think: a theme is a static list of colours, not running code, so there is nothing to "break." It needs attention only when Blender adds brand-new UI elements that have no colour assigned yet.
+
+What it changes is the entire look: the dark grey chrome, the panel headers, the button colours, the selection highlights, and — the piece that sells it — the **blue-grey gradient in the viewport** that every Maya user knows in their bones.
+
+---
+
+## 🛠️ How To Install It
+
+Two ways, both quick, on Blender 5.0 or newer:
+
+**The drag-and-drop way.** Download the theme's .zip from the extension page, then drag the file straight onto an open Blender window. Blender recognises it as an extension and offers to install. Done.
+
+**The menu way.** Go to **Edit → Preferences → Get Extensions**, click the dropdown in the top-right of that panel, and choose **Install from Disk**. Point it at the .zip.
+
+Either way, the theme then appears under **Edit → Preferences → Themes**, where you can select it, tweak any colour you dislike, and — if you ever want out — switch back to Blender Dark with one click. Nothing is permanent. One reviewer wished the vertex dots were a point smaller; that is the kind of thing you can change yourself in the Themes panel in about five seconds.
+
+---
+
+## 🧠 The Thing Nobody Tells You
+
+Here is the trap. You install the Maya theme, Blender suddenly *looks* right, and your brain relaxes — until you try to actually do something. You go to orbit the camera and the view does not tumble the way you expect. You click to select and the wrong thing happens. You reach for a hotkey and get a tool you have never heard of.
+
+**The theme changed the colours. It did not change a single control.** Selection, navigation, the entire keymap — all of that is still pure Blender, sitting underneath a Maya-coloured skin. Looking like Maya and working like Maya are two completely different settings, and the theme only touches the first one. This is why people install it, feel a flash of relief, and then feel *more* disoriented a minute later: their eyes say Maya and their hands get Blender.
+
+So treat the theme as exactly what it is — a comfortable paint job — and then go fix the part that actually matters.
+
+---
+
+## ⌨️ What Actually Makes Blender Feel Like Maya
+
+The real switch is one setting the theme does not touch: **Edit → Preferences → Keymap**. At the top of that panel is a dropdown that says "Blender." Change it to **Industry Compatible**.
+
+This is the setting that matters more than any theme. The Industry Compatible keymap was built specifically so people coming from Maya, Max and similar tools do not have to relearn their hands. It gives you:
+
+- **Left-click to select** — no more right-click selection surprising you.
+- **Alt + left-drag to tumble** the viewport, the same orbit gesture Maya trained into you.
+- Familiar transform and undo behaviour, with the common shortcuts sitting where a Maya user expects them.
+
+Pair the Industry Compatible keymap with the Maya theme and the gap between the two programs genuinely narrows — the screen looks right *and* your hands land where they expect to. That combination is the actual "make Blender feel like Maya" move. The theme alone is half the job; the keymap is the half that saves you from frustration.
+
+While you are in there, flip on **Emulate Numpad** too (in Preferences → Input) if you are on a laptop without a number pad — it lets the top-row number keys drive the viewport angles.
+
+---
+
+## 🤔 So Should You Use It?
+
+Yes — with clear eyes. The theme is free, tiny, reversible, and faithful enough that a ten-year Maya veteran signed off on it. If the stock Blender grey makes you tense and the blue-grey viewport makes you exhale, that is not a small thing; comfort in your tools is real, and reducing friction on day one keeps you from bouncing off Blender entirely.
+
+Just do not expect it to flatten the learning curve. A theme buys you *comfort*; it does not buy you *fluency*. Fluency comes from the keymap plus a couple of weeks of reps — the same honest timeline [any software switch takes](/blog/how-long-to-learn-blender). Use the Maya theme as a soft landing, pair it with the Industry Compatible keymap, give your hands two weeks, and the alien feeling fades faster than you would guess.
+
+The colour was never really the problem. But if a familiar colour is what gets you to stay in the seat long enough to rebuild the muscle memory, it has done its job perfectly.
+
+---
+
+**Read next:** [The Most Important Blender Keyboard Shortcuts for Beginners](/blog/blender-keyboard-shortcuts-beginners) — the handful of keys worth burning into your hands first, whichever keymap you land on.
+
+*Switching from Maya and want someone to shortcut the awkward first fortnight? [Book a free intro call →](https://www.blendertutoring.com/#packages) and share your screen. I work with artists making exactly this jump, and a single session on keymap, navigation and workflow saves weeks of fighting the defaults.*
+`,
+  },
+  {
     slug: "blender-booleans-topology",
     title: "Blender Booleans Wreck Your Topology",
     description: "Boolean cuts look clean, then pinch and smear the moment you subdivide or bake. Here's the messy topology Blender booleans leave — and how to fix it.",
