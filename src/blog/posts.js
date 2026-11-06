@@ -1,5 +1,94 @@
 export const posts = [
   {
+    slug: "maya-workflow-kit-blender",
+    title: "Maya Workflow Kit: Make Blender Work Like Maya",
+    description: "A free Blender extension rebuilds Maya's whole workflow — hotbox, marking menus, Channel Box, shelves — with a one-click switch back to plain Blender.",
+    date: "2026-11-06",
+    thumbnail: "/blog-images/blender-maya-theme.jpg",
+    content: `
+Last time I showed you a theme that makes Blender *look* like Maya, and I was blunt about its limit: a theme is paint. It repaints the viewport, but the moment your hand reaches for the hotbox or the Channel Box, the illusion breaks — those are not colours, they are *behaviour*, and a theme cannot touch them. This post is about the thing that can. The **Maya Workflow Kit** is a free, open-source Blender extension that rebuilds the actual Maya workflow — not one piece of it, the whole set — and it does it without disturbing a single one of your Blender settings.
+
+![The same Blender window in default dark and in the Maya theme — the theme handles the look; the Maya Workflow Kit handles everything the look can't](/blog-images/blender-maya-theme.jpg)
+
+Keep that image in mind, because it draws the line perfectly. The theme does the left-to-right transformation you see there — the colour. The kit does everything the colour cannot: the hotbox, the marking menus, the Channel Box, the way you navigate and name and group. Look and feel, two halves of the same problem. The theme was the easy half.
+
+---
+
+## 🧰 What The Maya Workflow Kit Is
+
+It is a **free, open-source extension** (GPL-3.0, pure Python) for **Blender 5.2 LTS**. It is independent — not affiliated with Autodesk, and it contains no Autodesk code, icons or MEL scripts. It does not need Maya installed, and it has no network access. It simply rebuilds Maya's behaviour on top of Blender's own tools.
+
+The pitch that makes it different from everything before it: other tools bring *one* piece of Maya across — a pivot tool here, a keymap there, a shelf somewhere else. This one rebuilds the **set together**, so the pieces talk to each other the way they do in Maya. That is the whole point. Maya does not feel like Maya because of any single feature; it feels like Maya because the hotbox, the Channel Box, the shelves and the navigation are one coherent environment. Recreate them one at a time and you get a patchwork. Recreate them together and you get the actual muscle memory back.
+
+---
+
+## 🎛️ What It Actually Brings Over
+
+This is far more than a keymap. Enabled and switched to Maya mode, the kit gives you:
+
+- **The hotbox** — hold Space and every menu of the current menu set is under your cursor, exactly like Maya's.
+- **Marking menus** — the radial, gesture-driven menus your hand already knows.
+- **The Channel Box and Attribute Editor** — Maya's transform and attribute panels, in their familiar place, with their familiar keys.
+- **Menu sets, shelves and option windows** — the Maya menu layout, your shelves, and option boxes carrying the *same defaults Maya ships with*.
+- **Maya navigation and pivot snapping** — the tumble, the snapping behaviour, the bits your hands do without thinking.
+- **Maya's scene concepts** — Freeze Transformations, Delete History, Center Pivot, groups, centimetres as the working unit, and yes, objects that come in named **pCube1**.
+
+That last group is the tell. Anyone can remap a hotkey; rebuilding *Freeze Transformations* and *Delete History* as real operations means someone sat down and reconstructed how a Maya artist actually thinks about a scene, not just which keys they press.
+
+---
+
+## 🔀 Nothing Changes Until You Choose Maya
+
+Here is the design decision that makes it genuinely safe to install, and the reason I would hand it to a nervous switcher without hesitation.
+
+Enabling the extension changes **nothing** on its own. It adds a small **Maya | Blender switch** at the right of the top bar, one Edit-menu entry, a shortcut (**Ctrl+Alt+Shift+M**), and a one-time welcome dialog. Your keymap, your theme, your layout and your preferences stay exactly as they were.
+
+Only when you click **"Make Blender feel like Maya"** does the kit add its keys, menus, panels and the Maya layout — and even then, it never writes your theme, your preferences or your active keymap. Click **Blender** in that switch and plain Blender is instantly back, same scene and all. That toggle is the killer feature: when a tutorial uses Blender's native shortcuts, you flip to Blender, follow along, and flip back to Maya to keep working. You are never locked in, and disabling or removing the extension unregisters everything it added with nothing left to clean up.
+
+For someone learning Blender *while* staying productive, that two-way switch is worth more than any single feature in the list above.
+
+---
+
+## 💾 How To Install It
+
+On **Blender 5.0 or later** (5.2 LTS is the supported target):
+
+1. Download the **maya-workflow-kit** zip (the newest version) from the project's **GitHub Releases** page. (The extensions.blender.org listing is not live yet, so GitHub is the place to get it for now.)
+2. In Blender, go to **Edit → Preferences → Get Extensions**, open the drop-down at the top-right, and choose **Install from Disk…** — then pick the zip. Or just drag the zip onto the Blender window.
+3. In the welcome dialog, click **Make Blender feel like Maya**. Ctrl+Alt+Shift+M flips you back whenever you want.
+
+It writes only your shelves and the Maya project folders you choose to create. That is the entire footprint.
+
+---
+
+## 🧱 Where It Honestly Stops
+
+I appreciate a tool that tells you its limits, and this one does — right on the page. Some of Maya lives deeper than any Blender extension can reach, so a few things are deliberately *not* faked:
+
+- **Blender is Z-up with one pivot per object**, where Maya is Y-up with flexible pivots. That is engine-level and cannot be swapped out.
+- **No middle-mouse drag-to-scrub** on a field. Instead there is a Python command line with a small **maya.cmds** look-alike for the muscle memory that wants a command.
+- **No MEL**, and no operating-system docking of panels or side tabs.
+
+Best touch: every Maya menu item Blender genuinely cannot do is still *shown*, greyed out, with a one-line note explaining why and what to use instead. Nothing silently vanishes — you are taught the gap, not left to trip over it. That is a rare bit of honesty in a compatibility tool, and it is exactly how I would want a switcher to learn the places where Blender simply is its own program.
+
+---
+
+## 🎨 Pair It With The Theme
+
+Now the two halves come together. Install the [Maya theme](/blog/blender-maya-theme) for the look — the blue-grey viewport, the green active outline, the familiar grey chrome — and add the Maya Workflow Kit for the feel. Theme plus kit, and the window in front of you both *looks* like Maya and *behaves* like Maya, while plain Blender is always one shortcut away underneath. That combination is as close to "Maya, but free and open source" as anything I have seen, and it costs nothing to try.
+
+The honest framing still holds, though: this is a **bridge, not a cage**. The goal is not to use Blender in a Maya costume forever. It is to stay fast and confident on day one — to keep shipping work while your hands are still arguing with a new program — and then, every time you flip that switch to Blender for a tutorial, to learn a little more of the tool underneath. The kit buys you comfort *and* a path out of it. Most compatibility layers only give you the first.
+
+A Maya veteran who installs this will be productive in an afternoon. A Maya veteran who installs this *and* keeps flipping the switch will, a few months in, quietly stop needing it. That is the best thing a tool like this can do.
+
+---
+
+**Read next:** [Make Blender Look (and Feel) Like Maya](/blog/blender-maya-theme) — the theme that handles the other half of the problem, and the keymap setting worth turning on alongside the kit.
+
+*Making the jump from Maya and want a human to smooth the first few weeks? [Book a free intro call →](https://www.blendertutoring.com/#packages) and share your screen. I work with artists switching from Maya constantly — a single session on workflow, navigation and which Blender habits are actually worth keeping saves a lot of lonely fighting with the defaults.*
+`,
+  },
+  {
     slug: "blender-maya-theme",
     title: "Make Blender Look (and Feel) Like Maya",
     description: "A free theme makes Blender look just like Maya — blue-grey viewport and all. Here's how to install it, and the keymap that makes it actually feel like Maya.",
@@ -59,6 +148,8 @@ This is the setting that matters more than any theme. The Industry Compatible ke
 - Familiar transform and undo behaviour, with the common shortcuts sitting where a Maya user expects them.
 
 Pair the Industry Compatible keymap with the Maya theme and the gap between the two programs genuinely narrows — the screen looks right *and* your hands land where they expect to. That combination is the actual "make Blender feel like Maya" move. The theme alone is half the job; the keymap is the half that saves you from frustration.
+
+There is also a free, open-source [Maya Workflow Kit](/blog/maya-workflow-kit-blender) that goes much further than any keymap — it rebuilds Maya's hotbox, marking menus, Channel Box and shelves inside Blender, with a one-click switch back to plain Blender. If the keymap is not enough on its own, that is the next thing to try.
 
 While you are in there, flip on **Emulate Numpad** too (in Preferences → Input) if you are on a laptop without a number pad — it lets the top-row number keys drive the viewport angles.
 
