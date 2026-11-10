@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-MRSNFX33');</script>
+  <!-- End Google Tag Manager -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <meta name="description" content="Lava adds non-destructive sculpt layers to Blender — the ZBrush feature Blender never had. Put wrinkles on one layer, big forms on another, and dial either back any time. Free prototype." />
+  <meta name="keywords" content="blender sculpt layers, blender sculpting addon, non-destructive sculpting blender, zbrush layers blender, blender sculpt layer system, lava blender addon" />
+  <link rel="canonical" href="https://www.blendertutoring.com/lava" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Blender Tutoring" />
+  <meta property="og:title" content="Lava — Sculpt Layers for Blender" />
+  <meta property="og:description" content="Non-destructive sculpt layers for Blender. Put wrinkles on one layer, big forms on another, and dial either back any time." />
+  <meta property="og:url" content="https://www.blendertutoring.com/lava" />
+  <meta property="og:image" content="https://www.blendertutoring.com/lava/layer-stack.png" />
+  <meta property="og:image:width" content="2960" />
+  <meta property="og:image:height" content="1262" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://www.blendertutoring.com/lava/layer-stack.png" />
+  <title>Lava — Sculpt Layers for Blender</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"SoftwareApplication","name":"Lava","applicationCategory":"DesignApplication","operatingSystem":"Blender 4.0+","softwareVersion":"0.1.0","url":"https://www.blendertutoring.com/lava","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Non-destructive sculpt layers for Blender — put wrinkles on one layer, big forms on another, and dial either back at any time.","author":{"@type":"Person","name":"Miki Butler"},"publisher":{"@type":"Organization","name":"Blender Tutoring","url":"https://www.blendertutoring.com"}}
+  </script>
+  <style>
+    :root{
+      color-scheme:dark;
+      --bg:#14110e; --surface:#1b1713; --surface-2:#231d17; --border:#352c22; --border-2:#48392b;
+      --fg:#f0e9e1; --mut:#a49686; --faint:#6f6153;
+      --accent:#e8812e; --accent-2:#ff9d4d; --on-accent:#241002; --accent-soft:#e8812e1a;
+      --radius:14px; --shadow:0 2px 12px rgba(0,0,0,.45);
+    }
+    *{box-sizing:border-box}
+    body{ margin:0; background:var(--bg); color:var(--fg); font-family:"Manrope",system-ui,-apple-system,sans-serif;
+      font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+    .mono{ font-family:"JetBrains Mono",ui-monospace,monospace; }
+    a{ color:var(--accent-2); text-decoration:none; }
+    img{ max-width:100%; display:block; }
+    .wrap{ max-width:1080px; margin:0 auto; padding:0 20px; }
+
+    /* header */
+    header.top{ display:flex; align-items:center; gap:12px; padding:20px; max-width:1080px; margin:0 auto; }
+    .glyph{ width:42px; height:42px; border-radius:12px; flex:none; border:1px solid var(--border-2); box-shadow:var(--shadow);
+      background:radial-gradient(120% 120% at 30% 15%,#ffd089,#ff7a1a 45%,#b4310a 100%); display:grid; place-items:center; }
+    .glyph svg{ width:22px; height:22px; }
+    .top h1{ font-size:21px; font-weight:800; margin:0; letter-spacing:-.4px; }
+    .top .sub{ font-size:12px; color:var(--mut); font-weight:600; }
+    .top .sp{ flex:1; }
+    .home{ font-size:12.5px; font-weight:700; color:var(--mut); border:1px solid var(--border); border-radius:10px; padding:9px 14px; }
+    .home:hover{ border-color:var(--accent); color:var(--accent-2); }
+
+    /* hero */
+    .hero{ text-align:center; padding:46px 0 10px; }
+    .badge{ display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:700; color:var(--accent-2);
+      background:var(--accent-soft); border:1px solid var(--border-2); border-radius:999px; padding:6px 13px; margin-bottom:22px; letter-spacing:.3px; }
+    .badge .dot{ width:7px; height:7px; border-radius:50%; background:var(--accent); }
+    .hero h2{ font-size:clamp(30px,6vw,52px); line-height:1.05; font-weight:800; letter-spacing:-1.2px; margin:0 0 18px; }
+    .hero h2 .hl{ color:var(--accent-2); }
+    .hero p.lead{ font-size:clamp(16px,2.4vw,19px); color:var(--mut); max-width:640px; margin:0 auto 28px; }
+    .cta{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+    .btn{ font-weight:800; font-size:15px; border-radius:11px; padding:13px 24px; border:1px solid transparent; cursor:pointer; display:inline-flex; align-items:center; gap:9px; }
+    .btn.primary{ background:var(--accent); color:var(--on-accent); }
+    .btn.primary:hover{ background:var(--accent-2); }
+    .btn.ghost{ border-color:var(--border-2); color:var(--fg); }
+    .btn.ghost:hover{ border-color:var(--accent); color:var(--accent-2); }
+    .hint{ font-size:12.5px; color:var(--faint); margin-top:14px; }
+
+    /* shots */
+    .shot{ margin:40px 0; }
+    .shot img{ width:100%; border-radius:var(--radius); border:1px solid var(--border); box-shadow:0 14px 40px rgba(0,0,0,.5); }
+    .cap{ font-size:13px; color:var(--mut); text-align:center; margin-top:12px; }
+
+    section.block{ padding:38px 0; border-top:1px solid var(--border); }
+    .eyebrow{ font-size:11.5px; font-weight:800; letter-spacing:1px; text-transform:uppercase; color:var(--accent); margin:0 0 10px; }
+    .block h3{ font-size:clamp(23px,4vw,32px); font-weight:800; letter-spacing:-.6px; margin:0 0 16px; }
+    .block p{ color:var(--mut); max-width:720px; }
+    .block p .em{ color:var(--fg); font-weight:700; }
+
+    .grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:26px; }
+    @media (max-width:820px){ .grid{ grid-template-columns:repeat(2,1fr); } }
+    @media (max-width:520px){ .grid{ grid-template-columns:1fr; } }
+    .feat{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:18px; }
+    .feat .fi{ width:30px; height:30px; border-radius:9px; background:var(--accent-soft); border:1px solid var(--border-2); display:grid; place-items:center; margin-bottom:12px; }
+    .feat .fi svg{ width:16px; height:16px; stroke:var(--accent-2); fill:none; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round; }
+    .feat h4{ font-size:15px; font-weight:800; margin:0 0 5px; }
+    .feat p{ font-size:13.5px; color:var(--mut); margin:0; }
+
+    .codebox{ background:#0e0b08; border:1px solid var(--border); border-radius:12px; padding:16px 18px; margin:20px 0; overflow:auto; }
+    .codebox code{ font-family:"JetBrains Mono",monospace; font-size:14px; color:#ffd089; white-space:nowrap; }
+
+    .steps{ counter-reset:s; margin:22px 0 0; padding:0; list-style:none; }
+    .steps li{ counter-increment:s; position:relative; padding:0 0 16px 44px; color:var(--mut); }
+    .steps li::before{ content:counter(s); position:absolute; left:0; top:-2px; width:28px; height:28px; border-radius:8px;
+      background:var(--accent-soft); border:1px solid var(--border-2); color:var(--accent-2); font-weight:800; font-size:13px; display:grid; place-items:center; }
+    .steps li b{ color:var(--fg); }
+    .steps .mono{ color:#ffd089; }
+
+    .note{ background:var(--surface); border:1px solid var(--border-2); border-left:3px solid var(--accent); border-radius:10px; padding:16px 18px; color:var(--mut); font-size:14px; margin-top:22px; }
+    .note b{ color:var(--fg); }
+
+    footer.foot{ border-top:1px solid var(--border); padding:40px 20px 56px; text-align:center; color:var(--faint); font-size:13px; }
+    footer.foot .big{ font-size:20px; font-weight:800; color:var(--fg); letter-spacing:-.4px; margin-bottom:10px; }
+    footer.foot a{ font-weight:700; }
+    .flinks{ margin-top:16px; display:flex; gap:18px; justify-content:center; flex-wrap:wrap; }
+  </style>
+</head>
+<body>
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MRSNFX33" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+  <header class="top">
+    <div class="glyph" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="#fff6e6"><path d="M12 2c1.6 3 .4 4.6 1.8 6.2C15 9.6 17 9 17.4 11c1.9-.6 1.3 2.1 2.4 3.1C21.4 15.6 22 17.4 22 19c0 2.2-4.5 3-10 3S2 21.2 2 19c0-2 .9-3.7 2.3-5.2C6 11.9 5.6 9.7 7.6 9.2 9 8.8 8.9 6.7 10 5.4 11.2 4 10.6 3.2 12 2z"/></svg>
+    </div>
+    <div>
+      <h1>Lava</h1>
+      <div class="sub">Sculpt layers for Blender</div>
+    </div>
+    <div class="sp"></div>
+    <a class="home" href="https://www.blendertutoring.com/">← Blender Tutoring</a>
+  </header>
+
+  <div class="wrap">
+    <section class="hero">
+      <span class="badge"><span class="dot"></span>FREE · PROTOTYPE v0.1.0 · BLENDER 4.0+</span>
+      <h2>Sculpt in <span class="hl">layers</span>.<br>The ZBrush feature Blender never had.</h2>
+      <p class="lead">Put wrinkles on one layer, big forms on another, and dial either one back afterwards — without redoing the work. Lava brings non-destructive sculpt layers to Blender's sculpt mode.</p>
+      <div class="cta">
+        <a class="btn primary" href="/lava/lava-sculpt-layers-v0.1.0.zip" download>
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 21h16"/></svg>
+          Download the add-on
+        </a>
+        <a class="btn ghost" href="#how">See how it works</a>
+      </div>
+      <p class="hint">A single .zip · installs straight into Blender · no account, no sign-up</p>
+    </section>
+
+    <div class="shot">
+      <img src="layer-stack.png" alt="One sculpt shown with two layers at four different strength settings — base, plus big forms, plus wrinkles, then wrinkles dialed back to 35%" />
+      <p class="cap">Same 40,962-vertex mesh in all four. Nothing was re-sculpted — only the layer strength values changed.</p>
+    </div>
+  </div>
+
+  <section class="block">
+    <div class="wrap">
+      <p class="eyebrow">The problem</p>
+      <h3>Blender forgets. Lava remembers every pass.</h3>
+      <p>In plain sculpt mode, every stroke is baked into one mesh. Change your mind about the wrinkles after you have added the pores and you are stuck — soften them and you lose the detail on top; keep them and you cannot touch them. <span class="em">ZBrush solved this twenty years ago with layers</span>, and it is the feature artists miss most when they move to Blender. Lava is that system, built natively for Blender's sculpt mode.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <p class="eyebrow">What it does</p>
+      <h3>Every pass on its own dial.</h3>
+      <div class="grid">
+        <div class="feat"><div class="fi"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/><circle cx="9" cy="7" r="2" fill="var(--accent-2)" stroke="none"/><circle cx="15" cy="12" r="2" fill="var(--accent-2)" stroke="none"/><circle cx="8" cy="17" r="2" fill="var(--accent-2)" stroke="none"/></svg></div><h4>Per-layer strength, live</h4><p>Scrub a layer to 40% and the mesh updates as you drag. Push past 100% for more than you sculpted.</p></div>
+        <div class="feat"><div class="fi"><svg viewBox="0 0 24 24"><path d="M12 19l7-7a3 3 0 0 0-4-4l-7 7-1 5z"/><path d="M11 6l4 4"/></svg></div><h4>Strokes land on the active layer</h4><p>Automatically. No record button to arm, no mode to remember — just pick a layer and sculpt.</p></div>
+        <div class="feat"><div class="fi"><svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg></div><h4>Visibility, solo &amp; lock</h4><p>Hide a pass, isolate one to inspect it, or lock a layer so a stray stroke can't touch it.</p></div>
+        <div class="feat"><div class="fi"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div><h4>Merge, duplicate, clear, reorder</h4><p>Full layer management — collapse two passes together, branch a copy, or wipe one back to flat.</p></div>
+        <div class="feat"><div class="fi"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></div><h4>Apply all or discard</h4><p>Bake the whole stack into the mesh when you're done, or drop everything back to the base shape.</p></div>
+        <div class="feat"><div class="fi"><svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg></div><h4>Survives save &amp; reload</h4><p>Your layers are stored in the .blend. Close it, reopen it next week, every pass is still there.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <p class="eyebrow">In context</p>
+      <h3>It lives in the sidebar, beside your sculpt.</h3>
+      <p>One <b style="color:var(--fg)">N</b> press from the brush, and it closes with the same key — so checking which layer you're on never costs you your place in the model.</p>
+      <div class="shot" style="margin-top:24px">
+        <img src="in-context.png" alt="The Lava sculpt-layers panel open in Blender's sidebar beside a sculpted rock, showing Wrinkles, Big Forms and Base Pass layers with strength sliders, visibility and lock toggles" />
+        <p class="cap">The Layers panel in Blender's N-sidebar: each pass with its own strength, eye, and lock.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="how">
+    <div class="wrap">
+      <p class="eyebrow">How it works</p>
+      <h3>One subtraction, and nothing is intercepted.</h3>
+      <p>An object under Lava keeps a <b class="em">base</b> — the vertices as they were when layers switched on. Each layer stores per-vertex offsets from that base, and the viewport shows:</p>
+      <div class="codebox"><code>coords = base + Σ ( offset<sub>i</sub> × strength<sub>i</sub> )&nbsp;&nbsp;for every visible layer</code></div>
+      <p>Your brush moves vertices the way it always has. After each update, the active layer's offset is recomputed as <span class="em">whatever is left once every other layer is accounted for</span> — that single subtraction is what makes strokes land on the active layer and nowhere else.</p>
+    </div>
+  </section>
+
+  <section class="block">
+    <div class="wrap">
+      <p class="eyebrow">Install</p>
+      <h3>In the viewport in under a minute.</h3>
+      <ol class="steps">
+        <li><b>Blender 4.2+:</b> <span class="mono">Edit ▸ Preferences ▸ Get Extensions ▸ Install from Disk</span> and pick the .zip. <br><b>Blender 4.0–4.1:</b> <span class="mono">Edit ▸ Preferences ▸ Add-ons ▸ Install</span>.</li>
+        <li>Open the 3D viewport sidebar with <b class="mono">N</b> and choose the <b>Layers</b> tab.</li>
+        <li>Select a mesh and press <b>Start Sculpting In Layers</b>. Its current shape becomes the base.</li>
+        <li>Sculpt. Press <b>+</b> for a new layer, sculpt again, then drag any layer's strength slider and watch that pass fade in or out.</li>
+      </ol>
+      <div class="cta" style="justify-content:flex-start;margin-top:26px">
+        <a class="btn primary" href="/lava/lava-sculpt-layers-v0.1.0.zip" download>
+          <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4M4 21h16"/></svg>
+          Download Lava v0.1.0
+        </a>
+      </div>
+      <div class="note"><b>It's a prototype.</b> Lava is v0.1.0 — a working proof of the idea, not a polished product yet. It does real layer compositing on real meshes, but expect rough edges. Found a bug or have a request? I'd genuinely like to hear it.</div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <div class="big">Built by Blender Tutoring</div>
+    <p>One-to-one Blender lessons and the occasional tool worth building.<br>Hard-surface, sculpting, game-art pipeline — taught by a working artist.</p>
+    <div class="flinks">
+      <a href="https://www.blendertutoring.com/">Home</a>
+      <a href="https://www.blendertutoring.com/#packages">Book a free intro call</a>
+      <a href="https://www.blendertutoring.com/blog">Blog</a>
+    </div>
+  </footer>
+</body>
+</html>

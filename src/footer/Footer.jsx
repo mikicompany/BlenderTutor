@@ -91,6 +91,9 @@ const Footer = () => {
       >
         Theme Maker
       </a>
+      <a href="/lava/" className="hover:text-white transition-colors">
+        Lava
+      </a>
 
       <Link to="/radar" className="hover:text-white transition-colors">
         The Radar
