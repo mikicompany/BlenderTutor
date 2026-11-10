@@ -34,6 +34,12 @@ const TESTIMONIALS = [
     name: "Lena K.",
     role: "Junior environment artist",
   },
+  {
+    quote:
+      "Patient, clear, and genuinely good at teaching — not just good at Blender. I leave every session with something I can actually use that week.",
+    name: "Sam W.",
+    role: "Weekend learner",
+  },
 ];
 
 const AUTO_MS = 6500;
