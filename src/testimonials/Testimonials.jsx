@@ -18,6 +18,12 @@ const SAMPLE = true;
 const TESTIMONIALS = [
   {
     quote:
+      "Patient, clear, and genuinely good at teaching — not just good at Blender. I leave every session with something I can actually use that week.",
+    name: "Sam W.",
+    role: "Weekend learner",
+  },
+  {
+    quote:
       "I'd done the donut three times and still couldn't make anything of my own. One session and I finally understood why — and had a real plan. I'm actually building now.",
     name: "Jordan R.",
     role: "Hobbyist → first portfolio piece",
@@ -33,12 +39,6 @@ const TESTIMONIALS = [
       "He looked at my portfolio the way a studio actually would and told me exactly what was missing. Blunt, kind, and worth ten times the price.",
     name: "Lena K.",
     role: "Junior environment artist",
-  },
-  {
-    quote:
-      "Patient, clear, and genuinely good at teaching — not just good at Blender. I leave every session with something I can actually use that week.",
-    name: "Sam W.",
-    role: "Weekend learner",
   },
 ];
 
