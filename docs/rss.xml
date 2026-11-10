@@ -8,6 +8,20 @@
     <lastBuildDate>Tue, 10 Nov 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://www.blendertutoring.com/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>Low Poly Modeling in Blender: Where to Start</title>
+      <link>https://www.blendertutoring.com/blog/low-poly-modeling-blender</link>
+      <guid isPermaLink="true">https://www.blendertutoring.com/blog/low-poly-modeling-blender</guid>
+      <pubDate>Tue, 10 Nov 2026 00:00:00 GMT</pubDate>
+      <description>Low poly is the fastest way to finish real projects in Blender — and how games are built. The workflow, why flat shading is everything, and how to colour it.</description>
+    </item>
+    <item>
+      <title>Hard Surface Modeling in Blender: Where to Begin</title>
+      <link>https://www.blendertutoring.com/blog/hard-surface-modeling-blender</link>
+      <guid isPermaLink="true">https://www.blendertutoring.com/blog/hard-surface-modeling-blender</guid>
+      <pubDate>Tue, 10 Nov 2026 00:00:00 GMT</pubDate>
+      <description>Hard surface modelling looks hard but it's a repeatable workflow, not a talent. The four stages, the five tools, and the mistakes that make models look amateur.</description>
+    </item>
+    <item>
       <title>Blender vs Maya: An Honest Comparison (2026)</title>
       <link>https://www.blendertutoring.com/blog/blender-vs-maya</link>
       <guid isPermaLink="true">https://www.blendertutoring.com/blog/blender-vs-maya</guid>
