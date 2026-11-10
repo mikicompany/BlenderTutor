@@ -1,5 +1,176 @@
 export const posts = [
   {
+    slug: "low-poly-modeling-blender",
+    title: "Low Poly Modeling in Blender: Where to Start",
+    description: "Low poly is the fastest way to finish real projects in Blender — and how games are built. The workflow, why flat shading is everything, and how to colour it.",
+    date: "2026-11-10",
+    thumbnail: "/blog-images/blender-low-poly-modeling.jpg",
+    content: `
+Low poly is the friendliest corner of 3D. The models are quick to make, they look charming on purpose, and — unlike a photoreal render that takes a week and still looks slightly off — you can finish a low-poly scene in an evening and be genuinely proud of it. It is the fastest way out of tutorial hell and, not coincidentally, the foundation of how real games are built. If you are early in Blender and want to actually *finish* something, start here.
+
+![A low-poly scene modelled in Blender — flat-shaded, brightly coloured simple forms](/blog-images/blender-low-poly-modeling.jpg)
+
+---
+
+## 🎨 What "Low Poly" Actually Means
+
+"Low poly" carries two meanings, and it helps to hold both.
+
+The first is a **style**: deliberately simple, faceted shapes with flat shading and bold flat colours. It is a look, chosen on purpose, the way pixel art is a look. Nobody thinks a pixel-art game is low-effort, and good low poly is the same — simple is not the same as easy.
+
+The second is **technical**: a low polygon count because the hardware has a budget. This is why games use it. Every model in a game is a compromise between detail and performance, and "low poly" is just the disciplined end of that trade-off.
+
+The lovely thing is that these two overlap. Learn the style and you are also learning the discipline that games actually need.
+
+---
+
+## 🚀 Why It Is the Best Place to Start
+
+A few reasons low poly beats grinding photoreal tutorials when you are new:
+
+- **You finish things.** A low-poly tree takes minutes, a whole scene an evening. Finishing is a skill, and it is the one [that gets you past the donut](/blog/life-beyond-the-donut) and into work that is yours.
+- **It teaches the fundamentals nakedly.** With no textures or detail to hide behind, you learn silhouette, proportion and form directly. Those transfer to everything else you will ever model.
+- **It is forgiving.** Fewer polygons means fewer things to get wrong. Mistakes are easy to see and easy to fix.
+- **It is genuinely shippable.** This is not a toy exercise. Stylised games sell low-poly art every day. What you make can go straight into a game.
+
+---
+
+## 🧊 The Workflow
+
+Low poly is mostly addition and restraint:
+
+1. **Start with primitives.** A cube is a crate, a house, a car body. A cylinder is a tree trunk or a barrel. An ico-sphere at low subdivisions is a rock or a bush. Most low-poly objects are a primitive with a few edits.
+2. **Shape it with a small set of tools.** Extrude (E), inset (I), and the loop cut (Ctrl R) do most of the work; a little bevel adds a chamfer where you want one. You barely need more than that — learning [these core shortcuts](/blog/blender-keyboard-shortcuts-beginners) makes the whole thing flow.
+3. **Keep the poly count intentional.** Every vertex should earn its place. If removing an edge does not change the silhouette, remove it.
+4. **Combine simple objects into scenes.** A low-poly world is usually lots of simple props arranged together, not one complex model. This is why it is fast.
+
+---
+
+## 🔑 Flat Shading Is the Whole Look
+
+This is the one setting that makes or breaks low poly, so it gets its own section. By default Blender smooth-shades toward rounded surfaces. Low poly wants the opposite: **Shade Flat**, so every facet reads as a crisp, distinct plane. That faceted look *is* the style.
+
+Right-click the object and choose **Shade Flat** (or Shade Auto Smooth if you want some edges smooth and others sharp). Get this wrong and your careful low-poly model looks like a melted blob; get it right and even a six-sided rock looks intentional. If you remember one thing from this article, remember to shade flat.
+
+---
+
+## 🖌️ Colouring Low Poly
+
+Two easy routes, and you will likely use both:
+
+- **One material per colour.** For a quick scene, just assign a handful of flat-coloured materials — red roof, green leaves, brown trunk. No texturing, no UVs, done.
+- **A palette texture.** For anything game-bound, the standard trick is a tiny image of colour swatches that every object shares. Each face's UVs point at the swatch it should be, so a whole scene uses one small texture. That keeps things efficient and makes [UV unwrapping](/blog/uv-unwrapping-blender-beginners) almost trivial, because you are just dropping faces onto colours rather than unwrapping detail.
+
+---
+
+## 🎮 From Hobby to Game-Ready
+
+Here is why low poly is more than a cosy starting point: it is the real thing. Stylised games ship low-poly assets as their final art, which means the skills carry straight across. Keep your meshes clean and your [texel density consistent](/blog/texel-density-blender), export them [correctly into a game engine](/blog/blender-to-unity-export), and you have shippable work. A tidy set of low-poly props is also one of the most approachable ways to start [a game art portfolio](/blog/game-art-portfolio-what-studios-want) — small, finished, and clearly competent beats one ambitious unfinished sculpt every time.
+
+---
+
+## 🎯 Start Small, Finish Often
+
+The trap in learning 3D is spending months on tutorials and finishing nothing. Low poly breaks that trap because the loop is short: pick a simple object, block it from primitives, shade it flat, colour it, done — and you have a finished thing you made. Do that ten times and you will have learned more about form, topology and workflow than ten hours of watching ever teaches, plus a little scene you are proud of.
+
+Simple on purpose is not a limitation. It is the fastest road to actually being good.
+
+---
+
+**Read next:** [What to Do After the Blender Donut](/blog/life-beyond-the-donut) — more ways to escape tutorial hell and start building work that is genuinely yours.
+
+*Want a nudge in the right direction, or feedback on your first low-poly scene? [Book a free intro call →](https://www.blendertutoring.com/#packages) and share your screen. I teach Blender one-to-one, and a beginner with a clear, finishable project moves faster than almost anything else.*
+`,
+  },
+  {
+    slug: "hard-surface-modeling-blender",
+    title: "Hard Surface Modeling in Blender: Where to Begin",
+    description: "Hard surface modelling looks hard but it's a repeatable workflow, not a talent. The four stages, the five tools, and the mistakes that make models look amateur.",
+    date: "2026-11-10",
+    thumbnail: "/blog-images/blender-hard-surface-modeling.jpg",
+    content: `
+Hard surface modelling — weapons, robots, vehicles, props, anything rigid and man-made — looks like the hardest thing in Blender. All those crisp bevels and panel lines and bolts seem to demand an artist's eye you do not have yet. Here is the secret the intimidating renders hide: **hard surface is a workflow, not a talent.** It is a short, repeatable sequence of the same few tools, and once you know the sequence you can build almost anything rigid. This is that sequence.
+
+![A hard-surface panel modelled in Blender — a bevelled slab with boolean panel lines, a recessed port, raised greeble details and bolts](/blog-images/blender-hard-surface-modeling.jpg)
+
+That panel above is nothing but boxes and cylinders, cut and bevelled in the order I am about to walk through. No sculpting, no magic — just the workflow applied one step at a time.
+
+---
+
+## 🔩 What "Hard Surface" Actually Means
+
+Hard surface is the opposite of organic. Organic modelling (characters, creatures, rocks) is about flowing, continuous forms and is usually sculpted. Hard surface is about **flat planes, crisp edges and deliberate mechanical shapes** — things that look manufactured.
+
+That difference drives everything. Where a sculptor pushes clay around, a hard-surface modeller thinks like an engineer: big simple forms first, then progressively smaller details bolted onto them, with clean edges catching the light. You are not drawing freehand. You are assembling.
+
+---
+
+## 🧱 The Workflow, In Four Stages
+
+Almost every hard-surface model follows the same four beats. Work them in order and do not skip ahead.
+
+**1. Block out the silhouette.** Start with primitive cubes and cylinders and get the overall shape and proportions right while everything is still simple. No details yet — just the big masses. If the silhouette does not read at this stage, no amount of greebling will save it later. This is the stage beginners rush and regret.
+
+**2. Establish the major forms.** Split the blockout into its real sub-shapes — the housing, the barrel, the grip, the panel. Use the [Mirror modifier](/blog/blender-mirror-modifier) heavily here: most hard-surface objects are symmetrical, so model one half and let Blender build the other. You have now gone from a rough mass to a recognisable object.
+
+**3. Add the detail.** This is where it starts to look real: panel lines, recessed ports, raised plates, bolts, vents. Booleans cut and add these fast, and arrays repeat them. Detail is what sells "manufactured" — but it is also where beginners create the mess that bites them two stages later, so add it deliberately, not everywhere.
+
+**4. Control the edges.** Real manufactured edges are never perfectly sharp — they have a tiny chamfer that catches light. Bevels (or support loops under a Subdivision Surface) give you that highlight on every hard edge. This single step is the biggest visual difference between a model that looks like a student exercise and one that looks professional.
+
+---
+
+## 🛠️ The Five Tools You Actually Need
+
+Hard surface uses a small, fixed toolkit. Learn these five and you have ninety per cent of it.
+
+- **Mirror modifier** — model one half, get the whole. The first thing to add on any symmetrical object. [Full guide here](/blog/blender-mirror-modifier).
+- **Bevel** — rounds hard edges so they catch light, as a modifier (live, angle-limited) or by hand (Ctrl B). The tool that makes edges look real.
+- **Boolean** — cuts holes and merges shapes instantly. Indispensable for panel lines and ports — but it leaves messy topology you have to respect, which is its own lesson: [why booleans wreck your topology](/blog/blender-booleans-topology).
+- **Subdivision Surface** — for smooth, rounded hard-surface forms, driven by support loops. If your model melts when you add it, that is expected and fixable: [stop subsurf melting your edges](/blog/blender-subdivision-support-loops).
+- **Array** — repeats a detail evenly (bolts, vents, ridges) without copying by hand.
+
+Mirror, Bevel, Boolean, Subdivision Surface, Array. That is the whole core. Everything fancier is a combination of these.
+
+---
+
+## ⚠️ The Mistakes That Make It Look Amateur
+
+Four things separate a clean hard-surface model from a messy one, and all four are avoidable once you know to look for them.
+
+**Ignoring boolean topology.** A boolean looks clean when shaded, but underneath it leaves n-gons and triangle fans that pinch the moment you subdivide or bake. Clean up after every boolean, or shade flat and know the limits — the [booleans topology guide](/blog/blender-booleans-topology) covers exactly how.
+
+**Triangles and n-gons where they matter.** On a flat panel, a triangle is harmless. Near an edge you are trying to keep sharp under subsurf, it pinches the surface into a visible dent. Knowing [where quads actually matter](/blog/quads-vs-triangles-blender) is most of the skill.
+
+**Black patches and smeared shading.** Bevelled, booleaned hard-surface meshes are exactly where [shading artifacts](/blog/blender-shading-artifacts) show up — usually fixed with weighted normals or auto-smooth, once you know the cause.
+
+**No edge variation.** Every edge bevelled to the same width reads as fake. Vary it — tight on small details, wider on big forms — and the model instantly looks more believable.
+
+---
+
+## 🎮 Then What? Games vs Renders
+
+Where your model goes next decides how you finish it.
+
+**For a still render**, you are nearly done — clean it up, light it, and shade it. The high-poly, subdivided, fully-bevelled version *is* the deliverable.
+
+**For a game**, that high-poly is far too heavy to ship. The pipeline is the same one the whole game-art world uses: build the detailed high-poly as above, then [retopologise it](/blog/blender-retopology) to a light mesh and [bake the detail onto it as a normal map](/blog/blender-normal-map-baking). Your crisp bevels and panel lines become texture on a mesh of a few hundred faces. If a studio job is the goal, hard-surface props built and baked this way are exactly [what a game art portfolio needs](/blog/game-art-portfolio-what-studios-want).
+
+---
+
+## 🎯 The Mindset That Makes It Click
+
+Beginners think hard surface is about knowing secret tools. It is not — you just met the entire toolkit, and it is five modifiers. What it is actually about is **order and restraint**: big forms before small ones, silhouette before detail, and clean edges holding it all together. Follow the four stages, respect the topology your booleans leave, and vary your bevels, and your first serious hard-surface model will look far better than the hours you put in would suggest.
+
+The intimidating part was never the modelling. It was not knowing the sequence. Now you do.
+
+---
+
+**Read next:** [Blender Booleans Wreck Your Topology](/blog/blender-booleans-topology) — the one hard-surface habit that quietly ruins models, and how to cut clean instead.
+
+*Want someone to look over your first hard-surface model before the bad habits set in? [Book a free intro call →](https://www.blendertutoring.com/#packages) and share your screen. I teach Blender one-to-one, and hard-surface workflow — booleans, bevels, edge control — is the kind of thing one focused session makes permanent.*
+`,
+  },
+  {
     slug: "blender-vs-maya",
     title: "Blender vs Maya: An Honest Comparison (2026)",
     description: "Blender vs Maya compared honestly: price, modelling, animation and industry use in 2026 — and which one you should actually learn.",
