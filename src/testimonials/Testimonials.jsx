@@ -1,17 +1,17 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { Star, Quote } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Star, Quote, ChevronLeft, ChevronRight } from "lucide-react";
 
 // ─────────────────────────────────────────────────────────────────────────
-// Testimonials
+// Testimonials — compact single-card carousel.
 //
 // SAMPLE controls whether these are presented as placeholders. While it is
-// true, each card shows a small "Sample" tag and the section carries an
+// true, the card shows a small "Sample" tag and the section carries an
 // honest sub-line, so no visitor is misled into thinking these are real
 // reviews. To go live with genuine testimonials:
 //   1. Replace the TESTIMONIALS entries below with real student quotes.
 //   2. Set SAMPLE = false.
-// That removes the "Sample" tags and the disclaimer in one step.
+// That removes the "Sample" tag and the disclaimer in one step.
 // ─────────────────────────────────────────────────────────────────────────
 const SAMPLE = true;
 
@@ -30,29 +30,13 @@ const TESTIMONIALS = [
   },
   {
     quote:
-      "Hard-surface finally clicked. Booleans, bevels, support loops — the order it all goes in. My props stopped falling apart the moment I subdivided them.",
-    name: "Marcus T.",
-    role: "Aspiring game artist",
-  },
-  {
-    quote:
       "He looked at my portfolio the way a studio actually would and told me exactly what was missing. Blunt, kind, and worth ten times the price.",
     name: "Lena K.",
     role: "Junior environment artist",
   },
-  {
-    quote:
-      "My bakes kept coming out wrong and no tutorial explained why. We fixed it in twenty minutes and I understood the whole pipeline after. Night and day.",
-    name: "Diego M.",
-    role: "Self-taught, 1 year in",
-  },
-  {
-    quote:
-      "Patient, clear, and genuinely good at teaching — not just good at Blender. I leave every session with something I can actually use that week.",
-    name: "Sam W.",
-    role: "Weekend learner",
-  },
 ];
+
+const AUTO_MS = 6500;
 
 const Stars = () => (
   <div className="flex gap-0.5" aria-label="5 out of 5 stars">
@@ -63,65 +47,127 @@ const Stars = () => (
 );
 
 const Testimonials = () => {
+  const [i, setI] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const n = TESTIMONIALS.length;
+
+  const go = (next) => setI((prev) => (next + n) % n);
+
+  // Auto-advance, paused on hover/focus so a reader is never yanked away.
+  useEffect(() => {
+    if (paused || n < 2) return;
+    const t = setInterval(() => setI((prev) => (prev + 1) % n), AUTO_MS);
+    return () => clearInterval(t);
+  }, [paused, n]);
+
+  const t = TESTIMONIALS[i];
+
   return (
-    <section className="py-24 px-6 bg-transparent text-white relative">
-      <div className="max-w-6xl mx-auto">
-        {/* Heading */}
+    <section className="py-16 px-6 bg-transparent text-white relative">
+      <div className="max-w-3xl mx-auto text-center">
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-14"
         >
-          <p className="text-orange-400 text-xs font-bold tracking-[0.2em] uppercase mb-3">
+          <p className="text-orange-400 text-[10px] font-bold tracking-[0.3em] uppercase mb-2">
             Testimonials
           </p>
-          <h2 className="text-4xl md:text-5xl font-black tracking-tight">
+          <h2 className="text-3xl md:text-4xl font-black tracking-tight">
             What students say
           </h2>
           {SAMPLE && (
-            <p className="mt-4 text-sm text-gray-400 max-w-xl mx-auto italic">
+            <p className="mt-3 text-xs text-gray-400 italic">
               Sample testimonials, shown while we gather real student reviews.
             </p>
           )}
         </motion.div>
 
-        {/* Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {TESTIMONIALS.map((t, i) => (
-            <motion.figure
-              key={t.name}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.45, delay: (i % 3) * 0.08 }}
-              className="relative flex flex-col rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-sm p-6 hover:border-orange-400/40 transition-colors"
-            >
-              {SAMPLE && (
-                <span className="absolute top-4 right-4 text-[10px] font-bold uppercase tracking-wider text-orange-300/80 bg-orange-400/10 border border-orange-400/20 rounded-full px-2 py-0.5">
-                  Sample
-                </span>
-              )}
+        {/* Carousel */}
+        <div
+          className="relative mt-8 flex items-center gap-2 sm:gap-4"
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+          onFocusCapture={() => setPaused(true)}
+          onBlurCapture={() => setPaused(false)}
+        >
+          <button
+            type="button"
+            onClick={() => go(i - 1)}
+            aria-label="Previous testimonial"
+            className="shrink-0 p-2.5 rounded-full border border-white/10 text-white transition-all hover:border-orange-500/60 hover:text-orange-400"
+          >
+            <ChevronLeft size={18} />
+          </button>
 
-              <Quote
-                size={26}
-                className="text-orange-400/40 mb-4"
-                aria-hidden="true"
-              />
+          <div className="relative flex-1 min-h-[220px] flex items-center">
+            <AnimatePresence mode="wait">
+              <motion.figure
+                key={i}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.35 }}
+                className="relative w-full rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-sm p-7 sm:p-9"
+              >
+                {SAMPLE && (
+                  <span className="absolute top-4 right-4 text-[10px] font-bold uppercase tracking-wider text-orange-300/80 bg-orange-400/10 border border-orange-400/20 rounded-full px-2 py-0.5">
+                    Sample
+                  </span>
+                )}
 
-              <blockquote className="text-[15px] leading-relaxed text-gray-200 flex-1">
-                "{t.quote}"
-              </blockquote>
+                <Quote
+                  size={28}
+                  className="text-orange-400/40 mx-auto mb-4"
+                  aria-hidden="true"
+                />
 
-              <figcaption className="mt-6 pt-5 border-t border-white/10 flex items-center justify-between gap-3">
-                <div>
-                  <div className="font-bold text-white text-sm">{t.name}</div>
-                  <div className="text-gray-400 text-xs mt-0.5">{t.role}</div>
-                </div>
-                <Stars />
-              </figcaption>
-            </motion.figure>
+                <blockquote className="text-[16px] sm:text-lg leading-relaxed text-gray-100">
+                  &ldquo;{t.quote}&rdquo;
+                </blockquote>
+
+                <figcaption className="mt-6 flex flex-col items-center gap-2">
+                  <Stars />
+                  <div>
+                    <span className="font-bold text-white text-sm">
+                      {t.name}
+                    </span>
+                    <span className="text-gray-400 text-sm">
+                      {" "}
+                      — {t.role}
+                    </span>
+                  </div>
+                </figcaption>
+              </motion.figure>
+            </AnimatePresence>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => go(i + 1)}
+            aria-label="Next testimonial"
+            className="shrink-0 p-2.5 rounded-full border border-white/10 text-white transition-all hover:border-orange-500/60 hover:text-orange-400"
+          >
+            <ChevronRight size={18} />
+          </button>
+        </div>
+
+        {/* Dots */}
+        <div className="mt-6 flex justify-center gap-2">
+          {TESTIMONIALS.map((_, d) => (
+            <button
+              key={d}
+              type="button"
+              onClick={() => setI(d)}
+              aria-label={`Go to testimonial ${d + 1}`}
+              aria-current={d === i}
+              className={`h-2 rounded-full transition-all ${
+                d === i
+                  ? "w-6 bg-orange-400"
+                  : "w-2 bg-white/25 hover:bg-white/40"
+              }`}
+            />
           ))}
         </div>
       </div>
