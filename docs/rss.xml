@@ -8,6 +8,13 @@
     <lastBuildDate>Tue, 10 Nov 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://www.blendertutoring.com/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>How to Make Lava in Blender</title>
+      <link>https://www.blendertutoring.com/blog/how-to-make-lava-blender</link>
+      <guid isPermaLink="true">https://www.blendertutoring.com/blog/how-to-make-lava-blender</guid>
+      <pubDate>Tue, 10 Nov 2026 00:00:00 GMT</pubDate>
+      <description>Make glowing procedural lava in Blender with one noise texture and a colour ramp — the crust, the hot cracks, displacement and bloom. No textures, no plugins.</description>
+    </item>
+    <item>
       <title>Godot vs Unity: An Honest Comparison (2026)</title>
       <link>https://www.blendertutoring.com/blog/godot-vs-unity</link>
       <guid isPermaLink="true">https://www.blendertutoring.com/blog/godot-vs-unity</guid>
