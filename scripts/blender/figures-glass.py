@@ -36,7 +36,7 @@ def sky(S):
     t.sky_type = 'NISHITA'
     t.sun_elevation = math.radians(35)
     t.sun_rotation = math.radians(40)
-    bg.inputs[1].default_value = 1.1
+    bg.inputs[1].default_value = 0.55
     nt.links.new(t.outputs[0], bg.inputs[0])
 
 
@@ -78,7 +78,7 @@ sky(S)
 
 # floor — pale, lightly glossy
 bpy.ops.mesh.primitive_plane_add(size=40, location=(0, 0, 0))
-put(bpy.context.object, matte((0.62, 0.62, 0.64), rough=0.35), smooth=False)
+put(bpy.context.object, matte((0.33, 0.34, 0.37), rough=0.3), smooth=False)
 
 # colourful matte shapes BEHIND the glass — the thing it refracts
 for (x, y, z, r, col) in ((-1.3, 2.4, 0.5, 0.5, (0.92, 0.26, 0.2)),
@@ -91,22 +91,22 @@ for (x, y, z, r, col) in ((-1.3, 2.4, 0.5, 0.5, (0.92, 0.26, 0.2)),
 
 # ── the glass, front row ──────────────────────────────────────────────
 # clear sphere
-bpy.ops.mesh.primitive_uv_sphere_add(radius=0.62, location=(-1.25, -0.2, 0.62), segments=64, ring_count=32)
+bpy.ops.mesh.primitive_uv_sphere_add(radius=0.62, location=(-1.45, 0.05, 0.62), segments=64, ring_count=32)
 put(bpy.context.object, glass_mat((0.97, 0.98, 1.0)))
 
 # faceted gem (ico-sphere, flat-shaded for crisp facets)
-bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=1, radius=0.6, location=(0.25, -0.5, 0.6))
+bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=1, radius=0.58, location=(0.15, -0.05, 0.58))
 g = bpy.context.object
 g.data.materials.append(glass_mat((0.98, 0.98, 1.0)))
 
 # tinted sphere (amber)
-bpy.ops.mesh.primitive_uv_sphere_add(radius=0.58, location=(1.55, -0.1, 0.58), segments=64, ring_count=32)
+bpy.ops.mesh.primitive_uv_sphere_add(radius=0.58, location=(1.65, 0.05, 0.58), segments=64, ring_count=32)
 put(bpy.context.object, glass_mat((1.0, 0.72, 0.32)))
 
 # a soft key light for glints
 bpy.ops.object.light_add(type='AREA', location=(-2.5, -3, 4))
 L = bpy.context.object.data
-L.energy = 500; L.size = 4
+L.energy = 240; L.size = 4
 v = Vector((0, 0, 0.4)) - bpy.context.object.location
 bpy.context.object.rotation_euler = v.to_track_quat('-Z', 'Y').to_euler()
 
@@ -115,9 +115,9 @@ cd = bpy.data.cameras.new("c")
 c = bpy.data.objects.new("c", cd)
 bpy.context.collection.objects.link(c)
 S.camera = c
-c.location = (0.1, -3.6, 1.35)
-cd.lens = 62
-v = Vector((0.1, 0.4, 0.5)) - c.location
+c.location = (0.1, -5.0, 1.55)
+cd.lens = 52
+v = Vector((0.1, 0.5, 0.48)) - c.location
 c.rotation_euler = v.to_track_quat('-Z', 'Y').to_euler()
 
 S.render.filepath = OUT + "glass_hero.png"
