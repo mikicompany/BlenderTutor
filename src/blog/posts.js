@@ -92,105 +92,13 @@ Almost all bad Blender water is one of these:
 
 The reason water feels hard is that people try to solve it in one lump. Split it — waves from the Ocean modifier, look from a transmissive shader, life from a sky to reflect — and each piece is small. Change the wave settings and the same material becomes a millpond or a storm; change the colour and it becomes a tropical shallow or a cold deep sea.
 
-It is the same lesson as [making lava](/blog/how-to-make-lava-blender): striking results come from a few well-understood inputs, not from one impossibly complex material. Water is just light, moving surface, and something to reflect — and Blender gives you all three.
+It is the same lesson as every good procedural material: striking results come from a few well-understood inputs, not from one impossibly complex setup. Water is just light, moving surface, and something to reflect — and Blender gives you all three.
 
 ---
 
 **Read next:** [Why Your Blender Render Is Noisy — and How to Fix It](/blog/blender-render-noisy-fix) — transmissive water and caustics are exactly where grain shows up, and this is how to clear it.
 
 *Want to build an ocean (or a calm pool) live and actually understand the nodes? [Book a free intro call →](https://www.blendertutoring.com/#packages) and share your screen. Materials and lighting click fast with someone walking you through the logic once — water is a great place to start.*
-`,
-  },
-  {
-    slug: "how-to-make-lava-blender",
-    title: "How to Make Lava in Blender",
-    description: "Make glowing procedural lava in Blender with one noise texture and a colour ramp — the crust, the hot cracks, displacement and bloom. No textures, no plugins.",
-    date: "2026-11-10",
-    thumbnail: "/blog-images/blender-lava-material.jpg",
-    content: `
-Lava is one of the most satisfying things to make in Blender, and one of the easiest to get wrong. The satisfying part: it is almost pure shader nodes — a dark rock crust with molten cracks glowing through it, built from a single noise texture and a colour ramp. No painted textures, no sculpting, no plugins. The getting-it-wrong part is usually one of two mistakes we will fix at the end. Here is the whole recipe.
-
-![Procedural lava in Blender — a dark crust with glowing orange cracks, made entirely with shader nodes](/blog-images/blender-lava-material.jpg)
-
-That render is one noise texture and one colour ramp. Once you see how it is wired, you can make lava, molten metal, cooling glass or glowing embers by changing a few colours.
-
----
-
-## 🔥 The Whole Idea In One Sentence
-
-**One noise texture decides where the surface is hot.** Where the noise is low, you get cool black crust; where it crosses a threshold, you get glowing lava. Everything else is just making that glow look convincing. Hold that picture and the node setup is obvious.
-
----
-
-## 🎛️ The Node Setup
-
-Open the Shading workspace and build this on a Principled BSDF:
-
-1. **Add a Noise Texture.** This is the pattern of hot and cool. A Scale around 4 and a high Detail (8–9) give you big molten regions broken up with fine veins. Its **Fac** output is the single value that drives everything.
-
-2. **Add a Colour Ramp** and plug the noise Fac into it. This is where lava is born. Set it so the **bottom half of the range is pure black** (the crust), then add stops climbing through **dark red → orange → bright orange → yellow → near-white** in the top portion. Most of the surface should read as black rock, with the hot colours appearing only in the cracks.
-
-3. **Plug the Colour Ramp into Emission Color** on the Principled BSDF, and turn **Emission Strength** up to around 8–10. This is the trick that makes it glow: black emission emits *no light at all*, so the crust stays dark while the hot cracks blaze. You get self-illuminating lava without a single lamp.
-
-4. **Set the Base Color to a very dark rock** (almost black) and Roughness high, around 0.7. That is the cooled crust the glow peeks through.
-
-That is the entire material. Noise → Ramp → Emission. Everything from here is polish.
-
----
-
-## 🏔️ Make It Three-Dimensional
-
-A flat plane with a glowing texture reads as a sticker. Real lava has a lumpy, molten surface, and you want the cracks sitting in the low valleys.
-
-Add a **Displace modifier** to a heavily subdivided plane (or use adaptive subdivision in Cycles) with a Clouds or Noise texture driving it. Even a small amount of displacement gives you the rolling, crusted-over look and lets light rake across the bumps. Smooth-shade the surface so it does not look faceted. This one step does more for believability than any amount of shader tweaking.
-
----
-
-## ✨ The Glow
-
-Bright emission alone does not bloom — the hot cracks look sharp rather than radiant. To get that molten halo:
-
-- In **EEVEE**, turn on **Bloom** (or the Bloom/Glare in the compositor on newer versions).
-- In **Cycles**, add a **Glare node** in the Compositor set to **Fog Glow**, with the threshold around 1.0. That spreads a soft glow out of the brightest cracks and is what sells "this is hot."
-
-It is a small step that makes an enormous difference, and it is the thing most beginner lava is missing.
-
----
-
-## 🌊 Making It Flow
-
-Static lava is already great, but animating it is nearly free. Two easy routes:
-
-- **Churning surface:** animate the **W** input of the Noise Texture (it is 4D), or keyframe a slow offset on a Mapping node feeding the noise. The hot regions will crawl and shift like a real molten surface.
-- **Moving crust:** animate the Displace texture's offset (or the Mapping node driving it) so the lumps drift.
-
-A few keyframes over a couple of hundred frames, looped, and you have living lava.
-
----
-
-## ⚠️ The Two Mistakes
-
-Almost all bad Blender lava comes down to these:
-
-**Everything glows.** If the whole surface is emitting, you have lava soup with no crust. Keep the bottom half of that colour ramp pure black so most of the surface is cool rock — the contrast between dark crust and bright crack *is* the effect. This is the same discipline as any good [material in Blender](/blog/blender-materials-look-like-plastic): restraint reads as realism.
-
-**It is flat.** No displacement, no raking light, and it looks like orange paint. Give it real geometry and let shadows fall across it.
-
-And one gotcha: dark, emissive scenes like this render **noisy** in Cycles. That is expected — it is a sampling problem, not a shader problem, and the [fixes for a noisy render](/blog/blender-render-noisy-fix) apply directly here.
-
----
-
-## 🎯 One Pattern, Many Materials
-
-The real prize is that this noise-to-emission pattern is a template. Swap the ramp colours and you have glowing runes, cooling forged metal, bioluminescence, or embers in ash. Learn lava and you have actually learned *emissive masking* — one of the most reusable ideas in shading.
-
-Simple inputs, striking output. That is procedural texturing at its best, and lava is the perfect first taste of it.
-
----
-
-**Read next:** [Why Your Blender Render Is Noisy — and How to Fix It](/blog/blender-render-noisy-fix) — dark emissive scenes like lava are exactly where noise shows up, and this is how to clear it.
-
-*Want to build this live and actually understand the nodes rather than copy them? [Book a free intro call →](https://www.blendertutoring.com/#packages) and share your screen. Procedural materials click fast once someone walks you through the logic once — lava is a great place to start.*
 `,
   },
   {
