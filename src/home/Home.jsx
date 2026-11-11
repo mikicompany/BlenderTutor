@@ -10,6 +10,7 @@ import About from "../about/About";
 import MeetYourTutor from "../tutors/MeetYourTutor";
 import WorkCarousel from "../work/WorkCarousel";
 import Testimonials from "../testimonials/Testimonials";
+import FAQ from "../faq/FAQ";
 import Footer from "../footer/Footer";
 import { BOOKING_URL, BOOKING_LABEL } from "../lib/links";
 
@@ -198,6 +199,12 @@ const Home = () => {
         {/* Note: Ensure the Packages component background is set to transparent! */}
         <section id="packages">
           <Packages />
+        </section>
+
+        {/* Objection-handling FAQ right after the price: visitors who hesitated
+            at the pricing meet the answers to their doubts, then a final CTA. */}
+        <section id="faq">
+          <FAQ />
         </section>
 
         <Footer />
