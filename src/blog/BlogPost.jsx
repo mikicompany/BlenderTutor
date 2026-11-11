@@ -6,7 +6,7 @@ import { posts } from "./posts"
 import Navbar from "../navbar/Navbar"
 import Footer from "../footer/Footer"
 import { useState } from "react"
-import { subscribeToNewsletter, isValidEmail } from "../lib/mailchimp"
+import { subscribeToNewsletter, isValidEmail } from "../lib/newsletter"
 
 const Subscribe = () => {
   const [email, setEmail] = useState("")
@@ -38,7 +38,7 @@ const Subscribe = () => {
 
       {status === "success" ? (
         <div className="bg-green-500/10 border border-green-500/25 rounded-lg px-4 py-3 text-green-400 text-sm">
-          ✓ You're in! Check your inbox for a confirmation email.
+          ✓ You're in! Thanks for subscribing.
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="flex gap-3 flex-wrap">

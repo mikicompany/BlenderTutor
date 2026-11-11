@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Send } from 'lucide-react'
-import { subscribeToNewsletter, isValidEmail } from '../../lib/mailchimp'
+import { subscribeToNewsletter, isValidEmail } from '../../lib/newsletter'
 
 export default function Subscribe() {
   const [email, setEmail] = useState('')
