@@ -41,6 +41,8 @@ export default defineConfig({
         '/pay',
         '/blog/blender-maya-theme',
         '/blog/maya-workflow-kit-blender',
+        // Removed post; its URL now serves a redirect stub to /blog.
+        '/blog/how-to-make-lava-blender',
       ],
       priority: {
         '/': 1.0,
