@@ -7,6 +7,28 @@ import Navbar from "../navbar/Navbar"
 import Footer from "../footer/Footer"
 import { useState } from "react"
 import { subscribeToNewsletter, isValidEmail } from "../lib/newsletter"
+import { IMAGE_DIMS } from "./image-dims"
+
+// Render markdown images with explicit width/height (from the build-time
+// dimension map) so the browser reserves space and the page doesn't jump as
+// images load, plus lazy/async loading to keep the initial render light.
+const mdComponents = {
+  img({ node, src = "", alt = "", ...props }) {
+    const dims = IMAGE_DIMS[src]
+    return (
+      <img
+        src={src}
+        alt={alt}
+        loading="lazy"
+        decoding="async"
+        width={dims && dims[0]}
+        height={dims && dims[1]}
+        style={{ height: "auto", maxWidth: "100%" }}
+        {...props}
+      />
+    )
+  },
+}
 
 const Subscribe = () => {
   const [email, setEmail] = useState("")
@@ -283,7 +305,7 @@ const BlogPost = () => {
         <h1 className="text-4xl font-bold mb-4">{post.title}</h1>
         <p className="text-gray-400 text-sm mb-10">{post.date}</p>
         <div className="prose prose-invert prose-orange max-w-none prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:text-orange-400 prose-blockquote:border-orange-400 prose-blockquote:bg-orange-400/5 prose-blockquote:rounded-r-lg prose-blockquote:py-1 prose-table:text-sm prose-td:border-white/10 prose-th:border-white/10 prose-hr:border-white/10">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
+          <ReactMarkdown remarkPlugins={[remarkGfm]} components={mdComponents}>{post.content}</ReactMarkdown>
         </div>
         {/* The lead-magnet box doubles as the newsletter signup for posts
             that have a downloadable, so those posts show it in place of the
