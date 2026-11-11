@@ -8,6 +8,13 @@
     <lastBuildDate>Wed, 11 Nov 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://www.blendertutoring.com/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>How to Make Glass in Blender</title>
+      <link>https://www.blendertutoring.com/blog/how-to-make-glass-blender</link>
+      <guid isPermaLink="true">https://www.blendertutoring.com/blog/how-to-make-glass-blender</guid>
+      <pubDate>Wed, 11 Nov 2026 00:00:00 GMT</pubDate>
+      <description>Realistic glass in Blender: the four Principled settings (transmission, roughness, IOR 1.45) and the one scene trick beginners miss — clear, tinted, frosted.</description>
+    </item>
+    <item>
       <title>How to Make Water in Blender</title>
       <link>https://www.blendertutoring.com/blog/how-to-make-water-blender</link>
       <guid isPermaLink="true">https://www.blendertutoring.com/blog/how-to-make-water-blender</guid>
