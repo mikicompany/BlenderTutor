@@ -1939,7 +1939,7 @@ Most "what's new" coverage is written for generalists. Narrowing it to this site
     // The PDF is a lead magnet: the in-article "download" links point at an
     // email gate (#get-the-guide) rendered by BlogPost, which subscribes the
     // reader and then reveals this file. `tag` marks where the signup came
-    // from in Mailchimp.
+    // from in MailerLite.
     leadMagnet: { file: "/blender-beginners-guide.pdf", tag: "guide" },
     content: `
 There is no shortage of Blender tutorials. That is the problem.

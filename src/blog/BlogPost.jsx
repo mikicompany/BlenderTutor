@@ -92,9 +92,9 @@ const Subscribe = () => {
 // in-article "download" links point at this box's id, so the one on the page
 // is the only way to the file — that is the whole point of a lead magnet.
 //
-// The guide is revealed on a successful subscribe. A transient failure should
-// not hold a free resource hostage, so after an error the download is offered
-// anyway with a quiet note; the goal is the list, not a wall.
+// Hard gate: the download link is revealed ONLY on a successful subscribe.
+// An error does not expose the file — the reader is asked to try again — so
+// the PDF really is subscribers-only, which is what the offer promises.
 const LeadMagnet = ({ file, tag = "guide" }) => {
   const [email, setEmail] = useState("")
   const [status, setStatus] = useState("idle") // idle | loading | success | error
@@ -113,7 +113,7 @@ const LeadMagnet = ({ file, tag = "guide" }) => {
       setStatus("success")
     } else {
       setStatus("error")
-      setMsg(result.message || "Something went wrong — but your guide is below.")
+      setMsg(result.message || "Something went wrong. Please try again.")
     }
   }
 
@@ -180,11 +180,7 @@ const LeadMagnet = ({ file, tag = "guide" }) => {
       )}
 
       {status === "error" && (
-        <div className="mt-3">
-          <p className="text-red-400 text-xs mb-3">{msg}</p>
-          {/* A failed signup should not withhold the promised guide. */}
-          <DownloadButton />
-        </div>
+        <p className="text-red-400 text-xs mt-3">{msg}</p>
       )}
     </div>
   )
