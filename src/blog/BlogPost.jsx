@@ -95,7 +95,7 @@ const Subscribe = () => {
 // Hard gate: the download link is revealed ONLY on a successful subscribe.
 // An error does not expose the file — the reader is asked to try again — so
 // the PDF really is subscribers-only, which is what the offer promises.
-const LeadMagnet = ({ file, tag = "guide" }) => {
+const LeadMagnet = ({ file, tag = "guide", title, blurb }) => {
   const [email, setEmail] = useState("")
   const [status, setStatus] = useState("idle") // idle | loading | success | error
   const [msg, setMsg] = useState("")
@@ -136,13 +136,11 @@ const LeadMagnet = ({ file, tag = "guide" }) => {
         Free PDF
       </p>
       <h3 className="text-2xl font-bold text-white mb-2">
-        Get the Beginner&rsquo;s Guide
+        {title || "Get the Beginner’s Guide"}
       </h3>
       <p className="text-gray-400 text-sm mb-6">
-        The whole guide — the 30-day plan, the key-shortcut tables and the
-        troubleshooting index — formatted to print or keep on a second screen.
-        Enter your email and it&rsquo;s yours, along with the occasional short
-        Blender tip. No spam, unsubscribe any time.
+        {blurb ||
+          "The whole guide — the 30-day plan, the key-shortcut tables and the troubleshooting index — formatted to print or keep on a second screen. Enter your email and it’s yours, along with the occasional short Blender tip. No spam, unsubscribe any time."}
       </p>
 
       {status === "success" ? (
@@ -307,7 +305,12 @@ const BlogPost = () => {
             that have a downloadable, so those posts show it in place of the
             generic Subscribe rather than two competing asks. */}
         {post.leadMagnet && (
-          <LeadMagnet file={post.leadMagnet.file} tag={post.leadMagnet.tag} />
+          <LeadMagnet
+            file={post.leadMagnet.file}
+            tag={post.leadMagnet.tag}
+            title={post.leadMagnet.title}
+            blurb={post.leadMagnet.blurb}
+          />
         )}
         <RelatedPosts post={post} />
         {!post.leadMagnet && <Subscribe />}
