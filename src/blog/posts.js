@@ -5,12 +5,24 @@ export const posts = [
     description: "Blender is also a free 2D animation studio. A complete beginner's guide to Grease Pencil v3: the five modes, strokes and fill materials, layers, frame-by-frame animation with onion skinning, and using 2D drawings in 3D scenes.",
     date: "2026-11-12",
     thumbnail: "/blog-images/blender-grease-pencil.jpg",
+    // Email gate (#get-the-guide) rendered by BlogPost: subscribing reveals
+    // this PDF. Its own title/blurb so the box describes the GP guide, not the
+    // beginner one. `tag` marks the signup source in MailerLite.
+    leadMagnet: {
+      file: "/blender-grease-pencil-guide.pdf",
+      tag: "grease-pencil",
+      title: "Get the Grease Pencil Starter Guide",
+      blurb:
+        "The whole guide as a clean, printable PDF — the five modes, stroke-and-fill materials, layers and onion-skinning, formatted to keep on a second screen while you draw. Enter your email and it’s yours, with the occasional short Blender tip. No spam, unsubscribe any time.",
+    },
     content: `
 Most people meet Blender as a 3D program and never realise it's also one of the best free 2D animation tools in existence. That's **Grease Pencil** — a feature that lets you draw actual strokes *in 3D space*, animate them frame by frame like traditional hand-drawn animation, and mix flat 2D artwork into fully 3D scenes. It's what studios used for the Blender shorts *Hero* and *Sprite Fright*, and it's sitting in your copy of Blender right now. This is the complete beginner's guide: what it is, how it's organised, and how to go from a blank canvas to a finished, animated drawing.
 
 ![An illustration of Grease Pencil animation: a hand-drawn ink character on a canvas with faded onion-skin ghost frames of it before (warm) and after (cool), plus a layers panel, stroke-and-fill materials and the Draw/Edit/Sculpt mode row](/blog-images/blender-grease-pencil.jpg)
 
 That ghosting is **onion skinning** — faded versions of the frames before and after the one you're drawing — and it's the heart of how 2D animation works in Blender. We'll build up to it.
+
+**[Get this guide as a printable PDF →](#get-the-guide)** — the whole thing, formatted to keep open on a second screen while you draw. Free — straight to your inbox.
 
 ---
 
@@ -65,6 +77,8 @@ Like a mesh object, a Grease Pencil object has **modes** — and switching betwe
 
 For plain drawing and animating you'll live in **Draw** and dip into **Edit** and **Sculpt**. The other two matter once you start rigging.
 
+![The five Grease Pencil modes side by side — Draw, Edit, Sculpt, Vertex Paint and Weight Paint — each with a small illustration of what it does](/blog-images/blender-grease-pencil-modes.jpg)
+
 ---
 
 ## 🖌️ Strokes, Fills and Materials
@@ -76,11 +90,15 @@ Here's the thing that confuses newcomers: in Grease Pencil, **colour comes from 
 
 So a single material could be "black line, no fill" for inking, or "no line, red fill" for a flat colour shape, or both at once. You build a small palette of materials — line, skin, shirt, shadow — and pick one before you draw, the way a 2D artist picks up a different pen or fills a region. To fill an enclosed shape, grab the **Fill tool** from the toolbar and click inside it.
 
+![The same shape drawn four ways to show Grease Pencil materials: stroke only, fill only, stroke and fill together, and a gradient fill](/blog-images/blender-grease-pencil-materials.jpg)
+
 ---
 
 ## 📚 Layers
 
 Grease Pencil layers work like layers in Photoshop or Procreate — stacked sheets you draw on, higher ones in front. They're essential for animation because you separate the parts that move from the parts that don't.
+
+![An exploded stack of Grease Pencil layers — Line/Sketch, Colour and Background sheets — combining into one composited frame of the character](/blog-images/blender-grease-pencil-layers.jpg)
 
 A typical setup: a **Background** layer that never changes, a **Colour** layer underneath, and a **Line/Sketch** layer on top. In v3 you can now group layers into folders to keep a complex character tidy. Each layer has its own opacity and its own onion-skin settings — and crucially, its own set of keyframes.
 
@@ -113,6 +131,8 @@ Because strokes are real 3D objects, Grease Pencil shines as a bridge between 2D
 - **Effects** — smoke, impact lines, sparks and other hand-drawn flourishes added on top of a 3D render.
 
 You control how strokes sit in space with the **Stroke Placement** setting (on the 3D cursor, on the surface of objects, or on a flat plane facing the view), which decides where your 2D marks land in the 3D world.
+
+![A hand-drawn 2D character standing on a 3D floor in perspective, facing a camera and lit by a scene light, showing a Grease Pencil drawing living inside a 3D scene](/blog-images/blender-grease-pencil-2d-in-3d.jpg)
 
 ---
 
