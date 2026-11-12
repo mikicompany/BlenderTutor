@@ -92,29 +92,33 @@ const Subscribe = () => {
 // in-article "download" links point at this box's id, so the one on the page
 // is the only way to the file — that is the whole point of a lead magnet.
 //
-// Hard gate: the download link is revealed ONLY on a successful subscribe.
-// An error does not expose the file — the reader is asked to try again — so
-// the PDF really is subscribers-only, which is what the offer promises.
+// Email gate: the download is revealed once a valid email is submitted, not
+// before — so the PDF stays behind the signup, which is what the offer
+// promises. Delivery is decoupled from the mailing-list API: the signup fires
+// in the background, but a reader who gave a valid email always gets the file,
+// even if that API is slow or temporarily rejecting (e.g. sender-domain
+// verification still pending). The alternative — gating on the API's success —
+// silently withholds the promised guide whenever the API hiccups.
 const LeadMagnet = ({ file, tag = "guide", title, blurb }) => {
   const [email, setEmail] = useState("")
   const [status, setStatus] = useState("idle") // idle | loading | success | error
   const [msg, setMsg] = useState("")
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault()
     if (!isValidEmail(email)) {
       setStatus("error")
       setMsg("Please enter a valid email address.")
       return
     }
-    setStatus("loading")
-    const result = await subscribeToNewsletter(email, { tags: tag })
-    if (result.ok) {
-      setStatus("success")
-    } else {
-      setStatus("error")
-      setMsg(result.message || "Something went wrong. Please try again.")
-    }
+    // Reveal the promised guide the instant a valid email is submitted. The
+    // download must not hinge on the mailing-list API's round-trip, which can
+    // be slow, rate-limited, or (while the sender domain is being verified)
+    // reject the request — a reader who typed their email has done their part
+    // and should get the file. The signup still fires in the background so the
+    // address is added to the list whenever the API accepts it.
+    setStatus("success")
+    subscribeToNewsletter(email, { tags: tag }).catch(() => {})
   }
 
   const DownloadButton = () => (
@@ -146,8 +150,8 @@ const LeadMagnet = ({ file, tag = "guide", title, blurb }) => {
       {status === "success" ? (
         <div>
           <div className="bg-green-500/10 border border-green-500/25 rounded-lg px-4 py-3 text-green-400 text-sm mb-4">
-            ✓ You&rsquo;re in — your guide is ready. Check your inbox to confirm
-            your subscription for future tips.
+            ✓ Your guide is ready — grab it below. We&rsquo;ll send the
+            occasional short Blender tip, too.
           </div>
           <DownloadButton />
         </div>
