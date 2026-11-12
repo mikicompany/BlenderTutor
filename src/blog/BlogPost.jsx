@@ -154,6 +154,11 @@ const LeadMagnet = ({ file, tag = "guide", title, blurb }) => {
             occasional short Blender tip, too.
           </div>
           <DownloadButton />
+          <p className="text-gray-400 text-xs mt-3">
+            Thanks for subscribing! If the download doesn&rsquo;t start, click
+            the button above. Keep an eye on your inbox for the occasional short
+            Blender tip.
+          </p>
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="flex gap-3 flex-wrap">
