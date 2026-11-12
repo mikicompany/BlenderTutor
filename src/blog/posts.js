@@ -267,6 +267,8 @@ This is where beginners trip, because rendering a *video* isn't the same as rend
 
 Then render the *timeline*, not the 3D scene: **Render ▸ Render Animation** (or **Ctrl+F12**). Blender plays through your edit and writes the finished video to your output folder.
 
+> **⚡ Want all of that in one click?** I made a free Blender addon that does it for you — [**download Quick MP4 Export**](/downloads/quick-mp4-export.zip) (Blender 3.0–4.x). Install it via **Edit ▸ Preferences ▸ Add-ons ▸ Install…**, then in the Sequencer open the **N** sidebar, go to the **Export** tab, and hit one button to set FFmpeg Video / MP4 / H.264 / AAC — including the Sequencer checkbox, so you never hit the traps below.
+
 > **If your export comes out black or empty:** check that **Post Processing ▸ Sequencer** is ticked in Output Properties. It's on by default, but if it ever gets switched off, Blender ignores your VSE edit entirely and renders the empty 3D scene instead.
 
 ---
