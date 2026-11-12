@@ -8,6 +8,13 @@
     <lastBuildDate>Thu, 12 Nov 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://www.blendertutoring.com/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>Grease Pencil in Blender: The Complete Guide</title>
+      <link>https://www.blendertutoring.com/blog/grease-pencil-in-blender</link>
+      <guid isPermaLink="true">https://www.blendertutoring.com/blog/grease-pencil-in-blender</guid>
+      <pubDate>Thu, 12 Nov 2026 00:00:00 GMT</pubDate>
+      <description>Blender is also a free 2D animation studio. A complete beginner's guide to Grease Pencil v3: the five modes, strokes and fill materials, layers, frame-by-frame animation with onion skinning, and using 2D drawings in 3D scenes.</description>
+    </item>
+    <item>
       <title>How to Edit Video in Blender with the VSE</title>
       <link>https://www.blendertutoring.com/blog/video-editing-in-blender</link>
       <guid isPermaLink="true">https://www.blendertutoring.com/blog/video-editing-in-blender</guid>
