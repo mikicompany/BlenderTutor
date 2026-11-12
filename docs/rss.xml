@@ -8,6 +8,13 @@
     <lastBuildDate>Thu, 12 Nov 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://www.blendertutoring.com/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
+      <title>How to Edit Video in Blender with the VSE</title>
+      <link>https://www.blendertutoring.com/blog/video-editing-in-blender</link>
+      <guid isPermaLink="true">https://www.blendertutoring.com/blog/video-editing-in-blender</guid>
+      <pubDate>Thu, 12 Nov 2026 00:00:00 GMT</pubDate>
+      <description>Blender has a full built-in video editor. Learn the Video Sequence Editor from scratch: strips, channels, cutting and trimming, titles and audio, and the exact FFmpeg / MP4 / H.264 export settings.</description>
+    </item>
+    <item>
       <title>DLSS in Blender: What It Is &amp; How to Enable It</title>
       <link>https://www.blendertutoring.com/blog/dlss-in-blender</link>
       <guid isPermaLink="true">https://www.blendertutoring.com/blog/dlss-in-blender</guid>
