@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/thumbs.js && node scripts/image-dims.js && node scripts/guide-pdf.mjs && vite build && node scripts/prerender.js && node scripts/rss.js",
+    "build": "node scripts/thumbs.js && node scripts/image-dims.js && node scripts/next-gen-images.js && node scripts/guide-pdf.mjs && vite build && node scripts/prerender.js && node scripts/rss.js",
     "lint": "eslint .",
     "preview": "vite preview"
   },

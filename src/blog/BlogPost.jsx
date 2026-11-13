@@ -8,14 +8,19 @@ import Footer from "../footer/Footer"
 import { useState } from "react"
 import { subscribeToNewsletter, isValidEmail } from "../lib/newsletter"
 import { IMAGE_DIMS } from "./image-dims"
+import { IMG_FORMATS } from "./image-formats"
 
 // Render markdown images with explicit width/height (from the build-time
 // dimension map) so the browser reserves space and the page doesn't jump as
 // images load, plus lazy/async loading to keep the initial render light.
+//
+// When the build has generated next-gen formats for an image (AVIF/WebP, often
+// 70–80% smaller than the JPEG), wrap it in a <picture> so modern browsers
+// fetch the small version and older ones fall back to the original <img>.
 const mdComponents = {
   img({ node, src = "", alt = "", ...props }) {
     const dims = IMAGE_DIMS[src]
-    return (
+    const img = (
       <img
         src={src}
         alt={alt}
@@ -26,6 +31,16 @@ const mdComponents = {
         style={{ height: "auto", maxWidth: "100%" }}
         {...props}
       />
+    )
+    const fmts = IMG_FORMATS[src]
+    if (!fmts || !fmts.length) return img
+    const asFormat = (fmt) => src.replace(/\.(jpe?g|png)$/i, `.${fmt}`)
+    return (
+      <picture>
+        {fmts.includes("avif") && <source srcSet={asFormat("avif")} type="image/avif" />}
+        {fmts.includes("webp") && <source srcSet={asFormat("webp")} type="image/webp" />}
+        {img}
+      </picture>
     )
   },
 }
