@@ -94,6 +94,9 @@ const Footer = () => {
       <a href="/lava/" className="hover:text-white transition-colors">
         Lava
       </a>
+      <a href="/free" className="hover:text-white transition-colors">
+        Free Tools
+      </a>
 
       <Link to="/radar" className="hover:text-white transition-colors">
         The Radar

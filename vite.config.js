@@ -24,7 +24,7 @@ export default defineConfig({
       outDir: 'docs',
       // '/' is picked up from docs/index.html, so listing it here too
       // would emit a duplicate entry.
-      dynamicRoutes: ['/blog', ...postRoutes, '/radar', '/terms', '/privacy'],
+      dynamicRoutes: ['/blog', ...postRoutes, '/radar', '/free', '/terms', '/privacy'],
       // The SPA fallback page and the Search Console verification file are
       // real .html files in docs/, but neither belongs in a sitemap.
       //

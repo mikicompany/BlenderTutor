@@ -585,5 +585,34 @@ document.getElementById('file').addEventListener('change',function(e){
 // init
 syncControls(); applyPreview();
 </script>
+
+<!-- newsletter signup -->
+<div class="wrap" style="margin-bottom:44px;">
+  <section style="background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:26px;">
+    <p style="font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--accent-2);margin:0 0 8px;">Newsletter</p>
+    <h3 style="font-size:22px;font-weight:800;margin:0 0 6px;letter-spacing:-.3px;color:var(--fg);">Get new free Blender tools as I build them</h3>
+    <p style="color:var(--mut);margin:0 0 16px;font-size:14.5px;max-width:580px;line-height:1.6;">This Theme Maker is one of a few free things I've built — there's also a one-click MP4 export add-on and two printable guides. Drop your email and I'll send the next one, plus the occasional short Blender tip. No spam, unsubscribe any time. <a href="/free" style="color:var(--accent-2);font-weight:600;">See all the free tools &rarr;</a></p>
+    <form id="ml-signup" novalidate style="display:flex;gap:10px;flex-wrap:wrap;">
+      <input type="email" id="ml-email" placeholder="your@email.com" autocomplete="email" aria-label="Your email address" style="flex:1;min-width:220px;background:#100d0a;border:1px solid var(--border-2);color:var(--fg);border-radius:10px;padding:11px 14px;font-size:14px;font-family:inherit;">
+      <button type="submit" style="background:var(--accent);color:var(--on-accent);border:none;border-radius:10px;padding:11px 20px;font-weight:700;font-size:14px;font-family:inherit;cursor:pointer;white-space:nowrap;">Email me free Blender tools</button>
+      <p id="ml-note" style="width:100%;margin:8px 0 0;font-size:12.5px;color:var(--faint);"></p>
+    </form>
+  </section>
+</div>
+<script>
+(function(){
+  var f=document.getElementById('ml-signup'), e=document.getElementById('ml-email'), n=document.getElementById('ml-note');
+  if(!f) return;
+  var EP='https://assets.mailerlite.com/jsonp/1653163/forms/203856672702071993/subscribe';
+  f.addEventListener('submit', function(ev){
+    ev.preventDefault();
+    var email=(e.value||'').trim();
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ n.textContent='Please enter a valid email address.'; n.style.color='#ff8c6b'; return; }
+    f.innerHTML='<p style="margin:0;color:#7ddc9c;font-weight:600;font-size:15px;">✓ You’re in! Watch your inbox — you’ll get the free guides and new tools as they land.</p>';
+    var b=new URLSearchParams(); b.set('fields[email]',email); b.set('ml-submit','1'); b.set('anticsrf','true');
+    fetch(EP,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:b.toString()}).catch(function(){});
+  });
+})();
+</script>
 </body>
 </html>
