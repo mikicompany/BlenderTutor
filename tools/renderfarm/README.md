@@ -44,7 +44,9 @@ choice is kept in `%LOCALAPPDATA%\MikiFarm\blender_path.txt`; the Blender in
 
 Each sync hop usually takes seconds and can take a minute or so.
 
-`cancel_<id>.txt` stops a running job. Removing a queued job in the manager moves
+`history_remove_*.json` (`{"ids": [...]}` or `{"all": true}`) drops finished jobs
+from the list in `farm_status.json`; the manager can also move a job's output
+folder to the Drive trash. `cancel_<id>.txt` stops a running job. Removing a queued job in the manager moves
 its job file to the Drive trash. The old trigger still works: an empty
 `render_256.txt` renders every .blend at 256 samples.
 

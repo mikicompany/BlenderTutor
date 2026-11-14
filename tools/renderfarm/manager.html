@@ -161,6 +161,8 @@ input:disabled, select:disabled { opacity: .55; }
 .thumbs span { font-family: var(--font-mono); font-size: 10.5px; color: var(--muted); padding: 2px 0; text-align: center; }
 .prev-row { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-size: 12px; color: var(--muted); }
 .prev-row button { background: none; border: 0; padding: 0; color: var(--accent); cursor: pointer; font: inherit; text-decoration: underline; }
+.confirm-row { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 8px; background: var(--bad-soft); font-size: 13px; }
+.confirm-row span { flex: 1 1 200px; min-width: 0; }
 .history-preview { grid-column: 1 / -1; margin-top: 6px; display: flex; flex-direction: column; gap: 12px; }
 details.log summary { cursor: pointer; font-size: 12.5px; color: var(--muted); }
 pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px; line-height: 1.55; background: var(--sunken); border-radius: 8px; padding: 10px 12px; overflow-x: auto; white-space: pre; max-height: 240px; }
@@ -367,7 +369,14 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
       </section>
 
       <section class="panel">
-        <div class="panel-head"><h2>Finished</h2><span class="small muted">last 25 jobs</span></div>
+        <div class="panel-head">
+          <h2>Finished</h2>
+          <div class="actions" style="gap:10px">
+            <span class="small muted">last 25 jobs</span>
+            <button type="button" class="btn small danger" id="clearHistory" hidden>Clear list</button>
+          </div>
+        </div>
+        <p class="toast" id="historyMsg" role="status" hidden></p>
         <div class="list" id="history"><div class="empty">No finished jobs yet.</div></div>
       </section>
     </div>
@@ -422,6 +431,8 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
     nform: null,                 // notification form while being edited
     seenIds: null,               // finished job ids already known, to spot new ones
     announce: null,              // "job finished" banner
+    hidden: store.get("hiddenJobs", {}),   // finished jobs removed here, until the PC drops them too
+    confirmRemove: null,         // job id waiting for "are you sure"
     outputFolderUrl: null,
     submitted: store.get("submitted", {}),  // job id -> job (this browser)
     cancelling: {},
@@ -513,6 +524,11 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
           if (fresh.length) announceJob(fresh[0]);
         }
         st.seenIds = new Set(hist.map((h) => h.id));
+        let hc = false;
+        for (const id of Object.keys(st.hidden)) {
+          if (!st.seenIds.has(id) || Date.now() - st.hidden[id] > 30 * 864e5) { delete st.hidden[id]; hc = true; }
+        }
+        if (hc) store.set("hiddenJobs", st.hidden);
       }
       const out = st.files.find((f) => f.title === "output" && f.mimeType === "application/vnd.google-apps.folder");
       st.outputFolderUrl = out ? out.viewUrl : null;
@@ -968,8 +984,15 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
       </div>`).join("");
   }
 
+  function visibleHistory() {
+    return (st.status?.history || []).filter((e) => !st.hidden[e.id]);
+  }
   function renderHistory() {
-    const h = st.status?.history || [];
+    const h = visibleHistory();
+    const ch = $("clearHistory");
+    ch.hidden = !h.length;
+    ch.disabled = st.conn !== "ok";
+    ch.textContent = st.confirmClearHist ? `Remove all ${h.length}? Click again` : "Clear list";
     if (!h.length) { setHTML($("history"), `<div class="empty">No finished jobs yet.</div>`); return; }
     const pill = { done: "ok", failed: "bad", cancelled: "idle", invalid: "bad" };
     const word = { done: "Done", failed: "Failed", cancelled: "Stopped", invalid: "Invalid job" };
@@ -987,7 +1010,14 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
           ${pvs.length ? `<button type="button" class="btn small" data-act="togglePrev" data-id="${esc(e.id)}" aria-expanded="${open}">${open ? "Hide preview" : "Preview"}</button>` : ""}
           ${url ? `<a class="btn small" href="${esc(url)}" target="_blank" rel="noopener">Open output</a>` : ""}
           <span class="pill ${pill[e.status] || "idle"}">${word[e.status] || esc(e.status)}</span>
+          <button type="button" class="btn small danger" data-act="askRemove" data-id="${esc(e.id)}" aria-label="Remove job ${esc(e.id)}">Remove</button>
         </div>
+        ${st.confirmRemove === e.id ? `<div class="confirm-row">
+          <span>Remove this job from the list?${url ? " Its renders stay in Drive unless you trash them too." : ""}</span>
+          <button type="button" class="btn small" data-act="removeJob" data-id="${esc(e.id)}">Remove</button>
+          ${st.outputs[e.id] ? `<button type="button" class="btn small danger" data-act="removeJob" data-id="${esc(e.id)}" data-trash="1">Remove and trash renders</button>` : ""}
+          <button type="button" class="btn small" data-act="keepJob">Cancel</button>
+        </div>` : ""}
         <div class="m">${esc([e.job ? jobSummary(e.job) : "", res.length ? `${res.length} file${res.length > 1 ? "s" : ""}, ${frames} frame${frames === 1 ? "" : "s"}` : "", secs != null ? dur(secs) : "", ago(e.finished)].filter(Boolean).join(" · "))}</div>
         ${e.error ? `<div class="err">${esc(e.error)}</div>` : ""}
         ${notes.length ? `<div class="m" style="color:var(--warn)">${notes.map(esc).join(" · ")}</div>` : ""}
@@ -1138,6 +1168,69 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
     } catch (e) { msg(errorCopy(e).msg, "bad"); }
   }
 
+  // -------- removing finished jobs
+  function historyMsg(msg, kind) {
+    const el = $("historyMsg");
+    el.hidden = !msg; el.textContent = msg || ""; el.className = "toast " + (kind || "");
+    clearTimeout(st.histMsgTimer);
+    if (msg) st.histMsgTimer = setTimeout(() => historyMsg(""), 12000);
+  }
+  function pcHandlesRemovals() {
+    const v = st.status?.version;
+    return !!v && v.localeCompare("1.7.0", undefined, { numeric: true }) >= 0;
+  }
+  async function sendHistoryRemoval(body) {
+    await drive("create_file", {
+      title: `history_remove_${Math.random().toString(36).slice(2, 10)}.json`, parentId: st.folder,
+      textContent: JSON.stringify(body), contentMimeType: "application/json", disableConversionToGoogleType: true,
+    });
+  }
+  function hideJobs(ids) {
+    const now = Date.now();
+    ids.forEach((id) => { st.hidden[id] = now; });
+    store.set("hiddenJobs", st.hidden);
+  }
+  async function removeJob(id, trashRenders, btn) {
+    btn.disabled = true;
+    const later = pcHandlesRemovals() ? "" : " Restart start_farm.bat on the PC so it drops it from its list too.";
+    try {
+      await sendHistoryRemoval({ ids: [id] });
+      let trashed = false;
+      if (trashRenders && st.outputs[id]) {
+        await drive("trash_file", { fileId: st.outputs[id].id });
+        delete st.outputs[id]; delete st.prev[id]; trashed = true;
+      }
+      hideJobs([id]);
+      st.confirmRemove = null; st.openPrev.delete(id);
+      historyMsg(`Removed ${id}${trashed ? " and moved its renders to your Drive trash" : ""}.${later}`, "ok");
+    } catch (e) {
+      btn.disabled = false;
+      historyMsg(errorCopy(e).msg, "bad");
+    }
+    renderHistory();
+  }
+  async function clearHistory() {
+    const h = visibleHistory();
+    if (!h.length) return;
+    if (!st.confirmClearHist) {
+      st.confirmClearHist = true; renderHistory();
+      clearTimeout(st.clearHistTimer);
+      st.clearHistTimer = setTimeout(() => { st.confirmClearHist = false; renderHistory(); }, 6000);
+      return;
+    }
+    clearTimeout(st.clearHistTimer);
+    st.confirmClearHist = false;
+    $("clearHistory").disabled = true;
+    try {
+      await sendHistoryRemoval({ ids: h.map((e) => e.id) });
+      hideJobs(h.map((e) => e.id));
+      st.openPrev.clear(); st.confirmRemove = null;
+      historyMsg(`Cleared ${h.length} finished job${h.length === 1 ? "" : "s"} from the list. Their renders are still in the output folder.` +
+        (pcHandlesRemovals() ? "" : " Restart start_farm.bat on the PC so it drops them too."), "ok");
+    } catch (e) { historyMsg(errorCopy(e).msg, "bad"); }
+    renderHistory();
+  }
+
   // -------- Blender version on the PC
   function renderBlender() {
     const w = st.status?.worker || {};
@@ -1246,6 +1339,9 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
     }
     if (a === "cancel") cancelJob(act.dataset.id, act);
     if (a === "remove") removeQueued(act.dataset.file, act.dataset.id, act);
+    if (a === "askRemove") { st.confirmRemove = act.dataset.id; renderHistory(); }
+    if (a === "keepJob") { st.confirmRemove = null; renderHistory(); }
+    if (a === "removeJob") removeJob(act.dataset.id, act.dataset.trash === "1", act);
     if (a === "dismiss") { st.announce = null; document.title = BASE_TITLE; renderBanner(); }
     if (a === "pick") {
       if (act.dataset.file) st.pick[act.dataset.key] = act.dataset.file; else delete st.pick[act.dataset.key];
@@ -1282,6 +1378,7 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
   $("jobForm").addEventListener("submit", submitJob);
   $("refreshBtn").addEventListener("click", () => refresh(true));
   $("clearQueue").addEventListener("click", clearQueue);
+  $("clearHistory").addEventListener("click", clearHistory);
   $("ntfyTopic").addEventListener("input", editNotify);
   $("discordHook").addEventListener("input", editNotify);
   $("ntfyNew").addEventListener("click", () => {

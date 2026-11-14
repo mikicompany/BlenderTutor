@@ -61,7 +61,7 @@ import zipfile
 import time
 import traceback
 
-VERSION = "1.6.0"
+VERSION = "1.7.0"
 ROLE = os.environ.get("FARM_ROLE", "watcher")
 SCRIPT = os.path.abspath(__file__)
 FOLDER = os.environ.get("FARM_FOLDER") or os.path.dirname(SCRIPT)
@@ -1079,6 +1079,7 @@ class Watcher:
             cur["log"] = list(tail)
             cur["elapsed"] = round(time.time() - t0)
             self.handle_test_requests()
+            self.handle_history_requests()
             ids = self.cancel_requests()
             if job["id"] in ids or "all" in ids:
                 log(f"cancel requested for {job['id']}")
@@ -1127,6 +1128,38 @@ class Watcher:
                 return json.load(fh)
         except (OSError, ValueError):
             return None
+
+    # -- finished-job list ---------------------------------------------------
+    def handle_history_requests(self):
+        """history_remove_*.json: {"ids": [...]} or {"all": true} removes finished jobs from the list."""
+        changed = False
+        for p in glob.glob(os.path.join(FOLDER, "history_remove_*.json")):
+            try:
+                with open(p, encoding="utf-8-sig") as fh:
+                    req = json.load(fh)
+            except (OSError, ValueError):
+                self.bad_reads[p] += 1
+                if self.bad_reads[p] < 6:
+                    continue   # still syncing
+                req = {}
+            try:
+                os.remove(p)
+            except OSError:
+                continue
+            if not isinstance(req, dict):
+                continue
+            before = len(self.state["history"])
+            if req.get("all") is True:
+                self.state["history"] = []
+            else:
+                ids = {str(i) for i in (req.get("ids") or []) if isinstance(i, (str, int))}
+                self.state["history"] = [h for h in self.state["history"] if h.get("id") not in ids]
+            removed = before - len(self.state["history"])
+            if removed:
+                log(f"removed {removed} finished job(s) from the list")
+                changed = True
+        if changed:
+            self.write_status(force=True)
 
     # -- Blender updates -----------------------------------------------------
     def set_update(self, **kw):
@@ -1269,6 +1302,7 @@ class Watcher:
         while True:
             try:
                 self.handle_test_requests()
+                self.handle_history_requests()
                 self.handle_update_request()   # only between jobs, never mid-render
                 cancels = self.cancel_requests()
                 jobs = self.read_jobs()
