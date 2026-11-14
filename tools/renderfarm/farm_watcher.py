@@ -55,7 +55,7 @@ import threading
 import time
 import traceback
 
-VERSION = "1.3.0"
+VERSION = "1.4.0"
 ROLE = os.environ.get("FARM_ROLE", "watcher")
 SCRIPT = os.path.abspath(__file__)
 FOLDER = os.environ.get("FARM_FOLDER") or os.path.dirname(SCRIPT)
@@ -276,6 +276,37 @@ def apply_device(scene, job):
     return notes
 
 
+def describe_cycles(scene):
+    """Say which device Cycles will really use: scene.cycles.device = GPU means
+    nothing unless a GPU is also enabled in this PC's Blender preferences."""
+    if scene.render.engine != "CYCLES":
+        return f"{scene.render.engine}", None
+    c = scene.cycles
+    where, warn = "CPU", None
+    if c.device == "GPU":
+        try:
+            prefs = bpy.context.preferences.addons["cycles"].preferences
+            t = prefs.compute_device_type
+            try:
+                prefs.refresh_devices()
+            except Exception:
+                pass
+            used = [d.name for d in prefs.get_devices_for_type(t) if d.use and d.type != "CPU"] if t != "NONE" else []
+            if used:
+                where = f"{t} {', '.join(used)}"
+            else:
+                warn = ("Rendering on the CPU: the file asks for GPU but no GPU is enabled in this PC's "
+                        "Blender preferences. Choose OptiX or CUDA in the manager.")
+        except Exception:
+            pass
+    extras = [f"{c.samples} samples"]
+    if getattr(c, "use_adaptive_sampling", False):
+        extras.append(f"noise threshold {c.adaptive_threshold:g}")
+    if getattr(c, "use_denoising", False):
+        extras.append("denoising")
+    return f"Cycles on {where} · " + ", ".join(extras), warn
+
+
 def render_role():
     job = json.loads(os.environ["FARM_JOB"])
     progress_path = os.environ["FARM_PROGRESS"]
@@ -313,12 +344,16 @@ def render_role():
         notes.append(f"EEVEE GPU: Vulkan device {job['eevee_device']}")
     notes += apply_device(scene, job)
     out_dir = apply_output(scene, job, blend_name)
+    device_info, device_warn = describe_cycles(scene)
+    if device_warn:
+        notes.append(device_warn)
 
     total = len(range(scene.frame_start, scene.frame_end + 1, max(1, scene.frame_step)))
     prog = {
         "blend": os.path.basename(bpy.data.filepath),
         "engine": scene.render.engine,
         "device": getattr(getattr(scene, "cycles", None), "device", None),
+        "device_info": device_info,
         "frame_start": scene.frame_start,
         "frame_end": scene.frame_end,
         "frame_step": scene.frame_step,
@@ -403,6 +438,7 @@ def render_role():
         dump()
 
     bpy.app.handlers.render_post.append(on_post)
+    print("*** FARM *** " + device_info, flush=True)
     for n in notes:
         print("*** FARM *** " + n, flush=True)
     print(f"*** FARM *** {prog['blend']}: frames {scene.frame_start}-{scene.frame_end} "

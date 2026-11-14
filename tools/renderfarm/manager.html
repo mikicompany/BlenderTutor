@@ -848,7 +848,7 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
         </div>
         ${total ? `<div><div class="strip" aria-hidden="true">${strip}</div>
           <div class="strip-scale"><span>${fs ?? ""}</span><span>${total > 240 ? "1 cell ≈ " + (total / 240).toFixed(1) + " frames" : ""}</span><span>${fe ?? ""}</span></div></div>` : ""}
-        <div class="small muted mono">${esc([p.engine, p.device, p.resolution, p.format].filter(Boolean).join(" · "))}${cur.elapsed != null ? " · " + dur(cur.elapsed) + " on this file" : ""}</div>
+        <div class="small muted mono">${esc([p.device_info || [p.engine, p.device].filter(Boolean).join(" · "), p.resolution, p.format].filter(Boolean).join(" · "))}${cur.elapsed != null ? " · " + dur(cur.elapsed) + " on this file" : ""}</div>
         ${(p.notes || []).length ? `<ul class="notes">${p.notes.map((n) => `<li>${esc(n)}</li>`).join("")}</ul>` : ""}
         ${(cur.log || []).length ? `<details class="log"${st.logOpen ? " open" : ""}><summary>Blender output (last ${cur.log.length} lines)</summary><pre class="logtail">${esc(cur.log.join("\n"))}</pre></details>` : ""}
       </div>`);
