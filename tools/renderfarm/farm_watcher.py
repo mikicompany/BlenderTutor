@@ -42,6 +42,7 @@ import bpy
 import collections
 import datetime
 import glob
+import hashlib
 import json
 import os
 import platform
@@ -52,19 +53,26 @@ import subprocess
 import sys
 import tempfile
 import threading
+import urllib.error
 import urllib.parse
 import urllib.request
 import uuid
+import zipfile
 import time
 import traceback
 
-VERSION = "1.5.0"
+VERSION = "1.6.0"
 ROLE = os.environ.get("FARM_ROLE", "watcher")
 SCRIPT = os.path.abspath(__file__)
 FOLDER = os.environ.get("FARM_FOLDER") or os.path.dirname(SCRIPT)
 STATUS_PATH = os.path.join(FOLDER, "farm_status.json")
 CONFIG_PATH = os.path.join(FOLDER, "farm_config.json")
 MANAGER_URL = "https://claude.ai/artifact/E6NgRqV79NRZ5H8zeN8Biu"
+UPDATE_REQUEST = os.path.join(FOLDER, "update_blender.json")
+# Per-PC state lives outside Drive: the Blender builds and which one renders.
+LOCAL_DIR = os.path.join(os.environ.get("LOCALAPPDATA") or os.path.expanduser("~"), "MikiFarm")
+BLENDER_OVERRIDE = os.path.join(LOCAL_DIR, "blender_path.txt")
+RELEASE_URL = os.environ.get("FARM_RELEASE_URL", "https://download.blender.org/release")
 OUTPUT_ROOT = os.path.join(FOLDER, "output")
 ARCHIVE_DIR = os.path.join(FOLDER, "archive", "jobs")
 
@@ -670,6 +678,71 @@ def _dur(sec):
     return f"{h}h {m:02d}m" if h else f"{m}m {s:02d}s" if m else f"{s}s"
 
 
+# ---------------------------------------------------------------------------
+# Blender updates: portable builds from download.blender.org, checked against
+# the published SHA-256, unpacked under %LOCALAPPDATA%\\MikiFarm\\blender.
+# ---------------------------------------------------------------------------
+
+def blender_version_of(exe):
+    try:
+        r = subprocess.run([exe, "--version"], capture_output=True, text=True, encoding="utf-8",
+                           errors="replace", timeout=90)
+        m = re.search(r"Blender\s+(\d+\.\d+(?:\.\d+)?(?:\s+\w+)?)", r.stdout or "")
+        return m.group(1).strip() if m else None
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def platform_suffix():
+    if sys.platform == "win32":
+        return "windows-arm64.zip" if platform.machine().lower() in ("arm64", "aarch64") else "windows-x64.zip"
+    if sys.platform == "darwin":
+        return "macos-arm64.dmg"   # not supported for automatic install
+    return "linux-x64.tar.xz"
+
+
+def _fetch_text(url):
+    req = urllib.request.Request(url, headers={"User-Agent": "MikiButlerRenderfarm"})
+    with urllib.request.urlopen(req, timeout=60) as r:
+        return r.read().decode("utf-8", "replace")
+
+
+def find_release(series):
+    """Newest blender-<series>.N build for this PC: (version, zip name, zip url, sha256 or None)."""
+    if not re.fullmatch(r"\d+\.\d+", series):
+        raise ValueError(f"{series!r} is not a Blender version like 5.3")
+    suffix = platform_suffix()
+    if not suffix.endswith(".zip"):
+        raise RuntimeError("automatic updates are only set up for Windows")
+    base = f"{RELEASE_URL}/Blender{series}/"
+    try:
+        html = _fetch_text(base)
+    except urllib.error.HTTPError as e:
+        if e.code == 404:
+            raise RuntimeError(f"Blender {series} is not on blender.org's release page yet") from e
+        raise
+    names = set(re.findall(rf"blender-{re.escape(series)}\.(\d+)-{re.escape(suffix)}", html))
+    if not names:
+        raise RuntimeError(f"no {suffix} download for Blender {series} on blender.org")
+    patch = max(int(n) for n in names)
+    version = f"{series}.{patch}"
+    zip_name = f"blender-{version}-{suffix}"
+    sha = None
+    for cand in (f"blender-{version}.sha256", f"{zip_name}.sha256"):
+        if cand in html:
+            try:
+                for line in _fetch_text(base + cand).splitlines():
+                    parts = line.split()
+                    if len(parts) >= 2 and parts[-1].lstrip("*") == zip_name:
+                        sha = parts[0].lower()
+                        break
+            except Exception:  # noqa: BLE001
+                pass
+        if sha:
+            break
+    return version, zip_name, base + zip_name, sha
+
+
 class PreviewMaker:
     """Turns the frames a render drops into its temp folder into Drive previews."""
 
@@ -728,14 +801,26 @@ class PreviewMaker:
 
 class Watcher:
     def __init__(self):
-        self.blender = bpy.app.binary_path
+        self.default_blender = bpy.app.binary_path
+        self.blender = self.default_blender
+        self.blender_version = bpy.app.version_string
+        try:
+            with open(BLENDER_OVERRIDE, encoding="utf-8") as fh:
+                alt = fh.read().strip()
+            if alt and os.path.isfile(alt):
+                self.blender = alt
+                self.blender_version = blender_version_of(alt) or "unknown"
+        except OSError:
+            pass
         self.state = {
             "farm": "Miki Butler Renderfarm",
             "version": VERSION,
             "worker": {
                 "host": socket.gethostname(),
                 "os": platform.platform(),
-                "blender": bpy.app.version_string,
+                "blender": self.blender_version,
+                "blender_default": bpy.app.version_string,
+                "blender_override": self.blender != self.default_blender,
                 "folder": FOLDER,
                 "started": now_iso(),
                 "heartbeat": None,
@@ -1043,12 +1128,130 @@ class Watcher:
         except (OSError, ValueError):
             return None
 
+    # -- Blender updates -----------------------------------------------------
+    def set_update(self, **kw):
+        self.state["update"] = dict(self.state.get("update") or {}, at=now_iso(), **kw)
+        self.write_status(force=True)
+
+    def use_blender(self, exe, version):
+        self.blender = exe
+        self.blender_version = version
+        w = self.state["worker"]
+        w["blender"] = version
+        w["blender_override"] = exe != self.default_blender
+        eevee, probe = detect_eevee_devices(self.blender)
+        self.state["eevee_devices"], self.state["eevee_probe"] = eevee, probe
+
+    def handle_update_request(self):
+        if not os.path.isfile(UPDATE_REQUEST):
+            return
+        try:
+            with open(UPDATE_REQUEST, encoding="utf-8-sig") as fh:
+                req = json.load(fh)
+        except (OSError, ValueError):
+            self.bad_reads[UPDATE_REQUEST] += 1
+            if self.bad_reads[UPDATE_REQUEST] < 6:
+                return   # still syncing
+            req = {}
+        try:
+            os.remove(UPDATE_REQUEST)
+        except OSError:
+            return
+        action = str((req or {}).get("action") or "")
+        if action == "revert":
+            try:
+                os.remove(BLENDER_OVERRIDE)
+            except OSError:
+                pass
+            self.use_blender(self.default_blender, bpy.app.version_string)
+            log(f"Blender: back to {bpy.app.version_string}")
+            self.set_update(state="done", version=None, error=None, progress=None,
+                            message=f"Rendering with Blender {bpy.app.version_string} again")
+            return
+        if action != "install":
+            self.set_update(state="failed", error="unknown update request")
+            return
+        series = str(req.get("series") or "")
+        try:
+            self.install_blender(series)
+        except Exception as e:  # noqa: BLE001
+            log(f"Blender update failed: {e}")
+            self.set_update(state="failed", error=str(e)[:300])
+
+    def install_blender(self, series):
+        log(f"Blender update: looking for the newest {series} build")
+        self.set_update(state="checking", series=series, version=None, error=None, progress=None, message=None)
+        version, zip_name, url, sha = find_release(series)
+        if not sha:
+            raise RuntimeError("blender.org has no checksum for this download, so it was not installed")
+        install_root = os.path.join(LOCAL_DIR, "blender")
+        folder = os.path.join(install_root, zip_name[:-4])
+        exe = os.path.join(folder, "blender.exe")
+        if not os.path.isfile(exe):
+            os.makedirs(os.path.join(LOCAL_DIR, "downloads"), exist_ok=True)
+            free = shutil.disk_usage(LOCAL_DIR).free
+            if free < 4 * 1024 ** 3:
+                raise RuntimeError(f"only {free / 1024 ** 3:.1f} GB free on the system drive; 4 GB needed")
+            zpath = os.path.join(LOCAL_DIR, "downloads", zip_name)
+            log(f"Blender update: downloading {zip_name}")
+            self.set_update(state="downloading", version=version, progress=0)
+            h = hashlib.sha256()
+            req = urllib.request.Request(url, headers={"User-Agent": "MikiButlerRenderfarm"})
+            with urllib.request.urlopen(req, timeout=60) as r, open(zpath + ".part", "wb") as out:
+                total = int(r.headers.get("Content-Length") or 0)
+                got, last = 0, 0
+                while True:
+                    chunk = r.read(1024 * 1024)
+                    if not chunk:
+                        break
+                    out.write(chunk)
+                    h.update(chunk)
+                    got += len(chunk)
+                    if time.time() - last > 10:
+                        last = time.time()
+                        pct = round(got * 100 / total) if total else None
+                        self.state["update"].update(progress=pct, mb=round(got / 1048576))
+                        self.write_status(force=True)
+            if h.hexdigest() != sha:
+                os.remove(zpath + ".part")
+                raise RuntimeError("the download did not match blender.org's checksum, so it was thrown away")
+            os.replace(zpath + ".part", zpath)
+            log("Blender update: checksum OK, unpacking")
+            self.set_update(state="unpacking", progress=100)
+            tmp_dir = os.path.join(install_root, "_unpacking")
+            shutil.rmtree(tmp_dir, ignore_errors=True)
+            with zipfile.ZipFile(zpath) as z:
+                for m in z.namelist():   # refuse paths that escape the folder
+                    if m.startswith(("/", "\\")) or ".." in m.replace("\\", "/").split("/"):
+                        raise RuntimeError("the download contains unsafe file paths")
+                z.extractall(tmp_dir)
+            inner = os.path.join(tmp_dir, zip_name[:-4])
+            if not os.path.isfile(os.path.join(inner, "blender.exe")):
+                raise RuntimeError("blender.exe was not found in the download")
+            shutil.rmtree(folder, ignore_errors=True)
+            os.replace(inner, folder)
+            shutil.rmtree(tmp_dir, ignore_errors=True)
+            try:
+                os.remove(zpath)
+            except OSError:
+                pass
+        self.set_update(state="testing", version=version)
+        got_version = blender_version_of(exe)
+        if not got_version or not got_version.startswith(series):
+            raise RuntimeError(f"the new Blender did not start correctly (reported {got_version!r})")
+        os.makedirs(LOCAL_DIR, exist_ok=True)
+        with open(BLENDER_OVERRIDE, "w", encoding="utf-8") as fh:
+            fh.write(exe)
+        self.use_blender(exe, got_version)
+        log(f"Blender update: renders now use Blender {got_version} ({exe})")
+        self.set_update(state="done", version=got_version, message=f"Renders now use Blender {got_version}")
+
     # -- main loop -----------------------------------------------------------
     def run(self):
         log("=" * 68)
         log(f"*** MIKI BUTLER RENDERFARM {VERSION} ***")
         log(f"Watching: {FOLDER}")
-        log(f"Blender:  {bpy.app.version_string}  ({self.blender})")
+        log(f"Blender:  {self.blender_version}  ({self.blender})")
         self.state["devices"] = detect_devices()
         for d in self.state["devices"]:
             log(f"Device:   [{d['type']}] {d['name']}")
@@ -1066,6 +1269,7 @@ class Watcher:
         while True:
             try:
                 self.handle_test_requests()
+                self.handle_update_request()   # only between jobs, never mid-render
                 cancels = self.cancel_requests()
                 jobs = self.read_jobs()
                 keep = []

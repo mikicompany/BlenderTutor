@@ -34,6 +34,14 @@ Discord webhook. Both are set in the manager's Notifications panel, which writes
 The PC sends them, so they arrive with the page closed. `notify_test*.txt` in the
 folder sends a test message.
 
+The manager can also update Blender on the PC: `update_blender.json`
+(`{"action": "install", "series": "5.3"}` or `{"action": "revert"}`) makes the
+watcher download the newest portable build of that version from
+download.blender.org, check it against the published SHA-256, unpack it under
+`%LOCALAPPDATA%\MikiFarm\blender\` and render with it from the next job. The
+choice is kept in `%LOCALAPPDATA%\MikiFarm\blender_path.txt`; the Blender in
+`start_farm.bat` is left alone and still runs the watcher.
+
 Each sync hop usually takes seconds and can take a minute or so.
 
 `cancel_<id>.txt` stops a running job. Removing a queued job in the manager moves

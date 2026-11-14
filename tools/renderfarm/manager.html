@@ -130,6 +130,7 @@ input:disabled, select:disabled { opacity: .55; }
 .btn.small { padding: 4px 10px; font-size: 12px; }
 .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
 .toast { font-size: 13px; }
+.panel > p.toast { margin: 0; }
 .toast.ok { color: var(--ok); }
 .toast.bad { color: var(--bad); }
 
@@ -291,6 +292,18 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
           <span class="toast" id="toast" role="status"></span>
         </div>
       </form>
+
+      <section class="panel" id="blenderPanel">
+        <div class="panel-head"><h2>Blender on the render PC</h2><span class="small muted mono" id="blenderNow"></span></div>
+        <div class="folderset">
+          <label class="label" for="blenderSeries" style="flex:none">Version</label>
+          <input type="text" id="blenderSeries" value="5.3" inputmode="decimal" spellcheck="false" style="flex:0 1 90px" aria-describedby="blenderHint">
+          <button type="button" class="btn" id="blenderInstall">Install</button>
+          <button type="button" class="btn" id="blenderRevert" hidden></button>
+        </div>
+        <p class="toast" id="blenderMsg" role="status"></p>
+        <p class="hint" id="blenderHint">The PC downloads the official portable build from blender.org, checks its checksum and renders with it from the next job. Your installed Blender stays as it is. Updates run between jobs, never during a render.</p>
+      </section>
 
       <section class="panel" id="notifyPanel">
         <div class="panel-head"><h2>Notifications</h2><span class="small muted" id="notifyState"></span></div>
@@ -726,7 +739,7 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
 
   // ------------------------------------------------------------------ render
   function renderAll() {
-    renderWorker(); renderBanner(); renderForm(); renderNow(); renderQueue(); renderHistory(); renderSetup(); renderNotify();
+    renderWorker(); renderBanner(); renderForm(); renderNow(); renderQueue(); renderHistory(); renderSetup(); renderNotify(); renderBlender();
   }
 
   function renderWorker() {
@@ -1125,6 +1138,49 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
     } catch (e) { msg(errorCopy(e).msg, "bad"); }
   }
 
+  // -------- Blender version on the PC
+  function renderBlender() {
+    const w = st.status?.worker || {};
+    $("blenderNow").textContent = w.blender ? "renders with " + w.blender : "";
+    const v = st.status?.version;
+    const old = st.status && (!v || v.localeCompare("1.6.0", undefined, { numeric: true }) < 0);
+    const pending = st.files.some((f) => f.title === "update_blender.json");
+    const u = st.status?.update;
+    const busy = pending || (u && ["checking", "downloading", "unpacking", "testing"].includes(u.state));
+    $("blenderInstall").disabled = st.conn !== "ok" || busy || old || !st.status;
+    const rv = $("blenderRevert");
+    rv.hidden = !w.blender_override;
+    rv.textContent = "Switch back to " + (w.blender_default || "the installed Blender");
+    rv.disabled = st.conn !== "ok" || busy;
+    let text = "", kind = "";
+    if (!st.status) text = "";
+    else if (old) { text = "Restart start_farm.bat on the PC to turn on Blender updates (it is running an older version)."; kind = "bad"; }
+    else if (pending) text = "Request sent. Waiting for the PC to pick it up" + (st.status.current ? " after the current render." : "…");
+    else if (u) {
+      const map = {
+        checking: "Looking for the newest build on blender.org…",
+        downloading: `Downloading Blender ${u.version || ""}${u.progress != null ? ` · ${u.progress}%` : u.mb ? ` · ${u.mb} MB` : ""}`,
+        unpacking: `Unpacking Blender ${u.version || ""}…`,
+        testing: `Checking that Blender ${u.version || ""} starts…`,
+        done: u.message || "Done.",
+        failed: "Update failed: " + (u.error || "unknown error"),
+      };
+      text = (map[u.state] || u.state) + (u.at ? " · " + ago(u.at) : "");
+      kind = u.state === "failed" ? "bad" : u.state === "done" ? "ok" : "";
+    }
+    $("blenderMsg").textContent = text; $("blenderMsg").className = "toast " + kind; $("blenderMsg").hidden = !text;
+  }
+  async function requestBlender(body, btn) {
+    btn.disabled = true;
+    try {
+      await drive("create_file", { title: "update_blender.json", parentId: st.folder, textContent: JSON.stringify(body), contentMimeType: "application/json", disableConversionToGoogleType: true });
+      await refresh(true);
+    } catch (e) {
+      $("blenderMsg").hidden = false; $("blenderMsg").textContent = errorCopy(e).msg; $("blenderMsg").className = "toast bad";
+      btn.disabled = false;
+    }
+  }
+
   function queueMsg(msg, kind) {
     const el = $("queueMsg");
     el.hidden = !msg; el.textContent = msg || ""; el.className = "toast " + (kind || "");
@@ -1233,6 +1289,12 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
     $("ntfyTopic").value = "miki-farm-" + r; editNotify();
   });
   $("notifySave").addEventListener("click", saveNotify);
+  $("blenderInstall").addEventListener("click", () => {
+    const series = $("blenderSeries").value.trim();
+    if (!/^\d+\.\d+$/.test(series)) { $("blenderMsg").hidden = false; $("blenderMsg").textContent = "Enter a version like 5.3."; $("blenderMsg").className = "toast bad"; return; }
+    requestBlender({ action: "install", series }, $("blenderInstall"));
+  });
+  $("blenderRevert").addEventListener("click", () => requestBlender({ action: "revert" }, $("blenderRevert")));
   $("notifyTest").addEventListener("click", testNotify);
   $("folderSave").addEventListener("click", () => {
     let v = $("folderId").value.trim();
