@@ -197,6 +197,16 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
         </div>
 
         <div class="field">
+          <span class="label">Render engine</span>
+          <div class="seg" id="engines" role="group" aria-label="Render engine">
+            <button type="button" data-v="CYCLES">Cycles<span class="sub">path tracing</span></button>
+            <button type="button" data-v="EEVEE">EEVEE<span class="sub">real-time</span></button>
+            <button type="button" data-v="FILE">File's engine<span class="sub">as saved</span></button>
+          </div>
+          <p class="hint" id="engineHint"></p>
+        </div>
+
+        <div class="field" id="deviceField">
           <span class="label"><span>Render device</span><span id="devSource"></span></span>
           <div class="seg" id="backends" role="group" aria-label="Render device"></div>
           <div class="devlist" id="devices"></div>
@@ -310,6 +320,7 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
   const STATUS_EVERY = 20000;
   const BACKEND_LABEL = { OPTIX: "OptiX", CUDA: "CUDA", HIP: "HIP", ONEAPI: "oneAPI", METAL: "Metal", CPU: "CPU", FILE: "File's setting" };
   const BACKEND_SUB = { OPTIX: "NVIDIA RTX", CUDA: "NVIDIA", HIP: "AMD", ONEAPI: "Intel Arc", METAL: "Apple", CPU: "processor", FILE: "as saved" };
+  const ENGINE_LABEL = { CYCLES: "Cycles", EEVEE: "EEVEE" };
   const FORMAT_LABEL = { PNG: "PNG sequence", JPEG: "JPEG sequence", OPEN_EXR: "EXR sequence", OPEN_EXR_MULTILAYER: "Multilayer EXR", TIFF: "TIFF sequence", FFMPEG: "MP4 video", FILE: "file's own format" };
 
   const $ = (id) => document.getElementById(id);
@@ -337,7 +348,7 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
   };
 
   const form = Object.assign({
-    blend: "*", backend: null, devices: null, frameMode: "range",
+    blend: "*", engine: "FILE", backend: null, devices: null, frameMode: "range",
     start: 1, end: 250, step: 1, samples: "", resPct: "", format: "PNG", headless: true,
   }, store.get("form", {}));
 
@@ -479,6 +490,7 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
     if (f.mode === "single") parts.push("frame " + f.start);
     else if (f.mode === "range") parts.push(`frames ${f.start}–${f.end}` + (f.step > 1 ? ` every ${f.step}` : ""));
     else parts.push("file's frames");
+    if (ENGINE_LABEL[j.engine]) parts.push(ENGINE_LABEL[j.engine]);
     if (j.compute && j.compute !== "FILE") parts.push(BACKEND_LABEL[j.compute] || j.compute);
     if (j.samples) parts.push(j.samples + " samples");
     if (j.resolution_pct) parts.push(j.resolution_pct + "%");
@@ -493,6 +505,7 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
   }
   function buildJob() {
     const devs = (st.status?.devices || []).filter((d) => d.type === form.backend);
+    const eevee = form.engine === "EEVEE";
     let chosen = [];
     if (form.devices && devs.length && form.backend !== "CPU" && form.backend !== "FILE") {
       chosen = devs.filter((d) => form.devices.includes(d.id)).map((d) => d.id);
@@ -505,8 +518,10 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
       id: newJobId(),
       created: new Date().toISOString(),
       blend: form.blend,
-      compute: form.backend || "FILE",
-      devices: chosen,
+      engine: form.engine || "FILE",
+      // EEVEE draws on the PC's display GPU, so there is no device to pick.
+      compute: eevee ? "FILE" : form.backend || "FILE",
+      devices: eevee ? [] : chosen,
       frames,
       samples: form.samples ? parseInt(form.samples, 10) : null,
       resolution_pct: form.resPct ? parseInt(form.resPct, 10) : null,
@@ -586,6 +601,15 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
       ? `Uploaded ${ago(picked.modifiedTime)}${picked.fileSize ? " · " + (picked.fileSize / 1048576).toFixed(1) + " MB" : ""}`
       : blends.length ? "Each file renders in turn, with these settings." : "Drop .blend files into the Drive folder and they show up here.";
 
+    // engine
+    if (!["CYCLES", "EEVEE", "FILE"].includes(form.engine)) form.engine = "FILE";
+    setPressed("engines", form.engine);
+    $("engineHint").textContent = form.engine === "EEVEE"
+      ? "Fast real-time renders. EEVEE uses the PC's display GPU and the samples below set its render samples."
+      : form.engine === "CYCLES" ? "Switches every file to Cycles for this render. The file itself is not changed."
+      : "Each file renders with the engine it was saved with.";
+    $("deviceField").hidden = form.engine === "EEVEE";
+
     // devices
     const backs = availableBackends();
     if (!form.backend || !backs.includes(form.backend)) form.backend = backs[0];
@@ -611,7 +635,8 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
       ? "The render PC has not reported its hardware yet, so every device type is offered. Pick the one your GPU uses."
       : form.backend === "FILE" ? "Uses the device saved in each .blend file and in the PC's Blender preferences."
       : form.backend === "CPU" ? "Renders Cycles on the processor. Slower, but needs no GPU."
-      : "GPU choice applies to Cycles. EEVEE always draws on the PC's display GPU.";
+      : form.engine === "CYCLES" ? "Renders Cycles on the chosen GPUs."
+      : "Applies when a file renders with Cycles. Files saved with EEVEE use the PC's display GPU.";
 
     // frames
     setPressed("frameMode", form.frameMode);
@@ -829,6 +854,7 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
     if (seg) {
       const g = seg.parentElement.id, v = seg.dataset.v;
       if (g === "backends") { form.backend = v; form.devices = null; }
+      if (g === "engines") form.engine = v;
       if (g === "frameMode") form.frameMode = v;
       if (g === "formats") form.format = v;
       saveForm(); renderForm(); return;

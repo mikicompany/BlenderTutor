@@ -18,6 +18,7 @@ Job file (all fields optional except id):
 {
   "id": "20261114-153012-ab12",
   "blend": "shot01.blend",        # a .blend in the folder, or "*" for all
+  "engine": "CYCLES",             # CYCLES | EEVEE | FILE (keep the file's engine)
   "compute": "OPTIX",             # OPTIX | CUDA | HIP | ONEAPI | METAL | CPU | FILE
   "devices": ["<device id>", ...],# empty = every device of that type
   "frames": {"mode": "range", "start": 1, "end": 250, "step": 1},
@@ -52,7 +53,7 @@ import threading
 import time
 import traceback
 
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 ROLE = os.environ.get("FARM_ROLE", "watcher")
 SCRIPT = os.path.abspath(__file__)
 FOLDER = os.environ.get("FARM_FOLDER") or os.path.dirname(SCRIPT)
@@ -65,6 +66,9 @@ STATUS_IDLE = 60         # rewrite status (heartbeat) this often while idle
 STATUS_BUSY = 10         # ...and this often while rendering
 HISTORY_KEEP = 25
 GPU_TYPES = ("OPTIX", "CUDA", "HIP", "ONEAPI", "METAL")
+ENGINES = ("CYCLES", "EEVEE", "FILE")
+# EEVEE's identifier changed between versions: BLENDER_EEVEE_NEXT in 4.2-4.x, BLENDER_EEVEE in 5.x.
+EEVEE_IDS = ("BLENDER_EEVEE", "BLENDER_EEVEE_NEXT")
 FORMATS = ("PNG", "JPEG", "OPEN_EXR", "OPEN_EXR_MULTILAYER", "TIFF", "FFMPEG", "FILE")
 
 
@@ -99,6 +103,9 @@ def normalise_job(raw, fallback_id):
     if not isinstance(raw, dict):
         raise ValueError("job file is not a JSON object")
     job_id = re.sub(r"[^A-Za-z0-9_-]", "", str(raw.get("id") or fallback_id))[:48] or fallback_id
+    engine = str(raw.get("engine") or "FILE").upper()
+    if engine not in ENGINES:
+        raise ValueError(f"unknown render engine {engine!r}")
     compute = str(raw.get("compute") or "FILE").upper()
     if compute not in GPU_TYPES + ("CPU", "FILE"):
         raise ValueError(f"unknown compute type {compute!r}")
@@ -134,6 +141,7 @@ def normalise_job(raw, fallback_id):
         "id": job_id,
         "created": raw.get("created"),
         "blend": blend,
+        "engine": engine,
         "compute": compute,
         "devices": [str(d) for d in devices][:16],
         "frames": {"mode": mode, "start": start, "end": end, "step": step},
@@ -196,6 +204,22 @@ def apply_output(scene, job, blend_name):
     r.use_overwrite = True
     r.use_placeholder = False
     return out_dir
+
+
+def apply_engine(scene, job):
+    want = job.get("engine", "FILE")
+    if want == "CYCLES":
+        scene.render.engine = "CYCLES"
+    elif want == "EEVEE":
+        for ident in EEVEE_IDS:
+            try:
+                scene.render.engine = ident
+                break
+            except (TypeError, ValueError):
+                continue
+        else:
+            return [f"EEVEE is not available in Blender {bpy.app.version_string}, kept {scene.render.engine}"]
+    return []
 
 
 def apply_device(scene, job):
@@ -270,6 +294,7 @@ def render_role():
             ee.taa_render_samples = job["samples"]
     if job["resolution_pct"]:
         scene.render.resolution_percentage = job["resolution_pct"]
+    notes += apply_engine(scene, job)
     notes += apply_device(scene, job)
     out_dir = apply_output(scene, job, blend_name)
 

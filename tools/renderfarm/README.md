@@ -5,7 +5,7 @@ Drive folder `Work/Renderfarm`.
 
 | File | Where it runs | What it does |
 |---|---|---|
-| `manager.html` | published as a claude.ai artifact | The online manager: choose the .blend, GPU, frames, samples, resolution, output format and headless/visible, then watch progress, the queue and finished jobs. It reads and writes the Drive folder through the Google Drive connector. |
+| `manager.html` | published as a claude.ai artifact | The online manager: choose the .blend, render engine (Cycles or EEVEE), GPU, frames, samples, resolution, output format and headless/visible, then watch progress, the queue and finished jobs. It reads and writes the Drive folder through the Google Drive connector. |
 | `farm_watcher.py` | render PC, inside Blender's own Python | Watches the folder for `job_*.json`, renders each job in its own Blender process and writes `farm_status.json` (heartbeat, GPUs, live progress, queue, history). |
 | `start_farm.bat` | render PC | Launches the watcher with `blender -b --factory-startup` and restarts it if it stops. Edit the Blender path and folder at the top. |
 
@@ -29,6 +29,7 @@ its job file to the Drive trash. The old trigger still works: an empty
 {
   "id": "20261114-153012-ab12",
   "blend": "shot01.blend",
+  "engine": "CYCLES",
   "compute": "OPTIX",
   "devices": [],
   "frames": {"mode": "range", "start": 1, "end": 250, "step": 1},
@@ -40,6 +41,7 @@ its job file to the Drive trash. The old trigger still works: an empty
 ```
 
 - `blend`: a file name in the folder, or `*` for every .blend.
+- `engine`: `CYCLES`, `EEVEE`, or `FILE` (keep the file's own engine). The file on disk is never changed.
 - `compute`: `OPTIX`, `CUDA`, `HIP`, `ONEAPI`, `METAL`, `CPU`, or `FILE` (keep the file's own setting).
 - `devices`: Cycles device ids from `farm_status.json`. Empty means every device of that type.
 - `frames.mode`: `file`, `range` or `single`.
