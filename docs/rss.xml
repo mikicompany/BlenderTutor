@@ -5,8 +5,15 @@
     <link>https://www.blendertutoring.com/blog</link>
     <description>Practical Blender guides for beginners and game artists.</description>
     <language>en</language>
-    <lastBuildDate>Thu, 12 Nov 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 14 Nov 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://www.blendertutoring.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Ucupaint: Layer-Based Texture Painting in Blender</title>
+      <link>https://www.blendertutoring.com/blog/ucupaint-texture-painting</link>
+      <guid isPermaLink="true">https://www.blendertutoring.com/blog/ucupaint-texture-painting</guid>
+      <pubDate>Sat, 14 Nov 2026 00:00:00 GMT</pubDate>
+      <description>Blender's built-in texture paint is one image and a brush. Ucupaint is a free add-on that adds a full layer-based painting system — masks, adjustment layers, normals and baking. What it is, why it matters, and how to start.</description>
+    </item>
     <item>
       <title>Grease Pencil in Blender: The Complete Guide</title>
       <link>https://www.blendertutoring.com/blog/grease-pencil-in-blender</link>
