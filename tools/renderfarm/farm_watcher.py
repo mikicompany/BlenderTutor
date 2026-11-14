@@ -21,6 +21,7 @@ Job file (all fields optional except id):
   "engine": "CYCLES",             # CYCLES | EEVEE | FILE (keep the file's engine)
   "compute": "OPTIX",             # OPTIX | CUDA | HIP | ONEAPI | METAL | CPU | FILE
   "devices": ["<device id>", ...],# empty = every device of that type
+  "eevee_device": "10de/2684/0",  # EEVEE GPU from farm_status.json; null = display GPU
   "frames": {"mode": "range", "start": 1, "end": 250, "step": 1},
                                   # mode: file | range | single (uses "start")
   "samples": 256,                 # null = keep the file's
@@ -53,7 +54,7 @@ import threading
 import time
 import traceback
 
-VERSION = "1.1.0"
+VERSION = "1.2.0"
 ROLE = os.environ.get("FARM_ROLE", "watcher")
 SCRIPT = os.path.abspath(__file__)
 FOLDER = os.environ.get("FARM_FOLDER") or os.path.dirname(SCRIPT)
@@ -109,6 +110,13 @@ def normalise_job(raw, fallback_id):
     compute = str(raw.get("compute") or "FILE").upper()
     if compute not in GPU_TYPES + ("CPU", "FILE"):
         raise ValueError(f"unknown compute type {compute!r}")
+    eevee_device = raw.get("eevee_device")
+    if eevee_device is not None and eevee_device != "":
+        eevee_device = str(eevee_device).strip()
+        if not re.fullmatch(r"\d{1,2}|[0-9A-Fa-f]{1,8}/[0-9A-Fa-f]{1,8}/[0-9A-Fa-f]{1,8}", eevee_device):
+            raise ValueError(f"eevee_device {eevee_device!r} is not a GPU index or vendor/device/id")
+    else:
+        eevee_device = None
     devices = raw.get("devices") or []
     if not isinstance(devices, list):
         devices = []
@@ -144,6 +152,7 @@ def normalise_job(raw, fallback_id):
         "engine": engine,
         "compute": compute,
         "devices": [str(d) for d in devices][:16],
+        "eevee_device": eevee_device,
         "frames": {"mode": mode, "start": start, "end": end, "step": step},
         "samples": _int_or_none(raw.get("samples"), lo=1, hi=1_000_000),
         "resolution_pct": _int_or_none(raw.get("resolution_pct"), lo=1, hi=1000),
@@ -295,6 +304,8 @@ def render_role():
     if job["resolution_pct"]:
         scene.render.resolution_percentage = job["resolution_pct"]
     notes += apply_engine(scene, job)
+    if job.get("engine") == "EEVEE" and job.get("eevee_device"):
+        notes.append(f"EEVEE GPU: Vulkan device {job['eevee_device']}")
     notes += apply_device(scene, job)
     out_dir = apply_output(scene, job, blend_name)
 
@@ -425,6 +436,40 @@ def detect_devices():
                 found.append({"id": d.id, "name": d.name, "type": t})
     found.append({"id": "CPU", "name": cpu_name(), "type": "CPU", "threads": os.cpu_count()})
     return found
+
+
+_LOG_LINE = re.compile(r"^\s*\d\d:\d\d\.\d+|\|")
+_HEX_ID = re.compile(r"\b([0-9A-Fa-f]{1,8}/[0-9A-Fa-f]{1,8}/[0-9A-Fa-f]{1,8})\b")
+
+
+def parse_gpu_device_help(text):
+    """Read the GPU list printed by `blender --gpu-backend vulkan --gpu-device help`."""
+    found = []
+    for line in text.splitlines():
+        if _LOG_LINE.search(line) or re.search(r"warning|error|usage|blender \d", line, re.I):
+            continue
+        m = re.match(r"^\s*\[?(\d{1,2})\]?\s*[:.)\]-]\s*(.+?)\s*$", line)
+        if not m:
+            continue
+        rest = m.group(2)
+        hexid = _HEX_ID.search(rest)
+        name = _HEX_ID.sub("", rest).strip(" -:[](),") or rest
+        found.append({"index": int(m.group(1)), "id": hexid.group(1) if hexid else None, "name": name})
+    return found
+
+
+def detect_eevee_devices(blender):
+    """EEVEE can only be pointed at a GPU through Vulkan (Blender 5.x --gpu-device)."""
+    cmd = [blender, "-b", "--factory-startup", "--gpu-backend", "vulkan", "--gpu-device", "help"]
+    try:
+        r = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8",
+                           errors="replace", timeout=120)
+        out = (r.stdout or "") + "\n" + (r.stderr or "")
+    except Exception as e:  # noqa: BLE001 - report any launch problem
+        return [], f"could not ask Blender for its Vulkan GPUs: {e}"
+    devs = parse_gpu_device_help(out)
+    tail = "\n".join(l for l in out.splitlines() if l.strip())[-1200:]
+    return devs, tail
 
 
 class Watcher:
@@ -593,6 +638,8 @@ class Watcher:
         cmd = [self.blender]
         if job["headless"]:
             cmd.append("-b")
+        if job.get("engine") == "EEVEE" and job.get("eevee_device"):
+            cmd += ["--gpu-backend", "vulkan", "--gpu-device", job["eevee_device"]]
         cmd += [blend, "--python-exit-code", "3", "-P", SCRIPT]
         log(f"-> {name}")
         out_dir = os.path.join(OUTPUT_ROOT, job["id"])
@@ -690,6 +737,13 @@ class Watcher:
         self.state["devices"] = detect_devices()
         for d in self.state["devices"]:
             log(f"Device:   [{d['type']}] {d['name']}")
+        eevee, probe = detect_eevee_devices(self.blender)
+        self.state["eevee_devices"] = eevee
+        self.state["eevee_probe"] = probe
+        for d in eevee:
+            log(f"EEVEE:    [{d['index']}] {d['name']}" + (f"  ({d['id']})" if d["id"] else ""))
+        if not eevee:
+            log("EEVEE:    no selectable GPUs reported; EEVEE uses the display GPU")
         log("Queue jobs from the online Render Farm Manager, or drop render_<samples>.txt here.")
         log("=" * 68)
         os.makedirs(OUTPUT_ROOT, exist_ok=True)

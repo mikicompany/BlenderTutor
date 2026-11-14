@@ -32,6 +32,7 @@ its job file to the Drive trash. The old trigger still works: an empty
   "engine": "CYCLES",
   "compute": "OPTIX",
   "devices": [],
+  "eevee_device": null,
   "frames": {"mode": "range", "start": 1, "end": 250, "step": 1},
   "samples": 256,
   "resolution_pct": 100,
@@ -44,6 +45,7 @@ its job file to the Drive trash. The old trigger still works: an empty
 - `engine`: `CYCLES`, `EEVEE`, or `FILE` (keep the file's own engine). The file on disk is never changed.
 - `compute`: `OPTIX`, `CUDA`, `HIP`, `ONEAPI`, `METAL`, `CPU`, or `FILE` (keep the file's own setting).
 - `devices`: Cycles device ids from `farm_status.json`. Empty means every device of that type.
+- `eevee_device`: for EEVEE, a GPU from `eevee_devices` in `farm_status.json` (Vulkan index or vendor/device/id). The watcher then starts Blender with `--gpu-backend vulkan --gpu-device <id>`. `null` uses the display GPU. Needs Blender 5.x.
 - `frames.mode`: `file`, `range` or `single`.
 - `output.format`: `PNG`, `JPEG`, `OPEN_EXR`, `OPEN_EXR_MULTILAYER`, `TIFF`, `FFMPEG` (H.264 MP4), or `FILE`.
 - `headless: false` opens Blender's render window on the PC and closes it when the render ends.
