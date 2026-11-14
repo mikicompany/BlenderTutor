@@ -292,6 +292,37 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
         </div>
       </form>
 
+      <section class="panel" id="notifyPanel">
+        <div class="panel-head"><h2>Notifications</h2><span class="small muted" id="notifyState"></span></div>
+        <div class="field">
+          <label class="label" for="ntfyTopic">Phone push (ntfy app)</label>
+          <div class="folderset">
+            <input type="text" id="ntfyTopic" placeholder="miki-farm-…" spellcheck="false" autocomplete="off">
+            <button type="button" class="btn small" id="ntfyNew">New topic</button>
+          </div>
+          <p class="hint">Install the free ntfy app on your phone, tap +, and subscribe to this topic name. Anyone who knows the name can read the messages, so keep the random part.</p>
+        </div>
+        <div class="field">
+          <label class="label" for="discordHook">Discord channel (optional)</label>
+          <input type="text" id="discordHook" placeholder="https://discord.com/api/webhooks/…" spellcheck="false" autocomplete="off">
+          <p class="hint">In Discord: channel settings → Integrations → Webhooks → New webhook → Copy webhook URL.</p>
+        </div>
+        <div class="field">
+          <span class="label">Notify me when a job</span>
+          <div class="seg" id="notifyOn" role="group" aria-label="Notify when">
+            <button type="button" data-v="done">Finishes</button>
+            <button type="button" data-v="failed">Fails</button>
+            <button type="button" data-v="cancelled">Is stopped</button>
+          </div>
+        </div>
+        <div class="actions">
+          <button type="button" class="btn" id="notifySave">Save</button>
+          <button type="button" class="btn" id="notifyTest">Send test</button>
+          <span class="toast" id="notifyMsg" role="status"></span>
+        </div>
+        <p class="hint" id="notifyLast"></p>
+      </section>
+
       <section class="panel setup" id="setup" hidden>
         <h2>Set up the render PC</h2>
         <ol>
@@ -373,6 +404,11 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
     img: new Map(),              // "fileId@modified" -> data: URL
     pick: {},                    // "job|blend" -> thumbnail file name shown instead of the latest frame
     openPrev: new Set(),         // finished jobs whose preview is expanded
+    config: null,                // farm_config.json contents
+    configFile: null,
+    nform: null,                 // notification form while being edited
+    seenIds: null,               // finished job ids already known, to spot new ones
+    announce: null,              // "job finished" banner
     outputFolderUrl: null,
     submitted: store.get("submitted", {}),  // job id -> job (this browser)
     cancelling: {},
@@ -447,6 +483,23 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
         }
       } else {
         st.status = null;
+      }
+      const cf = st.files.find((f) => f.title === "farm_config.json");
+      if (!cf) { st.config = {}; st.configFile = null; }
+      else if (!st.configFile || st.configFile.id !== cf.id || st.configFile.modifiedTime !== cf.modifiedTime) {
+        try {
+          const p = await drive("download_file_content", { fileId: cf.id });
+          st.config = JSON.parse(decodeB64(p.content || "")) || {};
+          st.configFile = cf;
+        } catch (e) { if (e && e.code && LOST_ACCESS.has(e.code)) throw e; }
+      }
+      if (st.status) {
+        const hist = st.status.history || [];
+        if (st.seenIds) {
+          const fresh = hist.filter((h) => !st.seenIds.has(h.id) && h.status !== "invalid");
+          if (fresh.length) announceJob(fresh[0]);
+        }
+        st.seenIds = new Set(hist.map((h) => h.id));
       }
       const out = st.files.find((f) => f.title === "output" && f.mimeType === "application/vnd.google-apps.folder");
       st.outputFolderUrl = out ? out.viewUrl : null;
@@ -673,7 +726,7 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
 
   // ------------------------------------------------------------------ render
   function renderAll() {
-    renderWorker(); renderBanner(); renderForm(); renderNow(); renderQueue(); renderHistory(); renderSetup();
+    renderWorker(); renderBanner(); renderForm(); renderNow(); renderQueue(); renderHistory(); renderSetup(); renderNotify();
   }
 
   function renderWorker() {
@@ -701,6 +754,11 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
       if (c.fix === "approve") btn = `<button type="button" class="btn small" data-act="refresh">Allow and retry</button>`;
       if (c.fix === "refresh") btn = `<button type="button" class="btn small" data-act="refresh">Try again</button>`;
       el.innerHTML = `<p>${esc(c.msg)}</p>${btn}`;
+      return;
+    }
+    if (st.announce) {
+      el.className = "banner " + (st.announce.kind === "ok" ? "" : "warn"); el.hidden = false;
+      el.innerHTML = `<p><b>${esc(st.announce.title)}</b> <span class="muted">${esc(st.announce.text)}</span></p><button type="button" class="btn small" data-act="dismiss">Dismiss</button>`;
       return;
     }
     if (st.statusErr) { el.className = "banner"; el.hidden = false; el.innerHTML = `<p class="small">${esc(st.statusErr)}</p>`; return; }
@@ -999,6 +1057,74 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
     }
   }
 
+  const BASE_TITLE = document.title;
+  function announceJob(e) {
+    const res = e.results || [];
+    const frames = res.reduce((a, r) => a + (r.frames_done || 0), 0);
+    const word = { done: "Render done", failed: "Render failed", cancelled: "Render stopped" }[e.status] || "Render finished";
+    const files = res.map((r) => r.blend).join(", ") || e.job?.blend || e.id;
+    st.announce = { title: `${word}: ${files}`, text: `${frames} frame${frames === 1 ? "" : "s"} · job ${e.id}`, kind: e.status === "done" ? "ok" : "warn" };
+    document.title = (e.status === "done" ? "✓ " : "! ") + word + " · " + BASE_TITLE;
+  }
+
+  // -------- notifications settings (farm_config.json)
+  const TOPIC_RE = /^[A-Za-z0-9_-]{1,64}$/;
+  const HOOK_RE = /^https:\/\/(?:\w+\.)?discord(?:app)?\.com\/api\/webhooks\/\d+\/[\w-]+$/;
+  function notifyFromConfig() {
+    const n = (st.config && st.config.notify) || {};
+    return { topic: n.ntfy_topic || "", hook: n.discord_webhook || "", on: Array.isArray(n.on) ? n.on.slice() : ["done", "failed"] };
+  }
+  function renderNotify() {
+    const f = st.nform || notifyFromConfig();
+    if (!st.nform && document.activeElement !== $("ntfyTopic")) $("ntfyTopic").value = f.topic;
+    if (!st.nform && document.activeElement !== $("discordHook")) $("discordHook").value = f.hook;
+    setPressed("notifyOn", null);
+    $("notifyOn").querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(f.on.includes(b.dataset.v))));
+    const saved = notifyFromConfig();
+    const on = saved.topic || saved.hook;
+    $("notifyState").textContent = st.config == null ? "" : on ? [saved.topic && "phone", saved.hook && "Discord"].filter(Boolean).join(" + ") + " on" : "off";
+    $("notifySave").disabled = !st.nform || st.conn !== "ok";
+    $("notifyTest").disabled = !on || !!st.nform || st.conn !== "ok";
+    const v = st.status?.version;
+    const old = st.status && (!v || v.localeCompare("1.5.0", undefined, { numeric: true }) < 0);
+    const last = st.status?.notify_last;
+    $("notifyLast").textContent = old ? "Restart start_farm.bat on the PC to turn on notifications (it is running an older version)."
+      : last ? `Last sent ${ago(last.at)}: ${last.title} · ${(last.results || []).join(" · ")}`
+      : on ? "The render PC sends these, so they arrive even when this page is closed." : "";
+  }
+  function editNotify() {
+    st.nform = st.nform || notifyFromConfig();
+    st.nform.topic = $("ntfyTopic").value.trim();
+    st.nform.hook = $("discordHook").value.trim();
+    $("notifyMsg").textContent = ""; renderNotify();
+  }
+  async function saveNotify() {
+    const f = st.nform; if (!f) return;
+    const msg = (t, k) => { $("notifyMsg").textContent = t; $("notifyMsg").className = "toast " + (k || ""); };
+    if (f.topic && !TOPIC_RE.test(f.topic)) return msg("Topic names use letters, numbers, - and _ only (up to 64).", "bad");
+    if (f.hook && !HOOK_RE.test(f.hook)) return msg("That doesn't look like a Discord webhook URL.", "bad");
+    const cfg = Object.assign({}, st.config || {});
+    cfg.notify = Object.assign({}, cfg.notify || {}, { ntfy_topic: f.topic, discord_webhook: f.hook, on: f.on });
+    $("notifySave").disabled = true; msg("Saving…");
+    try {
+      // Drive keeps duplicate names, so remove the old file before writing the new one.
+      if (st.configFile) await drive("trash_file", { fileId: st.configFile.id });
+      const created = await drive("create_file", { title: "farm_config.json", parentId: st.folder, textContent: JSON.stringify(cfg, null, 2), contentMimeType: "application/json", disableConversionToGoogleType: true });
+      st.config = cfg; st.configFile = created && created.id ? created : null; st.nform = null;
+      msg("Saved. The PC uses it for the next finished job.", "ok");
+    } catch (e) {
+      msg(errorCopy(e).msg, "bad");
+    }
+    renderNotify();
+  }
+  async function testNotify() {
+    const msg = (t, k) => { $("notifyMsg").textContent = t; $("notifyMsg").className = "toast " + (k || ""); };
+    try {
+      await drive("create_file", { title: `notify_test_${Math.random().toString(36).slice(2, 8)}.txt`, parentId: st.folder, textContent: "test", contentMimeType: "text/plain", disableConversionToGoogleType: true });
+      msg("Test sent to the PC. It should arrive within a minute or two.", "ok");
+    } catch (e) { msg(errorCopy(e).msg, "bad"); }
+  }
+
   function queueMsg(msg, kind) {
     const el = $("queueMsg");
     el.hidden = !msg; el.textContent = msg || ""; el.className = "toast " + (kind || "");
@@ -1047,6 +1173,11 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
       if (g === "engines") form.engine = v;
       if (g === "frameMode") form.frameMode = v;
       if (g === "formats") form.format = v;
+      if (g === "notifyOn") {
+        st.nform = st.nform || notifyFromConfig();
+        st.nform.on = st.nform.on.includes(v) ? st.nform.on.filter((x) => x !== v) : [...st.nform.on, v];
+        renderNotify(); return;
+      }
       saveForm(); renderForm(); return;
     }
     const act = ev.target.closest("[data-act]");
@@ -1059,6 +1190,7 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
     }
     if (a === "cancel") cancelJob(act.dataset.id, act);
     if (a === "remove") removeQueued(act.dataset.file, act.dataset.id, act);
+    if (a === "dismiss") { st.announce = null; document.title = BASE_TITLE; renderBanner(); }
     if (a === "pick") {
       if (act.dataset.file) st.pick[act.dataset.key] = act.dataset.file; else delete st.pick[act.dataset.key];
       renderNow(); renderHistory(); fillImages();
@@ -1094,6 +1226,14 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
   $("jobForm").addEventListener("submit", submitJob);
   $("refreshBtn").addEventListener("click", () => refresh(true));
   $("clearQueue").addEventListener("click", clearQueue);
+  $("ntfyTopic").addEventListener("input", editNotify);
+  $("discordHook").addEventListener("input", editNotify);
+  $("ntfyNew").addEventListener("click", () => {
+    const r = Array.from(crypto.getRandomValues(new Uint8Array(8)), (b) => "abcdefghijkmnpqrstuvwxyz23456789"[b % 32]).join("");
+    $("ntfyTopic").value = "miki-farm-" + r; editNotify();
+  });
+  $("notifySave").addEventListener("click", saveNotify);
+  $("notifyTest").addEventListener("click", testNotify);
   $("folderSave").addEventListener("click", () => {
     let v = $("folderId").value.trim();
     const m = v.match(/folders\/([A-Za-z0-9_-]+)/); if (m) v = m[1];

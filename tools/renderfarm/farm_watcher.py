@@ -52,14 +52,19 @@ import subprocess
 import sys
 import tempfile
 import threading
+import urllib.parse
+import urllib.request
+import uuid
 import time
 import traceback
 
-VERSION = "1.4.0"
+VERSION = "1.5.0"
 ROLE = os.environ.get("FARM_ROLE", "watcher")
 SCRIPT = os.path.abspath(__file__)
 FOLDER = os.environ.get("FARM_FOLDER") or os.path.dirname(SCRIPT)
 STATUS_PATH = os.path.join(FOLDER, "farm_status.json")
+CONFIG_PATH = os.path.join(FOLDER, "farm_config.json")
+MANAGER_URL = "https://claude.ai/artifact/E6NgRqV79NRZ5H8zeN8Biu"
 OUTPUT_ROOT = os.path.join(FOLDER, "output")
 ARCHIVE_DIR = os.path.join(FOLDER, "archive", "jobs")
 
@@ -577,6 +582,94 @@ def make_jpeg(src, dest, max_side, quality):
         bpy.data.images.remove(img)
 
 
+# ---------------------------------------------------------------------------
+# Notifications: ntfy push (phone app) and/or a Discord webhook, set in farm_config.json
+# {"notify": {"ntfy_topic": "...", "ntfy_server": "https://ntfy.sh",
+#             "discord_webhook": "https://discord.com/api/webhooks/...",
+#             "on": ["done", "failed", "cancelled"]}}
+# ---------------------------------------------------------------------------
+
+def load_config():
+    try:
+        with open(CONFIG_PATH, encoding="utf-8-sig") as fh:
+            cfg = json.load(fh)
+        return cfg if isinstance(cfg, dict) else {}
+    except (OSError, ValueError):
+        return {}
+
+
+def notify_targets(cfg):
+    n = cfg.get("notify") if isinstance(cfg.get("notify"), dict) else {}
+    topic = str(n.get("ntfy_topic") or "").strip()
+    server = str(n.get("ntfy_server") or "https://ntfy.sh").strip().rstrip("/")
+    hook = str(n.get("discord_webhook") or "").strip()
+    out = {}
+    if topic and re.fullmatch(r"[A-Za-z0-9_-]{1,64}", topic) and re.match(r"https?://", server):
+        out["ntfy"] = (server, topic)
+    if re.fullmatch(r"https://(?:\w+\.)?discord(?:app)?\.com/api/webhooks/\d+/[\w-]+", hook):
+        out["discord"] = hook
+    on = n.get("on")
+    out["on"] = set(on) if isinstance(on, list) else {"done", "failed"}
+    return out
+
+
+def _send(req):
+    with urllib.request.urlopen(req, timeout=30) as r:
+        return r.status
+
+
+def send_notification(targets, title, message, image=None, tags=""):
+    """Send to every configured target. Returns a list of 'target: ok/error' strings."""
+    results = []
+    img = None
+    if image and os.path.isfile(image) and os.path.getsize(image) < 8 * 1024 * 1024:
+        with open(image, "rb") as fh:
+            img = fh.read()
+    if "ntfy" in targets:
+        server, topic = targets["ntfy"]
+        q = {"title": title, "tags": tags, "click": MANAGER_URL}
+        try:
+            if img:
+                q.update(message=message, filename=os.path.basename(image))
+                req = urllib.request.Request(f"{server}/{topic}?" + urllib.parse.urlencode(q),
+                                             data=img, method="PUT")
+            else:
+                req = urllib.request.Request(f"{server}/{topic}?" + urllib.parse.urlencode(q),
+                                             data=message.encode("utf-8"), method="POST")
+            _send(req)
+            results.append("phone (ntfy): sent")
+        except Exception as e:  # noqa: BLE001
+            results.append(f"phone (ntfy): {e}")
+    if "discord" in targets:
+        payload = json.dumps({"content": f"**{title}**\n{message}\n<{MANAGER_URL}>"[:1990]})
+        try:
+            if img:
+                b = uuid.uuid4().hex
+                body = (f"--{b}\r\nContent-Disposition: form-data; name=\"payload_json\"\r\n"
+                        f"Content-Type: application/json\r\n\r\n{payload}\r\n"
+                        f"--{b}\r\nContent-Disposition: form-data; name=\"files[0]\"; "
+                        f"filename=\"{os.path.basename(image)}\"\r\nContent-Type: image/jpeg\r\n\r\n").encode() \
+                    + img + f"\r\n--{b}--\r\n".encode()
+                req = urllib.request.Request(targets["discord"], data=body, method="POST",
+                                             headers={"Content-Type": f"multipart/form-data; boundary={b}",
+                                                      "User-Agent": "MikiButlerRenderfarm"})
+            else:
+                req = urllib.request.Request(targets["discord"], data=payload.encode(), method="POST",
+                                             headers={"Content-Type": "application/json",
+                                                      "User-Agent": "MikiButlerRenderfarm"})
+            _send(req)
+            results.append("Discord: sent")
+        except Exception as e:  # noqa: BLE001
+            results.append(f"Discord: {e}")
+    return results
+
+
+def _dur(sec):
+    sec = int(sec or 0)
+    h, m, s = sec // 3600, sec % 3600 // 60, sec % 60
+    return f"{h}h {m:02d}m" if h else f"{m}m {s:02d}s" if m else f"{s}s"
+
+
 class PreviewMaker:
     """Turns the frames a render drops into its temp folder into Drive previews."""
 
@@ -788,7 +881,58 @@ class Watcher:
         self.add_history(entry)
         self.state["current"] = None
         log(f"JOB {job['id']} {status.upper()}" + (f": {error}" if error else ""))
+        self.notify_job(entry)
         self.write_status(force=True)
+
+    # -- notifications -------------------------------------------------------
+    def notify_async(self, title, message, image=None, tags="", label=""):
+        targets = notify_targets(load_config())
+        if "ntfy" not in targets and "discord" not in targets:
+            return False
+
+        def run():
+            res = send_notification(targets, title, message, image, tags)
+            log(f"   notify{(' ' + label) if label else ''}: " + "; ".join(res))
+            self.state["notify_last"] = {"at": now_iso(), "title": title, "results": res}
+            self.write_status(force=True)
+
+        threading.Thread(target=run, daemon=True).start()
+        return True
+
+    def notify_job(self, entry):
+        targets = notify_targets(load_config())
+        if entry["status"] not in targets.get("on", set()):
+            return
+        res = entry.get("results") or []
+        files = ", ".join(r["blend"] for r in res) or entry["job"].get("blend", "")
+        frames = sum(r.get("frames_done") or 0 for r in res)
+        secs = sum(r.get("seconds") or 0 for r in res)
+        word = {"done": "Render done", "failed": "Render failed", "cancelled": "Render stopped"}.get(entry["status"], "Render finished")
+        title = f"{word}: {files}"[:120]
+        msg = f"{frames} frame{'s' if frames != 1 else ''} in {_dur(secs)} on {socket.gethostname()}"
+        if entry.get("error"):
+            msg += f"\n{entry['error']}"[:300]
+        tags = {"done": "white_check_mark", "failed": "x", "cancelled": "stop_sign"}.get(entry["status"], "")
+        image = None
+        for r in reversed(res):
+            pv = r.get("preview") or {}
+            if pv.get("latest"):
+                image = os.path.join(FOLDER, pv["folder"].replace("/", os.sep), pv["latest"])
+                break
+        self.notify_async(title, msg, image, tags, label=entry["id"])
+
+    def handle_test_requests(self):
+        for p in glob.glob(os.path.join(FOLDER, "notify_test*.txt")):
+            try:
+                os.remove(p)
+            except OSError:
+                continue
+            log("notification test requested")
+            if not self.notify_async("Renderfarm test", f"Notifications from {socket.gethostname()} work.",
+                                     tags="bell", label="test"):
+                self.state["notify_last"] = {"at": now_iso(), "title": "Renderfarm test",
+                                             "results": ["nothing set up: add a phone topic or Discord webhook"]}
+                self.write_status(force=True)
 
     def render_file(self, job, blend, cur):
         name = os.path.basename(blend)
@@ -849,6 +993,7 @@ class Watcher:
                 previews.update(prog)
             cur["log"] = list(tail)
             cur["elapsed"] = round(time.time() - t0)
+            self.handle_test_requests()
             ids = self.cancel_requests()
             if job["id"] in ids or "all" in ids:
                 log(f"cancel requested for {job['id']}")
@@ -920,6 +1065,7 @@ class Watcher:
         self.write_status(force=True)
         while True:
             try:
+                self.handle_test_requests()
                 cancels = self.cancel_requests()
                 jobs = self.read_jobs()
                 keep = []

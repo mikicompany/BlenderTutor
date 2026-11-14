@@ -22,6 +22,18 @@ While a job renders, the watcher also writes previews to `output/<id>/_preview/`
 thumbnails spread over the frame range. The manager shows them live and for
 finished jobs. They work for every output format, MP4 included.
 
+When a job finishes, fails or is stopped, the watcher can send a notification
+with the last frame attached: a phone push through the free ntfy app and/or a
+Discord webhook. Both are set in the manager's Notifications panel, which writes
+`farm_config.json`:
+
+```json
+{"notify": {"ntfy_topic": "miki-farm-x7k2p9", "discord_webhook": "", "on": ["done", "failed"]}}
+```
+
+The PC sends them, so they arrive with the page closed. `notify_test*.txt` in the
+folder sends a test message.
+
 Each sync hop usually takes seconds and can take a minute or so.
 
 `cancel_<id>.txt` stops a running job. Removing a queued job in the manager moves
