@@ -311,7 +311,14 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
       </section>
 
       <section class="panel">
-        <div class="panel-head"><h2>Queue</h2><span class="small muted" id="queueCount"></span></div>
+        <div class="panel-head">
+          <h2>Queue</h2>
+          <div class="actions" style="gap:10px">
+            <span class="small muted" id="queueCount"></span>
+            <button type="button" class="btn small danger" id="clearQueue" hidden>Clear queue</button>
+          </div>
+        </div>
+        <p class="toast" id="queueMsg" role="status" hidden></p>
         <div class="list" id="queue"><div class="empty">Nothing queued.</div></div>
       </section>
 
@@ -874,6 +881,10 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
   function renderQueue() {
     const items = queueItems();
     $("queueCount").textContent = items.length ? `${items.length} waiting` : "";
+    const cq = $("clearQueue");
+    cq.hidden = !items.length && !st.clearing;
+    cq.disabled = !!st.clearing || st.conn !== "ok";
+    cq.textContent = st.clearing ? "Clearing…" : st.confirmClear ? `Remove all ${items.length}? Click again` : "Clear queue";
     if (!items.length) { $("queue").innerHTML = `<div class="empty">Nothing queued.</div>`; return; }
     $("queue").innerHTML = items.map((it, i) => `
       <div class="item">
@@ -988,6 +999,45 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
     }
   }
 
+  function queueMsg(msg, kind) {
+    const el = $("queueMsg");
+    el.hidden = !msg; el.textContent = msg || ""; el.className = "toast " + (kind || "");
+  }
+
+  async function clearQueue() {
+    const items = queueItems();
+    if (!items.length) return;
+    if (!st.confirmClear) {
+      st.confirmClear = true; renderQueue();
+      clearTimeout(st.confirmTimer);
+      st.confirmTimer = setTimeout(() => { st.confirmClear = false; renderQueue(); }, 6000);
+      return;
+    }
+    clearTimeout(st.confirmTimer);
+    st.confirmClear = false; st.clearing = true; renderQueue();
+    queueMsg(`Removing ${items.length} job${items.length > 1 ? "s" : ""}…`);
+    let removed = 0, failed = 0, lastErr = null;
+    for (const it of items) {
+      try {
+        await drive("trash_file", { fileId: it.file.id });
+        removed++;
+        delete st.submitted[it.id];
+        st.files = st.files.filter((f) => f.id !== it.file.id);
+      } catch (e) {
+        failed++; lastErr = e;
+        if (e && e.code && LOST_ACCESS.has(e.code)) break;
+      }
+      renderQueue();
+    }
+    store.set("submitted", st.submitted);
+    st.clearing = false;
+    if (failed) queueMsg(`Removed ${removed}. ${failed} could not be removed: ${errorCopy(lastErr).msg}`, "bad");
+    else queueMsg(`Cleared ${removed} job${removed === 1 ? "" : "s"}. They are in your Drive trash. The render in progress keeps going.`, "ok");
+    renderAll();
+    setTimeout(() => queueMsg(""), 12000);
+    refresh();
+  }
+
   // ------------------------------------------------------------------ wiring
   document.addEventListener("click", async (ev) => {
     const seg = ev.target.closest(".seg button");
@@ -1043,6 +1093,7 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
   $("headless").addEventListener("change", (e) => { form.headless = e.target.checked; saveForm(); renderForm(); });
   $("jobForm").addEventListener("submit", submitJob);
   $("refreshBtn").addEventListener("click", () => refresh(true));
+  $("clearQueue").addEventListener("click", clearQueue);
   $("folderSave").addEventListener("click", () => {
     let v = $("folderId").value.trim();
     const m = v.match(/folders\/([A-Za-z0-9_-]+)/); if (m) v = m[1];
