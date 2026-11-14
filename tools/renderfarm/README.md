@@ -17,6 +17,11 @@ Drive folder `Work/Renderfarm`.
    log to `output/<id>/`.
 4. `farm_status.json` syncs back up, and the manager shows it.
 
+While a job renders, the watcher also writes previews to `output/<id>/_preview/`:
+`<file>_latest.jpg` (up to 960 px, refreshed every 10 seconds) and up to 24
+thumbnails spread over the frame range. The manager shows them live and for
+finished jobs. They work for every output format, MP4 included.
+
 Each sync hop usually takes seconds and can take a minute or so.
 
 `cancel_<id>.txt` stops a running job. Removing a queued job in the manager moves

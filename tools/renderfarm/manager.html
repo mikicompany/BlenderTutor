@@ -146,6 +146,20 @@ input:disabled, select:disabled { opacity: .55; }
 .strip i.d { background: var(--tile-done); }
 .strip i.n { background: var(--tile-now); animation: blink 1s infinite; }
 .strip-scale { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
+/* previews */
+.preview { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.shot { position: relative; background: var(--sunken); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; aspect-ratio: 16 / 9; display: grid; place-items: center; max-width: 100%; }
+.shot img { width: 100%; height: 100%; object-fit: contain; display: block; background: #000; }
+.shot .wait { color: var(--muted); font-size: 12.5px; padding: 12px; text-align: center; }
+.shot .tag { position: absolute; left: 8px; bottom: 8px; background: rgba(0,0,0,.66); color: #fff; font-family: var(--font-mono); font-size: 11.5px; padding: 3px 8px; border-radius: 5px; }
+.thumbs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; }
+.thumbs button { flex: none; width: 84px; padding: 0; border: 2px solid transparent; border-radius: 6px; background: var(--sunken); cursor: pointer; overflow: hidden; display: flex; flex-direction: column; }
+.thumbs button[aria-pressed="true"] { border-color: var(--accent); }
+.thumbs .ph { width: 100%; aspect-ratio: 16 / 9; display: block; background: var(--tile); object-fit: cover; }
+.thumbs span { font-family: var(--font-mono); font-size: 10.5px; color: var(--muted); padding: 2px 0; text-align: center; }
+.prev-row { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-size: 12px; color: var(--muted); }
+.prev-row button { background: none; border: 0; padding: 0; color: var(--accent); cursor: pointer; font: inherit; text-decoration: underline; }
+.history-preview { grid-column: 1 / -1; margin-top: 6px; display: flex; flex-direction: column; gap: 12px; }
 details.log summary { cursor: pointer; font-size: 12.5px; color: var(--muted); }
 pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px; line-height: 1.55; background: var(--sunken); border-radius: 8px; padding: 10px 12px; overflow-x: auto; white-space: pre; max-height: 240px; }
 .notes { margin: 0; padding-left: 18px; font-size: 12.5px; color: var(--warn); }
@@ -158,6 +172,7 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
 .item .t { font-weight: 600; overflow-wrap: anywhere; }
 .item .m { grid-column: 1 / -1; font-size: 12.5px; color: var(--muted); overflow-wrap: anywhere; }
 .item .r { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+@media (max-width: 520px) { .item { grid-template-columns: minmax(0, 1fr); } .item .r { justify-content: flex-start; } }
 .item .err { grid-column: 1 / -1; font-size: 12.5px; color: var(--bad); overflow-wrap: anywhere; }
 
 .setup ol { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
@@ -345,7 +360,11 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
     status: null,
     statusFile: null,
     statusErr: null,
-    outputs: {},                 // job id -> folder url
+    outputs: {},                 // job id -> {id, url} of its output folder
+    prev: {},                    // job id -> {folderId, files: {name: file}, at}
+    img: new Map(),              // "fileId@modified" -> data: URL
+    pick: {},                    // "job|blend" -> thumbnail file name shown instead of the latest frame
+    openPrev: new Set(),         // finished jobs whose preview is expanded
     outputFolderUrl: null,
     submitted: store.get("submitted", {}),  // job id -> job (this browser)
     cancelling: {},
@@ -427,7 +446,7 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
         try {
           const subs = await listFolder(out.id);
           st.outputs = {};
-          subs.filter((f) => f.mimeType === "application/vnd.google-apps.folder").forEach((f) => { st.outputs[f.title] = f.viewUrl; });
+          subs.filter((f) => f.mimeType === "application/vnd.google-apps.folder").forEach((f) => { st.outputs[f.title] = { id: f.id, url: f.viewUrl }; });
         } catch (e) { if (e && e.code && LOST_ACCESS.has(e.code)) throw e; }
       }
       // Forget local job copies the farm has finished with.
@@ -438,6 +457,10 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
         if (known.has(id) || age > 7 * 864e5) { delete st.submitted[id]; changed = true; }
       }
       if (changed) store.set("submitted", st.submitted);
+      // Live preview files of the job that is rendering now.
+      const curId = st.status?.current?.job?.id;
+      if (curId) await loadPreviewFiles(curId).catch((e) => { if (e && e.code && LOST_ACCESS.has(e.code)) throw e; });
+      for (const id of st.openPrev) if (!st.prev[id]) await loadPreviewFiles(id).catch(() => {});
       st.lastRefresh = Date.now();
     } catch (e) {
       st.conn = "error"; st.connErr = e;
@@ -445,8 +468,92 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
     } finally {
       st.busy = false;
       renderAll();
+      fillImages();
     }
   }
+
+  // ------------------------------------------------------------------ previews
+  async function loadPreviewFiles(jobId) {
+    const out = st.outputs[jobId];
+    if (!out) return;
+    const p = st.prev[jobId] || { folderId: null, files: {}, at: 0 };
+    if (!p.folderId) {
+      const kids = await listFolder(out.id);
+      const pf = kids.find((f) => f.title === "_preview" && f.mimeType === "application/vnd.google-apps.folder");
+      if (!pf) { st.prev[jobId] = p; return; }
+      p.folderId = pf.id;
+    }
+    const files = await listFolder(p.folderId);
+    p.files = {};
+    files.forEach((f) => { p.files[f.title] = f; });
+    p.at = Date.now();
+    st.prev[jobId] = p;
+  }
+  const imgKey = (f) => f.id + "@" + (f.modifiedTime || "");
+  function cachedImg(jobId, name) {
+    const f = st.prev[jobId]?.files?.[name];
+    return f ? st.img.get(imgKey(f)) || null : null;
+  }
+  function wantedImages() {
+    // Latest frames first, then thumbnails, for the live job and any open finished jobs.
+    const jobs = [];
+    const cur = st.status?.current;
+    if (cur?.job?.id) jobs.push({ id: cur.job.id, previews: [cur.preview].filter(Boolean) });
+    for (const e of st.status?.history || []) if (st.openPrev.has(e.id)) jobs.push({ id: e.id, previews: (e.results || []).map((r) => r.preview).filter(Boolean) });
+    const first = [], later = [];
+    for (const j of jobs) {
+      const files = st.prev[j.id]?.files || {};
+      for (const pv of j.previews) {
+        const pick = st.pick[j.id + "|" + pv.latest];
+        if (pick && files[pick]) first.push(files[pick]);
+        if (pv.latest && files[pv.latest]) first.push(files[pv.latest]);
+        (pv.thumbs || []).forEach((t) => { if (files[t.file]) later.push(files[t.file]); });
+      }
+    }
+    return [...first, ...later].filter((f) => !st.img.has(imgKey(f)));
+  }
+  let filling = false;
+  async function fillImages() {
+    if (filling || !st.mcp) return;
+    filling = true;
+    try {
+      for (let n = 0; n < 40; n++) {
+        const next = wantedImages()[0];
+        if (!next) break;
+        try {
+          const p = await drive("download_file_content", { fileId: next.id });
+          st.img.set(imgKey(next), "data:image/jpeg;base64," + (p.content || ""));
+        } catch (e) {
+          st.img.set(imgKey(next), "");  // don't retry a broken file this session
+          if (e && e.code && LOST_ACCESS.has(e.code)) break;
+        }
+        if (st.img.size > 400) st.img.delete(st.img.keys().next().value);
+        renderNow(); renderHistory();
+      }
+    } finally { filling = false; }
+  }
+  function previewHTML(jobId, pv, live) {
+    if (!pv) return "";
+    const files = st.prev[jobId]?.files || {};
+    const pickKey = jobId + "|" + pv.latest;
+    const pick = st.pick[pickKey];
+    const thumbs = pv.thumbs || [];
+    const shownName = pick || pv.latest;
+    const shown = shownName ? cachedImg(jobId, shownName) : null;
+    const pickFrame = pick ? thumbs.find((t) => t.file === pick)?.frame : null;
+    const tag = pick ? `Frame ${pickFrame} · thumbnail` : pv.latest_frame != null ? `Frame ${pv.latest_frame}${live ? " · latest" : ""}` : "";
+    const waiting = !pv.latest ? "The first preview appears after the first frame finishes."
+      : !files[pv.latest] ? "Waiting for the preview to sync to Drive…" : "Loading preview…";
+    const img = shown ? `<img src="${shown}" alt="${esc(tag)}">${tag ? `<span class="tag">${esc(tag)}</span>` : ""}` : `<span class="wait">${esc(waiting)}</span>`;
+    const strip = thumbs.length ? `<div class="thumbs" role="group" aria-label="Rendered frames">${thumbs.map((t) => {
+      const src = cachedImg(jobId, t.file);
+      return `<button type="button" data-act="pick" data-key="${esc(pickKey)}" data-file="${esc(t.file)}" aria-pressed="${pick === t.file}" title="Frame ${t.frame}">
+        ${src ? `<img class="ph" src="${src}" alt="">` : `<i class="ph"></i>`}<span>${t.frame}</span></button>`;
+    }).join("")}</div>` : "";
+    const row = `<div class="prev-row"><span>${pv.updated ? "Preview updated " + esc(ago(pv.updated)) : ""}</span>${pick ? `<button type="button" data-act="pick" data-key="${esc(pickKey)}" data-file="">Show latest frame</button>` : ""}</div>`;
+    return `<div class="preview"><div class="shot">${img}</div>${row}${strip}</div>`;
+  }
+  function setHTML(el, html) { if (el._html !== html) { el.innerHTML = html; el._html = html; } }
 
   // ------------------------------------------------------------------ helpers
   function ago(iso) {
@@ -694,10 +801,11 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
     const ws = workerState();
     $("nowAge").textContent = st.status?.worker?.heartbeat ? "updated " + ago(st.status.worker.heartbeat) : "";
     if (!st.status) {
+      $("now")._html = null;
       $("now").innerHTML = `<div class="empty">${st.conn === "ok" ? "The render PC hasn't written <span class=\"mono\">farm_status.json</span> yet. See the setup steps." : "Waiting for Google Drive…"}</div>`;
       return;
     }
-    if (!cur) { $("now").innerHTML = `<div class="empty">${ws.online ? "Idle. Queue a render and the PC starts it as soon as Drive syncs the job." : "Nothing rendering. The PC is offline."}</div>`; return; }
+    if (!cur) { $("now")._html = null; $("now").innerHTML = `<div class="empty">${ws.online ? "Idle. Queue a render and the PC starts it as soon as Drive syncs the job." : "Nothing rendering. The PC is offline."}</div>`; return; }
     const j = cur.job || {}, p = cur.progress || {};
     const total = p.frames_total || 0, done = p.frames_done || 0;
     const pct = total ? Math.min(100, (done / total) * 100) : 0;
@@ -717,7 +825,7 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
     }
     const fs = p.frame_start, fe = p.frame_end;
     const cancelling = st.cancelling[j.id];
-    $("now").innerHTML = `
+    setHTML($("now"), `
       <div style="display:flex;flex-direction:column;gap:14px">
         <div class="now-head">
           <div style="min-width:0">
@@ -728,6 +836,8 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
           <button type="button" class="btn small danger" data-act="cancel" data-id="${esc(j.id)}" ${cancelling ? "disabled" : ""}>${cancelling ? "Stopping…" : "Stop render"}</button>
         </div>
         ${ws.online ? "" : `<div class="banner warn"><p class="small">The PC stopped reporting ${esc(ago(st.status.worker.heartbeat))}. This is the last known state.</p></div>`}
+        ${cur.preview ? previewHTML(j.id, cur.preview, true)
+          : `<p class="hint">Live previews need the latest farm_watcher.py. Restart start_farm.bat on the PC to turn them on.</p>`}
         <div class="bar" aria-label="Progress"><i style="width:${pct.toFixed(1)}%"></i></div>
         <div class="stats">
           <div class="stat"><div class="label">Frames</div><div class="v">${done}/${total || "–"}</div></div>
@@ -739,8 +849,8 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
           <div class="strip-scale"><span>${fs ?? ""}</span><span>${total > 240 ? "1 cell ≈ " + (total / 240).toFixed(1) + " frames" : ""}</span><span>${fe ?? ""}</span></div></div>` : ""}
         <div class="small muted mono">${esc([p.engine, p.device, p.resolution, p.format].filter(Boolean).join(" · "))}${cur.elapsed != null ? " · " + dur(cur.elapsed) + " on this file" : ""}</div>
         ${(p.notes || []).length ? `<ul class="notes">${p.notes.map((n) => `<li>${esc(n)}</li>`).join("")}</ul>` : ""}
-        ${(cur.log || []).length ? `<details class="log"><summary>Blender output (last ${cur.log.length} lines)</summary><pre class="logtail">${esc(cur.log.join("\n"))}</pre></details>` : ""}
-      </div>`;
+        ${(cur.log || []).length ? `<details class="log"${st.logOpen ? " open" : ""}><summary>Blender output (last ${cur.log.length} lines)</summary><pre class="logtail">${esc(cur.log.join("\n"))}</pre></details>` : ""}
+      </div>`);
   }
 
   function queueItems() {
@@ -777,26 +887,30 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
 
   function renderHistory() {
     const h = st.status?.history || [];
-    if (!h.length) { $("history").innerHTML = `<div class="empty">No finished jobs yet.</div>`; return; }
+    if (!h.length) { setHTML($("history"), `<div class="empty">No finished jobs yet.</div>`); return; }
     const pill = { done: "ok", failed: "bad", cancelled: "idle", invalid: "bad" };
     const word = { done: "Done", failed: "Failed", cancelled: "Stopped", invalid: "Invalid job" };
-    $("history").innerHTML = h.map((e) => {
+    setHTML($("history"), h.map((e) => {
       const res = e.results || [];
       const frames = res.reduce((a, r) => a + (r.frames_done || 0), 0);
       const secs = e.started && e.finished ? (Date.parse(e.finished) - Date.parse(e.started)) / 1000 : null;
-      const url = st.outputs[e.id];
+      const url = st.outputs[e.id]?.url;
+      const pvs = res.filter((r) => r.preview && r.preview.latest);
+      const open = st.openPrev.has(e.id);
       const notes = [...new Set(res.flatMap((r) => r.notes || []))];
       return `<div class="item">
         <div class="t mono">${esc(e.id)}</div>
         <div class="r">
+          ${pvs.length ? `<button type="button" class="btn small" data-act="togglePrev" data-id="${esc(e.id)}" aria-expanded="${open}">${open ? "Hide preview" : "Preview"}</button>` : ""}
           ${url ? `<a class="btn small" href="${esc(url)}" target="_blank" rel="noopener">Open output</a>` : ""}
           <span class="pill ${pill[e.status] || "idle"}">${word[e.status] || esc(e.status)}</span>
         </div>
         <div class="m">${esc([e.job ? jobSummary(e.job) : "", res.length ? `${res.length} file${res.length > 1 ? "s" : ""}, ${frames} frame${frames === 1 ? "" : "s"}` : "", secs != null ? dur(secs) : "", ago(e.finished)].filter(Boolean).join(" · "))}</div>
         ${e.error ? `<div class="err">${esc(e.error)}</div>` : ""}
         ${notes.length ? `<div class="m" style="color:var(--warn)">${notes.map(esc).join(" · ")}</div>` : ""}
+        ${open ? `<div class="history-preview">${pvs.map((r) => `<div>${pvs.length > 1 ? `<div class="label" style="margin-bottom:6px">${esc(r.blend)}</div>` : ""}${previewHTML(e.id, r.preview, false)}</div>`).join("")}</div>` : ""}
       </div>`;
-    }).join("");
+    }).join(""));
   }
 
   function renderSetup() {
@@ -894,7 +1008,19 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
     }
     if (a === "cancel") cancelJob(act.dataset.id, act);
     if (a === "remove") removeQueued(act.dataset.file, act.dataset.id, act);
+    if (a === "pick") {
+      if (act.dataset.file) st.pick[act.dataset.key] = act.dataset.file; else delete st.pick[act.dataset.key];
+      renderNow(); renderHistory(); fillImages();
+    }
+    if (a === "togglePrev") {
+      const id = act.dataset.id;
+      if (st.openPrev.has(id)) { st.openPrev.delete(id); renderHistory(); return; }
+      st.openPrev.add(id); renderHistory();
+      try { await loadPreviewFiles(id); } catch (e) { toast(errorCopy(e).msg, "bad"); }
+      renderHistory(); fillImages();
+    }
   });
+  $("now").addEventListener("toggle", (ev) => { if (ev.target.matches("details.log")) st.logOpen = ev.target.open; }, true);
   $("devices").addEventListener("change", (ev) => {
     const boxes = [...$("devices").querySelectorAll("input[data-dev]")];
     form.devices = boxes.filter((b) => b.checked).map((b) => b.dataset.dev);
@@ -920,7 +1046,7 @@ pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px;
     let v = $("folderId").value.trim();
     const m = v.match(/folders\/([A-Za-z0-9_-]+)/); if (m) v = m[1];
     if (!/^[A-Za-z0-9_-]{10,}$/.test(v)) { toast("Paste a Drive folder link or ID.", "bad"); return; }
-    st.folder = v; store.set("folder", v); st.status = null; st.files = []; st.outputs = {};
+    st.folder = v; store.set("folder", v); st.status = null; st.files = []; st.outputs = {}; st.prev = {}; st.openPrev.clear();
     renderAll(); refresh(true);
   });
 

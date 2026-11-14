@@ -46,6 +46,7 @@ import json
 import os
 import platform
 import re
+import shutil
 import socket
 import subprocess
 import sys
@@ -54,7 +55,7 @@ import threading
 import time
 import traceback
 
-VERSION = "1.2.0"
+VERSION = "1.3.0"
 ROLE = os.environ.get("FARM_ROLE", "watcher")
 SCRIPT = os.path.abspath(__file__)
 FOLDER = os.environ.get("FARM_FOLDER") or os.path.dirname(SCRIPT)
@@ -66,6 +67,10 @@ POLL_IDLE = 5            # seconds between folder checks while idle
 STATUS_IDLE = 60         # rewrite status (heartbeat) this often while idle
 STATUS_BUSY = 10         # ...and this often while rendering
 HISTORY_KEEP = 25
+PREVIEW_SIDE = 960       # longest side of the "latest frame" preview, in pixels
+THUMB_SIDE = 256
+THUMBS_MAX = 24          # thumbnails kept per .blend, spread over the frame range
+PREVIEW_EVERY = 10       # seconds between updates of the latest-frame preview
 GPU_TYPES = ("OPTIX", "CUDA", "HIP", "ONEAPI", "METAL")
 ENGINES = ("CYCLES", "EEVEE", "FILE")
 # EEVEE's identifier changed between versions: BLENDER_EEVEE_NEXT in 4.2-4.x, BLENDER_EEVEE in 5.x.
@@ -330,6 +335,45 @@ def render_role():
         "frame_times": [],
     }
     last = [time.time()]
+    prev_dir = os.environ.get("FARM_PREVIEW_DIR")
+    prev_off = [not prev_dir]
+
+    def grab_preview(sc):
+        # Save the frame that just rendered as a full-size JPEG for the watcher to shrink.
+        # The output format is switched to JPEG for this one save and put back at once;
+        # nothing heavier may run here, the render is still in progress.
+        if prev_off[0]:
+            return
+        rr = bpy.data.images.get("Render Result")
+        if rr is None:
+            return
+        im = sc.render.image_settings
+        keys = [k for k in ("media_type", "file_format", "color_mode", "color_depth", "quality") if hasattr(im, k)]
+        saved = {k: getattr(im, k) for k in keys}
+        ff = sc.render.ffmpeg
+        ff_saved = {k: getattr(ff, k) for k in ("format", "codec", "constant_rate_factor", "ffmpeg_preset", "audio_codec") if hasattr(ff, k)}
+        path = os.path.join(prev_dir, f"frame_{sc.frame_current:06d}.jpg")
+        try:
+            _set_media_type(im, "IMAGE")
+            im.file_format = "JPEG"
+            im.color_mode = "RGB"
+            im.quality = 90
+            rr.save_render(path + ".part")
+            os.replace(path + ".part", path)
+        except Exception as e:  # noqa: BLE001 - previews must never stop a render
+            prev_off[0] = True
+            prog["notes"].append(f"live preview turned off: {e}")
+        finally:
+            for k in keys:
+                try:
+                    setattr(im, k, saved[k])
+                except Exception:
+                    pass
+            for k, v in ff_saved.items():
+                try:
+                    setattr(ff, k, v)
+                except Exception:
+                    pass
 
     def dump():
         try:
@@ -344,6 +388,7 @@ def render_role():
         prog["frame"] = sc.frame_current
         prog["frame_times"] = (prog["frame_times"] + [round(t - last[0], 2)])[-20:]
         last[0] = t
+        grab_preview(sc)
         dump()
         print(f"*** FARM *** frame {sc.frame_current} done "
               f"({prog['frames_done']}/{total})", flush=True)
@@ -470,6 +515,86 @@ def detect_eevee_devices(blender):
     devs = parse_gpu_device_help(out)
     tail = "\n".join(l for l in out.splitlines() if l.strip())[-1200:]
     return devs, tail
+
+
+def make_jpeg(src, dest, max_side, quality):
+    """Shrink a JPEG with Blender's image API and copy it into the farm folder."""
+    img = bpy.data.images.load(src, check_existing=False)
+    try:
+        w, h = img.size
+        if not w or not h:
+            return False
+        k = max_side / max(w, h)
+        if k < 1:
+            img.scale(max(1, round(w * k)), max(1, round(h * k)))
+        local = os.path.join(tempfile.gettempdir(), f"farm_preview_{os.getpid()}.jpg")
+        img.filepath_raw = local
+        img.file_format = "JPEG"
+        try:
+            img.save(filepath=local, quality=quality)
+        except TypeError:
+            img.save()
+        # Copy over the old file in place so Drive keeps one file and just updates it.
+        shutil.copyfile(local, dest)
+        return True
+    finally:
+        bpy.data.images.remove(img)
+
+
+class PreviewMaker:
+    """Turns the frames a render drops into its temp folder into Drive previews."""
+
+    def __init__(self, src_dir, dest_dir, blend_name):
+        self.src = src_dir
+        self.dest = dest_dir
+        self.base = re.sub(r"[^A-Za-z0-9_.-]", "_", os.path.splitext(blend_name)[0])
+        self.info = {"folder": os.path.relpath(dest_dir, FOLDER).replace(os.sep, "/"),
+                     "latest": None, "latest_frame": None, "updated": None, "thumbs": []}
+        self.last_write = 0
+        self.thumbed = set()
+
+    def update(self, prog, force=False):
+        files = glob.glob(os.path.join(self.src, "frame_*.jpg"))
+        if not files or not prog:
+            return
+        os.makedirs(self.dest, exist_ok=True)
+        frames = []
+        for f in files:
+            m = re.search(r"frame_(-?\d+)\.jpg$", f)
+            if m:
+                frames.append((int(m.group(1)), f))
+        frames.sort()
+        start = prog.get("frame_start") or 0
+        step = max(1, prog.get("frame_step") or 1)
+        total = max(1, prog.get("frames_total") or 1)
+        stride = max(1, -(-total // THUMBS_MAX))
+        newest_frame, newest = frames[-1]
+        for frame, f in frames:
+            idx = (frame - start) // step
+            if (idx % stride == 0 or idx == total - 1) and frame not in self.thumbed:
+                name = f"{self.base}_f{frame:05d}.jpg"
+                try:
+                    if make_jpeg(f, os.path.join(self.dest, name), THUMB_SIDE, 75):
+                        self.thumbed.add(frame)
+                        self.info["thumbs"].append({"frame": frame, "file": name})
+                except Exception as e:  # noqa: BLE001
+                    log(f"   preview: {e}")
+        wrote_latest = False
+        if force or time.time() - self.last_write >= PREVIEW_EVERY:
+            name = f"{self.base}_latest.jpg"
+            try:
+                if make_jpeg(newest, os.path.join(self.dest, name), PREVIEW_SIDE, 82):
+                    self.info.update(latest=name, latest_frame=newest_frame, updated=now_iso())
+                    self.last_write = time.time()
+                    wrote_latest = True
+            except Exception as e:  # noqa: BLE001
+                log(f"   preview: {e}")
+        for frame, f in frames:
+            if f != newest or wrote_latest:
+                try:
+                    os.remove(f)
+                except OSError:
+                    pass
 
 
 class Watcher:
@@ -633,8 +758,13 @@ class Watcher:
         name = os.path.basename(blend)
         tmp = tempfile.mkdtemp(prefix="farm_")
         progress_path = os.path.join(tmp, "progress.json")
+        preview_src = os.path.join(tmp, "preview")
+        os.makedirs(preview_src, exist_ok=True)
+        previews = PreviewMaker(preview_src, os.path.join(OUTPUT_ROOT, job["id"], "_preview"), name)
+        cur["preview"] = previews.info
         env = dict(os.environ, FARM_ROLE="render", FARM_FOLDER=FOLDER,
-                   FARM_JOB=json.dumps(job), FARM_PROGRESS=progress_path)
+                   FARM_JOB=json.dumps(job), FARM_PROGRESS=progress_path,
+                   FARM_PREVIEW_DIR=preview_src)
         cmd = [self.blender]
         if job["headless"]:
             cmd.append("-b")
@@ -680,6 +810,7 @@ class Watcher:
                 cur["progress"] = prog
                 if prog.get("finished") and finished_at is None:
                     finished_at = time.time()
+                previews.update(prog)
             cur["log"] = list(tail)
             cur["elapsed"] = round(time.time() - t0)
             ids = self.cancel_requests()
@@ -705,10 +836,13 @@ class Watcher:
             logf.close()
         prog = self.read_progress(progress_path) or cur.get("progress") or {}
         cur["progress"] = prog
+        previews.update(prog, force=True)
+        shutil.rmtree(tmp, ignore_errors=True)
         cur["log"] = list(tail)
         res = {"blend": name, "seconds": round(time.time() - t0),
                "frames_done": prog.get("frames_done", 0), "frames_total": prog.get("frames_total"),
-               "format": prog.get("format"), "notes": prog.get("notes", []), "exit_code": proc.returncode}
+               "format": prog.get("format"), "notes": prog.get("notes", []), "exit_code": proc.returncode,
+               "preview": previews.info}
         if cancelled or prog.get("cancelled"):
             res["status"] = "cancelled"
         elif prog.get("finished") and (proc.returncode in (0, None) or finished_at):
