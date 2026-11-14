@@ -1,0 +1,884 @@
+<title>Miki Butler Renderfarm</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a control desk. Job form on the left, the render PC's live state on the right; stacks on phones. */
+:root {
+  --bg: #eef0f3;
+  --surface: #ffffff;
+  --sunken: #f5f6f8;
+  --ink: #161a20;
+  --muted: #5a6371;
+  --line: #d6dbe2;
+  --accent: #0a6c96;
+  --accent-soft: #e1f0f7;
+  --accent-ink: #ffffff;
+  --ok: #18794a;
+  --ok-soft: #e2f4ea;
+  --warn: #9a5800;
+  --warn-soft: #fbefdc;
+  --bad: #b42318;
+  --bad-soft: #fde8e6;
+  --tile: #e3e7ec;
+  --tile-done: #0a6c96;
+  --tile-now: #f0a020;
+  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --radius: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111317; --surface: #1a1d23; --sunken: #15171c; --ink: #e7e9ec; --muted: #98a1ad; --line: #2b3039;
+    --accent: #4fb4de; --accent-soft: #15303d; --accent-ink: #061218;
+    --ok: #52c98a; --ok-soft: #13301f; --warn: #f0a945; --warn-soft: #33260f; --bad: #ff7d6e; --bad-soft: #3a1714;
+    --tile: #262a32; --tile-done: #4fb4de; --tile-now: #f0a945; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111317; --surface: #1a1d23; --sunken: #15171c; --ink: #e7e9ec; --muted: #98a1ad; --line: #2b3039;
+  --accent: #4fb4de; --accent-soft: #15303d; --accent-ink: #061218;
+  --ok: #52c98a; --ok-soft: #13301f; --warn: #f0a945; --warn-soft: #33260f; --bad: #ff7d6e; --bad-soft: #3a1714;
+  --tile: #262a32; --tile-done: #4fb4de; --tile-now: #f0a945; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 14px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px 48px;
+}
+.wrap { max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
+h1, h2, h3 { font-family: var(--font-display); margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+h1 { font-size: 22px; font-weight: 700; }
+h2 { font-size: 16px; font-weight: 600; }
+h3 { font-size: 13px; font-weight: 600; }
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); }
+.small { font-size: 12.5px; }
+.label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+a { color: var(--accent); }
+button, input, select { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* header */
+.top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; }
+.brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.mark { width: 34px; height: 34px; border-radius: 8px; background: var(--ink); display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; padding: 6px; flex: none; }
+.mark i { background: var(--bg); border-radius: 1px; opacity: .35; }
+.mark i.on { opacity: 1; background: var(--tile-now); }
+.worker { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+.pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.pill.ok { color: var(--ok); background: var(--ok-soft); }
+.pill.warn { color: var(--warn); background: var(--warn-soft); }
+.pill.bad { color: var(--bad); background: var(--bad-soft); }
+.pill.idle { color: var(--muted); background: var(--sunken); border: 1px solid var(--line); }
+.pill.busy { color: var(--accent); background: var(--accent-soft); }
+.pill.busy::before { animation: blink 1.2s infinite; }
+@keyframes blink { 50% { opacity: .25; } }
+
+.banner { border-radius: var(--radius); padding: 12px 14px; display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; justify-content: space-between; border: 1px solid var(--line); background: var(--surface); }
+.banner.warn { border-color: transparent; background: var(--warn-soft); color: var(--ink); }
+.banner.bad { border-color: transparent; background: var(--bad-soft); }
+.banner p { margin: 0; min-width: 0; flex: 1 1 280px; }
+
+.grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 18px; align-items: start; }
+@media (max-width: 880px) { .grid { grid-template-columns: minmax(0, 1fr); } .col.live { order: -1; } }
+.col { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.panel-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+
+/* form */
+.field { display: flex; flex-direction: column; gap: 7px; min-width: 0; }
+.field > .label { display: flex; justify-content: space-between; gap: 8px; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; }
+.row > .field { flex: 1 1 90px; }
+select, input[type="number"], input[type="text"] {
+  width: 100%; min-width: 0; padding: 8px 10px; border: 1px solid var(--line); border-radius: 7px; background: var(--sunken);
+}
+input[type="number"] { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+input:disabled, select:disabled { opacity: .55; }
+.seg { display: flex; flex-wrap: wrap; gap: 6px; }
+.seg button {
+  border: 1px solid var(--line); background: var(--sunken); border-radius: 7px; padding: 6px 11px; cursor: pointer; font-size: 13px; font-weight: 500;
+}
+.seg button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.seg button .sub { display: block; font-size: 11px; font-weight: 400; opacity: .8; }
+.devlist { display: flex; flex-direction: column; gap: 6px; }
+.dev { display: flex; align-items: center; gap: 10px; padding: 9px 11px; border: 1px solid var(--line); border-radius: 8px; background: var(--sunken); cursor: pointer; min-width: 0; }
+.dev input { accent-color: var(--accent); width: 16px; height: 16px; flex: none; }
+.dev .name { font-weight: 500; min-width: 0; overflow-wrap: anywhere; }
+.dev .kind { margin-left: auto; font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
+.hint { font-size: 12.5px; color: var(--muted); margin: 0; }
+.switch { display: flex; gap: 12px; align-items: flex-start; padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--sunken); cursor: pointer; }
+.switch input { appearance: none; width: 36px; height: 20px; border-radius: 999px; background: var(--line); position: relative; flex: none; cursor: pointer; transition: background .15s; margin: 1px 0 0; }
+.switch input::after { content: ""; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--surface); transition: transform .15s; }
+.switch input:checked { background: var(--accent); }
+.switch input:checked::after { transform: translateX(16px); }
+.switch b { display: block; font-weight: 600; }
+.summary { font-family: var(--font-mono); font-size: 12.5px; background: var(--sunken); border: 1px dashed var(--line); border-radius: 8px; padding: 10px 12px; overflow-wrap: anywhere; }
+.btn { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 8px 14px; cursor: pointer; font-weight: 600; font-size: 13px; }
+.btn:hover { border-color: var(--muted); }
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); padding: 11px 18px; font-size: 14px; }
+.btn.primary:hover { filter: brightness(1.07); }
+.btn.danger { color: var(--bad); }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.btn.small { padding: 4px 10px; font-size: 12px; }
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.toast { font-size: 13px; }
+.toast.ok { color: var(--ok); }
+.toast.bad { color: var(--bad); }
+
+/* now rendering */
+.now-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: flex-start; }
+.now-file { font-family: var(--font-display); font-size: 20px; font-weight: 600; overflow-wrap: anywhere; }
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 520px) { .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.stat { background: var(--sunken); border-radius: 8px; padding: 9px 11px; min-width: 0; }
+.stat .v { font-family: var(--font-mono); font-size: 17px; font-weight: 500; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.bar { height: 8px; border-radius: 999px; background: var(--tile); overflow: hidden; }
+.bar > i { display: block; height: 100%; background: var(--tile-done); border-radius: inherit; transition: width .6s; }
+.strip { display: grid; grid-template-columns: repeat(auto-fill, minmax(9px, 1fr)); gap: 2px; }
+.strip i { aspect-ratio: 1 / 1.6; max-width: 100%; background: var(--tile); border-radius: 2px; }
+.strip i.d { background: var(--tile-done); }
+.strip i.n { background: var(--tile-now); animation: blink 1s infinite; }
+.strip-scale { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
+details.log summary { cursor: pointer; font-size: 12.5px; color: var(--muted); }
+pre.logtail { margin: 8px 0 0; font-family: var(--font-mono); font-size: 11.5px; line-height: 1.55; background: var(--sunken); border-radius: 8px; padding: 10px 12px; overflow-x: auto; white-space: pre; max-height: 240px; }
+.notes { margin: 0; padding-left: 18px; font-size: 12.5px; color: var(--warn); }
+.empty { padding: 18px; border: 1px dashed var(--line); border-radius: 8px; text-align: center; color: var(--muted); }
+
+/* lists */
+.list { display: flex; flex-direction: column; }
+.item { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; padding: 11px 0; border-top: 1px solid var(--line); align-items: center; }
+.item:first-child { border-top: 0; padding-top: 0; }
+.item .t { font-weight: 600; overflow-wrap: anywhere; }
+.item .m { grid-column: 1 / -1; font-size: 12.5px; color: var(--muted); overflow-wrap: anywhere; }
+.item .r { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+.item .err { grid-column: 1 / -1; font-size: 12.5px; color: var(--bad); overflow-wrap: anywhere; }
+
+.setup ol { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; }
+.setup code { font-family: var(--font-mono); font-size: 12.5px; background: var(--sunken); padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere; }
+.foot { font-size: 12px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px 16px; justify-content: space-between; }
+.folderset { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.folderset input { flex: 1 1 220px; font-family: var(--font-mono); font-size: 12px; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <div class="mark" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i><i></i></div>
+      <div>
+        <h1>Miki Butler Renderfarm</h1>
+        <div class="small muted" id="folderLine">Google Drive · Work / Renderfarm</div>
+      </div>
+    </div>
+    <div class="worker" id="worker"><span class="pill idle">Connecting to Google Drive…</span></div>
+  </header>
+
+  <div id="banner" hidden></div>
+
+  <div class="grid">
+    <div class="col">
+      <form class="panel" id="jobForm" novalidate>
+        <div class="panel-head">
+          <h2>New render</h2>
+          <button type="button" class="btn small" id="refreshBtn">Refresh</button>
+        </div>
+
+        <div class="field">
+          <label class="label" for="blend"><span>Blend file</span><span id="blendCount"></span></label>
+          <select id="blend"><option value="*">All .blend files in the folder</option></select>
+          <p class="hint" id="blendHint">Drop .blend files into the Drive folder and they show up here.</p>
+        </div>
+
+        <div class="field">
+          <span class="label"><span>Render device</span><span id="devSource"></span></span>
+          <div class="seg" id="backends" role="group" aria-label="Render device"></div>
+          <div class="devlist" id="devices"></div>
+          <p class="hint" id="devHint"></p>
+        </div>
+
+        <div class="field">
+          <span class="label">Frames</span>
+          <div class="seg" id="frameMode" role="group" aria-label="Frames">
+            <button type="button" data-v="file">File's range</button>
+            <button type="button" data-v="range">Range</button>
+            <button type="button" data-v="single">Single frame</button>
+          </div>
+          <div class="row" id="frameInputs">
+            <div class="field"><label class="label" for="fStart" id="fStartLabel">Start</label><input type="number" id="fStart" min="0" step="1" value="1" inputmode="numeric"></div>
+            <div class="field" data-range><label class="label" for="fEnd">End</label><input type="number" id="fEnd" min="0" step="1" value="250" inputmode="numeric"></div>
+            <div class="field" data-range><label class="label" for="fStep">Every nth</label><input type="number" id="fStep" min="1" step="1" value="1" inputmode="numeric"></div>
+          </div>
+          <p class="hint" id="frameHint"></p>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label class="label" for="samples">Samples</label>
+            <input type="number" id="samples" min="1" step="1" placeholder="File's" inputmode="numeric">
+          </div>
+          <div class="field">
+            <label class="label" for="resPct">Resolution</label>
+            <select id="resPct">
+              <option value="">File's %</option>
+              <option value="25">25%</option><option value="50">50%</option><option value="75">75%</option>
+              <option value="100">100%</option><option value="150">150%</option><option value="200">200%</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <span class="label">Output</span>
+          <div class="seg" id="formats" role="group" aria-label="Output format">
+            <button type="button" data-v="PNG">PNG<span class="sub">sequence</span></button>
+            <button type="button" data-v="JPEG">JPEG<span class="sub">sequence</span></button>
+            <button type="button" data-v="OPEN_EXR">EXR<span class="sub">sequence</span></button>
+            <button type="button" data-v="OPEN_EXR_MULTILAYER">EXR<span class="sub">multilayer</span></button>
+            <button type="button" data-v="TIFF">TIFF<span class="sub">sequence</span></button>
+            <button type="button" data-v="FFMPEG">MP4<span class="sub">H.264 video</span></button>
+            <button type="button" data-v="FILE">File's<span class="sub">as saved</span></button>
+          </div>
+          <p class="hint">Saved to <span class="mono">output/&lt;job&gt;/</span> in the Renderfarm folder, next to a log of the render.</p>
+        </div>
+
+        <label class="switch" for="headless">
+          <input type="checkbox" id="headless" checked>
+          <span><b id="headlessTitle">Headless</b><span class="small muted" id="headlessText">Renders in the background with no Blender window. Fastest.</span></span>
+        </label>
+
+        <div class="summary" id="summary"></div>
+
+        <div class="actions">
+          <button type="submit" class="btn primary" id="submitBtn">Queue render</button>
+          <span class="toast" id="toast" role="status"></span>
+        </div>
+      </form>
+
+      <section class="panel setup" id="setup" hidden>
+        <h2>Set up the render PC</h2>
+        <ol>
+          <li>Put <code>farm_watcher.py</code> and <code>start_farm.bat</code> in the Renderfarm folder.</li>
+          <li>On the PC, open <code>start_farm.bat</code> in Notepad and check the Blender path.</li>
+          <li>Close the old <code>watcher.bat</code> window, then double-click <code>start_farm.bat</code>.</li>
+          <li>Within a minute this page shows the PC as online with its GPUs.</li>
+        </ol>
+        <p class="hint" id="setupFiles"></p>
+      </section>
+    </div>
+
+    <div class="col live">
+      <section class="panel" id="nowPanel">
+        <div class="panel-head"><h2>Now rendering</h2><span class="small muted" id="nowAge"></span></div>
+        <div id="now"><div class="empty">Waiting for the render PC's status…</div></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head"><h2>Queue</h2><span class="small muted" id="queueCount"></span></div>
+        <div class="list" id="queue"><div class="empty">Nothing queued.</div></div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head"><h2>Finished</h2><span class="small muted">last 25 jobs</span></div>
+        <div class="list" id="history"><div class="empty">No finished jobs yet.</div></div>
+      </section>
+    </div>
+  </div>
+
+  <footer class="foot">
+    <span id="syncLine">Jobs and status travel through Google Drive, so expect up to a minute of delay each way.</span>
+    <details>
+      <summary>Farm folder</summary>
+      <div class="folderset" style="margin-top:8px">
+        <input type="text" id="folderId" aria-label="Google Drive folder ID" spellcheck="false">
+        <button type="button" class="btn small" id="folderSave">Use folder</button>
+      </div>
+    </details>
+  </footer>
+</div>
+
+<script>
+(() => {
+  "use strict";
+  const DRIVE = "Google Drive";
+  const DEFAULT_FOLDER = "1ZAXHdxEabzEX-OjMUafHW1VO60zb9n-9";
+  const STATUS_EVERY = 20000;
+  const BACKEND_LABEL = { OPTIX: "OptiX", CUDA: "CUDA", HIP: "HIP", ONEAPI: "oneAPI", METAL: "Metal", CPU: "CPU", FILE: "File's setting" };
+  const BACKEND_SUB = { OPTIX: "NVIDIA RTX", CUDA: "NVIDIA", HIP: "AMD", ONEAPI: "Intel Arc", METAL: "Apple", CPU: "processor", FILE: "as saved" };
+  const FORMAT_LABEL = { PNG: "PNG sequence", JPEG: "JPEG sequence", OPEN_EXR: "EXR sequence", OPEN_EXR_MULTILAYER: "Multilayer EXR", TIFF: "TIFF sequence", FFMPEG: "MP4 video", FILE: "file's own format" };
+
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem("farm:" + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
+    set(k, v) { try { localStorage.setItem("farm:" + k, JSON.stringify(v)); } catch {} },
+  };
+
+  const st = {
+    folder: store.get("folder", DEFAULT_FOLDER),
+    mcp: null,
+    conn: "connecting",          // connecting | ok | error | none
+    connErr: null,
+    files: [],                   // root folder listing
+    status: null,
+    statusFile: null,
+    statusErr: null,
+    outputs: {},                 // job id -> folder url
+    outputFolderUrl: null,
+    submitted: store.get("submitted", {}),  // job id -> job (this browser)
+    cancelling: {},
+    busy: false,
+    lastRefresh: 0,
+  };
+
+  const form = Object.assign({
+    blend: "*", backend: null, devices: null, frameMode: "range",
+    start: 1, end: 250, step: 1, samples: "", resPct: "", format: "PNG", headless: true,
+  }, store.get("form", {}));
+
+  // ------------------------------------------------------------------ Drive
+  function errorCopy(e) {
+    switch (e && e.code) {
+      case "server_not_connected": return { msg: "Google Drive is not connected to your Claude account. Add it in claude.ai Settings → Connectors, then reload this page.", fix: null };
+      case "needs_reauth": return { msg: "Your Google Drive connection has expired. Reconnect Google Drive in claude.ai Settings → Connectors.", fix: null };
+      case "selection_required": return { msg: "You have more than one Google Drive connector. Choose which one this page should use when Claude asks, then refresh.", fix: "refresh" };
+      case "not_in_manifest": return { msg: "Google Drive access is turned off for this page.", fix: "perms" };
+      case "approval_required": return { msg: "This page needs your OK to use Google Drive.", fix: "approve" };
+      case "blocked_by_policy": return { msg: "Your organization's policy blocks this Google Drive action.", fix: null };
+      case "server_unavailable": return { msg: "Google Drive did not answer. It will try again on the next refresh.", fix: "refresh" };
+      case "not_granted": case "capability_disabled": case "capability_removed":
+        return { msg: "This view cannot reach Google Drive. Open the page on claude.ai to control the farm.", fix: null };
+      default: return { msg: "Google Drive reported a problem" + (e && e.message ? ": " + String(e.message).slice(0, 160) : "."), fix: "refresh" };
+    }
+  }
+  const LOST_ACCESS = new Set(["server_not_connected", "needs_reauth", "not_in_manifest", "blocked_by_policy", "approval_required", "selection_required", "not_granted", "capability_disabled", "capability_removed"]);
+
+  async function drive(tool, input) {
+    const r = await st.mcp.callTool(DRIVE, tool, input, { cache: false });
+    return r.payload;
+  }
+  async function listFolder(id) {
+    const out = [];
+    let pageToken;
+    for (let i = 0; i < 5; i++) {
+      const p = await drive("search_files", { query: `parentId = '${id}' and trashed = false`, excludeContentSnippets: true, pageSize: 100, ...(pageToken ? { pageToken } : {}) });
+      const files = (p && p.files) || [];
+      out.push(...files);
+      pageToken = p && p.nextPageToken;
+      if (!pageToken || !files.length) break;
+    }
+    // Drive can repeat a file across pages.
+    const seen = new Set();
+    return out.filter((f) => !seen.has(f.id) && seen.add(f.id));
+  }
+  function decodeB64(b64) {
+    const bin = atob(b64);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    return new TextDecoder().decode(bytes);
+  }
+
+  async function refresh(manual) {
+    if (!st.mcp || st.busy) return;
+    st.busy = true;
+    try {
+      st.files = await listFolder(st.folder);
+      st.conn = "ok"; st.connErr = null;
+      const sf = st.files.find((f) => f.title === "farm_status.json");
+      st.statusFile = sf || null;
+      if (sf) {
+        try {
+          const p = await drive("download_file_content", { fileId: sf.id });
+          const parsed = JSON.parse(decodeB64(p.content || ""));
+          st.status = parsed; st.statusErr = null;
+        } catch (e) {
+          // A half-synced file fails to parse; keep the last good status.
+          if (e && e.code && LOST_ACCESS.has(e.code)) throw e;
+          st.statusErr = "Could not read farm_status.json this time; showing the last copy.";
+        }
+      } else {
+        st.status = null;
+      }
+      const out = st.files.find((f) => f.title === "output" && f.mimeType === "application/vnd.google-apps.folder");
+      st.outputFolderUrl = out ? out.viewUrl : null;
+      if (out) {
+        try {
+          const subs = await listFolder(out.id);
+          st.outputs = {};
+          subs.filter((f) => f.mimeType === "application/vnd.google-apps.folder").forEach((f) => { st.outputs[f.title] = f.viewUrl; });
+        } catch (e) { if (e && e.code && LOST_ACCESS.has(e.code)) throw e; }
+      }
+      // Forget local job copies the farm has finished with.
+      const known = new Set((st.status?.history || []).map((h) => h.id));
+      let changed = false;
+      for (const id of Object.keys(st.submitted)) {
+        const age = Date.now() - (st.submitted[id]._at || 0);
+        if (known.has(id) || age > 7 * 864e5) { delete st.submitted[id]; changed = true; }
+      }
+      if (changed) store.set("submitted", st.submitted);
+      st.lastRefresh = Date.now();
+    } catch (e) {
+      st.conn = "error"; st.connErr = e;
+      if (LOST_ACCESS.has(e && e.code)) { st.files = []; st.status = null; }
+    } finally {
+      st.busy = false;
+      renderAll();
+    }
+  }
+
+  // ------------------------------------------------------------------ helpers
+  function ago(iso) {
+    if (!iso) return "never";
+    const s = Math.max(0, Math.round((Date.now() - Date.parse(iso)) / 1000));
+    if (s < 60) return s + " s ago";
+    if (s < 3600) return Math.round(s / 60) + " min ago";
+    if (s < 86400) return Math.round(s / 3600) + " h ago";
+    return Math.round(s / 86400) + " d ago";
+  }
+  function dur(sec) {
+    if (sec == null || !isFinite(sec)) return "–";
+    sec = Math.round(sec);
+    const h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60), s = sec % 60;
+    return h ? `${h}h ${String(m).padStart(2, "0")}m` : m ? `${m}m ${String(s).padStart(2, "0")}s` : `${s}s`;
+  }
+  function workerState() {
+    const w = st.status && st.status.worker;
+    if (!w || !w.heartbeat) return { online: false, label: "Never seen", cls: "bad" };
+    const age = (Date.now() - Date.parse(w.heartbeat)) / 1000;
+    const limit = (w.poll_seconds || 60) * 2 + 150; // Drive sync adds a minute or two
+    if (age > limit) return { online: false, label: "Offline · last seen " + ago(w.heartbeat), cls: "bad" };
+    return w.state === "rendering" ? { online: true, label: "Rendering", cls: "busy" } : { online: true, label: "Online · idle", cls: "ok" };
+  }
+  function devicesByType() {
+    const by = {};
+    (st.status?.devices || []).forEach((d) => { (by[d.type] = by[d.type] || []).push(d); });
+    return by;
+  }
+  function availableBackends() {
+    const by = devicesByType();
+    const gpu = ["OPTIX", "CUDA", "HIP", "ONEAPI", "METAL"];
+    if (st.status && st.status.devices) return [...gpu.filter((t) => by[t]), "CPU", "FILE"];
+    return [...gpu, "CPU", "FILE"];
+  }
+  function frameCount() {
+    if (form.frameMode === "file") return null;
+    if (form.frameMode === "single") return 1;
+    const s = +form.start, e = +form.end, k = Math.max(1, +form.step || 1);
+    if (!Number.isInteger(s) || !Number.isInteger(e) || e < s) return null;
+    return Math.floor((e - s) / k) + 1;
+  }
+  function jobSummary(j) {
+    const parts = [];
+    parts.push(j.blend === "*" ? "all .blend files" : j.blend);
+    const f = j.frames || {};
+    if (f.mode === "single") parts.push("frame " + f.start);
+    else if (f.mode === "range") parts.push(`frames ${f.start}–${f.end}` + (f.step > 1 ? ` every ${f.step}` : ""));
+    else parts.push("file's frames");
+    if (j.compute && j.compute !== "FILE") parts.push(BACKEND_LABEL[j.compute] || j.compute);
+    if (j.samples) parts.push(j.samples + " samples");
+    if (j.resolution_pct) parts.push(j.resolution_pct + "%");
+    parts.push(FORMAT_LABEL[j.output?.format] || "file's format");
+    parts.push(j.headless === false ? "visible" : "headless");
+    return parts.join(" · ");
+  }
+  function newJobId() {
+    const d = new Date(), p = (n) => String(n).padStart(2, "0");
+    const rnd = Math.random().toString(36).slice(2, 6);
+    return `${d.getFullYear()}${p(d.getMonth() + 1)}${p(d.getDate())}-${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}-${rnd}`;
+  }
+  function buildJob() {
+    const devs = (st.status?.devices || []).filter((d) => d.type === form.backend);
+    let chosen = [];
+    if (form.devices && devs.length && form.backend !== "CPU" && form.backend !== "FILE") {
+      chosen = devs.filter((d) => form.devices.includes(d.id)).map((d) => d.id);
+      if (chosen.length === devs.length) chosen = []; // all = let the farm pick every device
+    }
+    const frames = { mode: form.frameMode };
+    if (form.frameMode !== "file") frames.start = parseInt(form.start, 10);
+    if (form.frameMode === "range") { frames.end = parseInt(form.end, 10); frames.step = Math.max(1, parseInt(form.step, 10) || 1); }
+    return {
+      id: newJobId(),
+      created: new Date().toISOString(),
+      blend: form.blend,
+      compute: form.backend || "FILE",
+      devices: chosen,
+      frames,
+      samples: form.samples ? parseInt(form.samples, 10) : null,
+      resolution_pct: form.resPct ? parseInt(form.resPct, 10) : null,
+      output: { format: form.format },
+      headless: !!form.headless,
+      submitted_from: "Renderfarm manager",
+    };
+  }
+  function validate() {
+    if (form.frameMode !== "file") {
+      const s = Number(form.start);
+      if (form.start === "" || !Number.isInteger(s) || s < 0) return "Enter a start frame of 0 or more.";
+      if (form.frameMode === "range") {
+        const e = Number(form.end);
+        if (form.end === "" || !Number.isInteger(e)) return "Enter an end frame.";
+        if (e < s) return "The end frame is before the start frame.";
+        if (form.step !== "" && (!Number.isInteger(Number(form.step)) || Number(form.step) < 1)) return "Every nth frame must be 1 or more.";
+      }
+    }
+    if (form.samples !== "" && (!Number.isInteger(Number(form.samples)) || Number(form.samples) < 1)) return "Samples must be a whole number above 0.";
+    return null;
+  }
+
+  // ------------------------------------------------------------------ render
+  function renderAll() {
+    renderWorker(); renderBanner(); renderForm(); renderNow(); renderQueue(); renderHistory(); renderSetup();
+  }
+
+  function renderWorker() {
+    const el = $("worker");
+    if (st.conn === "connecting") { el.innerHTML = `<span class="pill idle">Connecting to Google Drive…</span>`; return; }
+    if (st.conn === "none" || (st.conn === "error" && LOST_ACCESS.has(st.connErr?.code))) { el.innerHTML = `<span class="pill bad">No Drive access</span>`; return; }
+    if (!st.status) { el.innerHTML = `<span class="pill warn">Render PC not set up</span>`; return; }
+    const ws = workerState(), w = st.status.worker || {};
+    el.innerHTML = `<span class="pill ${ws.cls}">${esc(ws.label)}</span>
+      <span class="small muted mono">${esc(w.host || "")}${w.blender ? " · Blender " + esc(w.blender) : ""}</span>`;
+  }
+
+  function renderBanner() {
+    const el = $("banner");
+    if (st.conn === "none") {
+      el.className = "banner warn"; el.hidden = false;
+      el.innerHTML = `<p>This copy of the page cannot reach Google Drive. Open it on claude.ai, where it uses your Google Drive connector to queue renders and read the farm's status.</p>`;
+      return;
+    }
+    if (st.conn === "error") {
+      const c = errorCopy(st.connErr);
+      el.className = "banner " + (LOST_ACCESS.has(st.connErr?.code) ? "bad" : "warn"); el.hidden = false;
+      let btn = "";
+      if (c.fix === "perms") btn = `<button type="button" class="btn small" data-act="perms">Open permissions</button>`;
+      if (c.fix === "approve") btn = `<button type="button" class="btn small" data-act="refresh">Allow and retry</button>`;
+      if (c.fix === "refresh") btn = `<button type="button" class="btn small" data-act="refresh">Try again</button>`;
+      el.innerHTML = `<p>${esc(c.msg)}</p>${btn}`;
+      return;
+    }
+    if (st.statusErr) { el.className = "banner"; el.hidden = false; el.innerHTML = `<p class="small">${esc(st.statusErr)}</p>`; return; }
+    el.hidden = true;
+  }
+
+  function setPressed(groupId, value) {
+    $(groupId).querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.v === value)));
+  }
+
+  function renderForm() {
+    // blends
+    const blends = st.files.filter((f) => /\.blend$/i.test(f.title)).sort((a, b) => a.title.localeCompare(b.title));
+    const sel = $("blend");
+    const opts = [`<option value="*">All .blend files in the folder${blends.length ? ` (${blends.length})` : ""}</option>`]
+      .concat(blends.map((f) => `<option value="${esc(f.title)}">${esc(f.title)}</option>`));
+    if (form.blend !== "*" && !blends.some((f) => f.title === form.blend) && st.conn === "ok" && st.lastRefresh) form.blend = "*";
+    if (form.blend !== "*" && !blends.some((f) => f.title === form.blend)) opts.push(`<option value="${esc(form.blend)}">${esc(form.blend)}</option>`);
+    if (sel.innerHTML !== opts.join("")) sel.innerHTML = opts.join("");
+    sel.value = form.blend;
+    $("blendCount").textContent = st.lastRefresh ? `${blends.length} in folder` : "";
+    const picked = blends.find((f) => f.title === form.blend);
+    $("blendHint").textContent = picked
+      ? `Uploaded ${ago(picked.modifiedTime)}${picked.fileSize ? " · " + (picked.fileSize / 1048576).toFixed(1) + " MB" : ""}`
+      : blends.length ? "Each file renders in turn, with these settings." : "Drop .blend files into the Drive folder and they show up here.";
+
+    // devices
+    const backs = availableBackends();
+    if (!form.backend || !backs.includes(form.backend)) form.backend = backs[0];
+    const by = devicesByType();
+    $("backends").innerHTML = backs.map((b) => {
+      const n = (by[b] || []).length;
+      const sub = b === "CPU" || b === "FILE" ? BACKEND_SUB[b] : n ? `${n} GPU${n > 1 ? "s" : ""}` : BACKEND_SUB[b];
+      return `<button type="button" data-v="${b}">${BACKEND_LABEL[b]}<span class="sub">${esc(sub)}</span></button>`;
+    }).join("");
+    setPressed("backends", form.backend);
+    const devs = by[form.backend] || [];
+    $("devSource").textContent = st.status?.devices ? "reported by " + (st.status.worker?.host || "the PC") : "";
+    if (form.backend !== "CPU" && form.backend !== "FILE" && devs.length) {
+      const on = form.devices ? new Set(form.devices) : new Set(devs.map((d) => d.id));
+      $("devices").innerHTML = devs.map((d, i) => `<label class="dev" for="dev${i}">
+          <input type="checkbox" id="dev${i}" data-dev="${esc(d.id)}" ${on.has(d.id) ? "checked" : ""}>
+          <span class="name">${esc(d.name)}</span><span class="kind">${esc(d.type)}</span></label>`).join("");
+    } else if (form.backend === "CPU") {
+      const cpu = by.CPU && by.CPU[0];
+      $("devices").innerHTML = cpu ? `<div class="dev" style="cursor:default"><span class="name">${esc(cpu.name)}</span><span class="kind">${cpu.threads ? esc(cpu.threads) + " threads" : "CPU"}</span></div>` : "";
+    } else $("devices").innerHTML = "";
+    $("devHint").textContent = !st.status?.devices
+      ? "The render PC has not reported its hardware yet, so every device type is offered. Pick the one your GPU uses."
+      : form.backend === "FILE" ? "Uses the device saved in each .blend file and in the PC's Blender preferences."
+      : form.backend === "CPU" ? "Renders Cycles on the processor. Slower, but needs no GPU."
+      : "GPU choice applies to Cycles. EEVEE always draws on the PC's display GPU.";
+
+    // frames
+    setPressed("frameMode", form.frameMode);
+    $("frameInputs").hidden = form.frameMode === "file";
+    $("frameInputs").querySelectorAll("[data-range]").forEach((el) => { el.hidden = form.frameMode !== "range"; });
+    $("fStartLabel").textContent = form.frameMode === "single" ? "Frame" : "Start";
+    const n = frameCount();
+    $("frameHint").textContent = form.frameMode === "file" ? "Renders the start, end and step saved in each file."
+      : n == null ? "" : `${n.toLocaleString()} frame${n === 1 ? "" : "s"} per file`;
+
+    // format + headless
+    setPressed("formats", form.format);
+    $("headless").checked = !!form.headless;
+    $("headlessTitle").textContent = form.headless ? "Headless" : "Show Blender on the render PC";
+    $("headlessText").textContent = form.headless
+      ? " Renders in the background with no Blender window. Fastest."
+      : " Opens Blender's render window on the PC so you can watch, then closes it when done.";
+
+    // summary
+    const j = buildJob();
+    const err = validate();
+    $("summary").textContent = err ? err : jobSummary(j);
+    $("summary").style.color = err ? "var(--bad)" : "";
+    const ready = st.conn === "ok" && !err;
+    $("submitBtn").disabled = !ready;
+  }
+
+  function renderNow() {
+    const cur = st.status && st.status.current;
+    const ws = workerState();
+    $("nowAge").textContent = st.status?.worker?.heartbeat ? "updated " + ago(st.status.worker.heartbeat) : "";
+    if (!st.status) {
+      $("now").innerHTML = `<div class="empty">${st.conn === "ok" ? "The render PC hasn't written <span class=\"mono\">farm_status.json</span> yet. See the setup steps." : "Waiting for Google Drive…"}</div>`;
+      return;
+    }
+    if (!cur) { $("now").innerHTML = `<div class="empty">${ws.online ? "Idle. Queue a render and the PC starts it as soon as Drive syncs the job." : "Nothing rendering. The PC is offline."}</div>`; return; }
+    const j = cur.job || {}, p = cur.progress || {};
+    const total = p.frames_total || 0, done = p.frames_done || 0;
+    const pct = total ? Math.min(100, (done / total) * 100) : 0;
+    const times = p.frame_times || [];
+    const avg = times.length ? times.reduce((a, b) => a + b, 0) / times.length : null;
+    const eta = avg != null && total ? avg * (total - done) : null;
+    // frame strip
+    let strip = "";
+    if (total) {
+      const cells = Math.min(total, 240);
+      const per = total / cells;
+      for (let i = 0; i < cells; i++) {
+        const isDone = (i + 1) * per <= done;
+        const cls = isDone ? "d" : i * per <= done && done < total ? "n" : "";
+        strip += `<i class="${cls}"></i>`;
+      }
+    }
+    const fs = p.frame_start, fe = p.frame_end;
+    const cancelling = st.cancelling[j.id];
+    $("now").innerHTML = `
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="now-head">
+          <div style="min-width:0">
+            <div class="label">Job ${esc(j.id)} · file ${Math.min((cur.files_done || 0) + 1, cur.files_total || 1)} of ${cur.files_total || 1}</div>
+            <div class="now-file">${esc(cur.file || "Starting…")}</div>
+            <div class="small muted">${esc(jobSummary(j))}</div>
+          </div>
+          <button type="button" class="btn small danger" data-act="cancel" data-id="${esc(j.id)}" ${cancelling ? "disabled" : ""}>${cancelling ? "Stopping…" : "Stop render"}</button>
+        </div>
+        ${ws.online ? "" : `<div class="banner warn"><p class="small">The PC stopped reporting ${esc(ago(st.status.worker.heartbeat))}. This is the last known state.</p></div>`}
+        <div class="bar" aria-label="Progress"><i style="width:${pct.toFixed(1)}%"></i></div>
+        <div class="stats">
+          <div class="stat"><div class="label">Frames</div><div class="v">${done}/${total || "–"}</div></div>
+          <div class="stat"><div class="label">Last frame</div><div class="v">${p.frame ?? "–"}</div></div>
+          <div class="stat"><div class="label">Per frame</div><div class="v">${avg != null ? dur(avg) : "–"}</div></div>
+          <div class="stat"><div class="label">Time left</div><div class="v">${eta != null ? dur(eta) : "–"}</div></div>
+        </div>
+        ${total ? `<div><div class="strip" aria-hidden="true">${strip}</div>
+          <div class="strip-scale"><span>${fs ?? ""}</span><span>${total > 240 ? "1 cell ≈ " + (total / 240).toFixed(1) + " frames" : ""}</span><span>${fe ?? ""}</span></div></div>` : ""}
+        <div class="small muted mono">${esc([p.engine, p.device, p.resolution, p.format].filter(Boolean).join(" · "))}${cur.elapsed != null ? " · " + dur(cur.elapsed) + " on this file" : ""}</div>
+        ${(p.notes || []).length ? `<ul class="notes">${p.notes.map((n) => `<li>${esc(n)}</li>`).join("")}</ul>` : ""}
+        ${(cur.log || []).length ? `<details class="log"><summary>Blender output (last ${cur.log.length} lines)</summary><pre class="logtail">${esc(cur.log.join("\n"))}</pre></details>` : ""}
+      </div>`;
+  }
+
+  function queueItems() {
+    const jobsInDrive = st.files.filter((f) => /^job_.*\.json$/i.test(f.title));
+    const legacy = st.files.filter((f) => /^render_\d+\.txt$/i.test(f.title));
+    const statusQ = st.status?.queue || [];
+    const curId = st.status?.current?.job?.id;
+    const items = [];
+    for (const f of jobsInDrive) {
+      const id = f.title.replace(/^job_/i, "").replace(/\.json$/i, "");
+      if (id === curId) continue;
+      const job = statusQ.find((q) => q.id === id) || st.submitted[id] || null;
+      items.push({ id, file: f, job, seen: !!statusQ.find((q) => q.id === id), created: job?.created || f.createdTime });
+    }
+    for (const f of legacy) items.push({ id: f.title, file: f, job: null, legacy: true, created: f.createdTime });
+    items.sort((a, b) => String(a.created).localeCompare(String(b.created)));
+    return items;
+  }
+
+  function renderQueue() {
+    const items = queueItems();
+    $("queueCount").textContent = items.length ? `${items.length} waiting` : "";
+    if (!items.length) { $("queue").innerHTML = `<div class="empty">Nothing queued.</div>`; return; }
+    $("queue").innerHTML = items.map((it, i) => `
+      <div class="item">
+        <div class="t mono">${it.legacy ? esc(it.id) + " <span class=\"muted\">(old-style trigger)</span>" : esc(it.id)}</div>
+        <div class="r">
+          <span class="pill ${it.seen ? "idle" : "warn"}">${it.seen ? (i === 0 ? "Next" : "Waiting") : "Syncing to PC"}</span>
+          <button type="button" class="btn small danger" data-act="remove" data-file="${esc(it.file.id)}" data-id="${esc(it.id)}">Remove</button>
+        </div>
+        <div class="m">${it.job ? esc(jobSummary(it.job)) : it.legacy ? "All .blend files, the given samples, each file's own settings" : "Details appear once the PC reads the job."} · queued ${esc(ago(it.created))}</div>
+      </div>`).join("");
+  }
+
+  function renderHistory() {
+    const h = st.status?.history || [];
+    if (!h.length) { $("history").innerHTML = `<div class="empty">No finished jobs yet.</div>`; return; }
+    const pill = { done: "ok", failed: "bad", cancelled: "idle", invalid: "bad" };
+    const word = { done: "Done", failed: "Failed", cancelled: "Stopped", invalid: "Invalid job" };
+    $("history").innerHTML = h.map((e) => {
+      const res = e.results || [];
+      const frames = res.reduce((a, r) => a + (r.frames_done || 0), 0);
+      const secs = e.started && e.finished ? (Date.parse(e.finished) - Date.parse(e.started)) / 1000 : null;
+      const url = st.outputs[e.id];
+      const notes = [...new Set(res.flatMap((r) => r.notes || []))];
+      return `<div class="item">
+        <div class="t mono">${esc(e.id)}</div>
+        <div class="r">
+          ${url ? `<a class="btn small" href="${esc(url)}" target="_blank" rel="noopener">Open output</a>` : ""}
+          <span class="pill ${pill[e.status] || "idle"}">${word[e.status] || esc(e.status)}</span>
+        </div>
+        <div class="m">${esc([e.job ? jobSummary(e.job) : "", res.length ? `${res.length} file${res.length > 1 ? "s" : ""}, ${frames} frame${frames === 1 ? "" : "s"}` : "", secs != null ? dur(secs) : "", ago(e.finished)].filter(Boolean).join(" · "))}</div>
+        ${e.error ? `<div class="err">${esc(e.error)}</div>` : ""}
+        ${notes.length ? `<div class="m" style="color:var(--warn)">${notes.map(esc).join(" · ")}</div>` : ""}
+      </div>`;
+    }).join("");
+  }
+
+  function renderSetup() {
+    const has = (n) => st.files.some((f) => f.title === n);
+    const ws = workerState();
+    const show = st.conn === "ok" && st.lastRefresh && (!st.status || !ws.online);
+    $("setup").hidden = !show;
+    if (show) {
+      const missing = ["farm_watcher.py", "start_farm.bat"].filter((n) => !has(n));
+      $("setupFiles").textContent = missing.length ? "Not in the folder yet: " + missing.join(", ") + "."
+        : st.status ? "Both files are in place. Start start_farm.bat on the PC, or check that Google Drive for desktop is running there." : "Both files are in place. Start start_farm.bat on the PC.";
+    }
+    $("folderLine").textContent = st.folder === DEFAULT_FOLDER ? "Google Drive · Work / Renderfarm" : "Google Drive · folder " + st.folder;
+    if (document.activeElement !== $("folderId")) $("folderId").value = st.folder;
+    $("syncLine").textContent = "Jobs and status travel through Google Drive, so expect up to a minute of delay each way." +
+      (st.lastRefresh ? " Checked " + ago(new Date(st.lastRefresh).toISOString()) + "." : "");
+  }
+
+  // ------------------------------------------------------------------ actions
+  function saveForm() { store.set("form", form); }
+  function toast(msg, kind) { const t = $("toast"); t.textContent = msg; t.className = "toast " + (kind || ""); }
+
+  async function submitJob(ev) {
+    ev.preventDefault();
+    const err = validate();
+    if (err) { toast(err, "bad"); return; }
+    if (!st.mcp) return;
+    const job = buildJob();
+    $("submitBtn").disabled = true;
+    toast("Sending the job to Google Drive…");
+    try {
+      await drive("create_file", {
+        title: `job_${job.id}.json`, parentId: st.folder, textContent: JSON.stringify(job, null, 2),
+        contentMimeType: "application/json", disableConversionToGoogleType: true,
+      });
+      st.submitted[job.id] = { ...job, _at: Date.now() };
+      store.set("submitted", st.submitted);
+      const ws = workerState();
+      toast(ws.online ? `Queued ${job.id}. The PC picks it up once Drive syncs.` : `Queued ${job.id}. It starts when the render PC comes online.`, "ok");
+      refresh();
+    } catch (e) {
+      const c = errorCopy(e);
+      const unsure = e && (e.code === "server_unavailable" || e.code === "upstream_error" || !e.code);
+      toast(unsure ? "Drive did not confirm the job. Check the queue before sending it again." : c.msg, "bad");
+      if (LOST_ACCESS.has(e && e.code)) { st.conn = "error"; st.connErr = e; }
+      renderAll();
+      refresh();
+    }
+  }
+
+  async function cancelJob(id, btn) {
+    btn.disabled = true; btn.textContent = "Stopping…";
+    try {
+      await drive("create_file", { title: `cancel_${id}.txt`, parentId: st.folder, textContent: "cancel", contentMimeType: "text/plain", disableConversionToGoogleType: true });
+      st.cancelling[id] = true;
+      toast("Stop sent. The PC stops the render once Drive syncs it.", "ok");
+    } catch (e) {
+      btn.disabled = false; btn.textContent = "Stop render";
+      toast(errorCopy(e).msg, "bad");
+    }
+  }
+
+  async function removeQueued(fileId, id, btn) {
+    btn.disabled = true; btn.textContent = "Removing…";
+    try {
+      await drive("trash_file", { fileId });
+      delete st.submitted[id]; store.set("submitted", st.submitted);
+      st.files = st.files.filter((f) => f.id !== fileId);
+      toast(`Removed ${id} from the queue. It is in your Drive trash.`, "ok");
+      renderAll();
+    } catch (e) {
+      btn.disabled = false; btn.textContent = "Remove";
+      toast(errorCopy(e).msg, "bad");
+    }
+  }
+
+  // ------------------------------------------------------------------ wiring
+  document.addEventListener("click", async (ev) => {
+    const seg = ev.target.closest(".seg button");
+    if (seg) {
+      const g = seg.parentElement.id, v = seg.dataset.v;
+      if (g === "backends") { form.backend = v; form.devices = null; }
+      if (g === "frameMode") form.frameMode = v;
+      if (g === "formats") form.format = v;
+      saveForm(); renderForm(); return;
+    }
+    const act = ev.target.closest("[data-act]");
+    if (!act) return;
+    const a = act.dataset.act;
+    if (a === "refresh") { st.conn = st.mcp ? "ok" : st.conn; refresh(true); }
+    if (a === "perms") {
+      try { const perms = await claude.use("permissions"); await perms.manage(); } catch { toast("Open the artifact's Permissions menu and turn Google Drive on.", "bad"); }
+      refresh(true);
+    }
+    if (a === "cancel") cancelJob(act.dataset.id, act);
+    if (a === "remove") removeQueued(act.dataset.file, act.dataset.id, act);
+  });
+  $("devices").addEventListener("change", (ev) => {
+    const boxes = [...$("devices").querySelectorAll("input[data-dev]")];
+    form.devices = boxes.filter((b) => b.checked).map((b) => b.dataset.dev);
+    if (!form.devices.length) { ev.target.checked = true; form.devices = [ev.target.dataset.dev]; toast("Keep at least one GPU selected, or choose CPU.", "bad"); }
+    saveForm(); renderForm();
+  });
+  $("blend").addEventListener("change", (e) => { form.blend = e.target.value; saveForm(); renderForm(); });
+  [["fStart", "start"], ["fEnd", "end"], ["fStep", "step"], ["samples", "samples"]].forEach(([id, k]) => {
+    $(id).value = form[k];
+    $(id).addEventListener("input", (e) => { form[k] = e.target.value.trim(); saveForm(); renderForm(); });
+  });
+  $("resPct").value = form.resPct;
+  $("resPct").addEventListener("change", (e) => { form.resPct = e.target.value; saveForm(); renderForm(); });
+  $("headless").addEventListener("change", (e) => { form.headless = e.target.checked; saveForm(); renderForm(); });
+  $("jobForm").addEventListener("submit", submitJob);
+  $("refreshBtn").addEventListener("click", () => refresh(true));
+  $("folderSave").addEventListener("click", () => {
+    let v = $("folderId").value.trim();
+    const m = v.match(/folders\/([A-Za-z0-9_-]+)/); if (m) v = m[1];
+    if (!/^[A-Za-z0-9_-]{10,}$/.test(v)) { toast("Paste a Drive folder link or ID.", "bad"); return; }
+    st.folder = v; store.set("folder", v); st.status = null; st.files = []; st.outputs = {};
+    renderAll(); refresh(true);
+  });
+
+  renderAll();
+
+  const boot = window.claude && typeof window.claude.use === "function" ? window.claude.use("mcp") : Promise.resolve(null);
+  boot.then((mcp) => {
+    if (!mcp) { st.conn = "none"; renderAll(); return; }
+    st.mcp = mcp;
+    refresh(true);
+    setInterval(() => { if (!document.hidden) refresh(); else renderNow(); }, STATUS_EVERY);
+    document.addEventListener("visibilitychange", () => { if (!document.hidden && Date.now() - st.lastRefresh > 8000) refresh(); });
+  }).catch(() => { st.conn = "none"; renderAll(); });
+  // Keep the "x s ago" labels moving between Drive refreshes.
+  setInterval(() => { if (!document.hidden) { renderWorker(); renderSetup(); } }, 10000);
+})();
+</script>
