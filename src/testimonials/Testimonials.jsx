@@ -13,32 +13,14 @@ import { Star, Quote, ChevronLeft, ChevronRight } from "lucide-react";
 //   2. Set SAMPLE = false.
 // That removes the "Sample" tag and the disclaimer in one step.
 // ─────────────────────────────────────────────────────────────────────────
-const SAMPLE = true;
+const SAMPLE = false;
 
 const TESTIMONIALS = [
   {
     quote:
-      "Patient, clear, and genuinely good at teaching — not just good at Blender. I leave every session with something I can actually use that week.",
-    name: "Sam W.",
-    role: "Weekend learner",
-  },
-  {
-    quote:
-      "I'd done the donut three times and still couldn't make anything of my own. One session and I finally understood why — and had a real plan. I'm actually building now.",
-    name: "Jordan R.",
-    role: "Hobbyist → first portfolio piece",
-  },
-  {
-    quote:
-      "Coming from Maya, Blender felt backwards. We set up the keymap and the workflow kit, and by the end of the call my hands just worked. Saved me weeks of frustration.",
-    name: "Priya S.",
-    role: "Maya artist, switching to Blender",
-  },
-  {
-    quote:
-      "He looked at my portfolio the way a studio actually would and told me exactly what was missing. Blunt, kind, and worth ten times the price.",
-    name: "Lena K.",
-    role: "Junior environment artist",
+      "Hands down the fastest way to bridge the gap between hobbyist Blender habits and real-time production workflows. Practical, patient, and focused on things tutorials usually gloss over.",
+    name: "Samir K.",
+    role: "Indie Dev",
   },
 ];
 
@@ -103,14 +85,16 @@ const Testimonials = () => {
           onFocusCapture={() => setPaused(true)}
           onBlurCapture={() => setPaused(false)}
         >
-          <button
-            type="button"
-            onClick={() => go(i - 1)}
-            aria-label="Previous testimonial"
-            className="shrink-0 p-2.5 rounded-full border border-white/10 text-white transition-all hover:border-orange-500/60 hover:text-orange-400"
-          >
-            <ChevronLeft size={18} />
-          </button>
+          {n > 1 && (
+            <button
+              type="button"
+              onClick={() => go(i - 1)}
+              aria-label="Previous testimonial"
+              className="shrink-0 p-2.5 rounded-full border border-white/10 text-white transition-all hover:border-orange-500/60 hover:text-orange-400"
+            >
+              <ChevronLeft size={18} />
+            </button>
+          )}
 
           <div className="relative flex-1 min-h-[220px] flex items-center">
             <AnimatePresence mode="wait">
@@ -154,33 +138,37 @@ const Testimonials = () => {
             </AnimatePresence>
           </div>
 
-          <button
-            type="button"
-            onClick={() => go(i + 1)}
-            aria-label="Next testimonial"
-            className="shrink-0 p-2.5 rounded-full border border-white/10 text-white transition-all hover:border-orange-500/60 hover:text-orange-400"
-          >
-            <ChevronRight size={18} />
-          </button>
+          {n > 1 && (
+            <button
+              type="button"
+              onClick={() => go(i + 1)}
+              aria-label="Next testimonial"
+              className="shrink-0 p-2.5 rounded-full border border-white/10 text-white transition-all hover:border-orange-500/60 hover:text-orange-400"
+            >
+              <ChevronRight size={18} />
+            </button>
+          )}
         </div>
 
         {/* Dots */}
-        <div className="mt-6 flex justify-center gap-2">
-          {TESTIMONIALS.map((_, d) => (
-            <button
-              key={d}
-              type="button"
-              onClick={() => setI(d)}
-              aria-label={`Go to testimonial ${d + 1}`}
-              aria-current={d === i}
-              className={`h-2 rounded-full transition-all ${
-                d === i
-                  ? "w-6 bg-orange-400"
-                  : "w-2 bg-white/25 hover:bg-white/40"
-              }`}
-            />
-          ))}
-        </div>
+        {n > 1 && (
+          <div className="mt-6 flex justify-center gap-2">
+            {TESTIMONIALS.map((_, d) => (
+              <button
+                key={d}
+                type="button"
+                onClick={() => setI(d)}
+                aria-label={`Go to testimonial ${d + 1}`}
+                aria-current={d === i}
+                className={`h-2 rounded-full transition-all ${
+                  d === i
+                    ? "w-6 bg-orange-400"
+                    : "w-2 bg-white/25 hover:bg-white/40"
+                }`}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
