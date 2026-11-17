@@ -68,6 +68,11 @@ const Testimonials = () => {
 
   const t = TESTIMONIALS[i];
 
+  // Placeholder testimonials read as fake and cost more trust than they build,
+  // so the whole section is hidden until real student quotes replace them.
+  // Flip SAMPLE to false (after swapping in real quotes) to show it again.
+  if (SAMPLE) return null;
+
   return (
     <section className="py-16 px-6 bg-transparent text-white relative">
       <div className="max-w-3xl mx-auto text-center">

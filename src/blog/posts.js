@@ -34,6 +34,8 @@ With Ucupaint, each part of the look is its own layer:
 
 Want less rust? Drop that layer's opacity. Move the scratches somewhere else? Repaint just the scratch mask. Nothing you do to one layer touches the others. This is **non-destructive** texturing, and it's the single biggest reason to use the add-on — it turns texturing from a nerve-wracking one-shot into something you can actually iterate on.
 
+> **Stuck on your own model's textures?** Bring your .blend to a free 15-minute screen-share and we'll set up a clean UV-to-texture workflow live — no pitch, no commitment. [Book a free call →](https://www.blendertutoring.com/#packages)
+
 ---
 
 ## ✨ What It Can Do

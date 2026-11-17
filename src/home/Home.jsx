@@ -173,6 +173,31 @@ const Home = () => {
           </motion.div>
         </section>
 
+        {/* Credibility strip — the tutor's real production proof sat four
+            sections below the hero, where a visitor decides. This surfaces it
+            at the decision point, right under the first CTA. */}
+        <section
+          aria-label="Credentials"
+          className="border-y border-white/10 bg-white/[0.02] py-5 px-6"
+        >
+          <div className="max-w-5xl mx-auto flex flex-col sm:flex-row flex-wrap items-center justify-center gap-x-5 gap-y-2 text-center text-[13px] text-gray-400">
+            <span className="font-semibold text-gray-200">
+              Taught by a Senior Environment Artist · 18 years in games
+            </span>
+            <span className="hidden sm:inline text-gray-600" aria-hidden="true">•</span>
+            <span>
+              Shipped titles at{" "}
+              <span className="text-gray-300">
+                Capcom, EA, Ubisoft, Offworld Industries &amp; Next Level Games
+              </span>
+            </span>
+            <span className="hidden sm:inline text-gray-600" aria-hidden="true">•</span>
+            <span>
+              Mentor at <span className="text-gray-300">Think Tank</span>
+            </span>
+          </div>
+        </section>
+
         {/* Order matters here: what you get, then who teaches it, then what it
             costs. Pricing used to sit directly under the hero, which asked
             visitors to judge the price before they knew what they were buying. */}
