@@ -3,24 +3,38 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Star, Quote, ChevronLeft, ChevronRight } from "lucide-react";
 
 // ─────────────────────────────────────────────────────────────────────────
-// Testimonials — compact single-card carousel.
-//
-// SAMPLE controls whether these are presented as placeholders. While it is
-// true, the card shows a small "Sample" tag and the section carries an
-// honest sub-line, so no visitor is misled into thinking these are real
-// reviews. To go live with genuine testimonials:
-//   1. Replace the TESTIMONIALS entries below with real student quotes.
-//   2. Set SAMPLE = false.
-// That removes the "Sample" tag and the disclaimer in one step.
+// Testimonials — compact carousel. Each entry can set `sample: true`, which
+// shows a small "Sample" tag on that card so a placeholder is never mistaken
+// for a real review. Real quotes omit it and show no tag. Delete the sample
+// entries once there are enough real ones to fill the carousel.
 // ─────────────────────────────────────────────────────────────────────────
-const SAMPLE = false;
-
 const TESTIMONIALS = [
   {
     quote:
       "Hands down the fastest way to bridge the gap between hobbyist Blender habits and real-time production workflows. Practical, patient, and focused on things tutorials usually gloss over.",
     name: "Samir K.",
     role: "Indie Dev",
+  },
+  {
+    quote:
+      "Patient, clear, and genuinely good at teaching — not just good at Blender. I leave every session with something I can actually use that week.",
+    name: "Sam W.",
+    role: "Weekend learner",
+    sample: true,
+  },
+  {
+    quote:
+      "I'd done the donut three times and still couldn't make anything of my own. One session and I finally understood why — and had a real plan. I'm actually building now.",
+    name: "Jordan R.",
+    role: "Hobbyist → first portfolio piece",
+    sample: true,
+  },
+  {
+    quote:
+      "Coming from Maya, Blender felt backwards. We set up the keymap and the workflow kit, and by the end of the call my hands just worked. Saved me weeks of frustration.",
+    name: "Priya S.",
+    role: "Maya artist, switching to Blender",
+    sample: true,
   },
 ];
 
@@ -50,11 +64,6 @@ const Testimonials = () => {
 
   const t = TESTIMONIALS[i];
 
-  // Placeholder testimonials read as fake and cost more trust than they build,
-  // so the whole section is hidden until real student quotes replace them.
-  // Flip SAMPLE to false (after swapping in real quotes) to show it again.
-  if (SAMPLE) return null;
-
   return (
     <section className="py-16 px-6 bg-transparent text-white relative">
       <div className="max-w-3xl mx-auto text-center">
@@ -70,11 +79,6 @@ const Testimonials = () => {
           <h2 className="text-3xl md:text-4xl font-black tracking-tight">
             What students say
           </h2>
-          {SAMPLE && (
-            <p className="mt-3 text-xs text-gray-400 italic">
-              Sample testimonials, shown while we gather real student reviews.
-            </p>
-          )}
         </motion.div>
 
         {/* Carousel */}
@@ -106,7 +110,7 @@ const Testimonials = () => {
                 transition={{ duration: 0.35 }}
                 className="relative w-full rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-sm p-7 sm:p-9"
               >
-                {SAMPLE && (
+                {t.sample && (
                   <span className="absolute top-4 right-4 text-[10px] font-bold uppercase tracking-wider text-orange-300/80 bg-orange-400/10 border border-orange-400/20 rounded-full px-2 py-0.5">
                     Sample
                   </span>
