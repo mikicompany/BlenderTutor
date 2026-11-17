@@ -5,7 +5,9 @@
 // This is the FREE 15-minute call only. The paid session is booked on the
 // site's own calendar — see lib/availability.js — which is why there is no
 // second Calendly link here any more.
-export const BOOKING_URL = "https://calendly.com/blendertutoring-info/"
+// Links straight to the free 15-minute call event, not the Calendly landing
+// page — one less click and no "which event?" decision at the conversion point.
+export const BOOKING_URL = "https://calendly.com/blendertutoring-info/30min"
 
 // Shared by every booking button so the wording stays consistent — and says
 // "free", which is the part that makes people click.
