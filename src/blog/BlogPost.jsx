@@ -5,6 +5,7 @@ import remarkGfm from "remark-gfm"
 import { posts } from "./posts"
 import Navbar from "../navbar/Navbar"
 import Footer from "../footer/Footer"
+import BlogCTA from "./BlogCTA"
 import { useState } from "react"
 import { subscribeToNewsletter, isValidEmail } from "../lib/newsletter"
 import { IMAGE_DIMS } from "./image-dims"
@@ -325,6 +326,7 @@ const BlogPost = () => {
         <div className="prose prose-invert prose-orange max-w-none prose-headings:font-bold prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-4 prose-h3:text-xl prose-h3:mt-8 prose-h3:text-orange-400 prose-blockquote:border-orange-400 prose-blockquote:bg-orange-400/5 prose-blockquote:rounded-r-lg prose-blockquote:py-1 prose-table:text-sm prose-td:border-white/10 prose-th:border-white/10 prose-hr:border-white/10">
           <ReactMarkdown remarkPlugins={[remarkGfm]} components={mdComponents}>{post.content}</ReactMarkdown>
         </div>
+        <BlogCTA />
         {/* The lead-magnet box doubles as the newsletter signup for posts
             that have a downloadable, so those posts show it in place of the
             generic Subscribe rather than two competing asks. */}
