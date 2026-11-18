@@ -3,12 +3,18 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Star, Quote, ChevronLeft, ChevronRight } from "lucide-react";
 
 // ─────────────────────────────────────────────────────────────────────────
-// Testimonials — compact carousel. Each entry can set `sample: true`, which
-// shows a small "Sample" tag on that card so a placeholder is never mistaken
-// for a real review. Real quotes omit it and show no tag. Delete the sample
-// entries once there are enough real ones to fill the carousel.
+// Testimonials — compact carousel.
+//
+// The quotes are pulled LIVE from a Google Sheet the owner edits, so adding a
+// review is "type a row, it shows up" with no code change and no deploy. The
+// sheet has columns: Quote | Name | Role | Show. A row shows unless its Show
+// cell says no/false/0/hide (blank = show).
+//
+// FALLBACK below always renders first (so the section works even before the
+// fetch, during prerender, or if the sheet is ever unreachable). If the sheet
+// returns at least one row, it replaces the fallback.
 // ─────────────────────────────────────────────────────────────────────────
-const TESTIMONIALS = [
+const FALLBACK = [
   {
     quote:
       "Hands down the fastest way to bridge the gap between hobbyist Blender habits and real-time production workflows. Practical, patient, and focused on things tutorials usually gloss over.",
@@ -17,7 +23,83 @@ const TESTIMONIALS = [
   },
 ];
 
+// Live data source — the published CSV of the owner's "Blender Tutoring —
+// Testimonials" sheet. The gviz endpoint is derived from the sheet id, so this
+// URL never has to change as rows are added. Publishing the sheet to the web
+// (one-time) guarantees it is publicly readable.
+const SHEET_CSV_URL =
+  "https://docs.google.com/spreadsheets/d/12cbgRo4gY2oCNrPb4zSkMDMFd_DrtVdcOnL9X594QXI/gviz/tq?tqx=out:csv";
+
 const AUTO_MS = 6500;
+
+// Minimal CSV parser that respects quoted fields (a quote may contain commas,
+// newlines and escaped "" quotes). Returns an array of string arrays.
+function parseCSV(text) {
+  const rows = [];
+  let row = [];
+  let field = "";
+  let inQuotes = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (inQuotes) {
+      if (c === '"') {
+        if (text[i + 1] === '"') {
+          field += '"';
+          i++;
+        } else {
+          inQuotes = false;
+        }
+      } else {
+        field += c;
+      }
+    } else if (c === '"') {
+      inQuotes = true;
+    } else if (c === ",") {
+      row.push(field);
+      field = "";
+    } else if (c === "\n") {
+      row.push(field);
+      rows.push(row);
+      row = [];
+      field = "";
+    } else if (c !== "\r") {
+      field += c;
+    }
+  }
+  if (field !== "" || row.length) {
+    row.push(field);
+    rows.push(row);
+  }
+  return rows;
+}
+
+// Turn the sheet's rows into testimonial objects, keyed by header name so the
+// owner can reorder columns without breaking anything.
+function rowsToTestimonials(rows) {
+  if (!rows.length) return [];
+  const header = rows[0].map((h) => h.trim().toLowerCase());
+  const qi = header.indexOf("quote");
+  const ni = header.indexOf("name");
+  const ri = header.indexOf("role");
+  const si = header.indexOf("show");
+  if (qi === -1) return [];
+  const out = [];
+  for (let r = 1; r < rows.length; r++) {
+    const cells = rows[r];
+    const quote = (cells[qi] || "").trim();
+    if (!quote) continue; // skip blank rows
+    if (si !== -1) {
+      const show = (cells[si] || "").trim().toLowerCase();
+      if (["no", "false", "0", "hide", "n"].includes(show)) continue;
+    }
+    out.push({
+      quote,
+      name: (cells[ni] || "").trim(),
+      role: (cells[ri] || "").trim(),
+    });
+  }
+  return out;
+}
 
 const Stars = () => (
   <div className="flex gap-0.5" aria-label="5 out of 5 stars">
@@ -28,9 +110,30 @@ const Stars = () => (
 );
 
 const Testimonials = () => {
+  const [items, setItems] = useState(FALLBACK);
   const [i, setI] = useState(0);
   const [paused, setPaused] = useState(false);
-  const n = TESTIMONIALS.length;
+  const n = items.length;
+
+  // Pull the live list once on mount. Any failure leaves the fallback in place.
+  useEffect(() => {
+    let cancelled = false;
+    fetch(SHEET_CSV_URL)
+      .then((res) => (res.ok ? res.text() : Promise.reject(res.status)))
+      .then((text) => {
+        const parsed = rowsToTestimonials(parseCSV(text));
+        if (!cancelled && parsed.length) {
+          setItems(parsed);
+          setI(0);
+        }
+      })
+      .catch(() => {
+        /* keep FALLBACK — the section still renders a real review */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const go = (next) => setI((prev) => (next + n) % n);
 
@@ -41,7 +144,7 @@ const Testimonials = () => {
     return () => clearInterval(t);
   }, [paused, n]);
 
-  const t = TESTIMONIALS[i];
+  const t = items[Math.min(i, n - 1)];
 
   return (
     <section className="py-16 px-6 bg-transparent text-white relative">
@@ -89,12 +192,6 @@ const Testimonials = () => {
                 transition={{ duration: 0.35 }}
                 className="relative w-full rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-sm p-7 sm:p-9"
               >
-                {t.sample && (
-                  <span className="absolute top-4 right-4 text-[10px] font-bold uppercase tracking-wider text-orange-300/80 bg-orange-400/10 border border-orange-400/20 rounded-full px-2 py-0.5">
-                    Sample
-                  </span>
-                )}
-
                 <Quote
                   size={28}
                   className="text-orange-400/40 mx-auto mb-4"
@@ -111,10 +208,12 @@ const Testimonials = () => {
                     <span className="font-bold text-white text-sm">
                       {t.name}
                     </span>
-                    <span className="text-gray-400 text-sm">
-                      {" "}
-                      — {t.role}
-                    </span>
+                    {t.role && (
+                      <span className="text-gray-400 text-sm">
+                        {" "}
+                        — {t.role}
+                      </span>
+                    )}
                   </div>
                 </figcaption>
               </motion.figure>
@@ -136,7 +235,7 @@ const Testimonials = () => {
         {/* Dots */}
         {n > 1 && (
           <div className="mt-6 flex justify-center gap-2">
-            {TESTIMONIALS.map((_, d) => (
+            {items.map((_, d) => (
               <button
                 key={d}
                 type="button"
