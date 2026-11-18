@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Content Editor — Blender Tutoring</title>
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="stylesheet" href="/fonts/fonts.css" />
+  <style>
+    :root{
+      --bg:#141210; --panel:#1f1c17; --panel2:#2a251e; --border:#39332b;
+      --fg:#f3efe8; --muted:#a69d90; --accent:#F37D16; --accent2:#ffa24d;
+      --good:#4ade80; --crit:#f87171;
+      --head:"Space Grotesk Variable","Space Grotesk",system-ui,sans-serif;
+      --body:"Manrope Variable","Manrope",system-ui,sans-serif;
+      --mono:ui-monospace,"SF Mono",Menlo,monospace;
+    }
+    *{box-sizing:border-box;}
+    html,body{margin:0;}
+    body{background:var(--bg);color:var(--fg);font-family:var(--body);line-height:1.5;
+      padding:max(16px,env(safe-area-inset-left)) max(16px,env(safe-area-inset-right));}
+    .wrap{max-width:780px;margin:0 auto;padding-block:28px 72px;}
+    h1,h2,h3{font-family:var(--head);margin:0;letter-spacing:-.01em;}
+    a{color:var(--accent2);}
+    .top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+      border-bottom:1px solid var(--border);padding-bottom:16px;margin-bottom:24px;}
+    .brand{display:flex;align-items:center;gap:10px;}
+    .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);}
+    .brand h1{font-size:1.1rem;}
+    .top .links a{font-size:.82rem;margin-left:14px;}
+    .muted{color:var(--muted);}
+    .hidden{display:none!important;}
+
+    /* buttons */
+    button{font-family:var(--body);cursor:pointer;border-radius:9px;border:1px solid var(--border);
+      background:var(--panel2);color:var(--fg);padding:9px 14px;font-size:.9rem;font-weight:600;}
+    button:hover{border-color:var(--accent);}
+    button:active{transform:translateY(1px);}
+    button.primary{background:var(--accent);color:#1a1205;border-color:var(--accent);}
+    button.primary:hover{background:var(--accent2);}
+    button.ghost{background:transparent;}
+    button.danger{color:var(--crit);}
+    button:disabled{opacity:.5;cursor:not-allowed;}
+    .btnrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+
+    /* setup */
+    .card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:16px;}
+    .card h2{font-size:1.05rem;margin-bottom:6px;}
+    ol{margin:14px 0;padding-left:20px;}
+    ol li{margin:7px 0;}
+    pre{background:#0e0c0a;border:1px solid var(--border);border-radius:10px;padding:14px;overflow:auto;
+      font-family:var(--mono);font-size:.74rem;line-height:1.45;max-height:260px;}
+    .field{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+    input[type=text],input[type=url]{flex:1;min-width:0;background:var(--panel2);border:1px solid var(--border);
+      border-radius:9px;color:var(--fg);padding:10px 12px;font-family:var(--mono);font-size:.82rem;}
+    input:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:1px;}
+
+    /* editor list */
+    .toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px;}
+    .toolbar h2{font-size:1rem;}
+    .t{background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:16px;margin-bottom:12px;}
+    .t.off{opacity:.55;}
+    .t .meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px;}
+    textarea{width:100%;background:var(--panel2);border:1px solid var(--border);border-radius:9px;color:var(--fg);
+      padding:10px 12px;font-family:var(--body);font-size:.92rem;resize:vertical;min-height:72px;}
+    .inrow{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;}
+    .inrow label{flex:1;min-width:140px;font-size:.74rem;color:var(--muted);display:flex;flex-direction:column;gap:4px;}
+    .inrow input{width:100%;background:var(--panel2);border:1px solid var(--border);border-radius:8px;color:var(--fg);
+      padding:8px 10px;font-family:var(--body);font-size:.88rem;}
+    .t .foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;flex-wrap:wrap;}
+    .toggle{display:flex;align-items:center;gap:7px;font-size:.84rem;cursor:pointer;user-select:none;}
+    .toggle input{width:16px;height:16px;accent-color:var(--accent);}
+    .iconbtn{padding:6px 10px;font-size:.8rem;}
+    .pill{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:3px 8px;border-radius:999px;}
+    .pill.on{background:#16301f;color:var(--good);}
+    .pill.hide{background:#3a1d1c;color:var(--crit);}
+
+    .savebar{position:sticky;bottom:0;background:linear-gradient(transparent,var(--bg) 30%);padding-top:18px;margin-top:8px;
+      display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+    .status{font-size:.86rem;}
+    .status.ok{color:var(--good);} .status.err{color:var(--crit);}
+    .count{font-size:.78rem;color:var(--muted);}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="brand"><span class="dot"></span><h1>Content Editor</h1></div>
+    <div class="links">
+      <a href="https://www.blendertutoring.com/#testimonials" target="_blank" rel="noopener">View live ↗</a>
+      <a href="#" id="disconnect" class="hidden">Disconnect</a>
+    </div>
+  </div>
+
+  <!-- SETUP (shown until the Apps Script URL is connected) -->
+  <div id="setup">
+    <div class="card">
+      <h2>One-time setup — connect your testimonials sheet</h2>
+      <p class="muted">This lets the editor save straight to your site. Takes about 3 minutes, once.</p>
+      <ol>
+        <li>Open your <a href="https://docs.google.com/spreadsheets/d/12cbgRo4gY2oCNrPb4zSkMDMFd_DrtVdcOnL9X594QXI/edit" target="_blank" rel="noopener">Testimonials sheet</a>, then click <b>Extensions → Apps Script</b>.</li>
+        <li>Delete whatever is there, paste the code below, and click <b>Save</b> (💾).</li>
+        <li>Click <b>Deploy → New deployment</b>. For type choose <b>Web app</b>. Set <b>Execute as: Me</b> and <b>Who has access: Anyone</b>. Click <b>Deploy</b>.</li>
+        <li>Google will ask you to <b>authorize</b> — allow it (click <i>Advanced → Go to … (unsafe)</i> if warned; it's your own script).</li>
+        <li>Copy the <b>Web app URL</b> (it ends in <code>/exec</code>) and paste it below.</li>
+      </ol>
+      <div class="btnrow" style="margin-bottom:8px;">
+        <button id="copyCode">Copy the code</button>
+        <span class="muted" style="font-size:.8rem;">then paste it into Apps Script</span>
+      </div>
+      <pre id="code"></pre>
+      <div class="field">
+        <input type="url" id="urlInput" placeholder="https://script.google.com/macros/s/..../exec" />
+        <button class="primary" id="connect">Connect</button>
+      </div>
+      <p id="setupStatus" class="status"></p>
+    </div>
+  </div>
+
+  <!-- EDITOR -->
+  <div id="editor" class="hidden">
+    <div class="toolbar">
+      <h2>Testimonials</h2>
+      <div class="btnrow">
+        <button id="reload" class="ghost iconbtn">↻ Reload</button>
+        <button id="add">+ Add testimonial</button>
+      </div>
+    </div>
+    <div id="list"></div>
+    <div class="savebar">
+      <button class="primary" id="save">Save &amp; publish</button>
+      <span id="count" class="count"></span>
+      <span id="status" class="status"></span>
+    </div>
+  </div>
+</div>
+
+<script>
+  var SCRIPT_CODE = `/**
+ * Blender Tutoring — Testimonials API
+ * Deploy as: Web app · Execute as Me · Who has access: Anyone
+ */
+const TAB = 'Sheet1'; // falls back to the first tab if not found
+
+function doGet() { return out({ ok: true, rows: readRows() }); }
+
+function doPost(e) {
+  try {
+    var data = JSON.parse(e.postData.contents);
+    if (Array.isArray(data.rows)) writeRows(data.rows);
+    return out({ ok: true, rows: readRows() });
+  } catch (err) { return out({ ok: false, error: String(err) }); }
+}
+
+function sheet() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  return ss.getSheetByName(TAB) || ss.getSheets()[0];
+}
+
+function readRows() {
+  var values = sheet().getDataRange().getValues();
+  if (!values.length) return [];
+  var h = values[0].map(function (x) { return String(x).trim().toLowerCase(); });
+  var qi = h.indexOf('quote'), ni = h.indexOf('name'), ri = h.indexOf('role'), si = h.indexOf('show');
+  var rows = [];
+  for (var r = 1; r < values.length; r++) {
+    var row = values[r];
+    var quote = qi >= 0 ? String(row[qi]).trim() : '';
+    if (!quote) continue;
+    rows.push({
+      quote: quote,
+      name: ni >= 0 ? String(row[ni]).trim() : '',
+      role: ri >= 0 ? String(row[ri]).trim() : '',
+      show: si >= 0 ? String(row[si]).trim() : 'yes'
+    });
+  }
+  return rows;
+}
+
+function writeRows(rows) {
+  var sh = sheet();
+  sh.clear();
+  var o = [['Quote', 'Name', 'Role', 'Show']];
+  rows.forEach(function (t) {
+    var show = (t.show === false || String(t.show).toLowerCase() === 'no') ? 'no' : 'yes';
+    o.push([t.quote || '', t.name || '', t.role || '', show]);
+  });
+  sh.getRange(1, 1, o.length, 4).setValues(o);
+}
+
+function out(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
+}`;
+
+  var KEY = 'bt_admin_script_url';
+  var $ = function (id) { return document.getElementById(id); };
+  var url = null;
+  try { url = localStorage.getItem(KEY); } catch (e) {}
+
+  $('code').textContent = SCRIPT_CODE;
+
+  $('copyCode').addEventListener('click', function () {
+    var b = $('copyCode');
+    navigator.clipboard.writeText(SCRIPT_CODE).then(
+      function () { b.textContent = 'Copied ✓'; setTimeout(function(){ b.textContent = 'Copy the code'; }, 1400); },
+      function () {
+        var r = document.createRange(); r.selectNodeContents($('code'));
+        var s = getSelection(); s.removeAllRanges(); s.addRange(r);
+      }
+    );
+  });
+
+  $('connect').addEventListener('click', function () {
+    var v = $('urlInput').value.trim();
+    if (!/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec$/.test(v)) {
+      setStatus($('setupStatus'), 'That doesn’t look like a Web app URL ending in /exec.', 'err'); return;
+    }
+    try { localStorage.setItem(KEY, v); } catch (e) {}
+    url = v; showEditor(); load();
+  });
+
+  $('disconnect').addEventListener('click', function (e) {
+    e.preventDefault();
+    try { localStorage.removeItem(KEY); } catch (e2) {}
+    url = null; $('editor').classList.add('hidden'); $('setup').classList.remove('hidden'); $('disconnect').classList.add('hidden');
+  });
+
+  function showEditor() {
+    $('setup').classList.add('hidden'); $('editor').classList.remove('hidden'); $('disconnect').classList.remove('hidden');
+  }
+  function setStatus(el, msg, kind) { el.textContent = msg || ''; el.className = 'status' + (kind ? ' ' + kind : ''); }
+
+  var rows = [];
+
+  function render() {
+    var list = $('list'); list.innerHTML = '';
+    rows.forEach(function (t, i) {
+      var on = !(t.show === false || String(t.show).toLowerCase() === 'no');
+      var el = document.createElement('div');
+      el.className = 't' + (on ? '' : ' off');
+      el.innerHTML =
+        '<div class="meta"><span class="pill ' + (on ? 'on">Showing' : 'hide">Hidden') + '</span>' +
+        '<span class="muted" style="font-size:.76rem">#' + (i + 1) + '</span></div>' +
+        '<textarea placeholder="The testimonial quote…">' + esc(t.quote) + '</textarea>' +
+        '<div class="inrow">' +
+          '<label>Name<input class="n" value="' + escAttr(t.name) + '" placeholder="e.g. Samir K." /></label>' +
+          '<label>Role<input class="r" value="' + escAttr(t.role) + '" placeholder="e.g. Indie Dev" /></label>' +
+        '</div>' +
+        '<div class="foot">' +
+          '<label class="toggle"><input type="checkbox" class="sh"' + (on ? ' checked' : '') + ' /> Show on site</label>' +
+          '<div class="btnrow">' +
+            '<button class="ghost iconbtn up" title="Move up">↑</button>' +
+            '<button class="ghost iconbtn dn" title="Move down">↓</button>' +
+            '<button class="ghost iconbtn danger del">Delete</button>' +
+          '</div>' +
+        '</div>';
+      // wire inputs back to the model
+      el.querySelector('textarea').addEventListener('input', function (e) { t.quote = e.target.value; });
+      el.querySelector('.n').addEventListener('input', function (e) { t.name = e.target.value; });
+      el.querySelector('.r').addEventListener('input', function (e) { t.role = e.target.value; });
+      el.querySelector('.sh').addEventListener('change', function (e) { t.show = e.target.checked ? 'yes' : 'no'; render(); });
+      el.querySelector('.up').addEventListener('click', function () { if (i > 0) { rows.splice(i - 1, 0, rows.splice(i, 1)[0]); render(); } });
+      el.querySelector('.dn').addEventListener('click', function () { if (i < rows.length - 1) { rows.splice(i + 1, 0, rows.splice(i, 1)[0]); render(); } });
+      el.querySelector('.del').addEventListener('click', function () { rows.splice(i, 1); render(); });
+      list.appendChild(el);
+    });
+    var shown = rows.filter(function (t) { return !(t.show === false || String(t.show).toLowerCase() === 'no'); }).length;
+    $('count').textContent = rows.length + ' total · ' + shown + ' showing on site';
+  }
+
+  function load() {
+    setStatus($('status'), 'Loading…', '');
+    fetch(url, { method: 'GET' })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        if (!d.ok) throw new Error(d.error || 'Read failed');
+        rows = d.rows || []; render(); setStatus($('status'), '', '');
+      })
+      .catch(function (err) {
+        setStatus($('status'), 'Could not read the sheet. Check the URL is the /exec Web app link and access is set to "Anyone". (' + err.message + ')', 'err');
+      });
+  }
+
+  $('reload').addEventListener('click', load);
+  $('add').addEventListener('click', function () {
+    rows.push({ quote: '', name: '', role: '', show: 'yes' }); render();
+    window.scrollTo(0, document.body.scrollHeight);
+  });
+
+  $('save').addEventListener('click', function () {
+    var clean = rows.filter(function (t) { return (t.quote || '').trim(); });
+    if (clean.length !== rows.length) { rows = clean; render(); }
+    setStatus($('status'), 'Saving…', '');
+    $('save').disabled = true;
+    fetch(url, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ rows: rows }) })
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        $('save').disabled = false;
+        if (!d.ok) throw new Error(d.error || 'Save failed');
+        rows = d.rows || rows; render();
+        setStatus($('status'), 'Saved ✓  Your site updates within a couple of minutes.', 'ok');
+      })
+      .catch(function (err) {
+        $('save').disabled = false;
+        setStatus($('status'), 'Save failed: ' + err.message, 'err');
+      });
+  });
+
+  // boot
+  if (url) { showEditor(); load(); }
+</script>
+</body>
+</html>
