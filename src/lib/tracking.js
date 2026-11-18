@@ -41,6 +41,24 @@ function describe(anchor) {
   }
 }
 
+// A Discord webhook takes JSON with a `content` string, not form fields, and
+// its execute endpoint is CORS-enabled, so the browser can POST to it directly
+// and the message appears in the channel instantly.
+function isDiscord(url) {
+  return /discord(app)?\.com\/api\/webhooks\//.test(url)
+}
+
+function discordContent(fields) {
+  const when = new Date()
+  const title = fields._subject ? `🔔 **${fields._subject}**` : "🔔 **New site event**"
+  const lines = Object.entries(fields)
+    .filter(([k]) => !k.startsWith("_"))
+    .map(([k, v]) => `**${k}:** ${v}`)
+  lines.push(`**when:** ${when.toLocaleString("en-CA", { timeZone: "America/Vancouver" })}`)
+  if (document.referrer) lines.push(`**from:** ${document.referrer}`)
+  return JSON.stringify({ content: [title, ...lines].join("\n").slice(0, 1900) })
+}
+
 // Form-encoded rather than JSON, for two reasons. It is CORS-safelisted, so
 // the request goes without a preflight that sendBeacon cannot perform; and
 // form-to-email services turn each field into a line of the email, so the
@@ -55,6 +73,16 @@ function describe(anchor) {
 // match rather than claiming a confirmation it cannot have.
 export async function postAwait(fields) {
   if (!WEBHOOK) throw new Error("no webhook configured")
+
+  if (isDiscord(WEBHOOK)) {
+    await fetch(WEBHOOK, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: discordContent(fields),
+      keepalive: true,
+    })
+    return true
+  }
 
   const when = new Date()
   const body = new URLSearchParams({
@@ -77,6 +105,20 @@ export async function postAwait(fields) {
 
 function post(fields) {
   if (!WEBHOOK) return false
+
+  if (isDiscord(WEBHOOK)) {
+    try {
+      fetch(WEBHOOK, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: discordContent(fields),
+        keepalive: true,
+      }).catch(() => {})
+    } catch {
+      // Tracking must never interfere with the click that triggered it.
+    }
+    return
+  }
 
   const when = new Date()
   const body = new URLSearchParams({
