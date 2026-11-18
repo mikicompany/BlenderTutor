@@ -15,27 +15,6 @@ const TESTIMONIALS = [
     name: "Samir K.",
     role: "Indie Dev",
   },
-  {
-    quote:
-      "Patient, clear, and genuinely good at teaching — not just good at Blender. I leave every session with something I can actually use that week.",
-    name: "Sam W.",
-    role: "Weekend learner",
-    sample: true,
-  },
-  {
-    quote:
-      "I'd done the donut three times and still couldn't make anything of my own. One session and I finally understood why — and had a real plan. I'm actually building now.",
-    name: "Jordan R.",
-    role: "Hobbyist → first portfolio piece",
-    sample: true,
-  },
-  {
-    quote:
-      "Coming from Maya, Blender felt backwards. We set up the keymap and the workflow kit, and by the end of the call my hands just worked. Saved me weeks of frustration.",
-    name: "Priya S.",
-    role: "Maya artist, switching to Blender",
-    sample: true,
-  },
 ];
 
 const AUTO_MS = 6500;
