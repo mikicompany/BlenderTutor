@@ -421,6 +421,8 @@ DLSS — the NVIDIA tech that quietly doubled frame rates in half the games you'
 
 That's the whole idea in one picture: the left is what a path tracer gives you after only a handful of samples — speckled with noise. The right is the resolved image. DLSS does that reconstruction *live, in the viewport*, from very few samples — so instead of waiting for the preview to clean up, it's already clean while you move the camera.
 
+> **Quick answer:** DLSS in Blender (5.3+) is a **viewport denoiser** — NVIDIA DLSS Ray Reconstruction. On an RTX GPU, set **Render Properties ▸ Sampling ▸ Viewport ▸ Denoise** to **DLSS** for a clean, real-time preview. It's viewport-only (not final renders), NVIDIA-only, and off by default.
+
 ---
 
 ## 🧠 What DLSS in Blender Actually Is
@@ -428,6 +430,10 @@ That's the whole idea in one picture: the left is what a path tracer gives you a
 First, clear up the confusion. DLSS in games does a few different jobs — upscaling, frame generation, denoising. The version that came to Blender is specifically **DLSS Ray Reconstruction**, and in Blender it is **one thing: a viewport denoiser**.
 
 A path tracer like Cycles builds an image by firing rays and averaging samples. Few samples = fast but noisy; many samples = clean but slow. A **denoiser** cheats the trade-off: it takes the noisy low-sample image and reconstructs what the clean version should look like. Blender already had two (OptiX and OpenImageDenoise). DLSS Ray Reconstruction is a newer, AI-trained denoiser — built on top of the existing OptiX path — that is especially good at reconstructing fine detail, reflections and lighting from *very* few samples.
+
+![Cycles render at 6 samples beside the same scene at 400 samples, showing grain clearing](/blog-images/cycles-noise-samples-real.jpg)
+
+*Few samples (left) are fast but noisy; many samples (right) are clean but slow. A denoiser reconstructs the clean result from a noisy low-sample image — and DLSS does it live, in the viewport, from very few samples.*
 
 It is **not** frame generation, it is **not** upscaling your final render, and it does **not** magically make your final export faster. It makes the interactive preview beautiful, immediately.
 
@@ -444,6 +450,8 @@ DLSS Ray Reconstruction gives you a **clean, responsive, near-final preview in r
 - **Less waiting, more iterating.** The tight feedback loop is where good-looking work actually comes from.
 
 It's the same job as the [fixes for a noisy render](/blog/blender-render-noisy-fix), but applied continuously and interactively instead of after the fact.
+
+> **Setting up Cycles, your GPU, or a denoiser and it won't behave?** That's the kind of thing a quick 1-on-1 untangles in minutes instead of an afternoon of forum threads — bring your scene and we'll sort it live. [Book a free call →](https://www.blendertutoring.com/#packages)
 
 ---
 
@@ -473,10 +481,13 @@ That's it. Move the camera or drag a light and the preview resolves clean almost
 
 ## ⚖️ DLSS vs OptiX Denoise
 
-People ask which to use, so: they're both NVIDIA AI denoisers, with one key split.
+People ask which to use, so here's the split at a glance — the two NVIDIA AI denoisers plus the cross-platform option:
 
-- **OptiX denoise** works for **both** the viewport *and* final renders. It's your reliable all-rounder.
-- **DLSS Ray Reconstruction** is **viewport-only** (for now), but tends to be cleaner and sharper at very low sample counts, preserving detail that OptiX can smudge.
+| Denoiser | Viewport | Final render | Works on | Best for |
+| --- | --- | --- | --- | --- |
+| **DLSS Ray Reconstruction** | Yes | Not yet | NVIDIA RTX only | Sharpest real-time look-dev at very low samples |
+| **OptiX** | Yes | Yes | NVIDIA RTX | Reliable all-rounder — viewport *and* final |
+| **OpenImageDenoise** | Yes | Yes | Any GPU/CPU (AMD, Intel, Mac) | Cross-platform fallback when DLSS/OptiX aren't an option |
 
 So the practical answer: use **DLSS for interactive look-dev** — the fast, beautiful preview — and use **OptiX or OpenImageDenoise for the final render**, since DLSS doesn't do final-frame denoising yet.
 
@@ -487,6 +498,22 @@ So the practical answer: use **DLSS for interactive look-dev** — the fast, bea
 - **No DLSS option in the menu?** You're almost certainly not on Blender 5.3+, not on an RTX GPU, or your driver is old. All three have to be true.
 - **It didn't speed up my final render.** It won't — it's a *viewport* feature. Your export still uses OptiX or OpenImageDenoise.
 - **It's greyed out or missing on a laptop.** Make sure Blender is actually using the NVIDIA GPU (not the integrated graphics) in both Blender's preferences and your system/NVIDIA control panel.
+
+---
+
+## ❓ FAQ
+
+**Does DLSS speed up final renders in Blender?**
+No — it's a viewport-only denoiser for now. Your final export still uses OptiX or OpenImageDenoise.
+
+**Can I use DLSS on AMD, Intel or a Mac?**
+No, DLSS is NVIDIA RTX only. Use **OpenImageDenoise** instead — it runs anywhere and still gives a clean viewport preview.
+
+**Why is DLSS missing from my denoise menu?**
+You need all three at once: Blender 5.3+, an RTX GPU, and a current NVIDIA driver with Cycles set to OptiX. Miss any one and the option won't appear.
+
+**DLSS or OptiX — which should I pick?**
+DLSS for the interactive viewport (cleaner at low samples); OptiX or OpenImageDenoise for the final render.
 
 ---
 
