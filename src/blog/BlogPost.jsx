@@ -6,6 +6,7 @@ import { posts } from "./posts"
 import Navbar from "../navbar/Navbar"
 import Footer from "../footer/Footer"
 import BlogCTA from "./BlogCTA"
+import StickyBookingBar from "./StickyBookingBar"
 import { useState } from "react"
 import { subscribeToNewsletter, isValidEmail } from "../lib/newsletter"
 import { IMAGE_DIMS } from "./image-dims"
@@ -342,6 +343,7 @@ const BlogPost = () => {
         {!post.leadMagnet && <Subscribe />}
       </div>
       <Footer />
+      <StickyBookingBar />
     </div>
   )
 }
