@@ -5,8 +5,15 @@
     <link>https://www.blendertutoring.com/blog</link>
     <description>Practical Blender guides for beginners and game artists.</description>
     <language>en</language>
-    <lastBuildDate>Sat, 14 Nov 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 19 Nov 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://www.blendertutoring.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Gaussian Splatting in Blender 5.3: What It Is &amp; How to Use It</title>
+      <link>https://www.blendertutoring.com/blog/gaussian-splatting-in-blender</link>
+      <guid isPermaLink="true">https://www.blendertutoring.com/blog/gaussian-splatting-in-blender</guid>
+      <pubDate>Thu, 19 Nov 2026 00:00:00 GMT</pubDate>
+      <description>Blender 5.3 can import and render 3D Gaussian Splatting scenes — photoreal captures of real places, live in your viewport. What it is, why it matters for game art, and how to start.</description>
+    </item>
     <item>
       <title>Ucupaint: Layer-Based Texture Painting in Blender</title>
       <link>https://www.blendertutoring.com/blog/ucupaint-texture-painting</link>

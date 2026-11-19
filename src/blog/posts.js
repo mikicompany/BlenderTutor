@@ -1,5 +1,124 @@
 export const posts = [
   {
+    slug: "gaussian-splatting-in-blender",
+    title: "Gaussian Splatting in Blender 5.3: What It Is & How to Use It",
+    description: "Blender 5.3 can import and render 3D Gaussian Splatting scenes — photoreal captures of real places, live in your viewport. What it is, why it matters for game art, and how to start.",
+    date: "2026-11-19",
+    thumbnail: "/blog-images/gaussian-splatting.svg",
+    content: `
+Point a phone at a real object, walk around it, wait a few minutes — and then spin that exact object inside Blender, every reflection and soft shadow intact, photoreal from any angle. That's **3D Gaussian Splatting**, and as of **Blender 5.3** it's built right in: you can import and render splat scenes in the viewport, no add-on required. Here's what it actually is, why it's a big deal for environment and game art, and how to get your first splat into Blender.
+
+![An abstract cloud of soft, overlapping coloured splats resolving into a glowing 3D form — the look of a Gaussian splatting scene](/blog-images/gaussian-splatting.svg)
+
+> **Quick answer:** 3D Gaussian Splatting represents a scene as millions of tiny coloured 3D blobs ("splats") reconstructed from photos or video — giving photoreal, real-time results from any viewpoint. In **Blender 5.3** you import a splat file (**.ply / .splat**) via **File ▸ Import**, and it renders live in Eevee and Cycles. It's a *look*, not editable mesh geometry — brilliant for photoreal backdrops and reference, not for game-ready props.
+
+---
+
+## 🌫️ What Gaussian Splatting Actually Is
+
+A normal 3D model is a **mesh** — flat polygons with textures stretched over them. A Gaussian splat is nothing like that. The scene is stored as a huge cloud of tiny, soft, coloured ellipsoids — think millions of fuzzy translucent blobs, each with its own position, size, orientation, colour and transparency. On their own they're meaningless specks. Layered by the million, they reconstruct a real place so convincingly your eye reads it as a photograph.
+
+The clever part is **where the splats come from**: you feed an algorithm a set of photos or a short video of a real subject, it works out the camera positions, and then it "trains" a splat cloud that reproduces every one of those photos — including the stuff meshes struggle with, like soft reflections, subsurface glow and fine fuzzy detail. The result renders in **real time**, and because each splat carries view-dependent colour, reflections and highlights actually *shift* correctly as you orbit. It's the closest thing to teleporting a real location onto your GPU.
+
+---
+
+## 🎮 Why It Matters For Your Work
+
+For a game or environment artist, this unlocks things that used to cost hours:
+
+- **Photoreal backdrops and set dressing in minutes.** Capture a forest floor, an alley, a rock face — drop it straight behind your hero asset instead of modelling it.
+- **Reference you can actually orbit.** A splat of a real prop lets you study its proportions, materials and how light wraps it from every angle, not just the one photo you found.
+- **Set extension & matte replacement.** Park a splat scene beyond your playable area for instant depth and realism.
+- **Fast "scanned" look.** Capturing a weathered object as a splat is quicker than sculpting and texturing every scratch.
+
+The honest caveat up front: a splat is a **look**, not geometry you can rig, retopologise or collide against. Treat it as a photoreal layer in your scene, not a replacement for clean modelling — which, incidentally, is still the skill that makes everything else work.
+
+> **Not sure where splats fit in your pipeline — or stuck getting a capture to import clean?** That's exactly the kind of thing a quick 1-on-1 sorts in minutes instead of an afternoon of trial and error. Bring your scene and we'll work it out live. [Book a free call →](https://www.blendertutoring.com/#packages)
+
+---
+
+## ✅ What You Need
+
+- **Blender 5.3 or newer** — this is where native splat import and rendering landed.
+- **A splat file** — usually **.ply**, **.splat** or **.ksplat**.
+- **A reasonably modern GPU.** Splat scenes are heavy on VRAM; a few million splats will make a weak card chug.
+
+**Where do splat files come from?** Two routes:
+
+1. **Capture your own.** Shoot a steady video or ~50–200 overlapping photos of a subject, then "train" it into a splat with a capture app (Polycam, Luma, KIRI Engine) or the free, more technical route (nerfstudio / the original 3DGS tools, which use COLMAP to solve camera positions).
+2. **Download one.** There are growing libraries of free and paid splat scenes online — a fast way to test the workflow before you capture anything yourself.
+
+---
+
+## 🛠️ How To Bring a Splat Into Blender 5.3
+
+Once you're on 5.3+ with a splat file ready, it's quick:
+
+1. **Import it.** **File ▸ Import ▸ Gaussian Splat** (select your .ply / .splat). It comes in as a splat object.
+2. **Switch the viewport to Rendered shading** — splats draw live in both **Eevee** and **Cycles**.
+3. **Orient and scale it.** Captures very often arrive rotated and off-scale — a **-90° rotation on X** and a scale tweak is the usual first move to stand it upright.
+4. **Tune it.** The splat object carries controls for overall size/opacity and how it sits with the rest of your scene. Drop your own models in front of it, frame a camera, and you've got a real location behind your work.
+
+(Exact panel wording shifts a little between point releases, but it lives under the object's splat settings.)
+
+---
+
+## ⚖️ Gaussian Splatting vs Photogrammetry
+
+People mix these up, because both start from photos. The difference is what you get out:
+
+| | Gaussian Splatting | Photogrammetry (mesh) |
+| --- | --- | --- |
+| **Output** | A cloud of coloured 3D splats | A textured polygon mesh |
+| **Realism** | Extremely high — reflections, soft light, fuzz | High, but "frozen" and often flatter |
+| **Editable geometry** | No — you can't retopo, UV or rig it | Yes — it's real geometry |
+| **Lighting** | Baked in from the capture | Baked texture; relights better with PBR |
+| **Weight** | Large, GPU/VRAM heavy | Can be optimised, retopo'd, LOD'd |
+| **Best for** | Photoreal backdrops, reference, set extension | Game-ready props and assets |
+
+So the practical rule: reach for **splatting when you want a photoreal *scene* to sit in or reference**, and **photogrammetry (or plain modelling) when you need an *asset* you'll texture, rig and ship.**
+
+---
+
+## ⚠️ Limitations & Gotchas
+
+- **It isn't editable geometry.** You can't cleanly turn a splat into a retopologised, UV'd mesh — different job, different tool.
+- **The lighting is baked in.** A splat captured at golden hour stays golden hour; relighting it to match a new scene is limited.
+- **It's heavy.** Big scenes eat VRAM and can slow your viewport — budget accordingly.
+- **Some things capture badly.** Transparent, thin, mirror-like or *moving* subjects come out smeared; hard edges go a little fuzzy.
+- **Game engines need splat support.** Unreal and Unity can display splats via plugins, but a splat is **not** a drop-in mesh — plan for that before you build a level around one.
+
+---
+
+## ❓ FAQ
+
+**Do I need an add-on for Gaussian splatting in Blender 5.3?**
+No — import and rendering are native in 5.3. Older versions needed a third-party add-on.
+
+**Can I convert a splat into a normal mesh?**
+Not cleanly. If you need editable geometry, use photogrammetry or model it — splatting and meshing are different pipelines.
+
+**Does it render in Eevee, or only Cycles?**
+Both. Splats draw live in Eevee and Cycles in 5.3.
+
+**Can I use a Gaussian splat in a game?**
+Yes, *if* your engine supports splats (Unreal/Unity via plugins) — but it stays a splat, not a mesh you can collide against or rig.
+
+**How do I make my own splat?**
+Capture a steady video or lots of overlapping photos, then train it with a capture app (Polycam, Luma, KIRI) or the free nerfstudio / 3DGS toolchain.
+
+---
+
+## 🎯 The Takeaway
+
+Gaussian splatting is the first time "capture a real place and render it live, photoreal" is a native, one-import job in Blender. It won't replace clean modelling — a splat is a gorgeous *look*, not geometry you can build on — but as a way to drop real-world realism behind your work, nothing else is close. If you're on **Blender 5.3**, grab a free splat scene, import it, and orbit it once. You'll immediately see where it fits in your own projects.
+
+And if you want a hand wiring it into a real scene — lighting your own models to sit believably inside a captured environment is the genuinely tricky part — that's exactly what a [free call](https://www.blendertutoring.com/#packages) is for.
+
+---
+`,
+  },
+  {
     slug: "ucupaint-texture-painting",
     title: "Ucupaint: Layer-Based Texture Painting in Blender",
     description: "Blender's built-in texture paint is one image and a brush. Ucupaint is a free add-on that adds a full layer-based painting system \u2014 masks, adjustment layers, normals and baking. What it is, why it matters, and how to start.",
