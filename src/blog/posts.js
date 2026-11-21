@@ -1716,6 +1716,13 @@ So retopology is the moment a sculpt stops being a nice image and becomes an ass
 
   {
     slug: "texel-density-blender",
+    leadMagnet: {
+      file: "/game-ready-blender-asset-checklist.pdf",
+      tag: "game-ready-checklist",
+      title: "Free: Game-Ready Blender Asset Checklist",
+      blurb:
+        "A printable one-page checklist that runs every model through the 10 things behind 90% of import problems — scale, orientation, topology, UVs, materials, normals, export settings and the per-engine Unity / Unreal / Godot gotchas. Enter your email and it’s yours, plus the occasional short Blender tip. No spam, unsubscribe any time.",
+    },
     title: "Texel Density in Blender: Why Your Textures Look Uneven",
     description: "One asset crisp, the next blurry? That's texel density — texture pixels per unit of surface. What it is, the standard values, and how to keep it even in Blender.",
     date: "2026-11-04",
@@ -1822,6 +1829,13 @@ So it is a discipline of consistency rather than quality. You are not making any
 
   {
     slug: "blender-to-unity-export",
+    leadMagnet: {
+      file: "/game-ready-blender-asset-checklist.pdf",
+      tag: "game-ready-checklist",
+      title: "Free: Game-Ready Blender Asset Checklist",
+      blurb:
+        "A printable one-page checklist that runs every model through the 10 things behind 90% of import problems — scale, orientation, topology, UVs, materials, normals, export settings and the per-engine Unity / Unreal / Godot gotchas. Enter your email and it’s yours, plus the occasional short Blender tip. No spam, unsubscribe any time.",
+    },
     title: "Blender to Unity: Export Without the Scale and Rotation Mess",
     description: "Models landing in Unity sideways or 100x too small? The Blender export and Unity import settings that make assets come in upright and correctly scaled, every time.",
     date: "2026-11-03",
@@ -2898,6 +2912,13 @@ Be aware it is easy to build something that brings your machine to its knees, to
 
   {
     slug: "blender-fbx-export-scale-rotation",
+    leadMagnet: {
+      file: "/game-ready-blender-asset-checklist.pdf",
+      tag: "game-ready-checklist",
+      title: "Free: Game-Ready Blender Asset Checklist",
+      blurb:
+        "A printable one-page checklist that runs every model through the 10 things behind 90% of import problems — scale, orientation, topology, UVs, materials, normals, export settings and the per-engine Unity / Unreal / Godot gotchas. Enter your email and it’s yours, plus the occasional short Blender tip. No spam, unsubscribe any time.",
+    },
     title: "Blender FBX Export: Fixing Wrong Scale and Rotation",
     description: "Your model lands a hundred times too big or lying on its side. Why every guide gives different settings, and the two-minute test that settles it.",
     date: "2026-10-22",
@@ -3588,6 +3609,13 @@ Uniform roughness, half-metallic plastic, albedo with shadows painted in: none o
 
   {
     slug: "game-art-portfolio-what-studios-want",
+    leadMagnet: {
+      file: "/game-ready-blender-asset-checklist.pdf",
+      tag: "game-ready-checklist",
+      title: "Free: Game-Ready Blender Asset Checklist",
+      blurb:
+        "A printable one-page checklist that runs every model through the 10 things behind 90% of import problems — scale, orientation, topology, UVs, materials, normals, export settings and the per-engine Unity / Unreal / Godot gotchas. Enter your email and it’s yours, plus the occasional short Blender tip. No spam, unsubscribe any time.",
+    },
     title: "What a Game Art Portfolio Actually Needs in 2026",
     description: "Job postings describe the role in detail, for free. The gap between what they ask for and what most junior portfolios show \u2014 and how to close it.",
     date: "2026-10-17",
@@ -4533,6 +4561,13 @@ Next time you start something symmetrical, build one half first. The rest arrive
   },
   {
     slug: "blender-and-unreal-the-happy-couple",
+    leadMagnet: {
+      file: "/game-ready-blender-asset-checklist.pdf",
+      tag: "game-ready-checklist",
+      title: "Free: Game-Ready Blender Asset Checklist",
+      blurb:
+        "A printable one-page checklist that runs every model through the 10 things behind 90% of import problems — scale, orientation, topology, UVs, materials, normals, export settings and the per-engine Unity / Unreal / Godot gotchas. Enter your email and it’s yours, plus the occasional short Blender tip. No spam, unsubscribe any time.",
+    },
     title: "Blender and Unreal Engine: The Happy Couple",
     description: "One authors, the other makes it real-time — and both are free. Why this pairing is the most powerful free setup in 3D, and the gotchas nobody warns you about.",
     date: "2026-08-18",
