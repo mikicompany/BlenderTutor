@@ -11,54 +11,110 @@ function load() {
   return { work: false, notes: [], tasks: [], tab: 'notes' };
 }
 const state = load();
+if (!['auto', 'en', 'es'].includes(state.lang)) state.lang = 'auto';
+const phoneLang = /^es\b/i.test(navigator.language || '') ? 'es' : 'en';
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (_) { /* ignore */ } };
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
 
-// ---------- Transcript -> action items (rules, on-device) ----------
-const VERBS = 'call|phone|ring|email|e-mail|text|message|ping|send|book|buy|order|pay|schedule|set|fix|finish|write|review|check|update|prepare|follow|ask|tell|remind|pick|drop|clean|plan|submit|sign|renew|cancel|file|print|return|reply|respond|invite|meet|organize|organise|research|look|find|get|make|take|bring|move|read|draft|share|post|upload|test|confirm|contact|arrange|reserve|install|charge|wash|water|feed|walk|collect|deliver|ship|backup|back|start|stop|try|talk|visit|go|see|grab|print|study|practice|practise|learn|clear|sort|tidy|book';
-const VERB_START = new RegExp(`^(${VERBS})\\b`, 'i');
-const FILLER = /\b(um+|uh+|erm+|hmm+|ah+|you know|i mean|kind of|sort of|basically|actually|literally|like,)\b[,]?\s*/gi;
-const LEAD_INS = [
-  /^(ok(ay)?|so|and|also|then|well|alright|all right|right|now|oh|plus|first(ly)?|second(ly)?|next|finally|lastly)[,\s]+/i,
-  /^(i|we)\s+(really\s+|also\s+|still\s+)?(need|have|got|gotta|must|should|ought)\s+(to\s+)?/i,
-  /^(i|we)('m| am| are|'re)\s+(going|gonna)\s+(to\s+)?/i,
-  /^(i|we)('ll| will)\s+(need to\s+|have to\s+)?/i,
-  /^(i|we)\s+want\s+to\s+/i,
-  /^(i('d| would) like to)\s+/i,
-  /^(you|someone)\s+(need|needs|have|has)\s+to\s+/i,
-  /^(don'?t|do not)\s+forget\s+(to\s+)?/i,
-  /^(remember|remind me)\s+(to\s+)?/i,
-  /^(make sure\s+(to|that)?\s*)/i,
-  /^(let'?s|lets)\s+/i,
-  /^(can|could|would)\s+(you|someone|somebody)\s+(please\s+)?/i,
-  /^(please)\s+/i,
-  /^(to\s*do|todo|action item|task|reminder|note to self)[:,\s]+/i,
-  /^(gotta|need to|have to|got to|must)\s+/i,
-];
-const URGENT = /\b(urgent(ly)?|asap|as soon as possible|right away|immediately|critical|top priority|high priority|first thing)\b[:,]?\s*/i;
-const DUE = [
-  /\b(today|tonight|this (morning|afternoon|evening))\b/i,
-  /\b(tomorrow( morning| afternoon| evening| night)?)\b/i,
-  /\b(by|before|on|next|this)\s+(monday|tuesday|wednesday|thursday|friday|saturday|sunday|week|month|weekend|eod|end of (the )?(day|week|month))\b/i,
-  /\b(end of (the )?(day|week|month))\b/i,
-  /\b(at|by)\s+\d{1,2}(:\d{2})?\s*(am|pm|a\.m\.|p\.m\.|o'?clock)\b/i,
-  /\b(on|by)\s+(the\s+)?\d{1,2}(st|nd|rd|th)\b/i,
-];
+// ---------- Transcript -> action items (rules, on-device, English + Spanish) ----------
+const RULES = {
+  en: {
+    // A clause that starts with one of these is its own task.
+    verb: /^(call|phone|ring|email|e-mail|text|message|ping|send|book|buy|order|pay|schedule|set|fix|finish|write|review|check|update|prepare|follow|ask|tell|remind|pick|drop|clean|plan|submit|sign|renew|cancel|file|print|return|reply|respond|invite|meet|organi[sz]e|research|look|find|get|make|take|bring|move|read|draft|share|post|upload|test|confirm|contact|arrange|reserve|install|charge|wash|water|feed|walk|collect|deliver|ship|back|start|stop|try|talk|visit|go|see|grab|study|practi[cs]e|learn|clear|sort|tidy|cook)\b/i,
+    filler: /\b(um+|uh+|erm+|hmm+|ah+|you know|i mean|kind of|sort of|basically|actually|literally|like,)\b[,]?\s*/gi,
+    joins: /,?\s+(?:and then|after that|and also|then also|another thing is|also)\s+/i,
+    and: /(,\s+(?:and\s+)?|\s+and\s+)/i,
+    leadIns: [
+      /^(ok(ay)?|so|and|also|then|well|alright|all right|right|now|oh|plus|first(ly)?|second(ly)?|next|finally|lastly)[,\s]+/i,
+      /^(i|we)\s+(really\s+|also\s+|still\s+)?(need|have|got|gotta|must|should|ought)\s+(to\s+)?/i,
+      /^(i|we)('m| am| are|'re)\s+(going|gonna)\s+(to\s+)?/i,
+      /^(i|we)('ll| will)\s+(need to\s+|have to\s+)?/i,
+      /^(i|we)\s+want\s+to\s+/i,
+      /^(i('d| would) like to)\s+/i,
+      /^(you|someone)\s+(need|needs|have|has)\s+to\s+/i,
+      /^(don'?t|do not)\s+forget\s+(to\s+)?/i,
+      /^(remember|remind me)\s+(to\s+)?/i,
+      /^(make sure\s+(to|that)?\s*)/i,
+      /^(let'?s|lets)\s+/i,
+      /^(can|could|would)\s+(you|someone|somebody)\s+(please\s+)?/i,
+      /^(please)\s+/i,
+      /^(to\s*do|todo|action item|task|reminder|note to self)[:,\s]+/i,
+      /^(gotta|need to|have to|got to|must)\s+/i,
+    ],
+    tail: /[,\s]+(please)$/i,
+    urgent: /\b(urgent(ly)?|asap|as soon as possible|right away|immediately|critical|top priority|high priority|first thing)\b[:,]?\s*/i,
+    due: [
+      /\b(today|tonight|this (morning|afternoon|evening))\b/i,
+      /\b(tomorrow( morning| afternoon| evening| night)?)\b/i,
+      /\b(by|before|on|next|this)\s+(monday|tuesday|wednesday|thursday|friday|saturday|sunday|week|month|weekend|eod|end of (the )?(day|week|month))\b/i,
+      /\b(end of (the )?(day|week|month))\b/i,
+      /\b(at|by)\s+\d{1,2}(:\d{2})?\s*(am|pm|a\.m\.|p\.m\.|o'?clock)\b/i,
+      /\b(on|by)\s+(the\s+)?\d{1,2}(st|nd|rd|th)\b/i,
+    ],
+    dueStrip: /^(by|before|on)\s+/i,
+    noise: /^(thanks|thank you|bye|hello|hi|hey|yeah|yes|no|okay|ok)$/i,
+  },
+  es: {
+    // Infinitives and tú-imperatives ("llamar", "llama", "llámale", "mándale"...)
+    verb: /^(ll[aá]m|envi|env[ií]|mand|m[aá]nd|compr|reserv|pag|revis|escrib|termin|prepar|agend|program|confirm|contact|busc|b[uú]sc|recog|limpi|habl|h[aá]bl|pregunt|avis|av[ií]s|llev|tra[ei]|hac|haz|arregl|cancel|renov|renuev|imprim|respond|contest|actualiz|organiz|plane|planific|investig|le[eé]|sub|compart|firm|entreg|ped|pid|sac|s[aá]c|pon|apunt|anot|regal|visit|cocin|lav|estudi|practic|pas|p[aá]s|cit|revis|dej|d[eé]j|cerr|cierr|abr|instal|carg|recuerd|record|averigu|consigu|consegu|cambi|devolv|devuelv|di\b|ve\b|ir\b|ven\b)\p{L}*/iu,
+    filler: /\b(eh+|em+|mm+|ehm+|o sea|digamos|este,|como que)\s*,?\s*/giu,
+    joins: /,?\s+(?:y luego|y despu[eé]s|despu[eé]s de eso|y tambi[eé]n|tambi[eé]n|adem[aá]s|otra cosa es|otra cosa)\s*,?\s+/iu,
+    and: /(,\s+(?:y\s+)?|\s+y\s+)/i,
+    leadIns: [
+      /^(bueno|pues|entonces|y|tambi[eé]n|adem[aá]s|luego|despu[eé]s|primero|segundo|tercero|por [uú]ltimo|finalmente|ok|okey|vale|oye|a ver|ah|ay)[,\s]+/iu,
+      /^(yo\s+|nosotros\s+)?(tengo|tenemos|tienes|tiene|tendr[ií]a|tendr[ií]amos)\s+que\s+/iu,
+      /^(yo\s+)?(necesito|necesitamos|necesitas|necesita)\s+(que\s+)?/iu,
+      /^(hay|habr[ií]a|habr[aá])\s+que\s+/iu,
+      /^(yo\s+)?(debo|debemos|debes|deber[ií]a|deber[ií]amos)\s+(de\s+)?/iu,
+      /^(yo\s+)?(voy|vamos)\s+a\s+/iu,
+      /^(yo\s+)?(quiero|queremos|quisiera)\s+/iu,
+      /^(que\s+)?no\s+(se\s+me\s+|te\s+|se\s+nos\s+)?olvid(e|es|en)\s+(de\s+)?/iu,
+      /^(acu[eé]rdate|recuerda|recu[eé]rdame|recordar)\s+(de\s+|que\s+)?/iu,
+      /^(aseg[uú]rate|asegurarse|asegurarme)\s+de\s+(que\s+)?/iu,
+      /^(por favor)[,\s]+/iu,
+      /^(puedes|podr[ií]as|me\s+puedes|me\s+podr[ií]as)\s+/iu,
+      /^(tarea|pendiente|recordatorio|nota|apunte)[:,\s]+/iu,
+      /^(me\s+falta|falta)\s+/iu,
+    ],
+    tail: /[,\s]+(por favor)$/iu,
+    urgent: /\b(urgente(mente)?|cuanto antes|lo antes posible|lo m[aá]s pronto posible|inmediatamente|ya mismo|de inmediato|prioridad|es importante|a primera hora)\b[:,]?\s*/iu,
+    due: [
+      /\b(pasado mañana)\b/iu,
+      /\b(hoy|esta noche|esta tarde|esta mañana)\b/iu,
+      /\b(mañana( por la (mañana|tarde|noche))?)\b/iu,
+      /\b(para el|antes del|el|este|el pr[oó]ximo|la pr[oó]xima|esta)\s+(lunes|martes|mi[eé]rcoles|jueves|viernes|s[aá]bado|domingo|semana|mes|fin de semana)\b/iu,
+      /\b(fin de (mes|semana))\b/iu,
+      /\b(a|antes de|para)\s+las\s+\d{1,2}(:\d{2})?(\s+(de la (mañana|tarde|noche)|am|pm))?/iu,
+      /\b(para el|el)\s+\d{1,2}(\s+de\s+\p{L}+)?\b/iu,
+    ],
+    dueStrip: /^(para el|antes del|el|para|antes de)\s+/iu,
+    noise: /^(gracias|adi[oó]s|hola|s[ií]|no|vale|ok|okey|bueno)$/iu,
+  },
+};
 
-function splitIntoChunks(text) {
+// Rough guess when the language isn't known (e.g. older notes): count common words.
+function guessLang(text) {
+  const words = text.toLowerCase().match(/\p{L}+/gu) || [];
+  const es = new Set(['que', 'de', 'la', 'el', 'y', 'en', 'los', 'las', 'para', 'con', 'una', 'un', 'por', 'tengo', 'hay', 'mañana', 'hoy', 'llamar', 'no', 'es', 'del', 'al', 'lo', 'se', 'mi', 'necesito']);
+  const en = new Set(['the', 'to', 'and', 'of', 'a', 'in', 'for', 'with', 'need', 'tomorrow', 'today', 'call', 'is', 'it', 'on', 'my', 'i', 'have', 'this', 'that']);
+  let e = 0, s = 0;
+  for (const w of words) { if (es.has(w)) s++; if (en.has(w)) e++; }
+  return s > e ? 'es' : 'en';
+}
+
+function splitIntoChunks(text, R) {
   const out = [];
   const sentences = text.replace(/\s+/g, ' ').split(/(?<=[.!?;])\s+/);
   for (const s of sentences) {
-    // Spoken joins: "..., and then call Jim", "... and also book flights"
-    const parts = s.split(/,?\s+(?:and then|after that|and also|then also|another thing is|also)\s+/i);
-    for (const part of parts) {
-      // "call Jim, book flights and email Sara": split at a comma / "and" only
-      // when what follows starts with an action verb ("salt and pepper" stays whole).
-      const tokens = part.split(/(,\s+(?:and\s+)?|\s+and\s+)/i); // text, sep, text, sep, ...
+    // Spoken joins: "..., and then call Jim" / "... y luego llamar a Juan"
+    for (const part of s.split(R.joins)) {
+      // "call Jim, book flights and email Sara": split at a comma / "and" only when
+      // what follows starts with an action verb ("salt and pepper" stays whole).
+      const tokens = part.split(R.and); // text, sep, text, sep, ...
       let cur = tokens[0];
       for (let i = 1; i < tokens.length; i += 2) {
         const next = tokens[i + 1] || '';
-        if (VERB_START.test(next.trim())) { out.push(cur); cur = next; } else cur += tokens[i] + next;
+        if (R.verb.test(next.trim())) { out.push(cur); cur = next; } else cur += tokens[i] + next;
       }
       out.push(cur);
     }
@@ -66,27 +122,28 @@ function splitIntoChunks(text) {
   return out.map(s => s.trim()).filter(Boolean);
 }
 
-function toActionItem(raw) {
-  let t = raw.replace(FILLER, '').replace(/\s+/g, ' ').trim();
+function toActionItem(raw, R, lang) {
+  let t = raw.replace(R.filler, '').replace(/\s+/g, ' ').trim();
   let priority = 'normal';
-  if (URGENT.test(t)) { priority = 'high'; t = t.replace(URGENT, '').trim(); }
-  t = t.replace(/^[,.;:\s]+|[.!?;,\s]+$/g, '');
+  if (R.urgent.test(t)) { priority = 'high'; t = t.replace(R.urgent, '').trim(); }
+  t = t.replace(/^[,.;:¡¿\s]+|[.!?;,\s]+$/g, '').replace(R.tail, '');
   let prev;
-  do { // peel stacked lead-ins: "okay so I need to ..."
+  do { // peel stacked lead-ins: "okay so I need to ..." / "bueno, entonces tengo que ..."
     prev = t;
-    for (const re of LEAD_INS) t = t.replace(re, '');
-    t = t.trim();
+    for (const re of R.leadIns) t = t.replace(re, '');
+    t = t.replace(/^[,\s]+/, '').trim();
   } while (t !== prev && t.length);
-  if (!t || (t.split(' ').length < 2 && t.length < 4)) return null; // noise like "ok"
-  if (/^(thanks|thank you|bye|hello|hi|hey|yeah|yes|no|okay|ok)$/i.test(t)) return null;
+  if (!t || (t.split(' ').length < 2 && t.length < 4) || R.noise.test(t)) return null;
   t = t.charAt(0).toUpperCase() + t.slice(1);
   let due = null;
-  for (const re of DUE) { const m = t.match(re); if (m) { due = m[0].replace(/^(by|before|on)\s+/i, ''); break; } }
-  return { id: uid(), text: t, done: false, due, priority, created: Date.now() };
+  for (const re of R.due) { const m = t.match(re); if (m) { due = m[0].replace(R.dueStrip, ''); break; } }
+  return { id: uid(), text: t, done: false, due, priority, lang, created: Date.now() };
 }
 
-export function textToActionItems(text) {
-  return splitIntoChunks(text).map(toActionItem).filter(Boolean);
+export function textToActionItems(text, lang) {
+  lang = RULES[lang] ? lang : guessLang(text);
+  const R = RULES[lang];
+  return splitIntoChunks(text, R).map(c => toActionItem(c, R, lang)).filter(Boolean);
 }
 
 // ---------- DOM ----------
@@ -143,7 +200,7 @@ function render() {
     </div>`;
     main.innerHTML = tools + '<ul class="list">' + transcribingHtml() + state.notes.map(n => `
       <li class="card note" data-id="${n.id}">
-        <div class="meta"><span>${fmt(n.created)}</span>
+        <div class="meta"><span>${fmt(n.created)}${n.lang ? ` <span class="tag lang">${n.lang.toUpperCase()}</span>` : ''}</span>
           <span><button class="linkish" data-act="to-tasks">→ Action items</button>
           <button class="icon-btn" data-act="del-note" aria-label="Delete">×</button></span></div>
         <p>${esc(n.text)}</p>
@@ -176,14 +233,14 @@ function addTasks(items) {
   toast(items.length ? `+${items.length} action item${items.length > 1 ? 's' : ''}` : 'Nothing actionable found');
 }
 
-function addTranscript(text) {
+function addTranscript(text, lang) {
   text = text.trim();
   if (!text) return;
   if (state.work) {
-    addTasks(textToActionItems(text));
+    addTasks(textToActionItems(text, lang));
     if (state.tab !== 'tasks') return setTab('tasks');
   } else {
-    state.notes.unshift({ id: uid(), text, created: Date.now() });
+    state.notes.unshift({ id: uid(), text, lang, created: Date.now() });
   }
   save(); render();
 }
@@ -192,7 +249,7 @@ function moveNotesToTasks(ids) {
   const moving = state.notes.filter(n => !ids || ids.includes(n.id));
   if (!moving.length) return;
   state.notes = state.notes.filter(n => !moving.includes(n));
-  const items = moving.flatMap(n => textToActionItems(n.text).map(i => ({ ...i, created: n.created })));
+  const items = moving.flatMap(n => textToActionItems(n.text, n.lang).map(i => ({ ...i, created: n.created })));
   addTasks(items);
   save(); setTab('tasks');
 }
@@ -268,10 +325,10 @@ async function stopRecording() {
   transcribing.push(job);
   if (state.work && state.tab !== 'tasks') setTab('tasks'); else render();
   try {
-    const text = await whisper.transcribe(blob);
-    if (!text) toast('Didn’t catch anything');
+    const { text, lang } = await whisper.transcribe(blob, state.lang, state.lastLang || phoneLang);
+    if (text) { state.lastLang = lang; save(); } else toast('Didn’t catch anything');
     transcribing.splice(transcribing.indexOf(job), 1);
-    text ? addTranscript(text) : render();
+    text ? addTranscript(text, lang) : render();
   } catch (err) {
     transcribing.splice(transcribing.indexOf(job), 1);
     render();
@@ -280,6 +337,18 @@ async function stopRecording() {
 }
 
 mic.onclick = () => (recorder ? stopRecording() : startRecording());
+
+// Language: Auto (detects English or Spanish each time) or fixed.
+const langBox = $('langs');
+function applyLang() {
+  for (const b of langBox.querySelectorAll('button')) b.setAttribute('aria-pressed', b.dataset.lang === state.lang);
+}
+langBox.onclick = e => {
+  const b = e.target.closest('button[data-lang]'); if (!b) return;
+  state.lang = b.dataset.lang; save(); applyLang();
+  toast({ auto: 'Auto: detects English or Spanish', en: 'Always English', es: 'Siempre español' }[state.lang]);
+};
+applyLang();
 
 // ---------- Boot ----------
 applyMode();

@@ -2,7 +2,7 @@
 // the transformers.js library, the ONNX Runtime WebAssembly engine, and the
 // Whisper model files (downloaded once at build time, pinned to a revision).
 import { execFileSync } from 'node:child_process';
-import { copyFileSync, existsSync, mkdirSync, statSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, rmSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -10,8 +10,8 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const www = join(root, 'www');
 const nm = join(root, 'node_modules');
 
-const MODEL = 'onnx-community/whisper-base';
-const REVISION = '27a07b4b52b3a4c5886134bb4320e93e1a4bbc7c';
+const MODEL = 'onnx-community/whisper-small';
+const REVISION = '36050c46d777d46dc4b5f43f6d90574fc38f8732';
 const MODEL_FILES = [
   'config.json',
   'generation_config.json',
@@ -34,7 +34,8 @@ for (const f of ['ort-wasm-simd-threaded.asyncify.wasm', 'ort-wasm-simd-threaded
   copy(join(nm, 'onnxruntime-web/dist', f), join(www, 'vendor/ort', f));
 }
 
-// 2. Model files (skipped when already present).
+// 2. Model files (skipped when already present). Older bundled models are removed.
+for (const d of ['whisper-tiny', 'whisper-base']) rmSync(join(www, 'models/onnx-community', d), { recursive: true, force: true });
 for (const f of MODEL_FILES) {
   const dest = join(www, 'models', MODEL, f);
   if (existsSync(dest) && statSync(dest).size > 0) { console.log('present', dest.slice(root.length + 1)); continue; }

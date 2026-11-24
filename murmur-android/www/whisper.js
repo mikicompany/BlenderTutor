@@ -30,12 +30,17 @@ function call(msg, transfer = []) {
 /** Load the model into memory ahead of time so the first transcription is quick. */
 export const warmUp = () => call({ type: 'load' });
 
-export async function transcribe(blob) {
+/**
+ * @param {Blob} blob recorded audio
+ * @param {'auto'|'en'|'es'} language
+ * @param {'en'|'es'} fallback used when auto-detection is unsure (short notes)
+ * @returns {Promise<{text: string, lang: 'en'|'es'}>}
+ */
+export async function transcribe(blob, language = 'auto', fallback = 'en') {
   const audio = await toMono16k(blob);
-  if (audio.length < 16000 * 0.3) return ''; // under 0.3 s: nothing said
-  const language = (navigator.language || 'en').slice(0, 2).toLowerCase();
-  const res = await call({ type: 'transcribe', audio, language }, [audio.buffer]);
-  return res.text;
+  if (audio.length < 16000 * 0.3) return { text: '', lang: fallback }; // under 0.3 s: nothing said
+  const res = await call({ type: 'transcribe', audio, language, fallback }, [audio.buffer]);
+  return { text: res.text, lang: res.lang };
 }
 
 // Whisper wants 16 kHz mono float samples.
