@@ -89,6 +89,7 @@ This is the part that feels new:
 - **Move and scale each UV shell** onto the strip you want. Keep it **within that strip's vertical bounds**; stretch it **horizontally** to tile along long pieces.
 - Use **pixel snapping** (UV ▸ Snap, or snap to the UV grid) so shell edges land right on the strip boundaries — that's what kills bleeding.
 - **Follow Active Quads** (UV menu) is gold for straightening a run of faces along a single trim.
+- **Add-ons make this quicker.** Tools like **Zen UV** (more below) snap shells to trims, match texel density and stack duplicates in a click — a real speed-up once your kit grows past a few pieces.
 
 ### 5. Reuse everywhere
 Apply that same material to every piece in the kit. A whole corridor — walls, doorframes, pipes, panels — ends up sharing **one 2K texture**. That's the moment trim sheets click.
@@ -97,8 +98,9 @@ Apply that same material to every piece in the kit. A whole corridor — walls, 
 
 ## 💡 Blender-Specific Tips
 
-- **Test with a UV grid texture first.** Checker or grid maps make stretching and uneven texel density obvious before you commit to the real sheet.
-- **Keep texel density consistent.** Pieces at wildly different UV scales will look mismatched. The **TexTools** and **UVPackmaster** add-ons have texel-density checkers; Blender's own tools work too with a bit of care.
+- **Speed the whole thing up with Zen UV.** For serious trim-sheet work, the [**Zen UV**](https://blendermarket.com/products/zen-uv) add-on (by the Zen Masters team) is the single biggest time-saver — one-click **texel-density** matching across pieces, fast shell **transform, align and stack** tools, trim-friendly fitting, and a built-in **UV checker** for catching stretch before it bites. It's paid (around $39 on Blender Market), but it pays for itself on your first modular kit. There's also a **free Zen UV Checker** add-on on the official [Blender Extensions site](https://extensions.blender.org/add-ons/zenuvchecker/) if you just want the grid-map and distortion checks.
+- **Test with a UV grid texture first.** Checker or grid maps make stretching and uneven texel density obvious before you commit to the real sheet — Zen UV and its free checker ship grid maps for exactly this.
+- **Keep texel density consistent.** Pieces at wildly different UV scales look mismatched — match them across the whole kit. **Zen UV**, **TexTools** and **UVPackmaster** all have texel-density tools; Blender's own work too, with a bit of care.
 - **Don't confuse it with Box Mapping.** The shader's Box/triplanar projection is a different technique (great for rocks and terrain) — trim sheets use **explicit, hand-placed UVs**.
 - **Pin UVs** you've aligned so later unwraps don't shove them off their strip.
 
