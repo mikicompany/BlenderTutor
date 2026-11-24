@@ -1,5 +1,185 @@
 export const posts = [
   {
+    slug: "whats-new-blender-5-3",
+    title: "Everything Good in Blender 5.3",
+    description: "Blender 5.3 landed in November 2026 with native Gaussian splats, a DLSS viewport denoiser, Vulkan by default, EEVEE toon shading and a stack of editor upgrades. A tour of what's actually worth your time — with videos.",
+    date: "2026-11-28",
+    thumbnail: "/blog-images/blender-53.svg",
+    content: `
+Blender's big yearly release dropped on **November 10, 2026**, and 5.3 is a meaty one — it closes out the year with headline features (real Gaussian splats, DLSS in the viewport) and a pile of quieter upgrades that'll quietly make your week better. Here's a guided tour of what actually matters, roughly in order of "ooh," plus a couple of video showcases at the end.
+
+![A Blender 5.3 banner with a point-cloud splat and feature chips: DLSS viewport, Vulkan default, EEVEE toon shading, Grease Pencil tools, VSE ripple edit, Projects system](/blog-images/blender-53.svg)
+
+> **The short version:** 5.3 brings **native 3D Gaussian splats**, an **NVIDIA DLSS viewport denoiser**, **Vulkan as the default backend**, **EEVEE Material Lighting nodes** (hello, proper toon shading), a redesigned **Video Sequencer** with ripple editing, big **Grease Pencil** additions, an optional **Projects** system with ACES colour management, and modelling niceties like a **Quad-Sphere**. It's a free update — here's what to actually play with first.
+
+---
+
+## 🟦 Native 3D Gaussian Splats
+
+The marquee feature. Blender can now **import 3D Gaussian splats** — the point-cloud-like captures that render photoreal real-world scenes — as native point clouds, then **edit and process them with Geometry Nodes** and **render them in Workbench, EEVEE and Cycles**. You can even relight them.
+
+Two honest caveats: there's **no export yet**, and performance isn't where the devs want it on big captures. But having splats as first-class citizens inside Blender — mixable with normal geometry — is a genuine milestone. If you've never met them, start with my explainer on [Gaussian splatting in Blender](/blog/gaussian-splatting-in-blender).
+
+---
+
+## ⚡ DLSS Viewport Denoiser (NVIDIA)
+
+If you're on an NVIDIA GPU, this one you'll feel every day. The new **DLSS denoiser** cleans up the viewport by upscaling and reusing samples from previous frames — so your interactive Cycles preview resolves to a clean image **much faster**. Spinning around a scene stops being a noisy mess while you wait. Interior and product renderers in particular are going to love it.
+
+---
+
+## 🚀 Vulkan Is Now the Default
+
+Under the hood, 5.3 makes **Vulkan** the default graphics backend on Windows and Linux, retiring the decades-old OpenGL path (macOS stays on Metal). It doesn't change your final renders — it modernises how the whole viewport is drawn, for a snappier interface now and a better foundation for what's next. I wrote a whole piece on [why Blender going Vulkan is a big deal](/blog/blender-vulkan-why-it-matters) if you want the full story.
+
+---
+
+## 🎨 EEVEE: Material Lighting Nodes & More
+
+EEVEE keeps getting more capable. 5.3 adds **Material Lighting nodes**, which unlock proper **toon / stylised shading** — controlling how a material responds to light directly in the shader, a big deal for anime and NPR looks. On top of that: **panoramic cameras** in EEVEE and a **full Sky Texture sun disc**, so skies and 360° renders look right in the fast engine. Still deciding between the engines? See [Cycles vs EEVEE](/blog/cycles-vs-eevee).
+
+---
+
+## ✏️ Grease Pencil Upgrades
+
+The 2D-in-3D toolset gets real love: **selection tools in Draw Mode** (select and tweak strokes without mode-hopping) and a new **Carver Tool** that cuts shapes with proper boolean subtraction. If you do storyboards, 2D animation or concept work in Blender, these smooth out the workflow a lot.
+
+---
+
+## 🎬 Video Sequencer: Ripple Editing & a New Blade
+
+Blender's built-in editor matures again. 5.3 adds a full **ripple editing framework** — trim or delete a clip and everything downstream shifts to close the gap, the way a grown-up NLE works — plus a **redesigned Blade (cut) tool**. If you cut your own tutorials or reels inside Blender, this is a quality-of-life jump.
+
+---
+
+## 🗂️ Projects & Colour Management
+
+5.3 introduces an optional **Projects** system: a folder marked by a \`.blender_project\` directory that ties related files together. Alongside it, you get **OpenColorIO configuration choices** baked in — the default Blender config, **ACES 1.3**, **ACES 2.0**, or your own custom config — which matters a lot if you're matching footage or working in a studio pipeline.
+
+---
+
+## 🧰 Modelling & Nodes Odds and Ends
+
+The small stuff that adds up:
+
+- A **Quad-Sphere** primitive — a sphere made of clean quads, far friendlier for [good topology](/blog/good-vs-bad-topology), sculpting and subdivision than the usual UV sphere.
+- New **Geometry Nodes volume-grid nodes** for more control over volumes and simulations.
+- Assorted performance and API changes under the hood (worth a look if you maintain add-ons).
+
+---
+
+## ▶️ Watch It In Action
+
+Reading about it is one thing — here are a couple of community showcases that run through the new features on screen (pick whichever depth suits you):
+
+- [Blender 5.3: 10 New Features You Need to Know](https://www.youtube.com/watch?v=hVeaGKegESs)
+- [Blender 5.3 Released — 20 New Features You Shouldn't Miss](https://www.youtube.com/watch?v=E4NVPImQJmw)
+- [Blender 5.3 Is HUGE: Every New Feature in 5 Minutes](https://www.youtube.com/watch?v=aWr6PQc12HY)
+
+And the official word lives on the [Blender 5.3 release page](https://www.blender.org/press/blender-5-3-release/).
+
+---
+
+## 🎯 Should You Update?
+
+For most people: **yes.** It's free, the viewport improvements alone are worth it, and nothing here breaks your normal workflow. If you rely on specific add-ons, give them a day to catch up with the Vulkan and API changes before switching your production machine — but for learning and personal projects, grab it and go play with splats.
+
+New to all this and not sure where to start with the firehose of features? [Book a free 15-minute call →](https://www.blendertutoring.com/#packages) and I'll help you figure out which parts of 5.3 actually matter for what *you* want to make.
+`,
+  },
+  {
+    slug: "good-vs-bad-topology",
+    title: "Good Topology vs Bad Topology in Blender",
+    description: "Topology is the layout of the polygons in your mesh — and it quietly decides whether your model subdivides cleanly, deforms well, shades smoothly and unwraps without pain. What good topology looks like, what bad topology costs, and the rules that get you there.",
+    date: "2026-11-27",
+    thumbnail: "/blog-images/topology.svg",
+    content: `
+"Your topology is bad" is one of those notes that feels like a personal attack when you're starting out. But topology isn't about being tidy for its own sake — it's the hidden structure that decides whether your model will subdivide cleanly, bend without crumpling, catch light smoothly and unwrap without a fight. Get it right and everything downstream gets easier. Here's what good and bad actually look like, and how to stay on the right side of the line.
+
+![Two mesh patches side by side: a clean green grid of quads marked good, and a red patch full of triangles, an n-gon and a pole marked bad](/blog-images/topology.svg)
+
+> **Quick answer:** Good topology is mostly **quads**, with **edge loops that follow the form** and flow around areas that bend (joints, mouths, eyes), **even polygon density**, and **poles kept away from deforming or highly visible surfaces**. Bad topology is **triangles and n-gons where they cause shading or subdivision problems**, **poles in the wrong place**, **uneven stretched faces**, and **loops that spiral or dead-end**. The catch: "bad" is contextual — a static game prop can get away with things a character's face never could.
+
+---
+
+## 🧩 Quads, Tris and N-gons
+
+Every face in your mesh has a number of sides:
+
+- **Quad** — four sides. The gold standard. Quads subdivide predictably, form clean edge loops, and deform well. Aim to make most of your mesh out of these.
+- **Triangle (tri)** — three sides. Not evil — in fact everything becomes triangles at render/engine time — but tris **break edge-loop flow** and can pinch when subdivided or deformed. Use them deliberately, tucked into flat or hidden areas.
+- **N-gon** — five or more sides. Handy while blocking out, but they **shade unpredictably** and **subdivide badly**. Treat them as scaffolding to clean up, not a finished surface.
+
+The rule of thumb: **quads where it matters, tris sparingly in flat/hidden spots, n-gons gone before you call it done.**
+
+---
+
+## 🌊 Edge Loops & Edge Flow
+
+An **edge loop** is a continuous ring of edges running through your mesh. **Edge flow** is the direction those loops travel across the surface. Good flow means the loops **follow the shape and the way it moves** — circling the eyes and mouth on a face, wrapping around an elbow or knee, running along a muscle.
+
+Why it matters: when a surface bends, the geometry has to fold somewhere. If your loops line up with the bend, it folds cleanly. If they cut across it at random angles, you get crumpling and pinching. Good flow is the difference between an elbow that creases like skin and one that collapses like a crushed can.
+
+---
+
+## ⭐ Poles — and Where to Hide Them
+
+A **pole** is a vertex where an unusual number of edges meet — most commonly a **three-edge pole** (an "N-pole") or a **five-edge pole** (an "E-pole"). You can't model anything interesting without them; they're how you redirect edge flow and add or remove detail.
+
+The skill isn't *avoiding* poles — it's **placing** them. A pole sits on a flat, static, low-visibility area. Put one on the tip of a nose, the curve of a cheek or a bending joint and you'll see a **pinch or a star-shaped shading artifact** the moment you subdivide or deform. Hide your poles; don't fear them.
+
+---
+
+## 📏 Even Density
+
+Good topology keeps polygon size **reasonably even** and adds detail **where the form needs it** — more around a tight curve, less across a flat panel. Bad topology has wildly uneven faces: long thin slivers next to big flat quads, dense clumps next to empty stretches. Uneven density causes uneven shading and makes the mesh a nightmare to edit, sculpt or texture.
+
+---
+
+## 🔁 Why It Actually Matters
+
+Topology isn't academic — it pays off (or bites you) at four specific stages:
+
+- **Subdivision.** The Subdivision Surface modifier assumes quads. Feed it clean loops and you get smooth, predictable surfaces; feed it tris, n-gons and bad poles and you get pinching and lumps. Add **support loops** (loops near an edge) to keep corners crisp.
+- **Deformation / animation.** A rigged character bends at the loops. Loops that follow the anatomy deform like flesh; bad flow tears and collapses.
+- **Shading.** Smooth shading interpolates across faces. N-gons and poles in visible areas produce dark smudges and wobbles that no amount of lighting fixes.
+- **UVs & texturing.** Clean quad topology unwraps into clean UVs — which is half the battle in [UV unwrapping](/blog/uv-unwrapping-blender-beginners) and essential if you're building reusable [trim sheets](/blog/trim-sheets-in-blender).
+
+---
+
+## 🎮 When "Bad" Topology Is Totally Fine
+
+Here's the nuance beginners rarely hear: **context decides.** Topology rules exist to serve subdivision, deformation and clean shading. Where those don't apply, you can relax:
+
+- **Static game props** (a crate, a rock, a wall) are **triangulated for the engine anyway** and never deform — so tris and the occasional n-gon are fine as long as shading looks right.
+- **Hard-surface models** that won't be subdivided can carry tris in flat areas without issue.
+- **High-poly sculpts** destined only for baking don't need beautiful base topology — that's what **retopology** is for afterward.
+
+The models that genuinely *demand* clean topology are the ones that **subdivide or deform**: characters, creatures, anything animated, anything organic. Spend your topology budget there.
+
+---
+
+## ✅ A Quick Topology Checklist
+
+Before you call a deforming/subdividing model done:
+
+- Mostly **quads**; tris and n-gons only in flat, hidden, non-deforming spots.
+- **Edge loops follow the form** and wrap around anything that bends.
+- **Poles tucked** into flat, low-visibility areas — never on a crease or a highlight.
+- **Even-ish density**, more detail where curvature or deformation needs it.
+- **Support loops** where you need subdivided edges to stay sharp.
+- Turn on the **wireframe** and the **matcap**, and look for pinches and dark smudges — your eyes catch what the stats don't.
+
+---
+
+## 🎯 Takeaway
+
+Good topology is quads that flow with the form, even spacing, and poles kept out of trouble — and its reward is a model that subdivides, bends, shades and unwraps without a fight. Bad topology is tris, n-gons and poles sitting exactly where they'll cause pinching. But don't turn it into a religion: a static prop plays by looser rules than a character's face. Learn the rules, then learn where they stop applying — that judgment is what separates clean modelling from cargo-cult modelling.
+
+Want someone to look over your mesh and point out exactly where the flow goes wrong? [Book a free 15-minute call →](https://www.blendertutoring.com/#packages) and we'll go through it together.
+`,
+  },
+  {
     slug: "blender-on-tablets",
     title: "Blender Is Coming to Tablets: Where It Really Stands",
     description: "The Blender Foundation announced an official iPad and tablet version — a full 3D suite, not a lite app. The story so far, what's been shown, and the honest state of play.",
