@@ -1,5 +1,187 @@
 export const posts = [
   {
+    slug: "blender-on-tablets",
+    title: "Blender Is Coming to Tablets: Where It Really Stands",
+    description: "The Blender Foundation announced an official iPad and tablet version — a full 3D suite, not a lite app. The story so far, what's been shown, and the honest state of play.",
+    date: "2026-11-26",
+    thumbnail: "/blog-images/blender-tablets.svg",
+    content: `
+For years, "Blender on a tablet" meant a workaround — streaming your desktop, propping up a 2-in-1, or giving up. Then in **July 2025** the Blender Foundation said the thing artists had been asking for out loud: they're building an **official tablet version**, starting with the iPad. It's a genuinely big deal — and, as of now, a genuinely unfinished one. Here's the real story.
+
+![A tablet held at an angle showing a 3D modelling viewport with a stylus — Blender coming to tablets](/blog-images/blender-tablets.svg)
+
+> **Quick answer:** In **July 2025** the Blender Foundation announced an official tablet port, beginning with **iPad Pro and Apple Pencil**, built in a dedicated iOS branch of the code. The goal is the **full Blender experience**, not a stripped-down app. A prototype was **demoed at SIGGRAPH 2025**. Since then it's gone quiet: as of early 2026 **nothing has shipped**, the iPad release reportedly slipped, and the team has signalled it may focus on **Android first**. Exciting, real, and still a work in progress — no release date yet.
+
+---
+
+## 📣 The Announcement
+
+In mid-2025, the Blender Foundation confirmed it was developing a tablet version, **starting with the iPad Pro and Apple Pencil**, with the work happening in a new **iOS branch** of Blender's codebase. The motivation was simple: more and more CG artists use tablets — for sketching on the go, reviewing scenes, even as a primary machine — and Blender wanted to meet them there instead of leaving it to hacks.
+
+Crucially, this isn't a side experiment by a third party. It's an **official effort from the people who make Blender**, which is exactly what makes it credible.
+
+---
+
+## 🧱 Not a "Lite" App
+
+The most important detail: the team has been explicit that this is meant to be the **complete Blender experience**, not a dumbed-down "Blender Go." The plan is the same program — the full modelling, sculpting, shading and animation toolset — **adapted to touch and pencil input**, aimed squarely at **existing Blender users** who want their real tool on a tablet.
+
+They're starting small and building up, but the ambition is a proper port, not a toy. That's a much harder road than shipping a simplified app — and part of why it's taking time.
+
+---
+
+## 👁️ What's Been Shown
+
+At **SIGGRAPH 2025** (August), the Foundation showed a **working prototype running on an iPad Pro** — early, but real: Blender's interface and viewport, driven by touch and the Apple Pencil. It was a tech demo, not a download, but it proved the core idea runs on tablet hardware.
+
+---
+
+## 🧭 The Honest State of Play
+
+Here's where enthusiasm needs a reality check. As of **early 2026**:
+
+- **Nothing has been released.** No public build, no App Store listing, no firm date.
+- **The iPad version reportedly slipped.** The big summer-2025 announcement hasn't turned into a ship yet.
+- **A possible Android-first pivot.** A developer comment suggested the team may now prioritise the **Android** version — a reversal of the original iPad-first plan.
+
+None of that means it's dead; big, proper ports take years, and Blender's are famously thorough. But if you're waiting to do real work on an iPad, **don't hold your breath for a date.**
+
+---
+
+## ✨ Why It's Worth Caring About
+
+If — when — it lands, a real Blender on a tablet is a genuine shift:
+
+- **Model and sculpt anywhere** — the couch, a train, on location — not just at your desk.
+- **Pencil-native workflows** for sculpting, retopology, texture painting and grease pencil, where a stylus beats a mouse.
+- **A lower barrier to entry** for people who own a tablet but not a workstation.
+
+A full 3D suite running natively on a tablet is still rare air. Pulling it off well would be a milestone.
+
+And the honest caveats: **thermals and sustained performance**, how heavy a scene a tablet can really handle, battery life, and whether a touch-first UI can match a keyboard-and-mouse power user. These are the hard problems the team is working through — and why it isn't out yet.
+
+[Book a free 15-minute call →](https://www.blendertutoring.com/#packages) if you want help picking hardware that'll actually run Blender well today.
+
+---
+
+## 💡 What To Do In The Meantime
+
+You don't have to wait to get tablet-style input into Blender:
+
+- **A pen display or drawing tablet** (Wacom and friends) plugged into your desktop gives you pencil input in full Blender **right now** — ideal for sculpting and texture painting.
+- **A Windows 2-in-1 or tablet PC** runs the complete desktop Blender today, touch and pen included.
+- **Keep learning on desktop.** Every skill transfers directly — when the tablet version arrives, you'll already know the program; you'll just be holding it differently.
+
+---
+
+## ❓ Blender-On-Tablet FAQ
+
+**When is it coming?** No announced date. Announced in 2025, demoed at SIGGRAPH 2025, but not released as of early 2026, and reportedly delayed.
+
+**iPad or Android first?** Originally iPad-first; more recent signals suggest **Android** may now come first.
+
+**Will it be free?** Blender is free and open-source by licence, so the software itself is expected to stay free — exact app-store distribution details haven't been confirmed.
+
+**Will it be the full Blender?** That's the stated goal — the complete toolset adapted to touch and pencil, not a cut-down version.
+
+**Can I use Blender on a tablet right now?** Natively on a **Windows 2-in-1**, yes. On iPad, only by remote-desktop/streaming to a real PC — not a native app yet.
+
+---
+
+## 🎯 Takeaway
+
+Official Blender on a tablet went from wishful thinking to a real, Foundation-backed project with a working prototype — and then into the long, quiet middle of serious software development. It's coming, the ambition is the *full* Blender rather than a lite app, but there's no date and the roadmap has wobbled. Watch the space, keep sharpening your skills on desktop, and know that when it lands you'll be ready to pick it up — literally.
+`,
+  },
+  {
+    slug: "blender-vulkan-why-it-matters",
+    title: "Blender Went Vulkan: Why That's a Big Deal",
+    description: "Blender 5.3 made Vulkan the default graphics backend on Windows and Linux, retiring decades-old OpenGL. What Vulkan is, why the switch matters, and what it means for your viewport and your work.",
+    date: "2026-11-25",
+    thumbnail: "/blog-images/vulkan-blender.svg",
+    content: `
+Most Blender updates add buttons you can see. **Blender 5.3** flipped a switch you can't — and it might be the most important change in years. As of 5.3, Blender draws your viewport with **Vulkan** by default on Windows and Linux, retiring the decades-old **OpenGL** backend it had leaned on since the beginning. Here's what that means, why it's a big deal, and whether you need to do anything.
+
+![Many parallel coloured data streams flowing into a GPU chip — the modern, low-overhead Vulkan graphics backend](/blog-images/vulkan-blender.svg)
+
+> **Quick answer:** Vulkan is a modern, low-level graphics API — the successor to OpenGL — that lets Blender talk to your GPU with far less overhead and far more parallelism. **Blender 5.3 made it the default backend on Windows and Linux** (ARM builds and a few edge cases aside); macOS already uses Apple's **Metal**. You can still switch back to OpenGL under **Preferences ▸ System ▸ Backend**. It doesn't change how Cycles or EEVEE *render* — it modernises how the whole viewport is drawn, which unlocks smoother performance now and better features later.
+
+---
+
+## ⚙️ What Vulkan Actually Is
+
+Your 3D app doesn't talk to your graphics card directly — it goes through a **graphics API**, a translation layer between software and GPU. For nearly thirty years that API, in Blender, was **OpenGL**: reliable, universal, and *old*. It was designed for very different hardware, it hides most of the GPU behind a thick driver, and it struggles to keep today's many-core CPUs and massively parallel GPUs fed.
+
+**Vulkan** is its modern replacement — a **low-level, explicit API**. The app takes on more responsibility and in return gets much finer control: it can build work across many CPU threads at once, batch commands efficiently, and push them to the GPU with minimal driver overhead. It's the same generation of technology modern game engines render with. Where OpenGL says "trust the driver," Vulkan says "you drive."
+
+---
+
+## 🧭 Why Blender Had to Move
+
+This wasn't change for its own sake:
+
+- **OpenGL is a dead end.** It's effectively frozen, and **Apple deprecated it entirely** — which is why Blender on macOS already switched to **Metal**. Betting the next decade of Blender on a deprecated API was never viable.
+- **Modern hardware was being wasted.** OpenGL's largely single-threaded command model leaves fast CPUs and GPUs idling. Vulkan spreads the work out.
+- **Future features need a modern foundation.** Heavier viewports, GPU-driven subdivision and compute, a more capable EEVEE — all far easier to build on Vulkan than to bolt onto aging OpenGL.
+
+So Blender's developers spent years building a new Vulkan backend, running it experimentally, and closing the gap until it matched — and in many scenes beat — the old one.
+
+---
+
+## 🚀 What Changed in 5.3
+
+- **Vulkan is the default backend** on **Windows and Linux** (ARM builds still use OpenGL, and a handful of edge cases fall back).
+- **macOS** stays on **Metal** — Apple's own modern API — not Vulkan.
+- **OpenGL hasn't vanished.** If something misbehaves, switch it back under **Preferences ▸ System ▸ Backend** and restart.
+- **Requirements eased.** The minimum was lowered to **Vulkan 1.1**, so most GPUs from roughly the last decade qualify — and keeping your graphics drivers current matters more than ever.
+
+**One thing it does *not* change:** your final renders. Cycles and EEVEE produce the same images — Vulkan is about how the **viewport and interface** are drawn, not your render output.
+
+---
+
+## 👀 What You Actually Get
+
+Be a little patient with the hype — results depend on your GPU, driver and scene. But the direction is clear:
+
+- **A smoother, snappier viewport**, especially in heavy scenes, thanks to lower CPU-to-GPU overhead. Early tests showed big cold-start and draw improvements in a number of scenes.
+- **Better scaling** as projects grow, because the work parallelises instead of bottlenecking on one thread.
+- **Fewer long-term driver quirks**, since Vulkan is where GPU vendors now focus their effort.
+- **A platform for what's next** — the features coming to the viewport over the next few releases are being built Vulkan-first.
+
+Honest caveat: the migration took longer than planned, early experimental builds were rougher and sometimes *slower*, and extremely heavy meshes were a weak spot for a while. By 5.3 it's solid enough to be the default — but on older hardware or flaky drivers, keep the OpenGL fallback in your back pocket.
+
+[Book a free 15-minute call →](https://www.blendertutoring.com/#packages) if your viewport feels sluggish and you want a second pair of eyes on your setup.
+
+---
+
+## 🎮 Why It Matters If You Make Game Art
+
+If your work ends up in Unity, Unreal or Godot, this is more than trivia. Vulkan is a **real-time graphics API from the same world as your target engines** — a more GPU-forward Blender means heavier environments stay interactive, the viewport behaves more like the engine you'll ship in, and the whole tool is aligned with where real-time graphics is heading. You're modelling on modern rails instead of legacy ones.
+
+---
+
+## ❓ Vulkan FAQ
+
+**Do I need to do anything?** On 5.3, no — it's already the default. Just keep your GPU drivers updated.
+
+**Will my GPU work?** If it supports **Vulkan 1.1** (most cards from the last ~decade do), yes. If not, Blender falls back gracefully.
+
+**Is it actually faster?** Often, and especially in busy scenes — but it's workload- and hardware-dependent, not a magic across-the-board multiplier.
+
+**Does it change my renders?** No. Cycles and EEVEE output is unchanged; this is the drawing/viewport backend.
+
+**What about Mac?** macOS uses **Metal**, Apple's modern API, not Vulkan. Same idea — modern, not OpenGL.
+
+**Something broke after updating.** Switch to OpenGL under **Preferences ▸ System ▸ Backend**, restart, and update your drivers; report the issue if it persists.
+
+---
+
+## 🎯 Takeaway
+
+Vulkan is the quiet, foundational kind of upgrade: no new button, but you're now running Blender on a modern graphics engine instead of a thirty-year-old one. That means a snappier viewport today and a clear runway for the features coming next — and it brings Blender in line with the real-time world your assets live in. Nothing to configure, everything to gain.
+`,
+  },
+  {
     slug: "trim-sheets-in-blender",
     title: "Trim Sheets in Blender: One Texture, a Whole Level",
     description: "Trim sheets are how environment artists texture an entire building, corridor or sci-fi wall from one small texture — and keep it sharp and memory-light. What they are, when to use them, and how to build and apply one in Blender.",

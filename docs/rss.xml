@@ -5,8 +5,22 @@
     <link>https://www.blendertutoring.com/blog</link>
     <description>Practical Blender guides for beginners and game artists.</description>
     <language>en</language>
-    <lastBuildDate>Tue, 24 Nov 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 26 Nov 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://www.blendertutoring.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Blender Is Coming to Tablets: Where It Really Stands</title>
+      <link>https://www.blendertutoring.com/blog/blender-on-tablets</link>
+      <guid isPermaLink="true">https://www.blendertutoring.com/blog/blender-on-tablets</guid>
+      <pubDate>Thu, 26 Nov 2026 00:00:00 GMT</pubDate>
+      <description>The Blender Foundation announced an official iPad and tablet version — a full 3D suite, not a lite app. The story so far, what's been shown, and the honest state of play.</description>
+    </item>
+    <item>
+      <title>Blender Went Vulkan: Why That's a Big Deal</title>
+      <link>https://www.blendertutoring.com/blog/blender-vulkan-why-it-matters</link>
+      <guid isPermaLink="true">https://www.blendertutoring.com/blog/blender-vulkan-why-it-matters</guid>
+      <pubDate>Wed, 25 Nov 2026 00:00:00 GMT</pubDate>
+      <description>Blender 5.3 made Vulkan the default graphics backend on Windows and Linux, retiring decades-old OpenGL. What Vulkan is, why the switch matters, and what it means for your viewport and your work.</description>
+    </item>
     <item>
       <title>Trim Sheets in Blender: One Texture, a Whole Level</title>
       <link>https://www.blendertutoring.com/blog/trim-sheets-in-blender</link>
