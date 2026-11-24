@@ -15,6 +15,15 @@
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (_) { /* ignore */ }
   };
   const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  if (!Array.isArray(state.pending)) state.pending = []; // transcripts waiting for the AI
+
+  // API key lives in its own slot so exports/debugging of state never include it.
+  const KEY_SLOT = 'murmur:apikey';
+  const getKey = () => { try { return localStorage.getItem(KEY_SLOT) || ''; } catch (_) { return ''; } };
+  const setKey = k => { try { k ? localStorage.setItem(KEY_SLOT, k) : localStorage.removeItem(KEY_SLOT); } catch (_) { /* ignore */ } };
+  const aiOn = () => !!getKey() && state.ai !== false;
+  let aiModule = null;
+  const loadAI = () => (aiModule ||= import('./ai.js'));
 
   // ---------- Transcript -> action items ----------
   const FILLER = /\b(um+|uh+|erm|hmm+|you know|i mean|like,|basically|actually|literally)\b[,]?\s*/gi;
@@ -118,7 +127,10 @@
           <p>${esc(n.text)}</p>
         </li>`).join('') + '</ul>';
     } else {
-      if (!state.tasks.length) {
+      const pendingHtml = state.pending.map(p => `
+        <li class="card pending"><span class="spinner"></span>
+          <div class="body"><div class="label">Organizing with AI…</div><div class="src">${esc(p.text)}</div></div></li>`).join('');
+      if (!state.tasks.length && !state.pending.length) {
         main.innerHTML = `<p class="empty">No action items yet.<br>Turn on <b>Work mode</b> and start talking.</p>`; return;
       }
       const open = state.tasks.filter(t => !t.done), done = state.tasks.filter(t => t.done);
@@ -126,11 +138,12 @@
         <button data-act="share-tasks">Share</button>
         ${done.length ? '<button data-act="clear-done">Clear done</button>' : ''}
       </div>`;
-      main.innerHTML = tools + '<ul class="list">' + [...open, ...done].map(t => `
+      main.innerHTML = tools + '<ul class="list">' + pendingHtml + [...open, ...done].map(t => `
         <li class="card task ${t.done ? 'done' : ''}" data-id="${t.id}">
           <input type="checkbox" ${t.done ? 'checked' : ''} data-act="toggle" aria-label="Done" />
           <div class="body">
             <div class="text" contenteditable="true" spellcheck="false" data-act="edit">${esc(t.text)}</div>
+            ${t.priority === 'high' ? '<span class="tag high">urgent</span>' : ''}
             ${t.due ? `<span class="tag due">${esc(t.due)}</span>` : ''}
             <span class="tag">${fmt(t.created)}</span>
           </div>
@@ -139,35 +152,69 @@
     }
   }
 
+  function pushTasks(items) {
+    state.tasks.unshift(...items); // newest batch on top, in spoken order
+    toast(items.length ? `+${items.length} action item${items.length > 1 ? 's' : ''}` : 'Nothing actionable found');
+  }
+
+  // Turn one transcript into action items: AI when configured, rules otherwise.
+  // The transcript sits in state.pending (persisted) until it has been processed,
+  // so nothing is lost if the app is closed mid-request.
+  let working = false;
+  async function processPending() {
+    if (working) return;
+    working = true;
+    try {
+      while (state.pending.length) {
+        const p = state.pending[state.pending.length - 1]; // oldest first
+        let items = null, failMsg = null;
+        if (aiOn()) {
+          if (!navigator.onLine) break; // keep it queued; retried when back online
+          try {
+            const ai = await loadAI();
+            const open = state.tasks.filter(t => !t.done).map(t => t.text);
+            items = (await ai.organize(getKey(), p.text, open)).map(i => ({
+              id: uid(), text: i.text, done: false, due: i.due || null, priority: i.priority,
+              created: p.created, source: p.text, ai: true,
+            }));
+          } catch (err) {
+            const ai = await loadAI().catch(() => null);
+            failMsg = (ai ? ai.describeError(err) : 'AI unavailable') + ' — used basic mode';
+          }
+        }
+        if (!items) items = textToActionItems(p.text).map(i => ({ ...i, created: p.created }));
+        state.pending = state.pending.filter(x => x !== p);
+        pushTasks(items);
+        if (failMsg) toast(failMsg);
+        save(); render();
+      }
+    } finally {
+      working = false;
+    }
+  }
+
+  function queueForTasks(text, created = Date.now()) {
+    state.pending.unshift({ id: uid(), text, created });
+    save();
+    if (state.tab !== 'tasks') setTab('tasks'); else render();
+    processPending();
+  }
+
   function addTranscript(text) {
     text = text.trim();
     if (!text) return;
-    if (state.work) {
-      const items = textToActionItems(text);
-      if (items.length) {
-        state.tasks.unshift(...items.reverse());
-        toast(`+${items.length} action item${items.length > 1 ? 's' : ''}`);
-      }
-      if (state.tab !== 'tasks') setTab('tasks');
-    } else {
-      state.notes.unshift({ id: uid(), text, created: Date.now() });
-    }
+    if (state.work) return queueForTasks(text);
+    state.notes.unshift({ id: uid(), text, created: Date.now() });
     save(); render();
   }
 
   function moveNotesToTasks(ids) {
-    let added = 0;
-    const keep = [];
-    for (const n of state.notes) {
-      if (ids && !ids.includes(n.id)) { keep.push(n); continue; }
-      const items = textToActionItems(n.text);
-      items.forEach(i => (i.created = n.created));
-      state.tasks.unshift(...items.reverse());
-      added += items.length;
-    }
-    state.notes = keep;
-    save(); render();
-    toast(`Moved → ${added} action item${added === 1 ? '' : 's'}`);
+    const moving = state.notes.filter(n => !ids || ids.includes(n.id));
+    if (!moving.length) return;
+    state.notes = state.notes.filter(n => !moving.includes(n));
+    // One request for the batch so the AI can merge overlapping notes.
+    const text = moving.slice().reverse().map(n => n.text).join('\n\n');
+    queueForTasks(text, moving[0].created);
   }
 
   async function shareOrCopy(text, title) {
@@ -283,9 +330,39 @@
 
   document.addEventListener('visibilitychange', () => { if (document.hidden && listening) stop(); });
 
+  // ---------- Settings ----------
+  const dlg = $('settings'), keyInput = $('apiKey'), aiToggle = $('aiToggle'), aiStatus = $('aiStatus');
+  function refreshAIStatus() {
+    const k = getKey();
+    aiStatus.textContent = !k ? 'Basic' : state.ai === false ? 'AI paused' : 'AI on';
+    aiStatus.className = 'ai-pill ' + (aiOn() ? 'on' : '');
+  }
+  $('settingsBtn').onclick = () => {
+    keyInput.value = getKey();
+    aiToggle.checked = state.ai !== false;
+    dlg.showModal();
+  };
+  $('saveKey').onclick = e => {
+    e.preventDefault();
+    const k = keyInput.value.trim();
+    if (k && !/^sk-ant-/.test(k)) { toast('That doesn’t look like an Anthropic key (sk-ant-…)'); return; }
+    setKey(k);
+    state.ai = aiToggle.checked; save();
+    dlg.close(); refreshAIStatus();
+    toast(k ? (state.ai ? 'AI action items on' : 'Key saved, AI paused') : 'Key removed');
+    if (k) loadAI().catch(() => {});
+    processPending();
+  };
+  $('removeKey').onclick = e => { e.preventDefault(); keyInput.value = ''; };
+  $('closeSettings').onclick = e => { e.preventDefault(); dlg.close(); };
+  aiStatus.onclick = () => $('settingsBtn').click();
+  window.addEventListener('online', processPending);
+
   // ---------- Boot ----------
   applyMode();
+  refreshAIStatus();
   setTab(state.tab || 'notes');
+  processPending();
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
 
   window.__murmur = { textToActionItems }; // for testing

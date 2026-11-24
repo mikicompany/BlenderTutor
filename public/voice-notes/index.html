@@ -43,7 +43,7 @@
       display: flex; align-items: center; gap: 10px;
       font-size: 14px; color: var(--muted); user-select: none;
     }
-    .mode strong { color: var(--text); font-weight: 600; min-width: 92px; text-align: right; }
+    .mode strong { color: var(--text); font-weight: 600; white-space: nowrap; text-align: right; }
     body.work .mode strong { color: var(--work); }
     .switch { position: relative; width: 52px; height: 30px; flex: none; }
     .switch input { opacity: 0; width: 0; height: 0; position: absolute; }
@@ -133,6 +133,36 @@
       background: var(--panel); color: var(--text); font: inherit; padding: 12px;
     }
     .typebox button { border-radius: 10px; border: 0; background: var(--accent); color: #fff; font: inherit; padding: 0 16px; }
+    .brand { display: flex; align-items: center; gap: 8px; }
+    .ai-pill { white-space: nowrap; font: inherit; font-size: 11px; padding: 2px 8px; border-radius: 10px; cursor: pointer;
+      border: 1px solid var(--line); background: var(--panel); color: var(--muted); }
+    .ai-pill.on { color: #b79bff; border-color: rgba(183,155,255,.45); background: rgba(183,155,255,.1); }
+    .gear { background: none; border: 0; color: var(--muted); padding: 4px; margin-left: 6px; cursor: pointer; }
+    .gear svg { width: 22px; height: 22px; display: block; }
+    header .mode { margin-left: auto; }
+    .tag.high { background: rgba(255,93,93,.15); color: var(--danger); }
+    .pending { display: flex; gap: 12px; align-items: flex-start; border-style: dashed; }
+    .pending .label { color: #b79bff; font-size: 14px; }
+    .pending .src { color: var(--muted); font-size: 13px; margin-top: 2px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .spinner { width: 18px; height: 18px; margin-top: 2px; flex: none; border-radius: 50%;
+      border: 2px solid rgba(183,155,255,.25); border-top-color: #b79bff; animation: spin .8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    dialog { width: min(92vw, 440px); background: var(--panel); color: var(--text); border: 1px solid var(--line);
+      border-radius: 16px; padding: 20px; }
+    dialog::backdrop { background: rgba(0,0,0,.6); }
+    dialog h2 { margin: 0 0 8px; font-size: 18px; }
+    .muted { color: var(--muted); font-size: 14px; margin: 0 0 14px; }
+    .muted.small { font-size: 12px; margin-top: 6px; }
+    .muted a { color: var(--accent); }
+    .field { display: block; font-size: 13px; color: var(--muted); }
+    .field input { display: block; width: 100%; margin-top: 6px; padding: 12px; border-radius: 10px; font: inherit;
+      border: 1px solid var(--line); background: var(--bg); color: var(--text); }
+    .row { display: flex; gap: 8px; align-items: center; font-size: 14px; margin: 4px 0 16px; }
+    .row input { width: 18px; height: 18px; accent-color: var(--accent); }
+    .actions { display: flex; gap: 8px; }
+    .actions button { font: inherit; font-size: 14px; padding: 9px 14px; border-radius: 10px; cursor: pointer; }
+    .ghost { background: none; border: 1px solid var(--line); color: var(--text); }
+    .primary { background: var(--accent); border: 0; color: #fff; }
     .toast {
       position: fixed; left: 50%; top: calc(68px + env(safe-area-inset-top)); transform: translateX(-50%);
       background: var(--panel-2); border: 1px solid var(--line); padding: 8px 14px; border-radius: 10px;
@@ -143,7 +173,10 @@
 </head>
 <body>
   <header>
-    <h1>Murmur</h1>
+    <div class="brand">
+      <h1>Murmur</h1>
+      <button class="ai-pill" id="aiStatus" type="button">Basic</button>
+    </div>
     <label class="mode">
       <strong id="modeLabel">Work mode off</strong>
       <span class="switch">
@@ -151,6 +184,9 @@
         <span></span>
       </span>
     </label>
+    <button class="gear" id="settingsBtn" aria-label="Settings">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6-2-3.4-2.5 1a7.3 7.3 0 0 0-1.7-1L15 3.3h-4l-.4 2.7a7.3 7.3 0 0 0-1.7 1l-2.5-1-2 3.4L6.5 11a7.6 7.6 0 0 0 0 2l-2.1 1.6 2 3.4 2.5-1c.5.4 1.1.7 1.7 1l.4 2.7h4l.4-2.7c.6-.3 1.2-.6 1.7-1l2.5 1 2-3.4L19.4 13ZM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7Z" transform="translate(-1 0)"/></svg>
+    </button>
   </header>
 
   <div class="banner">Work mode is on — everything you say becomes an action item.</div>
@@ -177,6 +213,24 @@
   </div>
 
   <div class="toast" id="toast"></div>
+
+  <dialog id="settings">
+    <form method="dialog">
+      <h2>AI action items</h2>
+      <p class="muted">With an Anthropic API key, work mode uses Claude to turn what you say into clean action items: it fixes misheard words, splits and merges tasks, skips duplicates, and spots deadlines and urgency. Without a key, a simpler built-in method is used.</p>
+      <label class="field">API key
+        <input id="apiKey" type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-…" />
+      </label>
+      <p class="muted small">Get one at <a href="https://platform.claude.com/settings/keys" target="_blank" rel="noopener">platform.claude.com</a>. The key is stored only on this phone and sent only to Anthropic. Usage is billed to your Anthropic account.</p>
+      <label class="row"><input type="checkbox" id="aiToggle" checked /> Use AI when a key is set</label>
+      <div class="actions">
+        <button id="removeKey" class="ghost">Clear key</button>
+        <span style="flex:1"></span>
+        <button id="closeSettings" class="ghost">Cancel</button>
+        <button id="saveKey" class="primary">Save</button>
+      </div>
+    </form>
+  </dialog>
 
   <script src="app.js"></script>
 </body>
