@@ -1,0 +1,9 @@
+{
+  "appId": "app.murmur.voicenotes",
+  "appName": "Murmur",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": false,
+    "webContentsDebuggingEnabled": false
+  }
+}

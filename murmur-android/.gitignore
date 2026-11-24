@@ -1,0 +1,15 @@
+node_modules/
+# Fetched/copied at build time by scripts/prepare-assets.mjs (large binaries)
+www/models/
+www/vendor/
+# Signing material: never commit
+*.jks
+*.keystore
+keystore.properties
+android/app/release/
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+android/capacitor-cordova-android-plugins/
+android/app/src/main/assets/public/

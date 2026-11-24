@@ -37,9 +37,6 @@ export default defineConfig({
       // out of the sitemap.
       exclude: [
         '/404',
-        // Personal voice-notes app, not site content.
-        '/voice-notes',
-        '/voice-notes/index',
         '/googlea46d0184849e086f',
         '/pay',
         '/blog/blender-maya-theme',
