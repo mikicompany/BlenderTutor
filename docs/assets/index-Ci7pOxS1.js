@@ -97,7 +97,7 @@ And the official word lives on the [Blender 5.3 release page](https://www.blende
 For most people: **yes.** It's free, the viewport improvements alone are worth it, and nothing here breaks your normal workflow. If you rely on specific add-ons, give them a day to catch up with the Vulkan and API changes before switching your production machine — but for learning and personal projects, grab it and go play with splats.
 
 New to all this and not sure where to start with the firehose of features? [Book a free 15-minute call →](https://www.blendertutoring.com/#packages) and I'll help you figure out which parts of 5.3 actually matter for what *you* want to make.
-`},{slug:"good-vs-bad-topology",title:"Good Topology vs Bad Topology in Blender",description:"Topology is the layout of the polygons in your mesh — and it quietly decides whether your model subdivides cleanly, deforms well, shades smoothly and unwraps without pain. What good topology looks like, what bad topology costs, and the rules that get you there.",date:"2026-11-27",thumbnail:"/blog-images/topology.svg",content:`
+`},{slug:"good-vs-bad-topology",title:"Good Topology vs Bad Topology in Blender",description:"Topology is the layout of the polygons in your mesh — and it quietly decides whether your model subdivides cleanly, deforms well, shades smoothly and unwraps without pain. What good topology looks like, what bad topology costs, and the rules that get you there.",date:"2026-11-27",thumbnail:"/blog-images/topology.svg",leadMagnet:{file:"/blender-topology-cheat-sheet.pdf",tag:"topology-cheat-sheet",title:"Free: Blender Topology Cheat Sheet",blurb:"A printable one-page reference for clean meshes — the three face types, edge flow, where to hide poles, the four reasons topology matters, a pre-finish checklist, and when bad topology is actually fine. Enter your email and it’s yours, plus the occasional short Blender tip. No spam, unsubscribe any time."},content:`
 "Your topology is bad" is one of those notes that feels like a personal attack when you're starting out. But topology isn't about being tidy for its own sake — it's the hidden structure that decides whether your model will subdivide cleanly, bend without crumpling, catch light smoothly and unwrap without a fight. Get it right and everything downstream gets easier. Here's what good and bad actually look like, and how to stay on the right side of the line.
 
 ![Two mesh patches side by side: a clean green grid of quads marked good, and a red patch full of triangles, an n-gon and a pole marked bad](/blog-images/topology.svg)
@@ -504,7 +504,7 @@ For a game or environment artist, this unlocks things that used to cost hours:
 - **Set extension & matte replacement.** Park a splat scene beyond your playable area for instant depth and realism.
 - **Fast "scanned" look.** Capturing a weathered object as a splat is quicker than sculpting and texturing every scratch.
 
-The honest caveat up front: a splat is a **look**, not geometry you can rig, retopologise or collide against. Treat it as a photoreal layer in your scene, not a replacement for clean modelling — which, incidentally, is still the skill that makes everything else work.
+The honest caveat up front: a splat is a **look**, not geometry you can rig, retopologise or collide against. Treat it as a photoreal layer in your scene, not a replacement for clean modelling — which, incidentally, is still the skill that makes everything else work. Splats are only one of the headline additions this release; see [everything new in Blender 5.3](/blog/whats-new-blender-5-3).
 
 > **Not sure where splats fit in your pipeline — or stuck getting a capture to import clean?** That's exactly the kind of thing a quick 1-on-1 sorts in minutes instead of an afternoon of trial and error. Bring your scene and we'll work it out live. [Book a free call →](https://www.blendertutoring.com/#packages)
 
@@ -971,7 +971,7 @@ DLSS — the NVIDIA tech that quietly doubled frame rates in half the games you'
 
 That's the whole idea in one picture: the left is what a path tracer gives you after only a handful of samples — speckled with noise. The right is the resolved image. DLSS does that reconstruction *live, in the viewport*, from very few samples — so instead of waiting for the preview to clean up, it's already clean while you move the camera.
 
-> **Quick answer:** DLSS in Blender (5.3+) is a **viewport denoiser** — NVIDIA DLSS Ray Reconstruction. On an RTX GPU, set **Render Properties ▸ Sampling ▸ Viewport ▸ Denoise** to **DLSS** for a clean, real-time preview. It's viewport-only (not final renders), NVIDIA-only, and off by default.
+> **Quick answer:** DLSS in Blender (5.3+) is a **viewport denoiser** — NVIDIA DLSS Ray Reconstruction. On an RTX GPU, set **Render Properties ▸ Sampling ▸ Viewport ▸ Denoise** to **DLSS** for a clean, real-time preview. It's viewport-only (not final renders), NVIDIA-only, and off by default. It's one of several big viewport upgrades this release — see [everything new in Blender 5.3](/blog/whats-new-blender-5-3), including the switch to [Vulkan as the default backend](/blog/blender-vulkan-why-it-matters).
 
 ---
 
@@ -3997,7 +3997,7 @@ Topology is not a tidiness contest. It is a set of decisions about what the mesh
 
 ---
 
-**Read next:** [Text-to-3D in Blender: What AI Can and Can't Model Yet](/blog/text-to-3d-blender-ai) — generators produce quad-dominant meshes now, which sounds like it solves this and does not.
+**Read next:** [Good Topology vs Bad Topology in Blender](/blog/good-vs-bad-topology) — the bigger picture around this rule: edge flow, poles, density, and when bad topology is genuinely fine (grab the free [topology cheat sheet](/blog/good-vs-bad-topology#get-the-guide) while you're there).
 
 *Not sure whether your topology will survive rigging? [Book a free intro call →](https://www.blendertutoring.com/#packages)*
 `},{slug:"blender-render-looks-flat",title:"Why Your Blender Render Looks Flat",description:"Flat renders are a lighting problem, not a modelling one. The greyscale test, the four usual causes, and a three-point setup that reliably works.",date:"2026-10-17",thumbnail:"/blog-images/lighting-flat-vs-threepoint-real.jpg",content:`
@@ -4779,7 +4779,7 @@ Blender ships with two render engines, offers no guidance on which to use, and q
 
 Here's the short version, then the details.
 
-> 💡 **The one-line answer:** EEVEE is fast and approximates light. Cycles is slow and simulates it. Beginners should work in EEVEE and render finals in Cycles until they have a reason not to.
+> 💡 **The one-line answer:** EEVEE is fast and approximates light. Cycles is slow and simulates it. Beginners should work in EEVEE and render finals in Cycles until they have a reason not to. (EEVEE keeps closing the gap, too — [Blender 5.3 added Material Lighting nodes](/blog/whats-new-blender-5-3) for proper toon and stylised shading.)
 
 ![EEVEE the rasterizer against Cycles the path tracer, compared](/blog-images/cycles-eevee-compare.svg)
 
@@ -5035,7 +5035,7 @@ That's a five-minute conversation and a months-long frustration, depending on wh
 
 ---
 
-**Read next:** [Cycles vs EEVEE](/blog/cycles-vs-eevee) — once your textures sit properly, the render engine decides how they actually look.
+**Read next:** [Trim Sheets in Blender](/blog/trim-sheets-in-blender) — once unwrapping clicks, this is the technique that lets one texture dress a whole environment, and [Cycles vs EEVEE](/blog/cycles-vs-eevee), where the render engine decides how your textures actually look.
 
 *Stuck on your own model rather than a tutorial's? [Book a free intro call →](https://blendertutoring.com/#packages)*
     `},{slug:"life-beyond-the-donut",title:"What to Do After the Blender Donut: Escape Tutorial Hell",description:"Finished the Blender donut and stuck on what's next? How to escape tutorial hell and start building work that's actually yours — with projects to try.",date:"2026-07-24",thumbnail:"/blog-images/life-beyond-the-donut.jpg",content:`
