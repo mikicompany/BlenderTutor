@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="A trim sheet texture made of stacked horizontal strips, with an arrow showing those strips reused across a modular 3D wall piece">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="38%" r="80%">
+      <stop offset="0%" stop-color="#221c15"/>
+      <stop offset="60%" stop-color="#17130e"/>
+      <stop offset="100%" stop-color="#0e0b08"/>
+    </radialGradient>
+    <linearGradient id="metal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#8a929b"/><stop offset="50%" stop-color="#c7ced6"/><stop offset="100%" stop-color="#6b727b"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3a4654"/><stop offset="100%" stop-color="#28313c"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f0781a"/><stop offset="100%" stop-color="#f5b53a"/>
+    </linearGradient>
+    <filter id="sh" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#000" flood-opacity="0.5"/></filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- label -->
+  <g font-family="'Space Grotesk', system-ui, sans-serif" fill="#f3efe8">
+    <text x="84" y="120" font-size="20" letter-spacing="6" fill="#f0781a" opacity="0.9">BLENDER · ENVIRONMENT ART</text>
+    <text x="82" y="182" font-size="58" font-weight="700">Trim Sheets</text>
+    <text x="84" y="224" font-size="23" fill="#a69d90">One texture. A whole level.</text>
+  </g>
+
+  <!-- The trim sheet: stacked horizontal strips -->
+  <g filter="url(#sh)" transform="translate(120,275)">
+    <rect x="-8" y="-8" width="316" height="296" rx="10" fill="#211c15" stroke="#3a342b"/>
+    <!-- strip: metal edge -->
+    <rect x="0" y="0" width="300" height="26" fill="url(#metal)"/>
+    <!-- strip: panel with recess -->
+    <rect x="0" y="30" width="300" height="60" fill="url(#panel)"/>
+    <rect x="12" y="42" width="276" height="36" fill="#1f262e" stroke="#4a586a" stroke-width="2"/>
+    <!-- strip: rivets -->
+    <rect x="0" y="94" width="300" height="20" fill="#4b413a"/>
+    <g fill="#d7c9a8"><circle cx="18" cy="104" r="4"/><circle cx="54" cy="104" r="4"/><circle cx="90" cy="104" r="4"/><circle cx="126" cy="104" r="4"/><circle cx="162" cy="104" r="4"/><circle cx="198" cy="104" r="4"/><circle cx="234" cy="104" r="4"/><circle cx="270" cy="104" r="4"/></g>
+    <!-- strip: pipe -->
+    <rect x="0" y="118" width="300" height="40" fill="#2a2420"/>
+    <rect x="0" y="128" width="300" height="20" rx="10" fill="url(#metal)"/>
+    <!-- strip: warning stripe (accent) -->
+    <rect x="0" y="162" width="300" height="26" fill="#241a0b"/>
+    <g>
+      <rect x="0" y="162" width="300" height="26" fill="url(#accent)"/>
+      <g fill="#241a0b" opacity="0.85"><rect x="0" y="162" width="18" height="26"/><rect x="40" y="162" width="18" height="26"/><rect x="80" y="162" width="18" height="26"/><rect x="120" y="162" width="18" height="26"/><rect x="160" y="162" width="18" height="26"/><rect x="200" y="162" width="18" height="26"/><rect x="240" y="162" width="18" height="26"/><rect x="280" y="162" width="18" height="26"/></g>
+    </g>
+    <!-- strip: wide trim / molding -->
+    <rect x="0" y="192" width="300" height="34" fill="url(#panel)"/>
+    <rect x="0" y="201" width="300" height="3" fill="#5a677a"/>
+    <rect x="0" y="214" width="300" height="3" fill="#161c22"/>
+    <!-- bottom unique square area -->
+    <rect x="0" y="230" width="300" height="50" fill="#2e2822"/>
+    <rect x="8" y="238" width="60" height="34" fill="#3a4654"/>
+    <rect x="76" y="238" width="34" height="34" fill="#4b413a"/>
+    <rect x="118" y="238" width="174" height="34" fill="#262f38"/>
+  </g>
+  <text x="120" y="585" font-family="system-ui,sans-serif" font-size="16" fill="#a69d90">The trim sheet — reusable strips</text>
+
+  <!-- arrow -->
+  <g stroke="#f0781a" stroke-width="5" fill="none" stroke-linecap="round">
+    <path d="M470 420 h120"/>
+    <path d="M572 402 l22 18 l-22 18"/>
+  </g>
+
+  <!-- the modular wall piece using the strips -->
+  <g filter="url(#sh)" transform="translate(660,250)">
+    <!-- a simple extruded wall block in perspective -->
+    <polygon points="0,60 300,20 300,250 0,300" fill="#28313c"/>
+    <polygon points="300,20 430,55 430,275 300,250" fill="#1d242c"/>
+    <!-- trims mapped on the face -->
+    <polygon points="0,60 300,20 300,46 0,86" fill="url(#metal)" opacity="0.95"/>
+    <polygon points="0,250 300,210 300,250 0,300" fill="url(#panel)"/>
+    <g>
+      <polygon points="0,96 300,56 300,80 0,120" fill="url(#accent)"/>
+    </g>
+    <!-- recessed panel -->
+    <polygon points="40,140 260,112 260,196 40,224" fill="#1f262e" stroke="#4a586a" stroke-width="2"/>
+    <!-- rivets along top -->
+    <g fill="#d7c9a8"><circle cx="30" cy="78" r="3.5"/><circle cx="90" cy="70" r="3.5"/><circle cx="150" cy="62" r="3.5"/><circle cx="210" cy="54" r="3.5"/><circle cx="270" cy="46" r="3.5"/></g>
+  </g>
+  <text x="660" y="600" font-family="system-ui,sans-serif" font-size="16" fill="#a69d90">…dresses the whole modular kit</text>
+</svg>

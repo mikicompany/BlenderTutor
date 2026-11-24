@@ -1,5 +1,149 @@
 export const posts = [
   {
+    slug: "trim-sheets-in-blender",
+    title: "Trim Sheets in Blender: One Texture, a Whole Level",
+    description: "Trim sheets are how environment artists texture an entire building, corridor or sci-fi wall from one small texture — and keep it sharp and memory-light. What they are, when to use them, and how to build and apply one in Blender.",
+    date: "2026-11-24",
+    thumbnail: "/blog-images/trim-sheets.svg",
+    leadMagnet: {
+      file: "/game-ready-blender-asset-checklist.pdf",
+      tag: "game-ready-checklist",
+      title: "Free: Game-Ready Blender Asset Checklist",
+      blurb:
+        "A printable one-page checklist that runs every model through the 10 things behind 90% of import problems — scale, orientation, topology, UVs, materials, normals, export settings and the per-engine Unity / Unreal / Godot gotchas. Enter your email and it’s yours, plus the occasional short Blender tip. No spam, unsubscribe any time.",
+    },
+    content: `
+Look closely at almost any modern game environment — a sci-fi corridor, a factory wall, a stone fortress — and you'll find the same small texture doing the work of fifty. That's a **trim sheet**: one carefully built image that dresses an entire modular kit. It's the single highest-leverage texturing skill an environment or prop artist can learn, and Blender handles it beautifully once you know the moves. Here's what a trim sheet is, when to reach for one, and exactly how to build and apply one.
+
+![A trim sheet texture made of stacked horizontal strips, and an arrow showing those same strips reused across a modular 3D wall piece](/blog-images/trim-sheets.svg)
+
+> **Quick answer:** A trim sheet is a single texture built from **horizontal strips** — edges, panels, rivets, pipes, moldings, warning stripes — authored once as a PBR set and reused across tons of geometry by **sliding each piece's UVs onto the strip you want**. The strips tile left-to-right, so one 2K texture can dress a whole level with no end seams. In Blender: plan power-of-two strips, bake or author the sheet, then box-unwrap your meshes and line the UV shells up to the strips in the **UV Editor** (with the sheet loaded as the background image). Perfect for modular, hard-surface and architectural work — combine it with a tiling texture and a few decals for the rest.
+
+---
+
+## 🧩 What a Trim Sheet Actually Is
+
+A trim sheet is one texture divided into **horizontal bands**. Each band is a self-contained piece of surface detail — a polished metal edge, a row of bolts, a recessed panel, a pipe, a wood molding, a hazard stripe. You author the strips **once** (base colour, normal, roughness, metallic), and then you texture your models in a completely different way than usual: instead of giving every object its own unique unwrap, you **move each face's UVs onto whichever strip has the detail you want**.
+
+The key design rule is that trims run the **full width** of the sheet, so they **tile horizontally**. That means you can take a UV shell sitting on the "metal edge" strip and stretch it sideways to run that edge down a 50-metre corridor — no visible repeat at the ends, because the strip loops seamlessly left-to-right. Vertically, each strip keeps its fixed height; horizontally, it's infinite.
+
+---
+
+## 🤔 Trim Sheet vs. the Other Ways to Texture
+
+Trim sheets aren't the only option — they're one tool among four, and good artists mix them.
+
+| Method | Memory | Reuse | Best for | Watch out for |
+|---|---|---|---|---|
+| **Unique unwrap** | High | None | Hero props, faces, one-off details | Expensive; doesn't scale to big scenes |
+| **Tiling texture** | Very low | Infinite | Large flat surfaces — walls, floors, ground | Repetitive; no edges or variation |
+| **Trim sheet** | Low | Very high | Modular kits, edges, panels, pipes, architecture | Needs planning; not for organic shapes |
+| **Texture atlas** | Medium | Some | Lots of small unrelated props on one sheet | Each island is still unique — no tiling |
+
+The trim sheet's superpower is the middle ground: far more detail and variation than a plain tiling texture, far less memory and unwrapping than unique textures — and it's **shared across dozens of meshes**.
+
+---
+
+## 🧱 Anatomy of a Good Trim Sheet
+
+A sheet that's a joy to use shares a few traits:
+
+- **Power-of-two canvas** — **2048×2048** is the common default (1024 for background/small kits, 4096 for hero walls).
+- **A mix of strip heights** — a few tall panels, some medium trims, thin edge and bolt strips. Variety is what lets one sheet cover many shapes.
+- **Strips run full width** so every trim tiles horizontally.
+- **Built on a grid.** Snap strip boundaries to clean pixel heights (multiples of, say, 64 on a 2048 sheet) so your UVs land exactly on edges later.
+- **A little padding** between strips so neighbouring trims don't bleed into each other at a distance.
+- **Authored as a full PBR set** — base colour, normal, roughness, metallic, and often ambient occlusion and height.
+- **Reserve a corner** for a couple of unique or damaged bits, or keep those for separate decals.
+
+Spend your effort here. A well-planned sheet pays itself back across every asset that uses it.
+
+**Stuck planning your first sheet?** [Book a free 15-minute call →](https://www.blendertutoring.com/#packages) — bring a wall or prop and we'll map out the strips together.
+
+---
+
+## 🛠️ How To Build & Use One In Blender
+
+### 1. Plan the layout
+Before touching a texture, sketch the strips on a power-of-two canvas and decide each one's pixel height on a grid. Know what surfaces your kit needs — edges, panels, pipes, trims — and give each a band.
+
+### 2. Author or bake the sheet
+Two common routes:
+
+- **Bake it in Blender.** Model a high-poly "trim bar" — a flat strip of geometry with the panels, bolts, bevels and pipes modelled in, laid out to match your bands. Lay it over a flat low-poly plane and **Cycles-bake Normal and AO** (and curvature) down onto the plane's UVs. Then paint base colour, roughness and metallic on top. Blender can do this whole pipeline with no other software.
+- **Author it directly** in Substance 3D Painter/Designer, or even Photoshop/Krita for a stylised look. Substance speeds things up, but it is **not** required.
+
+### 3. Set up the material once
+Build **one** material from the sheet's maps (base colour → Base Color, normal → Normal Map node, roughness, metallic). Every modular piece in your kit shares this single material.
+
+### 4. UV the geometry onto the strips
+This is the part that feels new:
+
+- **Box / cube project** the mesh, or mark seams and unwrap — you just need clean, straight shells to start.
+- In the **UV Editor**, load the **trim sheet as the editor's background image** so you can see exactly where each shell sits.
+- **Move and scale each UV shell** onto the strip you want. Keep it **within that strip's vertical bounds**; stretch it **horizontally** to tile along long pieces.
+- Use **pixel snapping** (UV ▸ Snap, or snap to the UV grid) so shell edges land right on the strip boundaries — that's what kills bleeding.
+- **Follow Active Quads** (UV menu) is gold for straightening a run of faces along a single trim.
+
+### 5. Reuse everywhere
+Apply that same material to every piece in the kit. A whole corridor — walls, doorframes, pipes, panels — ends up sharing **one 2K texture**. That's the moment trim sheets click.
+
+---
+
+## 💡 Blender-Specific Tips
+
+- **Test with a UV grid texture first.** Checker or grid maps make stretching and uneven texel density obvious before you commit to the real sheet.
+- **Keep texel density consistent.** Pieces at wildly different UV scales will look mismatched. The **TexTools** and **UVPackmaster** add-ons have texel-density checkers; Blender's own tools work too with a bit of care.
+- **Don't confuse it with Box Mapping.** The shader's Box/triplanar projection is a different technique (great for rocks and terrain) — trim sheets use **explicit, hand-placed UVs**.
+- **Pin UVs** you've aligned so later unwraps don't shove them off their strip.
+
+---
+
+## ⚠️ Common Mistakes
+
+- **UVs drifting between strips** — a shell that overlaps two bands picks up detail from both. Snap to boundaries and leave padding.
+- **Stretching vertically.** Trims should keep their height; only stretch **horizontally** to tile. Vertical stretch smears the detail.
+- **Inconsistent texel density** — some trims razor-sharp, others blurry. Fix scale across the kit.
+- **Trying to do everything on the trim.** Reserve hero and unique details for a small atlas or decals; the trim is for the repeatable 90%.
+- **Non-power-of-two sheets** — engines and mip-mapping want 1024/2048/4096.
+
+---
+
+## 🧠 The Real Workflow: Trims + Tiling + Decals
+
+Pros rarely use trim sheets alone. The modern environment stack layers four things:
+
+- **Tiling materials** for big surfaces — walls, floors, ground.
+- **A trim sheet** for all the edges, panels, pipes and greebles.
+- **Decals** for unique damage, grime, signage and logos.
+- **A tiny unique atlas** for a few true hero pieces.
+
+Together they hit both **quality and performance** — exactly the balance studios hire for.
+
+---
+
+## ❓ Trim Sheet FAQ
+
+**Do I need Substance?** No. You can bake and author a solid trim sheet entirely in Blender. Substance just speeds up authoring once you scale up.
+
+**What resolution?** 2048×2048 is the sensible default. Drop to 1024 for background kits, go 4096 for hero walls seen up close.
+
+**Which maps do I need?** Base colour, normal, roughness and metallic at minimum; add ambient occlusion and height if your shader uses them.
+
+**Trim sheet vs atlas — what's the difference?** An atlas packs many *unrelated* textures together, each island unique. A trim sheet is *designed* so its strips tile and get **shared and reused** across many pieces.
+
+**Do trims work for organic shapes?** They shine on hard-surface, architecture, sci-fi and props. For organic surfaces, reach for tiling textures and unique bakes instead.
+
+---
+
+## 🎯 Takeaway
+
+Trim sheets are the backbone of fast, consistent, memory-light environment art. One small texture — planned as strips, reused by sliding UVs — can dress an entire level, and it's a learnable, repeatable skill rather than a dark art. Build one good sheet, UV a kit onto it, and you'll never texture a modular scene the slow way again.
+
+If you want to go from "I get the idea" to actually shipping a trim sheet and a modular kit built on it, that's exactly the kind of thing we do in a **1:1 session** — bring a wall or a prop and we'll plan the strips, bake the sheet, and UV a kit onto it live.
+`,
+  },
+  {
     slug: "gaussian-splatting-in-blender",
     title: "Gaussian Splatting in Blender 5.3: What It Is & How to Use It",
     description: "Blender 5.3 can import and render 3D Gaussian Splatting scenes — photoreal captures of real places, live in your viewport. What it is, why it matters for game art, and how to start.",
