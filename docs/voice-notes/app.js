@@ -16,6 +16,10 @@
   };
   const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
   if (!Array.isArray(state.pending)) state.pending = []; // transcripts waiting for the AI
+  if (!state.whisper) state.whisper = { always: false, size: 'base' }; // offline speech-to-text
+  const transcribing = []; // recordings being transcribed on-device (in memory only)
+  let whisperMod = null, whisperReady = false, dl = null; // dl: download progress {loaded,total}
+  const loadWhisper = () => (whisperMod ||= import('./whisper.js'));
 
   // API key lives in its own slot so exports/debugging of state never include it.
   const KEY_SLOT = 'murmur:apikey';
@@ -99,7 +103,10 @@
     document.body.classList.toggle('work', state.work);
     workToggle.checked = state.work;
     modeLabel.textContent = state.work ? 'Work mode on' : 'Work mode off';
-    if (!listening) hint.textContent = state.work ? 'Tap to speak — becomes action items' : 'Tap to start talking';
+    if (!listening) {
+      const dev = useWhisper() ? ' (on-device)' : '';
+      hint.textContent = (state.work ? 'Tap to speak — becomes action items' : 'Tap to start talking') + dev;
+    }
   }
 
   function setTab(tab) {
@@ -109,17 +116,38 @@
     render();
   }
 
+  function transcribingHtml() {
+    return transcribing.map(() => {
+      const pct = dl && dl.total ? Math.round(dl.loaded / dl.total * 100) : null;
+      const label = dl ? `Downloading offline model… ${pct ?? 0}%` : 'Transcribing on device…';
+      const sub = dl ? `${(dl.loaded / 1e6).toFixed(0)} / ${(dl.total / 1e6).toFixed(0)} MB — one-time download` : 'Whisper is running on your phone';
+      return `<li class="card pending"><span class="spinner"></span>
+        <div class="body"><div class="label">${label}</div><div class="src">${sub}</div>
+        ${dl ? `<div class="bar"><i style="width:${pct ?? 0}%"></i></div>` : ''}</div></li>`;
+    }).join('');
+  }
+
+  // Batches of items that were made with the basic rules because the AI was unreachable.
+  function redoBatches() {
+    const groups = new Map();
+    for (const t of state.tasks) if (t.basicBatch) {
+      if (!groups.has(t.basicBatch)) groups.set(t.basicBatch, []);
+      groups.get(t.basicBatch).push(t);
+    }
+    return [...groups.values()].filter(g => g.every(t => !t.done));
+  }
+
   function render() {
     $('notesCount').textContent = state.notes.length;
     $('tasksCount').textContent = state.tasks.filter(t => !t.done).length;
 
     if (state.tab === 'notes') {
-      if (!state.notes.length) { main.innerHTML = '<p class="empty">No transcripts yet.<br>Tap the mic and start talking.</p>'; return; }
+      if (!state.notes.length && !transcribing.length) { main.innerHTML = '<p class="empty">No transcripts yet.<br>Tap the mic and start talking.</p>'; return; }
       const tools = `<div class="toolbar">
         ${state.work ? '<button data-act="move-all">Move all to action items</button>' : ''}
         <button data-act="copy-notes">Copy all</button>
       </div>`;
-      main.innerHTML = tools + '<ul class="list">' + state.notes.map(n => `
+      main.innerHTML = tools + '<ul class="list">' + transcribingHtml() + state.notes.map(n => `
         <li class="card note" data-id="${n.id}">
           <div class="meta"><span>${fmt(n.created)}</span>
             <span><button class="linkish" data-act="to-tasks">→ Action items</button>
@@ -130,15 +158,18 @@
       const pendingHtml = state.pending.map(p => `
         <li class="card pending"><span class="spinner"></span>
           <div class="body"><div class="label">Organizing with AI…</div><div class="src">${esc(p.text)}</div></div></li>`).join('');
-      if (!state.tasks.length && !state.pending.length) {
+      if (!state.tasks.length && !state.pending.length && !transcribing.length) {
         main.innerHTML = `<p class="empty">No action items yet.<br>Turn on <b>Work mode</b> and start talking.</p>`; return;
       }
       const open = state.tasks.filter(t => !t.done), done = state.tasks.filter(t => t.done);
+      const redo = aiOn() && navigator.onLine ? redoBatches() : [];
+      const redoCount = redo.reduce((n, g) => n + g.length, 0);
       const tools = `<div class="toolbar">
+        ${redoCount ? `<button data-act="redo-ai" class="ai-btn">✨ Redo ${redoCount} offline item${redoCount > 1 ? 's' : ''} with AI</button>` : ''}
         <button data-act="share-tasks">Share</button>
         ${done.length ? '<button data-act="clear-done">Clear done</button>' : ''}
       </div>`;
-      main.innerHTML = tools + '<ul class="list">' + pendingHtml + [...open, ...done].map(t => `
+      main.innerHTML = tools + '<ul class="list">' + transcribingHtml() + pendingHtml + [...open, ...done].map(t => `
         <li class="card task ${t.done ? 'done' : ''}" data-id="${t.id}">
           <input type="checkbox" ${t.done ? 'checked' : ''} data-act="toggle" aria-label="Done" />
           <div class="body">
@@ -167,9 +198,10 @@
     try {
       while (state.pending.length) {
         const p = state.pending[state.pending.length - 1]; // oldest first
-        let items = null, failMsg = null;
-        if (aiOn()) {
-          if (!navigator.onLine) break; // keep it queued; retried when back online
+        let items = null, failMsg = null, basicBatch = null;
+        if (aiOn() && !navigator.onLine) {
+          basicBatch = p.id; // offline: use the rules now, offer an AI redo once back online
+        } else if (aiOn()) {
           try {
             const ai = await loadAI();
             const open = state.tasks.filter(t => !t.done).map(t => t.text);
@@ -180,9 +212,10 @@
           } catch (err) {
             const ai = await loadAI().catch(() => null);
             failMsg = (ai ? ai.describeError(err) : 'AI unavailable') + ' — used basic mode';
+            basicBatch = p.id;
           }
         }
-        if (!items) items = textToActionItems(p.text).map(i => ({ ...i, created: p.created }));
+        if (!items) items = textToActionItems(p.text).map(i => ({ ...i, created: p.created, ...(basicBatch && { basicBatch, source: p.text }) }));
         state.pending = state.pending.filter(x => x !== p);
         pushTasks(items);
         if (failMsg) toast(failMsg);
@@ -233,6 +266,13 @@
     else if (act === 'copy-notes') shareOrCopy(state.notes.map(n => `${fmt(n.created)}\n${n.text}`).join('\n\n'), 'Transcripts');
     else if (act === 'del-task') { state.tasks = state.tasks.filter(t => t.id !== id); save(); render(); }
     else if (act === 'toggle') { const t = state.tasks.find(t => t.id === id); if (t) { t.done = el.checked; save(); render(); } }
+    else if (act === 'redo-ai') {
+      for (const g of redoBatches()) {
+        state.tasks = state.tasks.filter(t => !g.includes(t));
+        state.pending.unshift({ id: uid(), text: g[0].source, created: g[0].created });
+      }
+      save(); render(); processPending();
+    }
     else if (act === 'clear-done') { state.tasks = state.tasks.filter(t => !t.done); save(); render(); }
     else if (act === 'share-tasks') {
       const open = state.tasks.filter(t => !t.done);
@@ -317,18 +357,77 @@
     applyMode();
   }
 
+  // ---------- Offline Whisper ----------
+  const canRecord = !!(navigator.mediaDevices && window.MediaRecorder);
+  // Whisper when asked for, when the device is offline (live recognition needs a
+  // connection), or when the browser has no live recognition at all.
+  function useWhisper() {
+    if (!canRecord) return false;
+    return state.whisper.always || !SR || (!navigator.onLine && whisperReady);
+  }
+
+  let recorder = null, timer = null;
+  async function startWhisper() {
+    if (!navigator.onLine && !whisperReady) {
+      toast('Offline model not downloaded yet — get it in Settings while online'); return;
+    }
+    const w = await loadWhisper();
+    recorder = new w.Recorder();
+    try { await recorder.start(); } catch (_) { recorder = null; toast('Microphone permission denied'); return; }
+    listening = true;
+    mic.classList.add('rec'); mic.setAttribute('aria-label', 'Stop recording');
+    hint.textContent = 'Recording on device… tap to stop';
+    live.classList.add('show');
+    const tick = () => {
+      const s = Math.floor((Date.now() - recorder.startedAt) / 1000);
+      live.innerHTML = `<span class="rec-dot"></span> Recording ${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}
+        <span class="interim">— words appear after you stop</span>`;
+    };
+    tick(); timer = setInterval(tick, 500);
+  }
+
+  async function stopWhisper() {
+    listening = false;
+    clearInterval(timer);
+    live.classList.remove('show');
+    mic.classList.remove('rec'); mic.setAttribute('aria-label', 'Start recording');
+    applyMode();
+    const r = recorder; recorder = null;
+    if (!r) return;
+    const blob = await r.stop();
+    const job = {};
+    transcribing.push(job);
+    if (state.work && state.tab !== 'tasks') setTab('tasks'); else render();
+    try {
+      const w = await loadWhisper();
+      if (!whisperReady && !(await w.isCached(state.whisper.size))) dl = { loaded: 0, total: 0 };
+      const text = await w.transcribe(blob, state.whisper.size);
+      whisperReady = true;
+      transcribing.splice(transcribing.indexOf(job), 1);
+      dl = null;
+      if (text) addTranscript(text); else { toast('Didn’t catch anything'); render(); }
+    } catch (err) {
+      transcribing.splice(transcribing.indexOf(job), 1);
+      dl = null; render();
+      toast('Transcription failed: ' + (err.message || err));
+    }
+  }
+
   mic.onclick = () => {
+    if (listening) return recorder ? stopWhisper() : stop();
+    if (useWhisper()) return startWhisper();
     if (!SR) { $('typed').focus(); return; }
-    listening ? stop() : start();
+    start();
   };
 
-  if (!SR) {
+  if (!SR && !canRecord) {
     $('typebox').classList.add('show');
     hint.textContent = 'Voice input needs Chrome (Android) or Safari (iPhone)';
   }
   $('typedSend').onclick = () => { addTranscript($('typed').value); $('typed').value = ''; };
 
-  document.addEventListener('visibilitychange', () => { if (document.hidden && listening) stop(); });
+  // Live recognition dies in the background; a Whisper recording can keep going.
+  document.addEventListener('visibilitychange', () => { if (document.hidden && listening && !recorder) stop(); });
 
   // ---------- Settings ----------
   const dlg = $('settings'), keyInput = $('apiKey'), aiToggle = $('aiToggle'), aiStatus = $('aiStatus');
@@ -337,9 +436,48 @@
     aiStatus.textContent = !k ? 'Basic' : state.ai === false ? 'AI paused' : 'AI on';
     aiStatus.className = 'ai-pill ' + (aiOn() ? 'on' : '');
   }
+  const wAlways = $('whisperAlways'), wSize = $('whisperSize'), wStatus = $('whisperStatus'), wBtn = $('whisperDownload');
+  async function refreshWhisperStatus() {
+    const w = await loadWhisper().catch(() => null);
+    const size = wSize.value;
+    const cached = w ? await w.isCached(size) : false;
+    if (size === state.whisper.size) whisperReady = cached;
+    if (dl && wBtn.disabled) return; // download in progress: progress handler owns the text
+    wStatus.textContent = cached ? '✓ Downloaded — works with no connection' : 'Not downloaded yet';
+    wStatus.className = 'w-status ' + (cached ? 'ok' : '');
+    wBtn.hidden = cached;
+  }
+  wSize.onchange = refreshWhisperStatus;
+  wBtn.onclick = async e => {
+    e.preventDefault();
+    if (!navigator.onLine) { toast('Connect to the internet to download'); return; }
+    wBtn.disabled = true; dl = { loaded: 0, total: 0 };
+    wStatus.textContent = 'Starting download…';
+    try {
+      const w = await loadWhisper();
+      await w.download(wSize.value);
+      toast('Offline model ready');
+    } catch (err) {
+      toast('Download failed: ' + (err.message || err));
+    } finally {
+      dl = null; wBtn.disabled = false;
+      refreshWhisperStatus(); render();
+    }
+  };
+  loadWhisper().then(w => w.onProgress(p => {
+    dl = { loaded: p.loaded, total: p.total };
+    const pct = p.total ? Math.round(p.loaded / p.total * 100) : 0;
+    if (dlg.open && wBtn.disabled) wStatus.textContent = `Downloading… ${pct}% (${(p.loaded / 1e6).toFixed(0)} / ${(p.total / 1e6).toFixed(0)} MB)`;
+    if (transcribing.length) render();
+  })).catch(() => {});
+
   $('settingsBtn').onclick = () => {
     keyInput.value = getKey();
     aiToggle.checked = state.ai !== false;
+    wAlways.checked = !!state.whisper.always;
+    wSize.value = state.whisper.size;
+    wAlways.disabled = wSize.disabled = !canRecord;
+    refreshWhisperStatus();
     dlg.showModal();
   };
   $('saveKey').onclick = e => {
@@ -347,18 +485,23 @@
     const k = keyInput.value.trim();
     if (k && !/^sk-ant-/.test(k)) { toast('That doesn’t look like an Anthropic key (sk-ant-…)'); return; }
     setKey(k);
-    state.ai = aiToggle.checked; save();
+    state.ai = aiToggle.checked;
+    if (wSize.value !== state.whisper.size) whisperReady = false;
+    state.whisper = { always: wAlways.checked, size: wSize.value };
+    save(); applyMode(); refreshWhisperStatus();
     dlg.close(); refreshAIStatus();
-    toast(k ? (state.ai ? 'AI action items on' : 'Key saved, AI paused') : 'Key removed');
+    toast(k ? (state.ai ? 'Saved — AI action items on' : 'Saved — AI paused') : 'Saved');
     if (k) loadAI().catch(() => {});
     processPending();
   };
   $('removeKey').onclick = e => { e.preventDefault(); keyInput.value = ''; };
   $('closeSettings').onclick = e => { e.preventDefault(); dlg.close(); };
   aiStatus.onclick = () => $('settingsBtn').click();
-  window.addEventListener('online', processPending);
+  window.addEventListener('online', () => { processPending(); applyMode(); render(); });
+  window.addEventListener('offline', () => { applyMode(); render(); });
 
   // ---------- Boot ----------
+  loadWhisper().then(w => w.isCached(state.whisper.size)).then(c => { whisperReady = c; applyMode(); }).catch(() => {});
   applyMode();
   refreshAIStatus();
   setTab(state.tab || 'notes');

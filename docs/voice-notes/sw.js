@@ -1,10 +1,10 @@
-const CACHE = 'murmur-v2';
-const FILES = ['./', 'index.html', 'app.js', 'ai.js', 'vendor/anthropic-sdk.js', 'manifest.json', 'icon.svg', 'icon-192.png', 'icon-512.png'];
+const CACHE = 'murmur-v4';
+const FILES = ['./', 'index.html', 'app.js', 'ai.js', 'vendor/anthropic-sdk.js', 'whisper.js', 'whisper-worker.js', 'manifest.json', 'icon.svg', 'icon-192.png', 'icon-512.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));
 });
 self.addEventListener('activate', e => {
-  e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim()));
+  e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k.startsWith('murmur-v') && k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim()));
 });
 // Network first so updates land; fall back to cache offline.
 self.addEventListener('fetch', e => {
