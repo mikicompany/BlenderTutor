@@ -54,7 +54,7 @@ Blender's built-in editor matures again. 5.3 adds a full **ripple editing framew
 
 ## 🗂️ Projects & Colour Management
 
-5.3 introduces an optional **Projects** system: a folder marked by a \`.blender_project\` directory that ties related files together. Alongside it, you get **OpenColorIO configuration choices** baked in — the default Blender config, **ACES 1.3**, **ACES 2.0**, or your own custom config — which matters a lot if you're matching footage or working in a studio pipeline.
+5.3 introduces an optional **Projects** system: a folder marked by a \`.blender_project\` directory that makes Blender aware of context beyond the single open .blend — tying related files together, sharing asset libraries and managing colour configuration across the whole project. Colour management also gets better **interoperability between files and assets built with different OpenColorIO configs** (ACES included), which matters a lot if you're matching footage or working in a studio pipeline.
 
 ---
 
