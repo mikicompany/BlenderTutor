@@ -5759,14 +5759,15 @@ You can follow 50 tutorials perfectly and still be building bad habits — topol
     measure how the site is used, described below. Beyond that, the only
     personal information we receive is what you choose to give us — when you
     book a call or subscribe to our newsletter — and we use it only for that
-    purpose.`},{title:"2. Analytics",body:`The Site loads Google Tag Manager, which we use to run analytics
-    such as Google Analytics. These tools record things like which pages are
-    visited, roughly where visitors are in the world, and which site referred
-    them, and they may set cookies in your browser to do so. We use this only
-    to understand which articles are useful and how people find us — never to
-    identify you personally. You can opt out with any standard cookie or
-    tracker blocker, and browsers offering "Do Not Track" or similar controls
-    will limit it further.`},{title:"3. Booking a call",body:`When you book an intro call, scheduling is handled by Calendly. They
+    purpose.`},{title:"2. Analytics",body:`The Site loads Google Tag Manager (used to run analytics such as
+    Google Analytics) and PostHog, a privacy-friendly product-analytics tool.
+    These record things like which pages are visited, roughly where visitors
+    are in the world, and which site referred them, and they may set cookies or
+    use local storage in your browser to do so. We use this only to understand
+    which articles are useful and how people find us — never to identify you
+    personally, and we do not sell this data. You can opt out with any standard
+    cookie or tracker blocker, and browsers offering "Do Not Track" or similar
+    controls will limit it further.`},{title:"3. Booking a call",body:`When you book an intro call, scheduling is handled by Calendly. They
     collect your name, email address, and the time you pick, and share it with
     us so we can hold the session. Calendly processes this data under its own
     privacy policy. We use your contact details only to run and follow up on
