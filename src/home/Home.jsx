@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import hero from "../assets/hero-bg-CMX9Xi5b.mp4";
 import heroWebm from "../assets/hero-bg.webm";
+import heroPoster from "../assets/hero-poster.jpg";
 import Navbar from "../navbar/Navbar";
 import Packages from "../packages/Packages";
 import About from "../about/About";
@@ -143,6 +144,10 @@ const Home = () => {
           // fall back to the 2MB mp4, and this is the page that has to load
           // fastest. "metadata" lets the browser decide.
           preload="metadata"
+          // Shown instantly while the video loads (and if it never plays, e.g.
+          // reduced-data mode) so the hero is never a blank black box on first
+          // paint. The poster is the video's own first frame, ~20KB.
+          poster={heroPoster}
           aria-hidden="true"
           className="h-full w-full object-cover"
         >
