@@ -3,6 +3,9 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  # Lets the deploy be kicked off manually (Actions tab or API). Needed because
+  # pushes made by an app/bot token do not fire the push trigger above.
+  workflow_dispatch:
 
 permissions:
   contents: read
