@@ -5,8 +5,43 @@
     <link>https://www.blendertutoring.com/blog</link>
     <description>Practical Blender guides for beginners and game artists.</description>
     <language>en</language>
-    <lastBuildDate>Thu, 19 Nov 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 28 Nov 2026 00:00:00 GMT</lastBuildDate>
     <atom:link href="https://www.blendertutoring.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>Everything Good in Blender 5.3</title>
+      <link>https://www.blendertutoring.com/blog/whats-new-blender-5-3</link>
+      <guid isPermaLink="true">https://www.blendertutoring.com/blog/whats-new-blender-5-3</guid>
+      <pubDate>Sat, 28 Nov 2026 00:00:00 GMT</pubDate>
+      <description>Blender 5.3 landed in November 2026 with native Gaussian splats, a DLSS viewport denoiser, Vulkan by default, EEVEE toon shading and a stack of editor upgrades. A tour of what's actually worth your time — with videos.</description>
+    </item>
+    <item>
+      <title>Good Topology vs Bad Topology in Blender</title>
+      <link>https://www.blendertutoring.com/blog/good-vs-bad-topology</link>
+      <guid isPermaLink="true">https://www.blendertutoring.com/blog/good-vs-bad-topology</guid>
+      <pubDate>Fri, 27 Nov 2026 00:00:00 GMT</pubDate>
+      <description>Topology is the layout of the polygons in your mesh — and it quietly decides whether your model subdivides cleanly, deforms well, shades smoothly and unwraps without pain. What good topology looks like, what bad topology costs, and the rules that get you there.</description>
+    </item>
+    <item>
+      <title>Blender Is Coming to Tablets: Where It Really Stands</title>
+      <link>https://www.blendertutoring.com/blog/blender-on-tablets</link>
+      <guid isPermaLink="true">https://www.blendertutoring.com/blog/blender-on-tablets</guid>
+      <pubDate>Thu, 26 Nov 2026 00:00:00 GMT</pubDate>
+      <description>The Blender Foundation announced an official iPad and tablet version — a full 3D suite, not a lite app. The story so far, what's been shown, and the honest state of play.</description>
+    </item>
+    <item>
+      <title>Blender Went Vulkan: Why That's a Big Deal</title>
+      <link>https://www.blendertutoring.com/blog/blender-vulkan-why-it-matters</link>
+      <guid isPermaLink="true">https://www.blendertutoring.com/blog/blender-vulkan-why-it-matters</guid>
+      <pubDate>Wed, 25 Nov 2026 00:00:00 GMT</pubDate>
+      <description>Blender 5.3 made Vulkan the default graphics backend on Windows and Linux, retiring decades-old OpenGL. What Vulkan is, why the switch matters, and what it means for your viewport and your work.</description>
+    </item>
+    <item>
+      <title>Trim Sheets in Blender: One Texture, a Whole Level</title>
+      <link>https://www.blendertutoring.com/blog/trim-sheets-in-blender</link>
+      <guid isPermaLink="true">https://www.blendertutoring.com/blog/trim-sheets-in-blender</guid>
+      <pubDate>Tue, 24 Nov 2026 00:00:00 GMT</pubDate>
+      <description>Trim sheets are how environment artists texture an entire building, corridor or sci-fi wall from one small texture — and keep it sharp and memory-light. What they are, when to use them, and how to build and apply one in Blender.</description>
+    </item>
     <item>
       <title>Gaussian Splatting in Blender 5.3: What It Is &amp; How to Use It</title>
       <link>https://www.blendertutoring.com/blog/gaussian-splatting-in-blender</link>

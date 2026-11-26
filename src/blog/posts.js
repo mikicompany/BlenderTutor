@@ -1,5 +1,520 @@
 export const posts = [
   {
+    slug: "whats-new-blender-5-3",
+    title: "Everything Good in Blender 5.3",
+    description: "Blender 5.3 landed in November 2026 with native Gaussian splats, a DLSS viewport denoiser, Vulkan by default, EEVEE toon shading and a stack of editor upgrades. A tour of what's actually worth your time — with videos.",
+    date: "2026-11-28",
+    thumbnail: "/blog-images/blender-53.svg",
+    content: `
+Blender's big yearly release dropped on **November 10, 2026**, and 5.3 is a meaty one — it closes out the year with headline features (real Gaussian splats, DLSS in the viewport) and a pile of quieter upgrades that'll quietly make your week better. Here's a guided tour of what actually matters, roughly in order of "ooh," plus a couple of video showcases at the end.
+
+![A Blender 5.3 banner with a point-cloud splat and feature chips: DLSS viewport, Vulkan default, EEVEE toon shading, Grease Pencil tools, VSE ripple edit, Projects system](/blog-images/blender-53.svg)
+
+> **The short version:** 5.3 brings **native 3D Gaussian splats**, an **NVIDIA DLSS viewport denoiser**, **Vulkan as the default backend**, **EEVEE Material Lighting nodes** (hello, proper toon shading), a redesigned **Video Sequencer** with ripple editing, big **Grease Pencil** additions, an optional **Projects** system with ACES colour management, and modelling niceties like a **Quad-Sphere**. It's a free update — here's what to actually play with first.
+
+---
+
+## 🟦 Native 3D Gaussian Splats
+
+The marquee feature. Blender can now **import 3D Gaussian splats** — the point-cloud-like captures that render photoreal real-world scenes — as native point clouds, then **edit and process them with Geometry Nodes** and **render them in Workbench, EEVEE and Cycles**. You can even relight them.
+
+Two honest caveats: there's **no export yet**, and performance isn't where the devs want it on big captures. But having splats as first-class citizens inside Blender — mixable with normal geometry — is a genuine milestone. If you've never met them, start with my explainer on [Gaussian splatting in Blender](/blog/gaussian-splatting-in-blender).
+
+---
+
+## ⚡ DLSS Viewport Denoiser (NVIDIA)
+
+If you're on an NVIDIA GPU, this one you'll feel every day. The new **DLSS denoiser** cleans up the viewport by upscaling and reusing samples from previous frames — so your interactive Cycles preview resolves to a clean image **much faster**. Spinning around a scene stops being a noisy mess while you wait. Interior and product renderers in particular are going to love it.
+
+---
+
+## 🚀 Vulkan Is Now the Default
+
+Under the hood, 5.3 makes **Vulkan** the default graphics backend on Windows and Linux, retiring the decades-old OpenGL path (macOS stays on Metal). It doesn't change your final renders — it modernises how the whole viewport is drawn, for a snappier interface now and a better foundation for what's next. I wrote a whole piece on [why Blender going Vulkan is a big deal](/blog/blender-vulkan-why-it-matters) if you want the full story.
+
+---
+
+## 🎨 EEVEE: Material Lighting Nodes & More
+
+EEVEE keeps getting more capable. 5.3 adds **Material Lighting nodes**, which unlock proper **toon / stylised shading** — controlling how a material responds to light directly in the shader, a big deal for anime and NPR looks. On top of that: **panoramic cameras** in EEVEE and a **full Sky Texture sun disc**, so skies and 360° renders look right in the fast engine. Still deciding between the engines? See [Cycles vs EEVEE](/blog/cycles-vs-eevee).
+
+---
+
+## ✏️ Grease Pencil Upgrades
+
+The 2D-in-3D toolset gets real love: **selection tools in Draw Mode** (select and tweak strokes without mode-hopping) and a new **Carver Tool** that cuts shapes with proper boolean subtraction. If you do storyboards, 2D animation or concept work in Blender, these smooth out the workflow a lot.
+
+---
+
+## 🎬 Video Sequencer: Ripple Editing & a New Blade
+
+Blender's built-in editor matures again. 5.3 adds a full **ripple editing framework** — trim or delete a clip and everything downstream shifts to close the gap, the way a grown-up NLE works — plus a **redesigned Blade (cut) tool**. If you cut your own tutorials or reels inside Blender, this is a quality-of-life jump.
+
+---
+
+## 🗂️ Projects & Colour Management
+
+5.3 introduces an optional **Projects** system: a folder marked by a \`.blender_project\` directory that makes Blender aware of context beyond the single open .blend — tying related files together, sharing asset libraries and managing colour configuration across the whole project. Colour management also gets better **interoperability between files and assets built with different OpenColorIO configs** (ACES included), which matters a lot if you're matching footage or working in a studio pipeline.
+
+---
+
+## 🧰 Modelling & Nodes Odds and Ends
+
+The small stuff that adds up:
+
+- A **Quad-Sphere** primitive — a sphere made of clean quads, far friendlier for [good topology](/blog/good-vs-bad-topology), sculpting and subdivision than the usual UV sphere.
+- New **Geometry Nodes volume-grid nodes** for more control over volumes and simulations.
+- Assorted performance and API changes under the hood (worth a look if you maintain add-ons).
+
+---
+
+## ▶️ Watch It In Action
+
+Reading about it is one thing — here are a couple of community showcases that run through the new features on screen (pick whichever depth suits you):
+
+- [Blender 5.3: 10 New Features You Need to Know](https://www.youtube.com/watch?v=hVeaGKegESs)
+- [Blender 5.3 Released — 20 New Features You Shouldn't Miss](https://www.youtube.com/watch?v=E4NVPImQJmw)
+- [Blender 5.3 Is HUGE: Every New Feature in 5 Minutes](https://www.youtube.com/watch?v=aWr6PQc12HY)
+
+And the official word lives on the [Blender 5.3 release page](https://www.blender.org/press/blender-5-3-release/).
+
+---
+
+## 🎯 Should You Update?
+
+For most people: **yes.** It's free, the viewport improvements alone are worth it, and nothing here breaks your normal workflow. If you rely on specific add-ons, give them a day to catch up with the Vulkan and API changes before switching your production machine — but for learning and personal projects, grab it and go play with splats.
+
+New to all this and not sure where to start with the firehose of features? [Book a free 15-minute call →](https://www.blendertutoring.com/#packages) and I'll help you figure out which parts of 5.3 actually matter for what *you* want to make.
+`,
+  },
+  {
+    slug: "good-vs-bad-topology",
+    title: "Good Topology vs Bad Topology in Blender",
+    description: "Topology is the layout of the polygons in your mesh — and it quietly decides whether your model subdivides cleanly, deforms well, shades smoothly and unwraps without pain. What good topology looks like, what bad topology costs, and the rules that get you there.",
+    date: "2026-11-27",
+    thumbnail: "/blog-images/topology.svg",
+    leadMagnet: {
+      file: "/blender-topology-cheat-sheet.pdf",
+      tag: "topology-cheat-sheet",
+      title: "Free: Blender Topology Cheat Sheet",
+      blurb:
+        "A printable one-page reference for clean meshes — the three face types, edge flow, where to hide poles, the four reasons topology matters, a pre-finish checklist, and when bad topology is actually fine. Enter your email and it’s yours, plus the occasional short Blender tip. No spam, unsubscribe any time.",
+    },
+    content: `
+"Your topology is bad" is one of those notes that feels like a personal attack when you're starting out. But topology isn't about being tidy for its own sake — it's the hidden structure that decides whether your model will subdivide cleanly, bend without crumpling, catch light smoothly and unwrap without a fight. Get it right and everything downstream gets easier. Here's what good and bad actually look like, and how to stay on the right side of the line.
+
+![Two mesh patches side by side: a clean green grid of quads marked good, and a red patch full of triangles, an n-gon and a pole marked bad](/blog-images/topology.svg)
+
+> **Quick answer:** Good topology is mostly **quads**, with **edge loops that follow the form** and flow around areas that bend (joints, mouths, eyes), **even polygon density**, and **poles kept away from deforming or highly visible surfaces**. Bad topology is **triangles and n-gons where they cause shading or subdivision problems**, **poles in the wrong place**, **uneven stretched faces**, and **loops that spiral or dead-end**. The catch: "bad" is contextual — a static game prop can get away with things a character's face never could.
+
+---
+
+## 🧩 Quads, Tris and N-gons
+
+Every face in your mesh has a number of sides:
+
+- **Quad** — four sides. The gold standard. Quads subdivide predictably, form clean edge loops, and deform well. Aim to make most of your mesh out of these.
+- **Triangle (tri)** — three sides. Not evil — in fact everything becomes triangles at render/engine time — but tris **break edge-loop flow** and can pinch when subdivided or deformed. Use them deliberately, tucked into flat or hidden areas.
+- **N-gon** — five or more sides. Handy while blocking out, but they **shade unpredictably** and **subdivide badly**. Treat them as scaffolding to clean up, not a finished surface.
+
+The rule of thumb: **quads where it matters, tris sparingly in flat/hidden spots, n-gons gone before you call it done.**
+
+---
+
+## 🌊 Edge Loops & Edge Flow
+
+An **edge loop** is a continuous ring of edges running through your mesh. **Edge flow** is the direction those loops travel across the surface. Good flow means the loops **follow the shape and the way it moves** — circling the eyes and mouth on a face, wrapping around an elbow or knee, running along a muscle.
+
+Why it matters: when a surface bends, the geometry has to fold somewhere. If your loops line up with the bend, it folds cleanly. If they cut across it at random angles, you get crumpling and pinching. Good flow is the difference between an elbow that creases like skin and one that collapses like a crushed can.
+
+---
+
+## ⭐ Poles — and Where to Hide Them
+
+A **pole** is a vertex where an unusual number of edges meet — most commonly a **three-edge pole** (an "N-pole") or a **five-edge pole** (an "E-pole"). You can't model anything interesting without them; they're how you redirect edge flow and add or remove detail.
+
+The skill isn't *avoiding* poles — it's **placing** them. A pole sits on a flat, static, low-visibility area. Put one on the tip of a nose, the curve of a cheek or a bending joint and you'll see a **pinch or a star-shaped shading artifact** the moment you subdivide or deform. Hide your poles; don't fear them.
+
+---
+
+## 📏 Even Density
+
+Good topology keeps polygon size **reasonably even** and adds detail **where the form needs it** — more around a tight curve, less across a flat panel. Bad topology has wildly uneven faces: long thin slivers next to big flat quads, dense clumps next to empty stretches. Uneven density causes uneven shading and makes the mesh a nightmare to edit, sculpt or texture.
+
+---
+
+## 🔁 Why It Actually Matters
+
+Topology isn't academic — it pays off (or bites you) at four specific stages:
+
+- **Subdivision.** The Subdivision Surface modifier assumes quads. Feed it clean loops and you get smooth, predictable surfaces; feed it tris, n-gons and bad poles and you get pinching and lumps. Add **support loops** (loops near an edge) to keep corners crisp.
+- **Deformation / animation.** A rigged character bends at the loops. Loops that follow the anatomy deform like flesh; bad flow tears and collapses.
+- **Shading.** Smooth shading interpolates across faces. N-gons and poles in visible areas produce dark smudges and wobbles that no amount of lighting fixes.
+- **UVs & texturing.** Clean quad topology unwraps into clean UVs — which is half the battle in [UV unwrapping](/blog/uv-unwrapping-blender-beginners) and essential if you're building reusable [trim sheets](/blog/trim-sheets-in-blender).
+
+---
+
+## 🎮 When "Bad" Topology Is Totally Fine
+
+Here's the nuance beginners rarely hear: **context decides.** Topology rules exist to serve subdivision, deformation and clean shading. Where those don't apply, you can relax:
+
+- **Static game props** (a crate, a rock, a wall) are **triangulated for the engine anyway** and never deform — so tris and the occasional n-gon are fine as long as shading looks right.
+- **Hard-surface models** that won't be subdivided can carry tris in flat areas without issue.
+- **High-poly sculpts** destined only for baking don't need beautiful base topology — that's what **retopology** is for afterward.
+
+The models that genuinely *demand* clean topology are the ones that **subdivide or deform**: characters, creatures, anything animated, anything organic. Spend your topology budget there.
+
+---
+
+## ✅ A Quick Topology Checklist
+
+Before you call a deforming/subdividing model done:
+
+- Mostly **quads**; tris and n-gons only in flat, hidden, non-deforming spots.
+- **Edge loops follow the form** and wrap around anything that bends.
+- **Poles tucked** into flat, low-visibility areas — never on a crease or a highlight.
+- **Even-ish density**, more detail where curvature or deformation needs it.
+- **Support loops** where you need subdivided edges to stay sharp.
+- Turn on the **wireframe** and the **matcap**, and look for pinches and dark smudges — your eyes catch what the stats don't.
+
+---
+
+## 🎯 Takeaway
+
+Good topology is quads that flow with the form, even spacing, and poles kept out of trouble — and its reward is a model that subdivides, bends, shades and unwraps without a fight. Bad topology is tris, n-gons and poles sitting exactly where they'll cause pinching. But don't turn it into a religion: a static prop plays by looser rules than a character's face. Learn the rules, then learn where they stop applying — that judgment is what separates clean modelling from cargo-cult modelling.
+
+Want someone to look over your mesh and point out exactly where the flow goes wrong? [Book a free 15-minute call →](https://www.blendertutoring.com/#packages) and we'll go through it together.
+`,
+  },
+  {
+    slug: "blender-on-tablets",
+    title: "Blender Is Coming to Tablets: Where It Really Stands",
+    description: "The Blender Foundation announced an official iPad and tablet version — a full 3D suite, not a lite app. The story so far, what's been shown, and the honest state of play.",
+    date: "2026-11-26",
+    thumbnail: "/blog-images/blender-tablets.svg",
+    content: `
+For years, "Blender on a tablet" meant a workaround — streaming your desktop, propping up a 2-in-1, or giving up. Then in **July 2025** the Blender Foundation said the thing artists had been asking for out loud: they're building an **official tablet version**, starting with the iPad. It's a genuinely big deal — and, as of now, a genuinely unfinished one. Here's the real story.
+
+![A tablet held at an angle showing a 3D modelling viewport with a stylus — Blender coming to tablets](/blog-images/blender-tablets.svg)
+
+> **Quick answer:** In **July 2025** the Blender Foundation announced an official tablet port, beginning with **iPad Pro and Apple Pencil**, built in a dedicated iOS branch of the code. The goal is the **full Blender experience**, not a stripped-down app. A prototype was **demoed at SIGGRAPH 2025**. Since then it's gone quiet: as of early 2026 **nothing has shipped**, the iPad release reportedly slipped, and the team has signalled it may focus on **Android first**. Exciting, real, and still a work in progress — no release date yet.
+
+---
+
+## 📣 The Announcement
+
+In mid-2025, the Blender Foundation confirmed it was developing a tablet version, **starting with the iPad Pro and Apple Pencil**, with the work happening in a new **iOS branch** of Blender's codebase. The motivation was simple: more and more CG artists use tablets — for sketching on the go, reviewing scenes, even as a primary machine — and Blender wanted to meet them there instead of leaving it to hacks.
+
+Crucially, this isn't a side experiment by a third party. It's an **official effort from the people who make Blender**, which is exactly what makes it credible.
+
+---
+
+## 🧱 Not a "Lite" App
+
+The most important detail: the team has been explicit that this is meant to be the **complete Blender experience**, not a dumbed-down "Blender Go." The plan is the same program — the full modelling, sculpting, shading and animation toolset — **adapted to touch and pencil input**, aimed squarely at **existing Blender users** who want their real tool on a tablet.
+
+They're starting small and building up, but the ambition is a proper port, not a toy. That's a much harder road than shipping a simplified app — and part of why it's taking time.
+
+---
+
+## 👁️ What's Been Shown
+
+At **SIGGRAPH 2025** (August), the Foundation showed a **working prototype running on an iPad Pro** — early, but real: Blender's interface and viewport, driven by touch and the Apple Pencil. It was a tech demo, not a download, but it proved the core idea runs on tablet hardware.
+
+---
+
+## 🧭 The Honest State of Play
+
+Here's where enthusiasm needs a reality check. As of **early 2026**:
+
+- **Nothing has been released.** No public build, no App Store listing, no firm date.
+- **The iPad version reportedly slipped.** The big summer-2025 announcement hasn't turned into a ship yet.
+- **A possible Android-first pivot.** A developer comment suggested the team may now prioritise the **Android** version — a reversal of the original iPad-first plan.
+
+None of that means it's dead; big, proper ports take years, and Blender's are famously thorough. But if you're waiting to do real work on an iPad, **don't hold your breath for a date.**
+
+---
+
+## ✨ Why It's Worth Caring About
+
+If — when — it lands, a real Blender on a tablet is a genuine shift:
+
+- **Model and sculpt anywhere** — the couch, a train, on location — not just at your desk.
+- **Pencil-native workflows** for sculpting, retopology, texture painting and grease pencil, where a stylus beats a mouse.
+- **A lower barrier to entry** for people who own a tablet but not a workstation.
+
+A full 3D suite running natively on a tablet is still rare air. Pulling it off well would be a milestone.
+
+And the honest caveats: **thermals and sustained performance**, how heavy a scene a tablet can really handle, battery life, and whether a touch-first UI can match a keyboard-and-mouse power user. These are the hard problems the team is working through — and why it isn't out yet.
+
+[Book a free 15-minute call →](https://www.blendertutoring.com/#packages) if you want help picking hardware that'll actually run Blender well today.
+
+---
+
+## 💡 What To Do In The Meantime
+
+You don't have to wait to get tablet-style input into Blender:
+
+- **A pen display or drawing tablet** (Wacom and friends) plugged into your desktop gives you pencil input in full Blender **right now** — ideal for sculpting and texture painting.
+- **A Windows 2-in-1 or tablet PC** runs the complete desktop Blender today, touch and pen included.
+- **Keep learning on desktop.** Every skill transfers directly — when the tablet version arrives, you'll already know the program; you'll just be holding it differently.
+
+---
+
+## ❓ Blender-On-Tablet FAQ
+
+**When is it coming?** No announced date. Announced in 2025, demoed at SIGGRAPH 2025, but not released as of early 2026, and reportedly delayed.
+
+**iPad or Android first?** Originally iPad-first; more recent signals suggest **Android** may now come first.
+
+**Will it be free?** Blender is free and open-source by licence, so the software itself is expected to stay free — exact app-store distribution details haven't been confirmed.
+
+**Will it be the full Blender?** That's the stated goal — the complete toolset adapted to touch and pencil, not a cut-down version.
+
+**Can I use Blender on a tablet right now?** Natively on a **Windows 2-in-1**, yes. On iPad, only by remote-desktop/streaming to a real PC — not a native app yet.
+
+---
+
+## 🎯 Takeaway
+
+Official Blender on a tablet went from wishful thinking to a real, Foundation-backed project with a working prototype — and then into the long, quiet middle of serious software development. It's coming, the ambition is the *full* Blender rather than a lite app, but there's no date and the roadmap has wobbled. Watch the space, keep sharpening your skills on desktop, and know that when it lands you'll be ready to pick it up — literally.
+`,
+  },
+  {
+    slug: "blender-vulkan-why-it-matters",
+    title: "Blender Went Vulkan: Why That's a Big Deal",
+    description: "Blender 5.3 made Vulkan the default graphics backend on Windows and Linux, retiring decades-old OpenGL. What Vulkan is, why the switch matters, and what it means for your viewport and your work.",
+    date: "2026-11-25",
+    thumbnail: "/blog-images/vulkan-blender.svg",
+    content: `
+Most Blender updates add buttons you can see. **Blender 5.3** flipped a switch you can't — and it might be the most important change in years. As of 5.3, Blender draws your viewport with **Vulkan** by default on Windows and Linux, retiring the decades-old **OpenGL** backend it had leaned on since the beginning. Here's what that means, why it's a big deal, and whether you need to do anything.
+
+![Many parallel coloured data streams flowing into a GPU chip — the modern, low-overhead Vulkan graphics backend](/blog-images/vulkan-blender.svg)
+
+> **Quick answer:** Vulkan is a modern, low-level graphics API — the successor to OpenGL — that lets Blender talk to your GPU with far less overhead and far more parallelism. **Blender 5.3 made it the default backend on Windows and Linux** (ARM builds and a few edge cases aside); macOS already uses Apple's **Metal**. You can still switch back to OpenGL under **Preferences ▸ System ▸ Backend**. It doesn't change how Cycles or EEVEE *render* — it modernises how the whole viewport is drawn, which unlocks smoother performance now and better features later.
+
+---
+
+## ⚙️ What Vulkan Actually Is
+
+Your 3D app doesn't talk to your graphics card directly — it goes through a **graphics API**, a translation layer between software and GPU. For nearly thirty years that API, in Blender, was **OpenGL**: reliable, universal, and *old*. It was designed for very different hardware, it hides most of the GPU behind a thick driver, and it struggles to keep today's many-core CPUs and massively parallel GPUs fed.
+
+**Vulkan** is its modern replacement — a **low-level, explicit API**. The app takes on more responsibility and in return gets much finer control: it can build work across many CPU threads at once, batch commands efficiently, and push them to the GPU with minimal driver overhead. It's the same generation of technology modern game engines render with. Where OpenGL says "trust the driver," Vulkan says "you drive."
+
+---
+
+## 🧭 Why Blender Had to Move
+
+This wasn't change for its own sake:
+
+- **OpenGL is a dead end.** It's effectively frozen, and **Apple deprecated it entirely** — which is why Blender on macOS already switched to **Metal**. Betting the next decade of Blender on a deprecated API was never viable.
+- **Modern hardware was being wasted.** OpenGL's largely single-threaded command model leaves fast CPUs and GPUs idling. Vulkan spreads the work out.
+- **Future features need a modern foundation.** Heavier viewports, GPU-driven subdivision and compute, a more capable EEVEE — all far easier to build on Vulkan than to bolt onto aging OpenGL.
+
+So Blender's developers spent years building a new Vulkan backend, running it experimentally, and closing the gap until it matched — and in many scenes beat — the old one.
+
+---
+
+## 🚀 What Changed in 5.3
+
+- **Vulkan is the default backend** on **Windows and Linux** (ARM builds still use OpenGL, and a handful of edge cases fall back).
+- **macOS** stays on **Metal** — Apple's own modern API — not Vulkan.
+- **OpenGL hasn't vanished.** If something misbehaves, switch it back under **Preferences ▸ System ▸ Backend** and restart.
+- **Requirements eased.** The minimum was lowered to **Vulkan 1.1**, so most GPUs from roughly the last decade qualify — and keeping your graphics drivers current matters more than ever.
+
+**One thing it does *not* change:** your final renders. Cycles and EEVEE produce the same images — Vulkan is about how the **viewport and interface** are drawn, not your render output.
+
+---
+
+## 👀 What You Actually Get
+
+Be a little patient with the hype — results depend on your GPU, driver and scene. But the direction is clear:
+
+- **A smoother, snappier viewport**, especially in heavy scenes, thanks to lower CPU-to-GPU overhead. Early tests showed big cold-start and draw improvements in a number of scenes.
+- **Better scaling** as projects grow, because the work parallelises instead of bottlenecking on one thread.
+- **Fewer long-term driver quirks**, since Vulkan is where GPU vendors now focus their effort.
+- **A platform for what's next** — the features coming to the viewport over the next few releases are being built Vulkan-first.
+
+Honest caveat: the migration took longer than planned, early experimental builds were rougher and sometimes *slower*, and extremely heavy meshes were a weak spot for a while. By 5.3 it's solid enough to be the default — but on older hardware or flaky drivers, keep the OpenGL fallback in your back pocket.
+
+[Book a free 15-minute call →](https://www.blendertutoring.com/#packages) if your viewport feels sluggish and you want a second pair of eyes on your setup.
+
+---
+
+## 🎮 Why It Matters If You Make Game Art
+
+If your work ends up in Unity, Unreal or Godot, this is more than trivia. Vulkan is a **real-time graphics API from the same world as your target engines** — a more GPU-forward Blender means heavier environments stay interactive, the viewport behaves more like the engine you'll ship in, and the whole tool is aligned with where real-time graphics is heading. You're modelling on modern rails instead of legacy ones.
+
+---
+
+## ❓ Vulkan FAQ
+
+**Do I need to do anything?** On 5.3, no — it's already the default. Just keep your GPU drivers updated.
+
+**Will my GPU work?** If it supports **Vulkan 1.1** (most cards from the last ~decade do), yes. If not, Blender falls back gracefully.
+
+**Is it actually faster?** Often, and especially in busy scenes — but it's workload- and hardware-dependent, not a magic across-the-board multiplier.
+
+**Does it change my renders?** No. Cycles and EEVEE output is unchanged; this is the drawing/viewport backend.
+
+**What about Mac?** macOS uses **Metal**, Apple's modern API, not Vulkan. Same idea — modern, not OpenGL.
+
+**Something broke after updating.** Switch to OpenGL under **Preferences ▸ System ▸ Backend**, restart, and update your drivers; report the issue if it persists.
+
+---
+
+## 🎯 Takeaway
+
+Vulkan is the quiet, foundational kind of upgrade: no new button, but you're now running Blender on a modern graphics engine instead of a thirty-year-old one. That means a snappier viewport today and a clear runway for the features coming next — and it brings Blender in line with the real-time world your assets live in. Nothing to configure, everything to gain.
+`,
+  },
+  {
+    slug: "trim-sheets-in-blender",
+    title: "Trim Sheets in Blender: One Texture, a Whole Level",
+    description: "Trim sheets are how environment artists texture an entire building, corridor or sci-fi wall from one small texture — and keep it sharp and memory-light. What they are, when to use them, and how to build and apply one in Blender.",
+    date: "2026-11-24",
+    thumbnail: "/blog-images/trim-sheets.svg",
+    leadMagnet: {
+      file: "/game-ready-blender-asset-checklist.pdf",
+      tag: "game-ready-checklist",
+      title: "Free: Game-Ready Blender Asset Checklist",
+      blurb:
+        "A printable one-page checklist that runs every model through the 10 things behind 90% of import problems — scale, orientation, topology, UVs, materials, normals, export settings and the per-engine Unity / Unreal / Godot gotchas. Enter your email and it’s yours, plus the occasional short Blender tip. No spam, unsubscribe any time.",
+    },
+    content: `
+Look closely at almost any modern game environment — a sci-fi corridor, a factory wall, a stone fortress — and you'll find the same small texture doing the work of fifty. That's a **trim sheet**: one carefully built image that dresses an entire modular kit. It's the single highest-leverage texturing skill an environment or prop artist can learn, and Blender handles it beautifully once you know the moves. Here's what a trim sheet is, when to reach for one, and exactly how to build and apply one.
+
+![A trim sheet texture made of stacked horizontal strips, and an arrow showing those same strips reused across a modular 3D wall piece](/blog-images/trim-sheets.svg)
+
+> **Quick answer:** A trim sheet is a single texture built from **horizontal strips** — edges, panels, rivets, pipes, moldings, warning stripes — authored once as a PBR set and reused across tons of geometry by **sliding each piece's UVs onto the strip you want**. The strips tile left-to-right, so one 2K texture can dress a whole level with no end seams. In Blender: plan power-of-two strips, bake or author the sheet, then box-unwrap your meshes and line the UV shells up to the strips in the **UV Editor** (with the sheet loaded as the background image). Perfect for modular, hard-surface and architectural work — combine it with a tiling texture and a few decals for the rest.
+
+---
+
+## 🧩 What a Trim Sheet Actually Is
+
+A trim sheet is one texture divided into **horizontal bands**. Each band is a self-contained piece of surface detail — a polished metal edge, a row of bolts, a recessed panel, a pipe, a wood molding, a hazard stripe. You author the strips **once** (base colour, normal, roughness, metallic), and then you texture your models in a completely different way than usual: instead of giving every object its own unique unwrap, you **move each face's UVs onto whichever strip has the detail you want**.
+
+The key design rule is that trims run the **full width** of the sheet, so they **tile horizontally**. That means you can take a UV shell sitting on the "metal edge" strip and stretch it sideways to run that edge down a 50-metre corridor — no visible repeat at the ends, because the strip loops seamlessly left-to-right. Vertically, each strip keeps its fixed height; horizontally, it's infinite.
+
+---
+
+## 🤔 Trim Sheet vs. the Other Ways to Texture
+
+Trim sheets aren't the only option — they're one tool among four, and good artists mix them.
+
+| Method | Memory | Reuse | Best for | Watch out for |
+|---|---|---|---|---|
+| **Unique unwrap** | High | None | Hero props, faces, one-off details | Expensive; doesn't scale to big scenes |
+| **Tiling texture** | Very low | Infinite | Large flat surfaces — walls, floors, ground | Repetitive; no edges or variation |
+| **Trim sheet** | Low | Very high | Modular kits, edges, panels, pipes, architecture | Needs planning; not for organic shapes |
+| **Texture atlas** | Medium | Some | Lots of small unrelated props on one sheet | Each island is still unique — no tiling |
+
+The trim sheet's superpower is the middle ground: far more detail and variation than a plain tiling texture, far less memory and unwrapping than unique textures — and it's **shared across dozens of meshes**.
+
+---
+
+## 🧱 Anatomy of a Good Trim Sheet
+
+A sheet that's a joy to use shares a few traits:
+
+- **Power-of-two canvas** — **2048×2048** is the common default (1024 for background/small kits, 4096 for hero walls).
+- **A mix of strip heights** — a few tall panels, some medium trims, thin edge and bolt strips. Variety is what lets one sheet cover many shapes.
+- **Strips run full width** so every trim tiles horizontally.
+- **Built on a grid.** Snap strip boundaries to clean pixel heights (multiples of, say, 64 on a 2048 sheet) so your UVs land exactly on edges later.
+- **A little padding** between strips so neighbouring trims don't bleed into each other at a distance.
+- **Authored as a full PBR set** — base colour, normal, roughness, metallic, and often ambient occlusion and height.
+- **Reserve a corner** for a couple of unique or damaged bits, or keep those for separate decals.
+
+Spend your effort here. A well-planned sheet pays itself back across every asset that uses it.
+
+**Stuck planning your first sheet?** [Book a free 15-minute call →](https://www.blendertutoring.com/#packages) — bring a wall or prop and we'll map out the strips together.
+
+---
+
+## 🛠️ How To Build & Use One In Blender
+
+### 1. Plan the layout
+Before touching a texture, sketch the strips on a power-of-two canvas and decide each one's pixel height on a grid. Know what surfaces your kit needs — edges, panels, pipes, trims — and give each a band.
+
+### 2. Author or bake the sheet
+Two common routes:
+
+- **Bake it in Blender.** Model a high-poly "trim bar" — a flat strip of geometry with the panels, bolts, bevels and pipes modelled in, laid out to match your bands. Lay it over a flat low-poly plane and **Cycles-bake Normal and AO** (and curvature) down onto the plane's UVs. Then paint base colour, roughness and metallic on top. Blender can do this whole pipeline with no other software.
+- **Author it directly** in Substance 3D Painter/Designer, or even Photoshop/Krita for a stylised look. Substance speeds things up, but it is **not** required.
+
+### 3. Set up the material once
+Build **one** material from the sheet's maps (base colour → Base Color, normal → Normal Map node, roughness, metallic). Every modular piece in your kit shares this single material.
+
+### 4. UV the geometry onto the strips
+This is the part that feels new:
+
+- **Box / cube project** the mesh, or mark seams and unwrap — you just need clean, straight shells to start.
+- In the **UV Editor**, load the **trim sheet as the editor's background image** so you can see exactly where each shell sits.
+- **Move and scale each UV shell** onto the strip you want. Keep it **within that strip's vertical bounds**; stretch it **horizontally** to tile along long pieces.
+- Use **pixel snapping** (UV ▸ Snap, or snap to the UV grid) so shell edges land right on the strip boundaries — that's what kills bleeding.
+- **Follow Active Quads** (UV menu) is gold for straightening a run of faces along a single trim.
+- **Add-ons make this quicker.** Tools like **Zen UV** (more below) snap shells to trims, match texel density and stack duplicates in a click — a real speed-up once your kit grows past a few pieces.
+
+### 5. Reuse everywhere
+Apply that same material to every piece in the kit. A whole corridor — walls, doorframes, pipes, panels — ends up sharing **one 2K texture**. That's the moment trim sheets click.
+
+---
+
+## 💡 Blender-Specific Tips
+
+- **Speed the whole thing up with Zen UV.** For serious trim-sheet work, the [**Zen UV**](https://blendermarket.com/products/zen-uv) add-on (by the Zen Masters team) is the single biggest time-saver — one-click **texel-density** matching across pieces, fast shell **transform, align and stack** tools, trim-friendly fitting, and a built-in **UV checker** for catching stretch before it bites. It's paid (around $39 on Blender Market), but it pays for itself on your first modular kit. There's also a **free Zen UV Checker** add-on on the official [Blender Extensions site](https://extensions.blender.org/add-ons/zenuvchecker/) if you just want the grid-map and distortion checks.
+- **Test with a UV grid texture first.** Checker or grid maps make stretching and uneven texel density obvious before you commit to the real sheet — Zen UV and its free checker ship grid maps for exactly this.
+- **Keep texel density consistent.** Pieces at wildly different UV scales look mismatched — match them across the whole kit. **Zen UV**, **TexTools** and **UVPackmaster** all have texel-density tools; Blender's own work too, with a bit of care.
+- **Don't confuse it with Box Mapping.** The shader's Box/triplanar projection is a different technique (great for rocks and terrain) — trim sheets use **explicit, hand-placed UVs**.
+- **Pin UVs** you've aligned so later unwraps don't shove them off their strip.
+
+---
+
+## ⚠️ Common Mistakes
+
+- **UVs drifting between strips** — a shell that overlaps two bands picks up detail from both. Snap to boundaries and leave padding.
+- **Stretching vertically.** Trims should keep their height; only stretch **horizontally** to tile. Vertical stretch smears the detail.
+- **Inconsistent texel density** — some trims razor-sharp, others blurry. Fix scale across the kit.
+- **Trying to do everything on the trim.** Reserve hero and unique details for a small atlas or decals; the trim is for the repeatable 90%.
+- **Non-power-of-two sheets** — engines and mip-mapping want 1024/2048/4096.
+
+---
+
+## 🧠 The Real Workflow: Trims + Tiling + Decals
+
+Pros rarely use trim sheets alone. The modern environment stack layers four things:
+
+- **Tiling materials** for big surfaces — walls, floors, ground.
+- **A trim sheet** for all the edges, panels, pipes and greebles.
+- **Decals** for unique damage, grime, signage and logos.
+- **A tiny unique atlas** for a few true hero pieces.
+
+Together they hit both **quality and performance** — exactly the balance studios hire for.
+
+---
+
+## ❓ Trim Sheet FAQ
+
+**Do I need Substance?** No. You can bake and author a solid trim sheet entirely in Blender. Substance just speeds up authoring once you scale up.
+
+**What resolution?** 2048×2048 is the sensible default. Drop to 1024 for background kits, go 4096 for hero walls seen up close.
+
+**Which maps do I need?** Base colour, normal, roughness and metallic at minimum; add ambient occlusion and height if your shader uses them.
+
+**Trim sheet vs atlas — what's the difference?** An atlas packs many *unrelated* textures together, each island unique. A trim sheet is *designed* so its strips tile and get **shared and reused** across many pieces.
+
+**Do trims work for organic shapes?** They shine on hard-surface, architecture, sci-fi and props. For organic surfaces, reach for tiling textures and unique bakes instead.
+
+---
+
+## 🎯 Takeaway
+
+Trim sheets are the backbone of fast, consistent, memory-light environment art. One small texture — planned as strips, reused by sliding UVs — can dress an entire level, and it's a learnable, repeatable skill rather than a dark art. Build one good sheet, UV a kit onto it, and you'll never texture a modular scene the slow way again.
+
+If you want to go from "I get the idea" to actually shipping a trim sheet and a modular kit built on it, that's exactly the kind of thing we do in a **1:1 session** — bring a wall or a prop and we'll plan the strips, bake the sheet, and UV a kit onto it live.
+`,
+  },
+  {
     slug: "gaussian-splatting-in-blender",
     title: "Gaussian Splatting in Blender 5.3: What It Is & How to Use It",
     description: "Blender 5.3 can import and render 3D Gaussian Splatting scenes — photoreal captures of real places, live in your viewport. What it is, why it matters for game art, and how to start.",
@@ -31,7 +546,7 @@ For a game or environment artist, this unlocks things that used to cost hours:
 - **Set extension & matte replacement.** Park a splat scene beyond your playable area for instant depth and realism.
 - **Fast "scanned" look.** Capturing a weathered object as a splat is quicker than sculpting and texturing every scratch.
 
-The honest caveat up front: a splat is a **look**, not geometry you can rig, retopologise or collide against. Treat it as a photoreal layer in your scene, not a replacement for clean modelling — which, incidentally, is still the skill that makes everything else work.
+The honest caveat up front: a splat is a **look**, not geometry you can rig, retopologise or collide against. Treat it as a photoreal layer in your scene, not a replacement for clean modelling — which, incidentally, is still the skill that makes everything else work. Splats are only one of the headline additions this release; see [everything new in Blender 5.3](/blog/whats-new-blender-5-3).
 
 > **Not sure where splats fit in your pipeline — or stuck getting a capture to import clean?** That's exactly the kind of thing a quick 1-on-1 sorts in minutes instead of an afternoon of trial and error. Bring your scene and we'll work it out live. [Book a free call →](https://www.blendertutoring.com/#packages)
 
@@ -540,7 +1055,7 @@ DLSS — the NVIDIA tech that quietly doubled frame rates in half the games you'
 
 That's the whole idea in one picture: the left is what a path tracer gives you after only a handful of samples — speckled with noise. The right is the resolved image. DLSS does that reconstruction *live, in the viewport*, from very few samples — so instead of waiting for the preview to clean up, it's already clean while you move the camera.
 
-> **Quick answer:** DLSS in Blender (5.3+) is a **viewport denoiser** — NVIDIA DLSS Ray Reconstruction. On an RTX GPU, set **Render Properties ▸ Sampling ▸ Viewport ▸ Denoise** to **DLSS** for a clean, real-time preview. It's viewport-only (not final renders), NVIDIA-only, and off by default.
+> **Quick answer:** DLSS in Blender (5.3+) is a **viewport denoiser** — NVIDIA DLSS Ray Reconstruction. On an RTX GPU, set **Render Properties ▸ Sampling ▸ Viewport ▸ Denoise** to **DLSS** for a clean, real-time preview. It's viewport-only (not final renders), NVIDIA-only, and off by default. It's one of several big viewport upgrades this release — see [everything new in Blender 5.3](/blog/whats-new-blender-5-3), including the switch to [Vulkan as the default backend](/blog/blender-vulkan-why-it-matters).
 
 ---
 
@@ -1716,6 +2231,13 @@ So retopology is the moment a sculpt stops being a nice image and becomes an ass
 
   {
     slug: "texel-density-blender",
+    leadMagnet: {
+      file: "/game-ready-blender-asset-checklist.pdf",
+      tag: "game-ready-checklist",
+      title: "Free: Game-Ready Blender Asset Checklist",
+      blurb:
+        "A printable one-page checklist that runs every model through the 10 things behind 90% of import problems — scale, orientation, topology, UVs, materials, normals, export settings and the per-engine Unity / Unreal / Godot gotchas. Enter your email and it’s yours, plus the occasional short Blender tip. No spam, unsubscribe any time.",
+    },
     title: "Texel Density in Blender: Why Your Textures Look Uneven",
     description: "One asset crisp, the next blurry? That's texel density — texture pixels per unit of surface. What it is, the standard values, and how to keep it even in Blender.",
     date: "2026-11-04",
@@ -1822,6 +2344,13 @@ So it is a discipline of consistency rather than quality. You are not making any
 
   {
     slug: "blender-to-unity-export",
+    leadMagnet: {
+      file: "/game-ready-blender-asset-checklist.pdf",
+      tag: "game-ready-checklist",
+      title: "Free: Game-Ready Blender Asset Checklist",
+      blurb:
+        "A printable one-page checklist that runs every model through the 10 things behind 90% of import problems — scale, orientation, topology, UVs, materials, normals, export settings and the per-engine Unity / Unreal / Godot gotchas. Enter your email and it’s yours, plus the occasional short Blender tip. No spam, unsubscribe any time.",
+    },
     title: "Blender to Unity: Export Without the Scale and Rotation Mess",
     description: "Models landing in Unity sideways or 100x too small? The Blender export and Unity import settings that make assets come in upright and correctly scaled, every time.",
     date: "2026-11-03",
@@ -2898,6 +3427,13 @@ Be aware it is easy to build something that brings your machine to its knees, to
 
   {
     slug: "blender-fbx-export-scale-rotation",
+    leadMagnet: {
+      file: "/game-ready-blender-asset-checklist.pdf",
+      tag: "game-ready-checklist",
+      title: "Free: Game-Ready Blender Asset Checklist",
+      blurb:
+        "A printable one-page checklist that runs every model through the 10 things behind 90% of import problems — scale, orientation, topology, UVs, materials, normals, export settings and the per-engine Unity / Unreal / Godot gotchas. Enter your email and it’s yours, plus the occasional short Blender tip. No spam, unsubscribe any time.",
+    },
     title: "Blender FBX Export: Fixing Wrong Scale and Rotation",
     description: "Your model lands a hundred times too big or lying on its side. Why every guide gives different settings, and the two-minute test that settles it.",
     date: "2026-10-22",
@@ -3588,6 +4124,13 @@ Uniform roughness, half-metallic plastic, albedo with shadows painted in: none o
 
   {
     slug: "game-art-portfolio-what-studios-want",
+    leadMagnet: {
+      file: "/game-ready-blender-asset-checklist.pdf",
+      tag: "game-ready-checklist",
+      title: "Free: Game-Ready Blender Asset Checklist",
+      blurb:
+        "A printable one-page checklist that runs every model through the 10 things behind 90% of import problems — scale, orientation, topology, UVs, materials, normals, export settings and the per-engine Unity / Unreal / Godot gotchas. Enter your email and it’s yours, plus the occasional short Blender tip. No spam, unsubscribe any time.",
+    },
     title: "What a Game Art Portfolio Actually Needs in 2026",
     description: "Job postings describe the role in detail, for free. The gap between what they ask for and what most junior portfolios show \u2014 and how to close it.",
     date: "2026-10-17",
@@ -3804,7 +4347,7 @@ Topology is not a tidiness contest. It is a set of decisions about what the mesh
 
 ---
 
-**Read next:** [Text-to-3D in Blender: What AI Can and Can't Model Yet](/blog/text-to-3d-blender-ai) — generators produce quad-dominant meshes now, which sounds like it solves this and does not.
+**Read next:** [Good Topology vs Bad Topology in Blender](/blog/good-vs-bad-topology) — the bigger picture around this rule: edge flow, poles, density, and when bad topology is genuinely fine (grab the free [topology cheat sheet](/blog/good-vs-bad-topology#get-the-guide) while you're there).
 
 *Not sure whether your topology will survive rigging? [Book a free intro call →](https://www.blendertutoring.com/#packages)*
 `,
@@ -4533,6 +5076,13 @@ Next time you start something symmetrical, build one half first. The rest arrive
   },
   {
     slug: "blender-and-unreal-the-happy-couple",
+    leadMagnet: {
+      file: "/game-ready-blender-asset-checklist.pdf",
+      tag: "game-ready-checklist",
+      title: "Free: Game-Ready Blender Asset Checklist",
+      blurb:
+        "A printable one-page checklist that runs every model through the 10 things behind 90% of import problems — scale, orientation, topology, UVs, materials, normals, export settings and the per-engine Unity / Unreal / Godot gotchas. Enter your email and it’s yours, plus the occasional short Blender tip. No spam, unsubscribe any time.",
+    },
     title: "Blender and Unreal Engine: The Happy Couple",
     description: "One authors, the other makes it real-time — and both are free. Why this pairing is the most powerful free setup in 3D, and the gotchas nobody warns you about.",
     date: "2026-08-18",
@@ -4655,7 +5205,7 @@ Blender ships with two render engines, offers no guidance on which to use, and q
 
 Here's the short version, then the details.
 
-> 💡 **The one-line answer:** EEVEE is fast and approximates light. Cycles is slow and simulates it. Beginners should work in EEVEE and render finals in Cycles until they have a reason not to.
+> 💡 **The one-line answer:** EEVEE is fast and approximates light. Cycles is slow and simulates it. Beginners should work in EEVEE and render finals in Cycles until they have a reason not to. (EEVEE keeps closing the gap, too — [Blender 5.3 added Material Lighting nodes](/blog/whats-new-blender-5-3) for proper toon and stylised shading.)
 
 ![EEVEE the rasterizer against Cycles the path tracer, compared](/blog-images/cycles-eevee-compare.svg)
 
@@ -4919,7 +5469,7 @@ That's a five-minute conversation and a months-long frustration, depending on wh
 
 ---
 
-**Read next:** [Cycles vs EEVEE](/blog/cycles-vs-eevee) — once your textures sit properly, the render engine decides how they actually look.
+**Read next:** [Trim Sheets in Blender](/blog/trim-sheets-in-blender) — once unwrapping clicks, this is the technique that lets one texture dress a whole environment, and [Cycles vs EEVEE](/blog/cycles-vs-eevee), where the render engine decides how your textures actually look.
 
 *Stuck on your own model rather than a tutorial's? [Book a free intro call →](https://blendertutoring.com/#packages)*
     `

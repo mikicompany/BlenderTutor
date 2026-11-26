@@ -8,7 +8,9 @@ import Radar from './radar/Radar'
 import Terms from './terms/Terms'
 import Privacy from './privacy/Privacy'
 import Pay from './pay/Pay'
+import StartHere from './start/StartHere'
 import ShareButton from './share/ShareButton'
+import ExitOffer from './components/ExitOffer'
 import { useBookingTracking } from './booking/useBookingTracking'
 
 // Without this, navigating via links at the bottom of a page (e.g. the
@@ -37,6 +39,7 @@ const App = () => {
           <Route path="/radar" element={<Radar />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/privacy" element={<Privacy />} />
+          <Route path="/start" element={<StartHere />} />
           {/* Not linked from anywhere on the site — it is sent directly to
               the person paying. See src/lib/payments.js. */}
           <Route path="/pay" element={<Pay />} />
@@ -44,6 +47,9 @@ const App = () => {
         {/* Outside Routes so it is present on every page, including The Radar,
             which does not use the site navbar. */}
         <ShareButton />
+        {/* Site-wide exit-intent lead capture. Lives inside the Router so it
+            can read the route and skip transactional / utility pages. */}
+        <ExitOffer />
       </BrowserRouter>
     </HelmetProvider>
   )

@@ -31,6 +31,7 @@ const Navbar = () => {
   // need a crawl path to /blog and the footer only renders on the home page.
   // Entries with `to` render as router links; the blog used one.
   const navLinks = [
+    { name: "Start here", to: "/start" },
     { name: "Packages", href: "#packages" },
     { name: "About", href: "#about" },
     { name: "Tutors", href: "#tutors" },

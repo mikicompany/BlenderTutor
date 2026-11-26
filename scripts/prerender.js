@@ -25,6 +25,7 @@ const ROUTES = [
   '/blog',
   ...posts.map(p => `/blog/${p.slug}`),
   '/radar',
+  '/start',
   '/terms',
   '/privacy',
   // Needs a real file like any other route — it is sent as a link and must

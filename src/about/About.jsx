@@ -1,30 +1,82 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Box, Swords, Bone, Gauge } from "lucide-react"; // npm install lucide-react
+
+// Custom, Blender-flavoured discipline icons — drawn for this craft rather than
+// pulled from a generic UI set. Shared line style keeps them a cohesive family:
+// thin stroke, round joins, currentColor so they inherit the card's orange.
+const iconProps = {
+  width: 20,
+  height: 20,
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 1.7,
+  strokeLinecap: "round",
+  strokeLinejoin: "round",
+  "aria-hidden": "true",
+};
+
+// Game assets — a gamepad with grips: the clearest mark for "made for games".
+const AssetsIcon = () => (
+  <svg {...iconProps}>
+    <path d="M8 9h8a5 5 0 0 1 4.95 4.2l.65 4a2.3 2.3 0 0 1-4.2 1.55l-1.1-1.75a2 2 0 0 0-1.7-.95H9.4a2 2 0 0 0-1.7.95l-1.1 1.75A2.3 2.3 0 0 1 2.4 17.2l.65-4A5 5 0 0 1 8 9Z" />
+    <path d="M7.5 12.5v2.4 M6.3 13.7h2.4" />
+    <circle cx="15.6" cy="12.9" r=".95" fill="currentColor" stroke="none" />
+    <circle cx="17.3" cy="14.4" r=".95" fill="currentColor" stroke="none" />
+  </svg>
+);
+
+// 3D modeling — an isometric mesh cube with a highlighted vertex handle.
+const ModelingIcon = () => (
+  <svg {...iconProps}>
+    <path d="M12 2.5 20.5 7.25V16.75L12 21.5 3.5 16.75V7.25Z" />
+    <path d="M12 12V2.5 M12 12 20.5 7.25 M12 12 3.5 7.25" />
+    <circle cx="20.5" cy="7.25" r="1.35" fill="currentColor" stroke="none" />
+  </svg>
+);
+
+// Animation — an armature: joints linked by bones, with a second limb.
+const RigIcon = () => (
+  <svg {...iconProps}>
+    <path d="M6.5 18 12 12 17.5 6" />
+    <path d="M12 12 17 15.5" />
+    <circle cx="6.5" cy="18" r="1.7" />
+    <circle cx="12" cy="12" r="1.7" />
+    <circle cx="17.5" cy="6" r="1.7" />
+    <circle cx="17" cy="15.5" r="1.25" />
+  </svg>
+);
+
+// Real-time — a bolt for fast viewport / EEVEE / optimization.
+const RealtimeIcon = () => (
+  <svg {...iconProps}>
+    <path d="M13 2.5 5.5 13.5H11l-1 8L18.5 9.5H12.5Z" />
+  </svg>
+);
 
 const About = () => {
-  // Icons name the craft, not the console: a prop, a mesh cube, an armature
-  // bone, a perf gauge — each one is the thing the lesson is actually about.
+  // Icons name the craft, not the console: a prop crate, a mesh cube, an
+  // armature, a performance bolt — each one is the thing the lesson is about.
   const specializations = [
     {
       title: "Game Assets",
       desc: "Characters, props & environment art",
-      icon: <Swords size={18} />,
+      icon: <AssetsIcon />,
     },
     {
       title: "3D Modeling",
       desc: "Low-poly to high-poly workflows",
-      icon: <Box size={18} />,
+      icon: <ModelingIcon />,
     },
     {
       title: "Animation",
       desc: "Game-ready rigging & motion",
-      icon: <Bone size={18} />,
+      icon: <RigIcon />,
     },
     {
       title: "Real-Time",
       desc: "EEVEE, baking & optimization",
-      icon: <Gauge size={18} />,
+      icon: <RealtimeIcon />,
     },
   ];
 
