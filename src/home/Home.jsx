@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
@@ -21,6 +21,61 @@ const scrollToSection = (selector) => {
   if (!element) return;
   const top = element.getBoundingClientRect().top + window.scrollY - 70;
   window.scrollTo({ top, behavior: "smooth" });
+};
+
+// A number that counts up once, the first time it scrolls into view. Honours
+// prefers-reduced-motion by showing the final figure immediately.
+const StatCounter = ({ to, suffix = "", label, duration = 1400 }) => {
+  const ref = useRef(null);
+  const [val, setVal] = useState(0);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const reduce =
+      window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) {
+      setVal(to);
+      return;
+    }
+    let raf;
+    let started = false;
+    const obs = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting || started) return;
+          started = true;
+          const start = performance.now();
+          const step = (now) => {
+            const p = Math.min(1, (now - start) / duration);
+            const eased = 1 - Math.pow(1 - p, 3); // ease-out cubic
+            setVal(Math.round(eased * to));
+            if (p < 1) raf = requestAnimationFrame(step);
+          };
+          raf = requestAnimationFrame(step);
+        });
+      },
+      { threshold: 0.5 }
+    );
+    obs.observe(el);
+    return () => {
+      obs.disconnect();
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [to, duration]);
+
+  return (
+    <div ref={ref} className="flex flex-col items-center min-w-[72px]">
+      <span className="text-2xl md:text-3xl font-bold text-orange-500 tabular-nums leading-none">
+        {val}
+        {suffix}
+      </span>
+      <span className="text-[10px] sm:text-[11px] uppercase tracking-wider text-gray-400 mt-1.5 text-center">
+        {label}
+      </span>
+    </div>
+  );
 };
 
 const Home = () => {
@@ -178,8 +233,14 @@ const Home = () => {
             at the decision point, right under the first CTA. */}
         <section
           aria-label="Credentials"
-          className="border-y border-white/10 bg-white/[0.02] py-5 px-6"
+          className="border-y border-white/10 bg-white/[0.02] py-7 px-6"
         >
+          <div className="max-w-5xl mx-auto flex items-center justify-center gap-10 sm:gap-20 mb-6">
+            <StatCounter to={18} suffix="+" label="Years in games" />
+            <StatCounter to={5} label="AAA studios" />
+            <StatCounter to={100} suffix="%" label="1-on-1" />
+          </div>
+
           <div className="max-w-5xl mx-auto flex flex-col sm:flex-row flex-wrap items-center justify-center gap-x-5 gap-y-2 text-center text-[13px] text-gray-400">
             <span className="font-semibold text-gray-200">
               Taught by a Senior Environment Artist · 18 years in games
